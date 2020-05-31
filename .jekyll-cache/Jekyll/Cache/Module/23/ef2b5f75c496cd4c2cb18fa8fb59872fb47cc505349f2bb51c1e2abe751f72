@@ -1,4 +1,4 @@
-I"ö
+I"Z
 
 <div class="masthead">
   <div class="masthead__inner-wrap">
@@ -13,6 +13,8 @@
               <a href="https://froggydisk.github.io/">Home</a>
             </li><li class="masthead__menu-item">
               <a href="/about/">About</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/">Category</a>
             </li></ul>
         
         <button class="greedy-nav__toggle hidden" type="button">
