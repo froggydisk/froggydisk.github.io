@@ -1,5 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-06-12T16:28:38+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">A.I. Developer</title><subtitle>지나가던 대학원생의 블로그</subtitle><author><name>지나가던 대학원생</name></author><entry><title type="html">Top1 Accuracy와 Top5 Accuracy 이해하기</title><link href="http://localhost:4000/blog/second-post/" rel="alternate" type="text/html" title="Top1 Accuracy와 Top5 Accuracy 이해하기" /><published>2020-06-12T00:00:00+09:00</published><updated>2020-06-12T00:00:00+09:00</updated><id>http://localhost:4000/blog/second-post</id><content type="html" xml:base="http://localhost:4000/blog/second-post/">&lt;p&gt;Top1 
-Top5&lt;/p&gt;</content><author><name>지나가던 대학원생</name></author><category term="Blog" /><summary type="html">논문에 자주 등장하는 Top1, Top5의 의미는?</summary></entry><entry><title type="html">github.io 블로그 시작하기</title><link href="http://localhost:4000/blog/first-post/" rel="alternate" type="text/html" title="github.io 블로그 시작하기" /><published>2020-05-02T00:00:00+09:00</published><updated>2019-05-04T22:06:00+09:00</updated><id>http://localhost:4000/blog/first-post</id><content type="html" xml:base="http://localhost:4000/blog/first-post/">&lt;p&gt;GitHub Blog 서비스인 github.io 블로그 시작하기로 했다.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-06-12T17:38:11+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">A.I. Developer</title><subtitle>지나가던 대학원생의 블로그</subtitle><author><name>지나가던 대학원생</name></author><entry><title type="html">Top1 Accuracy와 Top5 Accuracy 이해하기</title><link href="http://localhost:4000/blog/second-post/" rel="alternate" type="text/html" title="Top1 Accuracy와 Top5 Accuracy 이해하기" /><published>2020-06-12T00:00:00+09:00</published><updated>2020-06-12T00:00:00+09:00</updated><id>http://localhost:4000/blog/second-post</id><content type="html" xml:base="http://localhost:4000/blog/second-post/">&lt;p&gt;딥러닝 관련 논문을 읽다보면 Top1, Top5, Top10과 같은 말들을 자주 볼 수 있습니다.
+대충 감이 오기는 하지만 정확히 무엇을 의미하는 것일까요?&lt;br /&gt;
+Top1 뒤에는 Accuracy가 오는 경우와 Loss가 오는 경우 두 가지가 있습니다.&lt;br /&gt;
+Top1 Accuracy의 경우에는 가장 가까운 클래스를 예측했을 때 정답이었던 경우의 전체 경우의 수에 대한 비율을 의미합니다.
+반대로 Top1 Loss의 경우에는 가장 가까운 클래스를 예측했을 때 정답이 아니었던 경우의 전체 경우의 수에 대한 비율을 의미합니다.&lt;br /&gt;
+예를 들어 강아지 고양이 미어캣 개구리 너구리를 구분하는 분류기가 있다고 합시다.
+위의 다섯 동물 중 어느 한 동물의 이미지를 분류기에 집어넣었더니 분류기의 마지막 층으로부터 Softmax 함수를 지나서 나온 결과가 (0.1, 0.15, 0.3, 0.4, 0.05)였다고 합시다.
+벡터의 각 요소가 (강아지, 고양이, 미어캣, 개구리, 너구리)순으로 각각의 클래스로 분류될 확률이라고 한다면 이미지가 분류될 클래스 중에 가장 확률이 높은 것은 개구리가 됩니다.&lt;br /&gt;
+같은 방법으로 두번째로 확률이 높은 클래스는 미어캣이 되겠네요.
+이미지가 분류될 확률이 높은 순으로 클래스를 나열하면 개구리 -&amp;gt; 미어캣 -&amp;gt; 고양이 -&amp;gt; 강아지 -&amp;gt; 너구리 순이 됩니다.&lt;br /&gt;
+만약에 실제로 넣은 이미지가 개구리였다고 했을 때 Top1 Accuracy는 1이 되고 Top1 Loss는 0이 되겠네요.&lt;br /&gt;
+예상하셨겠지만 Top5 Accuracy는 가장 가까운 클래스를 다섯 개 뽑았을 때 그 안에 정답이 존재한 경우의 비율을 의미합니다.
+참고로 분류기가 5개의 클래스 밖에 구분하지 못하므로 여기서는 Top5 Accuracy는 의미가 없다고 할 수 있습니다. 
+입력 이미지가 위의 다섯 종류의 동물 중 하나라고 했을 때, 분류될 수 있는 클래스가 다섯개 뿐이므로 무조건 정답이 Top5 안에는 들어있게 되기 때문이죠.
+혹여나 입력 이미지가 위의 다섯 종류에 국한되어 있지 않는다면 이야기는 달라집니다만 여기서는 고려하지 않겠습니다.&lt;br /&gt;
+보통 Top1 Accuracy + Top1 Loss = 1 이 되므로 Accuracy든 Loss든 결국에는 같은 이야기를 하고 있다고 생각하시면 됩니다.&lt;/p&gt;</content><author><name>지나가던 대학원생</name></author><category term="Blog" /><summary type="html">논문에 자주 등장하는 Top1, Top5의 의미는?</summary></entry><entry><title type="html">github.io 블로그 시작하기</title><link href="http://localhost:4000/blog/first-post/" rel="alternate" type="text/html" title="github.io 블로그 시작하기" /><published>2020-05-02T00:00:00+09:00</published><updated>2019-05-04T22:06:00+09:00</updated><id>http://localhost:4000/blog/first-post</id><content type="html" xml:base="http://localhost:4000/blog/first-post/">&lt;p&gt;GitHub Blog 서비스인 github.io 블로그 시작하기로 했다.
 GitHub Blog 서비스의 이름은 Pages이다.&lt;/p&gt;
 
 &lt;p&gt;Pages가 다른 블로그 플랫폼 보다 편한 것 같아서 마음에 든다.
