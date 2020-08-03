@@ -10,4 +10,10 @@ var store = [{
         "tags": ["Blog"],
         "url": "http://localhost:4000/blog/second-post/",
         "teaser": "http://localhost:4000/assets/images/blog_profile.JPG"
+      },{
+        "title": "CAM(Class Acitvation Map) Implementation",
+        "excerpt":"Assignment  ","categories": [],
+        "tags": [],
+        "url": "http://localhost:4000/assignment/",
+        "teaser": "http://localhost:4000/assets/images/blog_profile.JPG"
       }]
