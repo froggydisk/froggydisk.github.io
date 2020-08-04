@@ -1,5 +1,5 @@
 ---
-title: "CAM(Class Acitvation Map) Implementation"
+title: "CAM(Class Activation Map) Implementation"
 excerpt: "Learning Deep Features for Discriminative Localization"
 use_math: true
 comments: true
