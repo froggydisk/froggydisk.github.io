@@ -125,8 +125,8 @@ If you use the pretrained model, you don't need to train it anymore. You can use
 And this is the comparison between 5-epoch-experiment and 50-epoch-experiment.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5 Epoch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;50 Epoch  
-![epoch5-1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-1.png?raw=true "5 epochs") ![epoch50-1](https://drive.google.com/uc?export=view&id=1qsuT5nWGhiWcWD_nm_z4AF72WI-JHj0z "50 epochs")  
-![epoch5-2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-2.png?raw=true "5 epochs") ![epoch50-2](https://drive.google.com/uc?export=view&id=1XM2-WKZXxxkBtmi9_QqRkre0W4-ujKOe "50 epochs")
+![epoch5-1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-1.png?raw=true "5 epochs") ![epoch50-1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-1.png?raw=true "50 epochs")  
+![epoch5-2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-2.png?raw=true "5 epochs") ![epoch50-2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-2.png?raw=true "50 epochs")
 
 You can find the model concentrates on the details of the image as the number of epochs increases.
 
