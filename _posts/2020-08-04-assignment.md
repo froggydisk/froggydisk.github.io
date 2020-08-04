@@ -61,7 +61,7 @@ S_c &=& \sum_k w_k^c F_k \\
 >
 >like this.  
 If we define $M_c$ as the CAM for class c, where each spatial element is given by $M_c(x, y)$ = $\sum_k w_k^c f_k(x, y)$, we can find $S_c = \sum_{x, y} M_c(x, y)$.  
-Hence, $M_c(x,y)$ directly indicates the importance of the activation at spatial grid (x,y) which is leading to the classification of an image to class c.
+Hence, $M_c(x,y)$ directly indicates the importance of the activation at spatial grid (x,y) leading to the classification of an image to class c.
 
 Therefore, the class activation map is simply a weighted linear sum of the presence of visual patterns at different spatial location. By simply upsampling the class activation map 
 to the size of the input image, the regions of the image that are most relevant to the particular category can be identified.
