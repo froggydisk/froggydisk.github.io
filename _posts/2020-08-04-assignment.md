@@ -112,23 +112,26 @@ learning_rate = 0.001
 ```
 These are the settings for my experiment. The number of epochs can vary depending on the condition.
 
-Here is examples.  
+Here are some results.  
 
 ![test1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/bird1.jpg?raw=true) ![cam1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/bird5.png?raw=true)  
 ![test2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse1.jpg?raw=true) ![cam2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse5-1.png?raw=true)  
 ![test3](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship1.jpeg?raw=true) ![cam3](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship40.png?raw=true)  
 
-It would be a bit hard to see the results because the size of CIFAR10 images is 32x32.  
+The results show that class acitivation maps are highlighting the discriminative object parts detected by the CNN.
+
+While implementing, it would be a bit hard to see the results because the size of CIFAR10 images is 32x32.  
 I would recommend you to train the model with another dataset if possible, or just take a pretrained model like GoogLeNet for better results.
 If you use the pretrained model, you don't need to train it anymore. You can use it as it is.
 
-And this is the comparison between 5-epoch-experiment and 50-epoch-experiment.
+And this is the results of comparison between 5-epoch-experiment and 50-epoch-experiment.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5 Epoch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;50 Epoch  
 ![epoch5-1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-1.png?raw=true "5 epochs") ![epoch50-1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-1.png?raw=true "50 epochs")  
 ![epoch5-2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-2.png?raw=true "5 epochs") ![epoch50-2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-2.png?raw=true "50 epochs")
 
 You can find the model concentrates on the details of the image as the number of epochs increases.
+Consequently, we can say global average pooling CNNs can perform accurate object localization.
 
 ## Reference
 

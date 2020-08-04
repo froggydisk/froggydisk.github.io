@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-05T00:45:06+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">A.I. Developer</title><subtitle>지나가던 대학원생의 블로그</subtitle><author><name>지나가던 대학원생</name></author><entry><title type="html">CAM(Class Activation Map) Implementation</title><link href="http://localhost:4000/assignment/" rel="alternate" type="text/html" title="CAM(Class Activation Map) Implementation" /><published>2020-08-04T00:00:00+09:00</published><updated>2020-08-04T03:41:00+09:00</updated><id>http://localhost:4000/assignment</id><content type="html" xml:base="http://localhost:4000/assignment/">&lt;p&gt;Today, I’m going to talk about a paper, ‘Learning Deep Features for Discriminative Localization’(&lt;a href=&quot;https://arxiv.org/pdf/1512.04150.pdf&quot;&gt;Zhou+ CVPR16&lt;/a&gt;).
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-05T03:31:49+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">A.I. Developer</title><subtitle>지나가던 대학원생의 블로그</subtitle><author><name>지나가던 대학원생</name></author><entry><title type="html">CAM(Class Activation Map) Implementation</title><link href="http://localhost:4000/assignment/" rel="alternate" type="text/html" title="CAM(Class Activation Map) Implementation" /><published>2020-08-04T00:00:00+09:00</published><updated>2020-08-04T03:41:00+09:00</updated><id>http://localhost:4000/assignment</id><content type="html" xml:base="http://localhost:4000/assignment/">&lt;p&gt;Today, I’m going to talk about a paper, ‘Learning Deep Features for Discriminative Localization’(&lt;a href=&quot;https://arxiv.org/pdf/1512.04150.pdf&quot;&gt;Zhou+ CVPR16&lt;/a&gt;).
 I will review this paper lightly first and try to implement the main functions of CAM with Pytorch, which are introduced in the paper.&lt;/p&gt;
 
 &lt;h2 id=&quot;background&quot;&gt;Background&lt;/h2&gt;
@@ -102,23 +102,26 @@ Then, we can draw a heatmap by multiplying the corresponding weights with each f
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;These are the settings for my experiment. The number of epochs can vary depending on the condition.&lt;/p&gt;
 
-&lt;p&gt;Here is examples.&lt;/p&gt;
+&lt;p&gt;Here are some results.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/bird1.jpg?raw=true&quot; alt=&quot;test1&quot; /&gt; &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/bird5.png?raw=true&quot; alt=&quot;cam1&quot; /&gt;&lt;br /&gt;
-&lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse1.jpg?raw=true&quot; alt=&quot;test2&quot; /&gt; &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse5-2.png?raw=true&quot; alt=&quot;cam2&quot; /&gt;&lt;br /&gt;
+&lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse1.jpg?raw=true&quot; alt=&quot;test2&quot; /&gt; &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse5-1.png?raw=true&quot; alt=&quot;cam2&quot; /&gt;&lt;br /&gt;
 &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship1.jpeg?raw=true&quot; alt=&quot;test3&quot; /&gt; &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship40.png?raw=true&quot; alt=&quot;cam3&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;It would be a bit hard to see the results because the size of CIFAR10 images is 32x32.&lt;br /&gt;
+&lt;p&gt;The results show that class acitivation maps are highlighting the discriminative object parts detected by the CNN.&lt;/p&gt;
+
+&lt;p&gt;While implementing, it would be a bit hard to see the results because the size of CIFAR10 images is 32x32.&lt;br /&gt;
 I would recommend you to train the model with another dataset if possible, or just take a pretrained model like GoogLeNet for better results.
 If you use the pretrained model, you don’t need to train it anymore. You can use it as it is.&lt;/p&gt;
 
-&lt;p&gt;And this is the comparison between 5-epoch-experiment and 50-epoch-experiment.&lt;/p&gt;
+&lt;p&gt;And this is the results of comparison between 5-epoch-experiment and 50-epoch-experiment.&lt;/p&gt;
 
 &lt;p&gt;      5 Epoch            50 Epoch&lt;br /&gt;
 &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-1.png?raw=true&quot; alt=&quot;epoch5-1&quot; title=&quot;5 epochs&quot; /&gt; &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-1.png?raw=true&quot; alt=&quot;epoch50-1&quot; title=&quot;50 epochs&quot; /&gt;&lt;br /&gt;
 &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-2.png?raw=true&quot; alt=&quot;epoch5-2&quot; title=&quot;5 epochs&quot; /&gt; &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-2.png?raw=true&quot; alt=&quot;epoch50-2&quot; title=&quot;50 epochs&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;You can find the model concentrates on the details of the image as the number of epochs increases.&lt;/p&gt;
+&lt;p&gt;You can find the model concentrates on the details of the image as the number of epochs increases.
+Consequently, we can say global average pooling CNNs can perform accurate object localization.&lt;/p&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
 

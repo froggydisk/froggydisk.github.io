@@ -1,4 +1,4 @@
-I"�3<p>Today, I’m going to talk about a paper, ‘Learning Deep Features for Discriminative Localization’(<a href="https://arxiv.org/pdf/1512.04150.pdf">Zhou+ CVPR16</a>).
+I"�4<p>Today, I’m going to talk about a paper, ‘Learning Deep Features for Discriminative Localization’(<a href="https://arxiv.org/pdf/1512.04150.pdf">Zhou+ CVPR16</a>).
 I will review this paper lightly first and try to implement the main functions of CAM with Pytorch, which are introduced in the paper.</p>
 
 <h2 id="background">Background</h2>
@@ -102,23 +102,26 @@ Then, we can draw a heatmap by multiplying the corresponding weights with each f
 </code></pre></div></div>
 <p>These are the settings for my experiment. The number of epochs can vary depending on the condition.</p>
 
-<p>Here is examples.</p>
+<p>Here are some results.</p>
 
 <p><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/bird1.jpg?raw=true" alt="test1" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/bird5.png?raw=true" alt="cam1" /><br />
-<img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse1.jpg?raw=true" alt="test2" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse5-2.png?raw=true" alt="cam2" /><br />
+<img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse1.jpg?raw=true" alt="test2" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse5-1.png?raw=true" alt="cam2" /><br />
 <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship1.jpeg?raw=true" alt="test3" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship40.png?raw=true" alt="cam3" /></p>
 
-<p>It would be a bit hard to see the results because the size of CIFAR10 images is 32x32.<br />
+<p>The results show that class acitivation maps are highlighting the discriminative object parts detected by the CNN.</p>
+
+<p>While implementing, it would be a bit hard to see the results because the size of CIFAR10 images is 32x32.<br />
 I would recommend you to train the model with another dataset if possible, or just take a pretrained model like GoogLeNet for better results.
 If you use the pretrained model, you don’t need to train it anymore. You can use it as it is.</p>
 
-<p>And this is the comparison between 5-epoch-experiment and 50-epoch-experiment.</p>
+<p>And this is the results of comparison between 5-epoch-experiment and 50-epoch-experiment.</p>
 
 <p>      5 Epoch            50 Epoch<br />
 <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-1.png?raw=true" alt="epoch5-1" title="5 epochs" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-1.png?raw=true" alt="epoch50-1" title="50 epochs" /><br />
 <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-2.png?raw=true" alt="epoch5-2" title="5 epochs" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-2.png?raw=true" alt="epoch50-2" title="50 epochs" /></p>
 
-<p>You can find the model concentrates on the details of the image as the number of epochs increases.</p>
+<p>You can find the model concentrates on the details of the image as the number of epochs increases.
+Consequently, we can say global average pooling CNNs can perform accurate object localization.</p>
 
 <h2 id="reference">Reference</h2>
 
