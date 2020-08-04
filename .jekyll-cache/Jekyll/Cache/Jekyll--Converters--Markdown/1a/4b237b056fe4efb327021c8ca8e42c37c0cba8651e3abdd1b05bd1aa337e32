@@ -1,4 +1,4 @@
-I"�2<p>Today, I’m going to talk about a paper, ‘Learning Deep Features for Discriminative Localization’(<a href="https://arxiv.org/pdf/1512.04150.pdf">Zhou+ CVPR16</a>).
+I"�2<p>Today, I’m going to talk about a paper, ‘Learning Deep Features for Discriminative Localization’(<a href="https://arxiv.org/pdf/1512.04150.pdf">Zhou+ CVPR16</a>).
 I’ll review this paper lightly first and try to implement the main functions of CAM with Pytorch, which are introduced in the paper.</p>
 
 <h2 id="background">Background</h2>
@@ -114,7 +114,7 @@ If you use the pretrained model, you don’t need to train it anymore. You can u
 
 <p>And this is the comparison between 5-epoch-experiment and 50-epoch-experiment.</p>
 
-<p>5 Epoch      50 Epoch<br />
+<p>Left: 5 Epoch, Right: 50 Epoch<br />
 <img src="https://drive.google.com/uc?export=view&amp;id=1RzaGt4mPik8XDlg5JNsX7hkHlVYQ3YoJ" alt="epoch5-1" title="5 epochs" /> <img src="https://drive.google.com/uc?export=view&amp;id=1qsuT5nWGhiWcWD_nm_z4AF72WI-JHj0z" alt="epoch50-1" title="50 epochs" /><br />
 <img src="https://drive.google.com/uc?export=view&amp;id=16EGjSSm3yOuTQFkG_F0zhI0pVhMkUbd_" alt="epoch5-2" title="5 epochs" /> <img src="https://drive.google.com/uc?export=view&amp;id=1XM2-WKZXxxkBtmi9_QqRkre0W4-ujKOe" alt="epoch50-2" title="50 epochs" /></p>
 
