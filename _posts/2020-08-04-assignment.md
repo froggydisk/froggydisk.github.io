@@ -42,7 +42,7 @@ This approach should be the core contribution of this paper and it provides us w
 
 ## Class Activation Map(CAM)
 
-CAM actually works at the end of the network, just before the final output layer(softmax layer in the case of categorization).
+CAM actually works at the end of the network, just before the final output layer(softmax in the case of categorization).
 At this point, GAP is applied to the convolutional feature maps and the features after the GAP layer finally pass through the last FC layer.
 (This network uses only one FC layer)
 And then, CAM identifies the importance of the image regions by projecting back the weights of the output layer onto the convolutional feature maps. 
