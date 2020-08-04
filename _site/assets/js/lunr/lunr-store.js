@@ -12,7 +12,7 @@ var store = [{
         "teaser": "http://localhost:4000/assets/images/blog_profile.JPG"
       },{
         "title": "CAM(Class Acitvation Map) Implementation",
-        "excerpt":"Assignment  ","categories": [],
+        "excerpt":"Today, I’m going to talk about a paper, ‘Learning Deep Features for Discriminative Localization’(Zhou+ CVPR16). I’ll review this paper lightly first and try to implement the main functions of CAM with Pytorch, which are introduced in the paper. Background Over a long history of CNN, people made a great effort...","categories": [],
         "tags": [],
         "url": "http://localhost:4000/assignment/",
         "teaser": "http://localhost:4000/assets/images/blog_profile.JPG"

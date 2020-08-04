@@ -1,4 +1,119 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-04T03:42:10+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">A.I. Developer</title><subtitle>지나가던 대학원생의 블로그</subtitle><author><name>지나가던 대학원생</name></author><entry><title type="html">CAM(Class Acitvation Map) Implementation</title><link href="http://localhost:4000/assignment/" rel="alternate" type="text/html" title="CAM(Class Acitvation Map) Implementation" /><published>2020-08-04T00:00:00+09:00</published><updated>2020-08-04T03:41:00+09:00</updated><id>http://localhost:4000/assignment</id><content type="html" xml:base="http://localhost:4000/assignment/">&lt;p&gt;Assignment&lt;/p&gt;</content><author><name>지나가던 대학원생</name></author><summary type="html">Learning Deep Features for Discriminative Localization</summary></entry><entry><title type="html">Top1 Accuracy와 Top5 Accuracy 이해하기</title><link href="http://localhost:4000/blog/second-post/" rel="alternate" type="text/html" title="Top1 Accuracy와 Top5 Accuracy 이해하기" /><published>2020-06-12T00:00:00+09:00</published><updated>2020-06-12T00:00:00+09:00</updated><id>http://localhost:4000/blog/second-post</id><content type="html" xml:base="http://localhost:4000/blog/second-post/">&lt;p&gt;딥러닝 관련 논문을 읽다보면 Top1, Top5, Top10과 같은 말들을 자주 볼 수 있습니다.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-04T19:22:14+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">A.I. Developer</title><subtitle>지나가던 대학원생의 블로그</subtitle><author><name>지나가던 대학원생</name></author><entry><title type="html">CAM(Class Acitvation Map) Implementation</title><link href="http://localhost:4000/assignment/" rel="alternate" type="text/html" title="CAM(Class Acitvation Map) Implementation" /><published>2020-08-04T00:00:00+09:00</published><updated>2020-08-04T03:41:00+09:00</updated><id>http://localhost:4000/assignment</id><content type="html" xml:base="http://localhost:4000/assignment/">&lt;p&gt;Today, I’m going to talk about a paper, ‘Learning Deep Features for Discriminative Localization’(&lt;a href=&quot;https://arxiv.org/pdf/1512.04150.pdf&quot;&gt;Zhou+ CVPR16&lt;/a&gt;).
+I’ll review this paper lightly first and try to implement the main functions of CAM with Pytorch, which are introduced in the paper.&lt;/p&gt;
+
+&lt;h2 id=&quot;background&quot;&gt;Background&lt;/h2&gt;
+
+&lt;p&gt;Over a long history of CNN, people made a great effort to increase the accuracy of the trained model. Since 2012, deep learning techniques have developed overwhelmingly 
+and have now surpassed human beings in terms of object recognition.
+However, what they had known was that filters could find the edge of an object at the shallow layers and capture the high-dimensional features as the network goes deeper.
+The important thing is, they didn’t know why the machine made such a judgment when it was asked to guess what the object was. 
+That is to say, there was not any method that could explain the process of the machine’s thinking.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;CAM&lt;/em&gt;, which was developed by Bolei Zhou+ in 2016, is the very way to solve this problem. 
+Using CAM, we can interpret an image from the machine’s point of view and explain which parts of the image are utilized to make a decision.&lt;/p&gt;
+
+&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;In this paper, Zhou showed that trained CNN model is successfully able to localize the discriminative regions of an object for classification despite no data on the location
+of the object was provided.&lt;/p&gt;
+
+&lt;p&gt;Generally, a CNN model has a Fully-Connected layer(FC) at the last part of the network, which is used to generate the final output. To use the FC layer, however, the features 
+need to be flattened while losing the spatial information that convolution layers accumulated through the previous parts of the network.
+This is the main reason that makes the model lose the ability to localize objects.&lt;br /&gt;
+Recently, popular CNN models such as NIN(Network in Network) and GoogLeNet have been proposed to avoid FC layer not only to keep the localization ability which is mentioned 
+above, but also to minimize the number of parameters while maintaining high performance.&lt;br /&gt;
+In order to achive this, the author just applied GAP(global average pooling) to the model.
+The use of GAP prevented overfitting during training and encouraged the network to identify the complete extent of the object at the same time.
+After the application of GAP, trained CNN model actually gets to build a generic localizable deep representation that exposes the implicit attention of CNNs on an image.&lt;/p&gt;
+
+&lt;p&gt;What we have to look at is that while GAP is not a novel techinique at all, which is even simple technique with little computational cost, the unique observation that it can be
+applied for accurate discriminative localizations offered a new paradigm in ML model analysis.&lt;br /&gt;
+This approach should be the core contribution of this paper and it provides us with another glimpse into the soul of CNNs.&lt;/p&gt;
+
+&lt;h2 id=&quot;class-activation-mapcam&quot;&gt;Class Activation Map(CAM)&lt;/h2&gt;
+
+&lt;p&gt;CAM actually works at the end of the network, just before the final output layer(softmax layer in the case of categorization).
+At this point, GAP is applied to the convolutional feature maps and the features after the GAP layer finally pass through the last FC layer.
+(This network uses only one FC layer)
+And then, CAM identifies the importance of the image regions by projecting back the weights of the output layer onto the convolutional feature maps.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;To explain the concept with equations,&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;Let $f_k(x,y)$ represent the activation of unit $k$ in the last convolutional layer at spatial location $(x,y)$. Then, for unit $k$, the result of performing GAP is expressed
+as $F^k$ and it equals to $\sum_{x, y}f_k(x,y)$. Thus for a given class c, the input to the softmax, $S_c$ is $\sum_k w_{k}^{c}F_k$, where $w_{k}^{c}$ is the weight 
+corresponding to class $c$ for unit $k$. Essentially, $w_{k}^{c}$ indicates the importnace of $F_k$ for class $c$.&lt;br /&gt;
+To sum up, it becomes \(\begin{matrix} S_c &amp;amp;=&amp;amp; \sum_k w_k^c F_k \ &amp;amp;=&amp;amp; \sum_k w_c^k \sum_{x, y}f_k(x,y) \ &amp;amp;=&amp;amp; \sum_{x, y} \sum_k w_k^c f_k(x,y) \end{matrix}\) like this.&lt;br /&gt;
+If we define $M_c$ as the CAM for class $c$, where each spatial element is given by $M_c(x, y) = \sum_k w_k^c f_k(x, y)$, we can find $S_c = \sum_{x, y} M_c(x, y)$.&lt;br /&gt;
+Hence, $M_c(x,y)$ directly indicates the importance of the activation at spatial grid $(x,y)$ leading to the classification of an image to class c.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Therefore, the class activation map is simply a weighted linear sum of the presence of visual patterns at different spatial location. By simply upsampling the class activation map 
+to the size of the input image, the regions of the image that are most relevant to the particular category can be identified.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1NXXxd6T0XWR455qImxqG3-WX762Q78SG&quot; alt=&quot;structure&quot; class=&quot;align-center&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;implementation&quot;&gt;Implementation&lt;/h2&gt;
+
+&lt;p&gt;I tried to implement the main functions of the original project and visually check their results.
+You can refer to the code &lt;a href=&quot;https://github.com/froggydisk/CAM&quot;&gt;here(CAM implementation code)&lt;/a&gt;.
+I used Pytorch and you can simply run the code on GoogleColab.&lt;/p&gt;
+
+&lt;p&gt;I made a very simple network first and used CIFAR10 for training.
+After the training is finished, the model becomes able to classify an object and we can find the class with the highest probability.
+Then, we can draw a heatmap by multiplying the corresponding weights with each feature maps that came out from the last convolutional layer.&lt;/p&gt;
+
+&lt;p&gt;The code below shows the main parts of the CAM function.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;feature_collection&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; 
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get_feature&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;                                         &lt;span class=&quot;c1&quot;&gt;# get features from the input
+&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;feature&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;net&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;feature_collection&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;feature&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cpu&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numpy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;net&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parameters&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;weight_for_softmax&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;squeeze&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cpu&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numpy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# get weights from the final layer
+&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Do_CAM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;feature&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;weigth_for_softmax&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;class_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;                   &lt;span class=&quot;c1&quot;&gt;# draw a heatmap
+&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;upsample_size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;img_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;img_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;feature&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;weight_for_softmax&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;feature&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reshape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# (weights) x (feature maps)  
+&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reshape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; 
+  &lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;uint8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;255&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cv2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;resize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;upsample_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;By implementing this code, you can get a heatmap of the image you want to see.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Settings&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;dataset&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'CIFAR10'&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;img_size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;32&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;batch_size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;128&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;epoch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;learning_rate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.001&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;These are the settings for my experiment. The number of epochs can vary depending on the condition.&lt;/p&gt;
+
+&lt;p&gt;Here is examples.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1lHqpu8QE8PMa8BuIzwbiJQNOV_5HZ9xe&quot; alt=&quot;test1&quot; /&gt; &lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1uAmApd8PnsCBixmM6whvkBPmrVF5LGV7&quot; alt=&quot;cam1&quot; /&gt;&lt;br /&gt;
+&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1coE6aIaoZ-lgrqsOnHE9HIuRHj1dImwh&quot; alt=&quot;test2&quot; /&gt; &lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=108Y6Ds_sZ7FkruX7qThMdt5RrrPo2VQf&quot; alt=&quot;cam2&quot; /&gt;&lt;br /&gt;
+&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1hOUnEG8qpj8-GafGajwie7PAUI6nyGbh&quot; alt=&quot;test3&quot; /&gt; &lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1V84PrTRS3EALuSb2_3stXYas-Den0alc&quot; alt=&quot;cam3&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;It would be a bit hard to see the results because the size of CIFAR10 images is 32x32.&lt;br /&gt;
+I would recommend you to train the model with another dataset if possible, or just take a pretrained model like GoogLeNet for better results.
+If you use the pretrained model, you don’t need to train it anymore. You can use it as it is.&lt;/p&gt;
+
+&lt;p&gt;And this is the comparison between 5-epoch-experiment and 50-epoch-experiment.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1RzaGt4mPik8XDlg5JNsX7hkHlVYQ3YoJ&quot; alt=&quot;epoch5-1&quot; title=&quot;5 epochs&quot; /&gt; &lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1qsuT5nWGhiWcWD_nm_z4AF72WI-JHj0z&quot; alt=&quot;epoch50-1&quot; title=&quot;50 epochs&quot; /&gt;
+&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=16EGjSSm3yOuTQFkG_F0zhI0pVhMkUbd_&quot; alt=&quot;epoch5-2&quot; title=&quot;5 epochs&quot; /&gt; &lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1XM2-WKZXxxkBtmi9_QqRkre0W4-ujKOe&quot; alt=&quot;epoch50-2&quot; title=&quot;50 epochs&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can find the model concentrates on the details of the image as the number of epochs increases.&lt;/p&gt;
+
+&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://kangbk0120.github.io/articles/2018-02/cam&quot;&gt;https://kangbk0120.github.io/articles/2018-02/cam&lt;/a&gt;&lt;/p&gt;</content><author><name>지나가던 대학원생</name></author><summary type="html">Learning Deep Features for Discriminative Localization</summary></entry><entry><title type="html">Top1 Accuracy와 Top5 Accuracy 이해하기</title><link href="http://localhost:4000/blog/second-post/" rel="alternate" type="text/html" title="Top1 Accuracy와 Top5 Accuracy 이해하기" /><published>2020-06-12T00:00:00+09:00</published><updated>2020-06-12T00:00:00+09:00</updated><id>http://localhost:4000/blog/second-post</id><content type="html" xml:base="http://localhost:4000/blog/second-post/">&lt;p&gt;딥러닝 관련 논문을 읽다보면 Top1, Top5, Top10과 같은 말들을 자주 볼 수 있습니다.
 대충 감이 오기는 하지만 정확히 무엇을 의미하는 것일까요?&lt;br /&gt;
 Top1 뒤에는 Accuracy가 오는 경우와 Loss가 오는 경우 두 가지가 있습니다.&lt;br /&gt;
 Top1 Accuracy의 경우에는 가장 가까운 클래스를 예측했을 때 정답이었던 경우의 전체 경우의 수에 대한 비율을 의미합니다.
