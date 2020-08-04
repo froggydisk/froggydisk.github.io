@@ -71,7 +71,7 @@ to the size of the input image, the regions of the image that are most relevant 
 ## Implementation
 
 I tried to implement the main functions of the original project and visually check their results.
-You can refer to the code [here(CAM implementation code)](https://github.com/froggydisk/CAM).
+You can refer to the code [here(CAM Implementation)](https://github.com/froggydisk/CAM).
 I used Pytorch and you can simply run the code on GoogleColab. 
 
 I made a very simple network first and used CIFAR10 for training.
