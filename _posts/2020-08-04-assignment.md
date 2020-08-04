@@ -9,7 +9,7 @@ last_modified_at: 2020-08-04T03:41
 
 
 Today, I'm going to talk about a paper, 'Learning Deep Features for Discriminative Localization'([Zhou+ CVPR16](https://arxiv.org/pdf/1512.04150.pdf)).
-I'll review this paper lightly first and try to implement the main functions of CAM with Pytorch, which are introduced in the paper.  
+I will review this paper lightly first and try to implement the main functions of CAM with Pytorch, which are introduced in the paper.  
   
 ## Background
 
@@ -124,7 +124,7 @@ If you use the pretrained model, you don't need to train it anymore. You can use
 
 And this is the comparison between 5-epoch-experiment and 50-epoch-experiment.
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5 Epoch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;50 Epoch  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5 Epoch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;50 Epoch  
 ![epoch5-1](https://drive.google.com/uc?export=view&id=1RzaGt4mPik8XDlg5JNsX7hkHlVYQ3YoJ "5 epochs") ![epoch50-1](https://drive.google.com/uc?export=view&id=1qsuT5nWGhiWcWD_nm_z4AF72WI-JHj0z "50 epochs")  
 ![epoch5-2](https://drive.google.com/uc?export=view&id=16EGjSSm3yOuTQFkG_F0zhI0pVhMkUbd_ "5 epochs") ![epoch50-2](https://drive.google.com/uc?export=view&id=1XM2-WKZXxxkBtmi9_QqRkre0W4-ujKOe "50 epochs")
 
