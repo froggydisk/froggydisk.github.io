@@ -66,7 +66,7 @@ Hence, $M_c(x,y)$ directly indicates the importance of the activation at spatial
 Therefore, the class activation map is simply a weighted linear sum of the presence of visual patterns at different spatial location. By simply upsampling the class activation map 
 to the size of the input image, the regions of the image that are most relevant to the particular category can be identified.
 
-![structure](https://drive.google.com/uc?export=view&id=1NXXxd6T0XWR455qImxqG3-WX762Q78SG){: .align-center}
+![structure](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/CAM%20structure.png?raw=true){: .align-center}
 
 ## Implementation
 
@@ -114,9 +114,9 @@ These are the settings for my experiment. The number of epochs can vary dependin
 
 Here is examples.  
 
-![test1](https://drive.google.com/uc?export=view&id=1lHqpu8QE8PMa8BuIzwbiJQNOV_5HZ9xe) ![cam1](https://drive.google.com/uc?export=view&id=1uAmApd8PnsCBixmM6whvkBPmrVF5LGV7)  
-![test2](https://drive.google.com/uc?export=view&id=1coE6aIaoZ-lgrqsOnHE9HIuRHj1dImwh) ![cam2](https://drive.google.com/uc?export=view&id=108Y6Ds_sZ7FkruX7qThMdt5RrrPo2VQf)  
-![test3](https://drive.google.com/uc?export=view&id=1hOUnEG8qpj8-GafGajwie7PAUI6nyGbh) ![cam3](https://drive.google.com/uc?export=view&id=1V84PrTRS3EALuSb2_3stXYas-Den0alc)  
+![test1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/bird1.jpg?raw=true) ![cam1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/bird5.png?raw=true)  
+![test2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse1.jpg?raw=true) ![cam2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse5-2.png?raw=true)  
+![test3](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship1.jpeg?raw=true) ![cam3](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship40.png?raw=true)  
 
 It would be a bit hard to see the results because the size of CIFAR10 images is 32x32.  
 I would recommend you to train the model with another dataset if possible, or just take a pretrained model like GoogLeNet for better results.
@@ -125,8 +125,8 @@ If you use the pretrained model, you don't need to train it anymore. You can use
 And this is the comparison between 5-epoch-experiment and 50-epoch-experiment.
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5 Epoch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;50 Epoch  
-![epoch5-1](https://drive.google.com/uc?export=view&id=1RzaGt4mPik8XDlg5JNsX7hkHlVYQ3YoJ "5 epochs") ![epoch50-1](https://drive.google.com/uc?export=view&id=1qsuT5nWGhiWcWD_nm_z4AF72WI-JHj0z "50 epochs")  
-![epoch5-2](https://drive.google.com/uc?export=view&id=16EGjSSm3yOuTQFkG_F0zhI0pVhMkUbd_ "5 epochs") ![epoch50-2](https://drive.google.com/uc?export=view&id=1XM2-WKZXxxkBtmi9_QqRkre0W4-ujKOe "50 epochs")
+![epoch5-1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-1.png?raw=true "5 epochs") ![epoch50-1](https://drive.google.com/uc?export=view&id=1qsuT5nWGhiWcWD_nm_z4AF72WI-JHj0z "50 epochs")  
+![epoch5-2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-2.png?raw=true "5 epochs") ![epoch50-2](https://drive.google.com/uc?export=view&id=1XM2-WKZXxxkBtmi9_QqRkre0W4-ujKOe "50 epochs")
 
 You can find the model concentrates on the details of the image as the number of epochs increases.
 
