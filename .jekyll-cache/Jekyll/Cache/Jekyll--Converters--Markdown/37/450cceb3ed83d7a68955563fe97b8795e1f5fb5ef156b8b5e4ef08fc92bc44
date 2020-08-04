@@ -1,4 +1,4 @@
-I"�2<p>Today, I’m going to talk about a paper, ‘Learning Deep Features for Discriminative Localization’(<a href="https://arxiv.org/pdf/1512.04150.pdf">Zhou+ CVPR16</a>).
+I"�2<p>Today, I’m going to talk about a paper, ‘Learning Deep Features for Discriminative Localization’(<a href="https://arxiv.org/pdf/1512.04150.pdf">Zhou+ CVPR16</a>).
 I’ll review this paper lightly first and try to implement the main functions of CAM with Pytorch, which are introduced in the paper.</p>
 
 <h2 id="background">Background</h2>
@@ -42,16 +42,18 @@ And then, CAM identifies the importance of the image regions by projecting back 
   <p>Let $f_k(x,y)$ represent the activation of unit $k$ in the last convolutional layer at spatial location $(x,y)$. Then, for unit $k$, the result of performing GAP is expressed
 as $F^k$ and it equals to $\sum_{x, y}f_k(x,y)$. Thus for a given class c, the input to the softmax, $S_c$ is $\sum_k w_{k}^{c}F_k$, where $w_{k}^{c}$ is the weight 
 corresponding to class $c$ for unit $k$. Essentially, $w_{k}^{c}$ indicates the importnace of $F_k$ for class $c$.<br />
-To sum up, it becomes 
-$\begin{matrix}
-S_c &amp;=&amp; \sum_k w_k^c F_k <br />
-&amp;=&amp; \sum_k w_c^k \sum_{x, y}f_k(x,y) <br />
-&amp;=&amp; \sum_{x, y} \sum_k w_k^c f_k(x,y)
-\end{matrix}$
-like this.<br />
+To sum up, it becomes</p>
+</blockquote>
+
+\[\begin{matrix}
+S_c &amp;=&amp; \sum_k w_k^c F_k \\
+&amp;=&amp; \sum_k w_c^k \sum_{x, y}f_k(x,y) \\
+&amp;=&amp; \sum_{x, y} \sum_k w_k^c f_k(x,y) 
+\end{matrix}\]
+
+<p>like this.<br />
 If we define $M_c$ as the CAM for class $c$, where each spatial element is given by $M_c(x, y) = \sum_k w_k^c f_k(x, y)$, we can find $S_c = \sum_{x, y} M_c(x, y)$.<br />
 Hence, $M_c(x,y)$ directly indicates the importance of the activation at spatial grid $(x,y)$ leading to the classification of an image to class c.</p>
-</blockquote>
 
 <p>Therefore, the class activation map is simply a weighted linear sum of the presence of visual patterns at different spatial location. By simply upsampling the class activation map 
 to the size of the input image, the regions of the image that are most relevant to the particular category can be identified.</p>
@@ -112,7 +114,8 @@ If you use the pretrained model, you don’t need to train it anymore. You can u
 
 <p>And this is the comparison between 5-epoch-experiment and 50-epoch-experiment.</p>
 
-<p><img src="https://drive.google.com/uc?export=view&amp;id=1RzaGt4mPik8XDlg5JNsX7hkHlVYQ3YoJ" alt="epoch5-1" title="5 epochs" /> <img src="https://drive.google.com/uc?export=view&amp;id=1qsuT5nWGhiWcWD_nm_z4AF72WI-JHj0z" alt="epoch50-1" title="50 epochs" /><br />
+<p>5 Epoch     50 Epoch<br />
+<img src="https://drive.google.com/uc?export=view&amp;id=1RzaGt4mPik8XDlg5JNsX7hkHlVYQ3YoJ" alt="epoch5-1" title="5 epochs" /> <img src="https://drive.google.com/uc?export=view&amp;id=1qsuT5nWGhiWcWD_nm_z4AF72WI-JHj0z" alt="epoch50-1" title="50 epochs" /><br />
 <img src="https://drive.google.com/uc?export=view&amp;id=16EGjSSm3yOuTQFkG_F0zhI0pVhMkUbd_" alt="epoch5-2" title="5 epochs" /> <img src="https://drive.google.com/uc?export=view&amp;id=1XM2-WKZXxxkBtmi9_QqRkre0W4-ujKOe" alt="epoch50-2" title="50 epochs" /></p>
 
 <p>You can find the model concentrates on the details of the image as the number of epochs increases.</p>
