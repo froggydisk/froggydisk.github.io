@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-04T21:06:47+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">A.I. Developer</title><subtitle>지나가던 대학원생의 블로그</subtitle><author><name>지나가던 대학원생</name></author><entry><title type="html">CAM(Class Acitvation Map) Implementation</title><link href="http://localhost:4000/assignment/" rel="alternate" type="text/html" title="CAM(Class Acitvation Map) Implementation" /><published>2020-08-04T00:00:00+09:00</published><updated>2020-08-04T03:41:00+09:00</updated><id>http://localhost:4000/assignment</id><content type="html" xml:base="http://localhost:4000/assignment/">&lt;p&gt;Today, I’m going to talk about a paper, ‘Learning Deep Features for Discriminative Localization’(&lt;a href=&quot;https://arxiv.org/pdf/1512.04150.pdf&quot;&gt;Zhou+ CVPR16&lt;/a&gt;).
-I’ll review this paper lightly first and try to implement the main functions of CAM with Pytorch, which are introduced in the paper.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-04T22:55:19+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">A.I. Developer</title><subtitle>지나가던 대학원생의 블로그</subtitle><author><name>지나가던 대학원생</name></author><entry><title type="html">CAM(Class Acitvation Map) Implementation</title><link href="http://localhost:4000/assignment/" rel="alternate" type="text/html" title="CAM(Class Acitvation Map) Implementation" /><published>2020-08-04T00:00:00+09:00</published><updated>2020-08-04T03:41:00+09:00</updated><id>http://localhost:4000/assignment</id><content type="html" xml:base="http://localhost:4000/assignment/">&lt;p&gt;Today, I’m going to talk about a paper, ‘Learning Deep Features for Discriminative Localization’(&lt;a href=&quot;https://arxiv.org/pdf/1512.04150.pdf&quot;&gt;Zhou+ CVPR16&lt;/a&gt;).
+I will review this paper lightly first and try to implement the main functions of CAM with Pytorch, which are introduced in the paper.&lt;/p&gt;
 
 &lt;h2 id=&quot;background&quot;&gt;Background&lt;/h2&gt;
 
@@ -32,16 +32,16 @@ This approach should be the core contribution of this paper and it provides us w
 
 &lt;h2 id=&quot;class-activation-mapcam&quot;&gt;Class Activation Map(CAM)&lt;/h2&gt;
 
-&lt;p&gt;CAM actually works at the end of the network, just before the final output layer(softmax layer in the case of categorization).
+&lt;p&gt;CAM actually works at the end of the network, just before the final output layer(softmax in the case of categorization).
 At this point, GAP is applied to the convolutional feature maps and the features after the GAP layer finally pass through the last FC layer.
 (This network uses only one FC layer)
 And then, CAM identifies the importance of the image regions by projecting back the weights of the output layer onto the convolutional feature maps.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;To explain the concept with equations,&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-  &lt;p&gt;Let $f_k(x,y)$ represent the activation of unit $k$ in the last convolutional layer at spatial location $(x,y)$. Then, for unit $k$, the result of performing GAP is expressed
+  &lt;p&gt;Let $f_k(x,y)$ represent the activation of unit k in the last convolutional layer at spatial location (x,y). Then, for unit k, the result of performing GAP is expressed
 as $F^k$ and it equals to $\sum_{x, y}f_k(x,y)$. Thus for a given class c, the input to the softmax, $S_c$ is $\sum_k w_{k}^{c}F_k$, where $w_{k}^{c}$ is the weight 
-corresponding to class $c$ for unit $k$. Essentially, $w_{k}^{c}$ indicates the importnace of $F_k$ for class $c$.&lt;br /&gt;
+corresponding to class c for unit k. Essentially, $w_{k}^{c}$ indicates the importnace of $F_k$ for class c.&lt;br /&gt;
 To sum up, it becomes&lt;/p&gt;
 
 \[\begin{matrix}
@@ -51,14 +51,14 @@ S_c &amp;amp;=&amp;amp; \sum_k w_k^c F_k \\
 \end{matrix}\]
 
   &lt;p&gt;like this.&lt;br /&gt;
-If we define $M_c$ as the CAM for class $c$, where each spatial element is given by $M_c(x, y) = \sum_k w_k^c f_k(x, y)$, we can find $S_c = \sum_{x, y} M_c(x, y)$.&lt;br /&gt;
-Hence, $M_c(x,y)$ directly indicates the importance of the activation at spatial grid $(x,y)$ leading to the classification of an image to class c.&lt;/p&gt;
+If we define $M_c$ as the CAM for class c, where each spatial element is given by $M_c(x, y)$ = $\sum_k w_k^c f_k(x, y)$, we can find $S_c = \sum_{x, y} M_c(x, y)$.&lt;br /&gt;
+Hence, $M_c(x,y)$ directly indicates the importance of the activation at spatial grid (x,y) leading to the classification of an image to class c.&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;p&gt;Therefore, the class activation map is simply a weighted linear sum of the presence of visual patterns at different spatial location. By simply upsampling the class activation map 
 to the size of the input image, the regions of the image that are most relevant to the particular category can be identified.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1NXXxd6T0XWR455qImxqG3-WX762Q78SG&quot; alt=&quot;structure&quot; class=&quot;align-center&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/CAM%20structure.png?raw=true&quot; alt=&quot;structure&quot; class=&quot;align-center&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;implementation&quot;&gt;Implementation&lt;/h2&gt;
 
@@ -104,9 +104,9 @@ Then, we can draw a heatmap by multiplying the corresponding weights with each f
 
 &lt;p&gt;Here is examples.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1lHqpu8QE8PMa8BuIzwbiJQNOV_5HZ9xe&quot; alt=&quot;test1&quot; /&gt; &lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1uAmApd8PnsCBixmM6whvkBPmrVF5LGV7&quot; alt=&quot;cam1&quot; /&gt;&lt;br /&gt;
-&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1coE6aIaoZ-lgrqsOnHE9HIuRHj1dImwh&quot; alt=&quot;test2&quot; /&gt; &lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=108Y6Ds_sZ7FkruX7qThMdt5RrrPo2VQf&quot; alt=&quot;cam2&quot; /&gt;&lt;br /&gt;
-&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1hOUnEG8qpj8-GafGajwie7PAUI6nyGbh&quot; alt=&quot;test3&quot; /&gt; &lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1V84PrTRS3EALuSb2_3stXYas-Den0alc&quot; alt=&quot;cam3&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/bird1.jpg?raw=true&quot; alt=&quot;test1&quot; /&gt; &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/bird5.png?raw=true&quot; alt=&quot;cam1&quot; /&gt;&lt;br /&gt;
+&lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse1.jpg?raw=true&quot; alt=&quot;test2&quot; /&gt; &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse5-2.png?raw=true&quot; alt=&quot;cam2&quot; /&gt;&lt;br /&gt;
+&lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship1.jpeg?raw=true&quot; alt=&quot;test3&quot; /&gt; &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship40.png?raw=true&quot; alt=&quot;cam3&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;It would be a bit hard to see the results because the size of CIFAR10 images is 32x32.&lt;br /&gt;
 I would recommend you to train the model with another dataset if possible, or just take a pretrained model like GoogLeNet for better results.
@@ -114,9 +114,9 @@ If you use the pretrained model, you don’t need to train it anymore. You can u
 
 &lt;p&gt;And this is the comparison between 5-epoch-experiment and 50-epoch-experiment.&lt;/p&gt;
 
-&lt;p&gt;         5 Epoch               50 Epoch&lt;br /&gt;
-&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1RzaGt4mPik8XDlg5JNsX7hkHlVYQ3YoJ&quot; alt=&quot;epoch5-1&quot; title=&quot;5 epochs&quot; /&gt; &lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1qsuT5nWGhiWcWD_nm_z4AF72WI-JHj0z&quot; alt=&quot;epoch50-1&quot; title=&quot;50 epochs&quot; /&gt;&lt;br /&gt;
-&lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=16EGjSSm3yOuTQFkG_F0zhI0pVhMkUbd_&quot; alt=&quot;epoch5-2&quot; title=&quot;5 epochs&quot; /&gt; &lt;img src=&quot;https://drive.google.com/uc?export=view&amp;amp;id=1XM2-WKZXxxkBtmi9_QqRkre0W4-ujKOe&quot; alt=&quot;epoch50-2&quot; title=&quot;50 epochs&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;      5 Epoch            50 Epoch&lt;br /&gt;
+&lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-1.png?raw=true&quot; alt=&quot;epoch5-1&quot; title=&quot;5 epochs&quot; /&gt; &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-1.png?raw=true&quot; alt=&quot;epoch50-1&quot; title=&quot;50 epochs&quot; /&gt;&lt;br /&gt;
+&lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-2.png?raw=true&quot; alt=&quot;epoch5-2&quot; title=&quot;5 epochs&quot; /&gt; &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-2.png?raw=true&quot; alt=&quot;epoch50-2&quot; title=&quot;50 epochs&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;You can find the model concentrates on the details of the image as the number of epochs increases.&lt;/p&gt;
 
