@@ -115,7 +115,7 @@ These are the settings for my experiment. The number of epochs can vary dependin
 Here is examples.  
 
 ![test1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/bird1.jpg?raw=true) ![cam1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/bird5.png?raw=true)  
-![test2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse1.jpg?raw=true) ![cam2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse5-2.png?raw=true)  
+![test2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse1.jpg?raw=true) ![cam2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse5-1.png?raw=true)  
 ![test3](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship1.jpeg?raw=true) ![cam3](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship40.png?raw=true)  
 
 It would be a bit hard to see the results because the size of CIFAR10 images is 32x32.  
