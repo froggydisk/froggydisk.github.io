@@ -118,7 +118,7 @@ Here are some results.
 ![test2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse1.jpg?raw=true) ![cam2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse5-1.png?raw=true)  
 ![test3](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship1.jpeg?raw=true) ![cam3](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship40.png?raw=true)  
 
-The results show that class acitivation maps are highlighting the discriminative object parts detected by the CNN.
+The results show that class activation maps are highlighting the discriminative object parts detected by the CNN.
 
 While implementing, it would be a bit hard to see the results because the size of CIFAR10 images is 32x32.  
 I would recommend you to train the model with another dataset if possible, or just take a pretrained model like GoogLeNet for better results.
