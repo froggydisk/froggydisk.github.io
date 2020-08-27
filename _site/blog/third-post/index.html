@@ -9,8 +9,8 @@
   <head>
     <meta charset="utf-8">
 
-<!-- begin _includes/seo.html --><title>github.io 블로그 시작하기 - A.I. Developer</title>
-<meta name="description" content="GitHub Blog 서비스인 github.io 블로그 시작하기로 했다. ">
+<!-- begin _includes/seo.html --><title>[HTML/CSS] 모바일에서 hover 효과 없애기 - A.I. Developer</title>
+<meta name="description" content="반응형 웹페이지 만들기 ">
 
 
   <meta name="author" content="지나가던 대학원생">
@@ -19,11 +19,11 @@
 <meta property="og:type" content="article">
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="A.I. Developer">
-<meta property="og:title" content="github.io 블로그 시작하기">
-<meta property="og:url" content="http://localhost:4000/blog/first-post/">
+<meta property="og:title" content="[HTML/CSS] 모바일에서 hover 효과 없애기">
+<meta property="og:url" content="http://localhost:4000/blog/third-post/">
 
 
-  <meta property="og:description" content="GitHub Blog 서비스인 github.io 블로그 시작하기로 했다. ">
+  <meta property="og:description" content="반응형 웹페이지 만들기 ">
 
 
 
@@ -33,11 +33,11 @@
 
 
 
-  <meta property="article:published_time" content="2020-05-02T00:00:00+09:00">
+  <meta property="article:published_time" content="2020-08-28T00:00:00+09:00">
 
 
 
-  <meta property="article:modified_time" content="2019-05-04T22:06:00+09:00">
+  <meta property="article:modified_time" content="2020-08-28T00:00:00+09:00">
 
 
 
@@ -46,7 +46,7 @@
   
 
 
-<link rel="canonical" href="http://localhost:4000/blog/first-post/">
+<link rel="canonical" href="http://localhost:4000/blog/third-post/">
 
 
 
@@ -280,15 +280,15 @@
 
 
   <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
-    <meta itemprop="headline" content="github.io 블로그 시작하기">
-    <meta itemprop="description" content="GitHub Blog 서비스인 github.io 블로그 시작하기로 했다.">
-    <meta itemprop="datePublished" content="2020-05-02T00:00:00+09:00">
-    <meta itemprop="dateModified" content="2019-05-04T22:06:00+09:00">
+    <meta itemprop="headline" content="[HTML/CSS] 모바일에서 hover 효과 없애기">
+    <meta itemprop="description" content="반응형 웹페이지 만들기">
+    <meta itemprop="datePublished" content="2020-08-28T00:00:00+09:00">
+    <meta itemprop="dateModified" content="2020-08-28T00:00:00+09:00">
 
     <div class="page__inner-wrap">
       
         <header>
-          <h1 id="page-title" class="page__title" itemprop="headline">github.io 블로그 시작하기
+          <h1 id="page-title" class="page__title" itemprop="headline">[HTML/CSS] 모바일에서 hover 효과 없애기
 </h1>
           
             <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
@@ -305,15 +305,31 @@
 
       <section class="page__content" itemprop="text">
         
-        <p>GitHub Blog 서비스인 github.io 블로그 시작하기로 했다.
-GitHub Blog 서비스의 이름은 Pages이다.</p>
+        <p>아이폰이나 아이패드와 같은 기기에서는 PC와는 다르게 hover 효과가 적용되지 않는다.<br />
+그 이유는 마우스가 아닌 터치 방식을 사용하기 때문이다.<br />
+그러다보니 모바일에서 드랍다운 메뉴 같은 경우, 한 번 누르면 계속 호버된 상태가 되어 효과가 사라지지 않는 경우가 있다.<br />
+이 때 화면의 다른 부분을 누르면 호버효과가 사라지게 만들고 싶을 때 쓸만한 방법이 있다.</p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"utf-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>모바일에서 hover 효과 없애기<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"style.css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">type=</span><span class="s">"text/css"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;style&gt;</span>
+<span class="k">@media</span> <span class="p">(</span> <span class="n">max-width</span><span class="p">:</span> <span class="m">768px</span> <span class="p">){</span>
+        <span class="nt">button</span> <span class="p">{</span>
+          <span class="nl">-webkit-tap-highlight-color</span><span class="p">:</span><span class="nb">transparent</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="nt">&lt;/style&gt;</span>
+  <span class="nt">&lt;/head&gt;</span>
+  <span class="nt">&lt;body</span> <span class="na">ontouchstart=</span><span class="s">""</span><span class="nt">&gt;</span>
 
-<p>Pages가 다른 블로그 플랫폼 보다 편한 것 같아서 마음에 든다.
-다른 사람들도 같이 많이 사용했으면 좋겠다는 생각이 든다.</p>
-
-<p>YFM에서 정의한 제목을 이중 괄호 구문으로 본문에 추가할 수 있다.
-이 글의 제목은 github.io 블로그 시작하기이고
-마지막으로 수정된 시간은 2019-05-04 08:06:00 -0500이다.</p>
+  <span class="nt">&lt;/body&gt;</span>
+</code></pre></div></div>
+<p>호버 효과를 적용하는 class의 style 안에 <strong>-webkit-tap-highlight-color:transparent;</strong>를 넣어주고(터치 시 탭효과 제거)<br />
+  body에 <strong>ontouchstart=”“</strong>를 적용하면 끝</p>
 
         
       </section>
@@ -343,7 +359,7 @@ GitHub Blog 서비스의 이름은 Pages이다.</p>
 
 
         
-          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2019-05-04">May 4, 2019</time></p>
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-08-28">August 28, 2020</time></p>
         
       </footer>
 
@@ -352,22 +368,22 @@ GitHub Blog 서비스의 이름은 Pages이다.</p>
     <h4 class="page__share-title">Share on</h4>
   
 
-  <a href="https://twitter.com/intent/tweet?text=github.io+%EB%B8%94%EB%A1%9C%EA%B7%B8+%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Ffirst-post%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?text=%5BHTML%2FCSS%5D+%EB%AA%A8%EB%B0%94%EC%9D%BC%EC%97%90%EC%84%9C+hover+%ED%9A%A8%EA%B3%BC+%EC%97%86%EC%95%A0%EA%B8%B0%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fthird-post%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Ffirst-post%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fthird-post%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Ffirst-post%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fthird-post%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
 </section>
 
 
       
   <nav class="pagination">
     
-      <a href="#" class="pagination--pager disabled">Previous</a>
+      <a href="/assignment/" class="pagination--pager" title="CAM(Class Activation Map) Implementation
+">Previous</a>
     
     
-      <a href="/blog/second-post/" class="pagination--pager" title="Top1 Accuracy와 Top5 Accuracy 이해하기
-">Next</a>
+      <a href="#" class="pagination--pager disabled">Next</a>
     
   </nav>
 
@@ -381,39 +397,6 @@ GitHub Blog 서비스의 이름은 Pages이다.</p>
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
-        
-          
-
-
-
-<div class="grid__item">
-  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-    
-      <div class="archive__item-teaser">
-        <img src="/assets/images/blog_profile.JPG" alt="">
-      </div>
-    
-    <h2 class="archive__item-title" itemprop="headline">
-      
-        <a href="/blog/third-post/" rel="permalink">[HTML/CSS] 모바일에서 hover 효과 없애기
-</a>
-      
-    </h2>
-    
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
-
-
-
-
-  less than 1 minute read
-
-</p>
-    
-    <p class="archive__item-excerpt" itemprop="description">반응형 웹페이지 만들기
-</p>
-  </article>
-</div>
-
         
           
 
@@ -481,6 +464,39 @@ GitHub Blog 서비스의 이름은 Pages이다.</p>
 </div>
 
         
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/assets/images/blog_profile.JPG" alt="">
+      </div>
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/blog/first-post/" rel="permalink">github.io 블로그 시작하기
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  less than 1 minute read
+
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">GitHub Blog 서비스인 github.io 블로그 시작하기로 했다.
+</p>
+  </article>
+</div>
+
+        
       </div>
     </div>
   
@@ -542,8 +558,8 @@ GitHub Blog 서비스의 이름은 Pages이다.</p>
     
   <script>
     var disqus_config = function () {
-      this.page.url = "http://localhost:4000/blog/first-post/";  /* Replace PAGE_URL with your page's canonical URL variable */
-      this.page.identifier = "/blog/first-post"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
+      this.page.url = "http://localhost:4000/blog/third-post/";  /* Replace PAGE_URL with your page's canonical URL variable */
+      this.page.identifier = "/blog/third-post"; /* Replace PAGE_IDENTIFIER with your page's unique identifier variable */
     };
     (function() { /* DON'T EDIT BELOW THIS LINE */
       var d = document, s = d.createElement('script');

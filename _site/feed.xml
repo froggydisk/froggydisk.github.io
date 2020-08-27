@@ -1,4 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-05T03:31:49+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">A.I. Developer</title><subtitle>지나가던 대학원생의 블로그</subtitle><author><name>지나가던 대학원생</name></author><entry><title type="html">CAM(Class Activation Map) Implementation</title><link href="http://localhost:4000/assignment/" rel="alternate" type="text/html" title="CAM(Class Activation Map) Implementation" /><published>2020-08-04T00:00:00+09:00</published><updated>2020-08-04T03:41:00+09:00</updated><id>http://localhost:4000/assignment</id><content type="html" xml:base="http://localhost:4000/assignment/">&lt;p&gt;Today, I’m going to talk about a paper, ‘Learning Deep Features for Discriminative Localization’(&lt;a href=&quot;https://arxiv.org/pdf/1512.04150.pdf&quot;&gt;Zhou+ CVPR16&lt;/a&gt;).
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-28T02:28:57+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">A.I. Developer</title><subtitle>지나가던 대학원생의 블로그</subtitle><author><name>지나가던 대학원생</name></author><entry><title type="html">[HTML/CSS] 모바일에서 hover 효과 없애기</title><link href="http://localhost:4000/blog/third-post/" rel="alternate" type="text/html" title="[HTML/CSS] 모바일에서 hover 효과 없애기" /><published>2020-08-28T00:00:00+09:00</published><updated>2020-08-28T00:00:00+09:00</updated><id>http://localhost:4000/blog/third-post</id><content type="html" xml:base="http://localhost:4000/blog/third-post/">&lt;p&gt;아이폰이나 아이패드와 같은 기기에서는 PC와는 다르게 hover 효과가 적용되지 않는다.&lt;br /&gt;
+그 이유는 마우스가 아닌 터치 방식을 사용하기 때문이다.&lt;br /&gt;
+그러다보니 모바일에서 드랍다운 메뉴 같은 경우, 한 번 누르면 계속 호버된 상태가 되어 효과가 사라지지 않는 경우가 있다.&lt;br /&gt;
+이 때 화면의 다른 부분을 누르면 호버효과가 사라지게 만들고 싶을 때 쓸만한 방법이 있다.&lt;/p&gt;
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;charset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;utf-8&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;viewport&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;content=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;width=device-width&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;모바일에서 hover 효과 없애기&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;style.css&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;stylesheet&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/css&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;style&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;@media&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;max-width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;768px&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;button&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+          &lt;span class=&quot;nl&quot;&gt;-webkit-tap-highlight-color&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;transparent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/style&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;body&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ontouchstart=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+
+  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;호버 효과를 적용하는 class의 style 안에 &lt;strong&gt;-webkit-tap-highlight-color:transparent;&lt;/strong&gt;를 넣어주고(터치 시 탭효과 제거)&lt;br /&gt;
+  body에 &lt;strong&gt;ontouchstart=”“&lt;/strong&gt;를 적용하면 끝&lt;/p&gt;</content><author><name>지나가던 대학원생</name></author><category term="Blog" /><summary type="html">반응형 웹페이지 만들기</summary></entry><entry><title type="html">CAM(Class Activation Map) Implementation</title><link href="http://localhost:4000/assignment/" rel="alternate" type="text/html" title="CAM(Class Activation Map) Implementation" /><published>2020-08-04T00:00:00+09:00</published><updated>2020-08-04T03:41:00+09:00</updated><id>http://localhost:4000/assignment</id><content type="html" xml:base="http://localhost:4000/assignment/">&lt;p&gt;Today, I’m going to talk about a paper, ‘Learning Deep Features for Discriminative Localization’(&lt;a href=&quot;https://arxiv.org/pdf/1512.04150.pdf&quot;&gt;Zhou+ CVPR16&lt;/a&gt;).
 I will review this paper lightly first and try to implement the main functions of CAM with Pytorch, which are introduced in the paper.&lt;/p&gt;
 
 &lt;h2 id=&quot;background&quot;&gt;Background&lt;/h2&gt;
@@ -108,19 +132,20 @@ Then, we can draw a heatmap by multiplying the corresponding weights with each f
 &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse1.jpg?raw=true&quot; alt=&quot;test2&quot; /&gt; &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse5-1.png?raw=true&quot; alt=&quot;cam2&quot; /&gt;&lt;br /&gt;
 &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship1.jpeg?raw=true&quot; alt=&quot;test3&quot; /&gt; &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship40.png?raw=true&quot; alt=&quot;cam3&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;The results show that class acitivation maps are highlighting the discriminative object parts detected by the CNN.&lt;/p&gt;
+&lt;p&gt;The results show that class activation maps are highlighting the discriminative object parts detected by the CNN.&lt;/p&gt;
 
 &lt;p&gt;While implementing, it would be a bit hard to see the results because the size of CIFAR10 images is 32x32.&lt;br /&gt;
 I would recommend you to train the model with another dataset if possible, or just take a pretrained model like GoogLeNet for better results.
 If you use the pretrained model, you don’t need to train it anymore. You can use it as it is.&lt;/p&gt;
 
-&lt;p&gt;And this is the results of comparison between 5-epoch-experiment and 50-epoch-experiment.&lt;/p&gt;
+&lt;p&gt;And this is the results of comparison between 5-epoch-experiment and 50-epoch-experiment.
+I captured the model every 10 epochs during training and observed how the results change.&lt;/p&gt;
 
 &lt;p&gt;      5 Epoch            50 Epoch&lt;br /&gt;
 &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-1.png?raw=true&quot; alt=&quot;epoch5-1&quot; title=&quot;5 epochs&quot; /&gt; &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-1.png?raw=true&quot; alt=&quot;epoch50-1&quot; title=&quot;50 epochs&quot; /&gt;&lt;br /&gt;
 &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-2.png?raw=true&quot; alt=&quot;epoch5-2&quot; title=&quot;5 epochs&quot; /&gt; &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-2.png?raw=true&quot; alt=&quot;epoch50-2&quot; title=&quot;50 epochs&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;You can find the model concentrates on the details of the image as the number of epochs increases.
+&lt;p&gt;As expected, you can find the model concentrates on the details of the image as the number of epochs increases.
 Consequently, we can say global average pooling CNNs can perform accurate object localization.&lt;/p&gt;
 
 &lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;

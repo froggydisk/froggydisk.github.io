@@ -440,19 +440,20 @@ Then, we can draw a heatmap by multiplying the corresponding weights with each f
 <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse1.jpg?raw=true" alt="test2" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse5-1.png?raw=true" alt="cam2" /><br />
 <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship1.jpeg?raw=true" alt="test3" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship40.png?raw=true" alt="cam3" /></p>
 
-<p>The results show that class acitivation maps are highlighting the discriminative object parts detected by the CNN.</p>
+<p>The results show that class activation maps are highlighting the discriminative object parts detected by the CNN.</p>
 
 <p>While implementing, it would be a bit hard to see the results because the size of CIFAR10 images is 32x32.<br />
 I would recommend you to train the model with another dataset if possible, or just take a pretrained model like GoogLeNet for better results.
 If you use the pretrained model, you don’t need to train it anymore. You can use it as it is.</p>
 
-<p>And this is the results of comparison between 5-epoch-experiment and 50-epoch-experiment.</p>
+<p>And this is the results of comparison between 5-epoch-experiment and 50-epoch-experiment.
+I captured the model every 10 epochs during training and observed how the results change.</p>
 
 <p>      5 Epoch            50 Epoch<br />
 <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-1.png?raw=true" alt="epoch5-1" title="5 epochs" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-1.png?raw=true" alt="epoch50-1" title="50 epochs" /><br />
 <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-2.png?raw=true" alt="epoch5-2" title="5 epochs" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-2.png?raw=true" alt="epoch50-2" title="50 epochs" /></p>
 
-<p>You can find the model concentrates on the details of the image as the number of epochs increases.
+<p>As expected, you can find the model concentrates on the details of the image as the number of epochs increases.
 Consequently, we can say global average pooling CNNs can perform accurate object localization.</p>
 
 <h2 id="reference">Reference</h2>
@@ -492,7 +493,8 @@ Consequently, we can say global average pooling CNNs can perform accurate object
 ">Previous</a>
     
     
-      <a href="#" class="pagination--pager disabled">Next</a>
+      <a href="/blog/third-post/" class="pagination--pager" title="[HTML/CSS] 모바일에서 hover 효과 없애기
+">Next</a>
     
   </nav>
 
@@ -506,6 +508,39 @@ Consequently, we can say global average pooling CNNs can perform accurate object
     <div class="page__related">
       <h4 class="page__related-title">You may also enjoy</h4>
       <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/assets/images/blog_profile.JPG" alt="">
+      </div>
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/blog/third-post/" rel="permalink">[HTML/CSS] 모바일에서 hover 효과 없애기
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  less than 1 minute read
+
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">반응형 웹페이지 만들기
+</p>
+  </article>
+</div>
+
         
           
 

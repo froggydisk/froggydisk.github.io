@@ -16,4 +16,10 @@ var store = [{
         "tags": [],
         "url": "http://localhost:4000/assignment/",
         "teaser": "http://localhost:4000/assets/images/blog_profile.JPG"
+      },{
+        "title": "[HTML/CSS] 모바일에서 hover 효과 없애기",
+        "excerpt":"아이폰이나 아이패드와 같은 기기에서는 PC와는 다르게 hover 효과가 적용되지 않는다. 그 이유는 마우스가 아닌 터치 방식을 사용하기 때문이다. 그러다보니 모바일에서 드랍다운 메뉴 같은 경우, 한 번 누르면 계속 호버된 상태가 되어 효과가 사라지지 않는 경우가 있다. 이 때 화면의 다른 부분을 누르면 호버효과가 사라지게 만들고 싶을 때 쓸만한 방법이 있다....","categories": ["Blog"],
+        "tags": ["Blog"],
+        "url": "http://localhost:4000/blog/third-post/",
+        "teaser": "http://localhost:4000/assets/images/blog_profile.JPG"
       }]
