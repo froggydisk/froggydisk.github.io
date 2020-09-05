@@ -51,15 +51,15 @@ And then, CAM identifies the importance of the image regions by projecting back 
 >Let $f_k(x,y)$ represent the activation of unit k in the last convolutional layer at spatial location (x,y). Then, for unit k, the result of performing GAP is expressed
 as $F^k$ and it equals to $\sum_{x, y}f_k(x,y)$. Thus for a given class c, the input to the softmax, $S_c$ is $\sum_k w_{k}^{c}F_k$, where $w_{k}^{c}$ is the weight 
 corresponding to class c for unit k. Essentially, $w_{k}^{c}$ indicates the importnace of $F_k$ for class c.  
-To sum up, it becomes 
+To sum up, it becomes
 >
->$$\begin{matrix}
+$\begin{matrix}
 S_c &=& \sum_k w_k^c F_k \\
 &=& \sum_k w_c^k \sum_{x, y}f_k(x,y) \\
 &=& \sum_{x, y} \sum_k w_k^c f_k(x,y) 
-\end{matrix}$$
+\end{matrix}$
 >
->like this.  
+like this.  
 If we define $M_c$ as the CAM for class c, where each spatial element is given by $M_c(x, y)$ = $\sum_k w_k^c f_k(x, y)$, we can find $S_c = \sum_{x, y} M_c(x, y)$.  
 Hence, $M_c(x,y)$ directly indicates the importance of the activation at spatial grid (x,y) leading to the classification of an image to class c.
 
