@@ -104,7 +104,7 @@ author:
       url: "mailto:kim@g.ecc.u-tokyo.ac.jp"
     - label: "Website"
       icon: "fas fa-fw fa-link"
-      # url: "https://your-website.com"
+      url: "https://foodlog-athl.org"
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
       # url: "https://twitter.com/"
