@@ -202,7 +202,7 @@
           
         
           
-            <li><a href="https://foodlog-athl.org" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-link" aria-hidden="true"></i><span class="label">Website</span></a></li>
+            <li><a href="http://foodlog-athl.org" rel="nofollow noopener noreferrer"><i class="fas fa-fw fa-link" aria-hidden="true"></i><span class="label">Website</span></a></li>
           
         
           
@@ -292,37 +292,31 @@
         <header>
           <h1 id="page-title" class="page__title" itemprop="headline">Top1 Accuracy와 Top5 Accuracy 이해하기
 </h1>
-          
-            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
-
-
-
-
-  1 minute read
-
-</p>
-          
+          <!--  -->
         </header>
       
 
       <section class="page__content" itemprop="text">
         
-        <p>딥러닝 관련 논문을 읽다보면 Top1, Top5, Top10과 같은 말들을 자주 볼 수 있습니다.
-대충 감이 오기는 하지만 정확히 무엇을 의미하는 것일까요?<br />
-Top1 뒤에는 Accuracy가 오는 경우와 Loss가 오는 경우 두 가지가 있습니다.<br />
-Top1 Accuracy의 경우에는 가장 가까운 클래스를 예측했을 때 정답이었던 경우의 전체 경우의 수에 대한 비율을 의미합니다.
-반대로 Top1 Loss의 경우에는 가장 가까운 클래스를 예측했을 때 정답이 아니었던 경우의 전체 경우의 수에 대한 비율을 의미합니다.<br />
-예를 들어 강아지 고양이 미어캣 개구리 너구리를 구분하는 분류기가 있다고 합시다.
-위의 다섯 동물 중 어느 한 동물의 이미지를 분류기에 집어넣었더니 분류기의 마지막 층으로부터 Softmax 함수를 지나서 나온 결과가 (0.1, 0.15, 0.3, 0.4, 0.05)였다고 합시다.   <br />
-벡터의 각 요소가 (강아지, 고양이, 미어캣, 개구리, 너구리)순으로 각각의 클래스로 분류될 확률이라고 한다면 이미지가 분류될 클래스 중에 가장 확률이 높은 것은 개구리가 됩니다.<br />
-같은 방법으로 두번째로 확률이 높은 클래스는 미어캣이 되겠네요.
-이미지가 분류될 확률이 높은 순으로 클래스를 나열하면 개구리 -&gt; 미어캣 -&gt; 고양이 -&gt; 강아지 -&gt; 너구리 순이 됩니다.<br />
-만약에 실제로 넣은 이미지가 개구리였다고 했을 때 Top1 Accuracy는 1이 되고 Top1 Loss는 0이 되겠네요.<br />
-예상하셨겠지만 Top5 Accuracy는 가장 가까운 클래스를 다섯 개 뽑았을 때 그 안에 정답이 존재한 경우의 비율을 의미합니다.
-참고로 분류기가 5개의 클래스 밖에 구분하지 못하므로 여기서는 Top5 Accuracy는 의미가 없다고 할 수 있습니다. 
-입력 이미지가 위의 다섯 종류의 동물 중 하나라고 했을 때, 분류될 수 있는 클래스가 다섯개 뿐이므로 무조건 정답이 Top5 안에는 들어있게 되기 때문이죠.
-혹여나 입력 이미지가 위의 다섯 종류에 국한되어 있지 않는다면 이야기는 달라집니다만 여기서는 고려하지 않겠습니다.<br />
-보통 Top1 Accuracy + Top1 Loss = 1 이 되므로 Accuracy든 Loss든 결국에는 같은 이야기를 하고 있다고 생각하시면 됩니다.</p>
+        <p><br /></p>
+<p align="justify">
+딥러닝 관련 논문을 읽다보면 Top1, Top5, Top10과 같은 말들을 자주 볼 수 있습니다. <br />
+대충 감이 오기는 하지만 정확히 무엇을 의미하는 것일까요?  <br />
+Top1 뒤에는 Accuracy가 오는 경우와 Loss가 오는 경우 두 가지가 있습니다.  <br />
+Top1 Accuracy의 경우에는 가장 가까운 클래스를 예측했을 때 정답이었던 경우의 전체 경우의 수에 대한 비율을 의미합니다.<br />
+반대로 Top1 Loss의 경우에는 가장 가까운 클래스를 예측했을 때 정답이 아니었던 경우의 전체 경우의 수에 대한 비율을 의미합니다.  <br />
+예를 들어 강아지 고양이 미어캣 개구리 너구리를 구분하는 분류기가 있다고 합시다.<br />
+위의 다섯 동물 중 어느 한 동물의 이미지를 분류기에 집어넣었더니 분류기의 마지막 층으로부터 Softmax 함수를 지나서 나온 결과가 (0.1, 0.15, 0.3, 0.4, 0.05)였다고 합시다.     <br />
+벡터의 각 요소가 (강아지, 고양이, 미어캣, 개구리, 너구리)순으로 각각의 클래스로 분류될 확률이라고 한다면 이미지가 분류될 클래스 중에 가장 확률이 높은 것은 개구리가 됩니다.  <br />
+같은 방법으로 두번째로 확률이 높은 클래스는 미어캣이 되겠네요.<br />
+이미지가 분류될 확률이 높은 순으로 클래스를 나열하면 개구리 -&gt; 미어캣 -&gt; 고양이 -&gt; 강아지 -&gt; 너구리 순이 됩니다.  <br />
+만약에 실제로 넣은 이미지가 개구리였다고 했을 때 Top1 Accuracy는 1이 되고 Top1 Loss는 0이 되겠네요.  <br />
+예상하셨겠지만 Top5 Accuracy는 가장 가까운 클래스를 다섯 개 뽑았을 때 그 안에 정답이 존재한 경우의 비율을 의미합니다.<br />
+참고로 분류기가 5개의 클래스 밖에 구분하지 못하므로 여기서는 Top5 Accuracy는 의미가 없다고 할 수 있습니다. <br />
+입력 이미지가 위의 다섯 종류의 동물 중 하나라고 했을 때, 분류될 수 있는 클래스가 다섯개 뿐이므로 무조건 정답이 Top5 안에는 들어있게 되기 때문이죠.<br />
+혹여나 입력 이미지가 위의 다섯 종류에 국한되어 있지 않는다면 이야기는 달라집니다만 여기서는 고려하지 않겠습니다.  <br />
+보통 Top1 Accuracy + Top1 Loss = 1 이 되므로 Accuracy든 Loss든 결국에는 같은 이야기를 하고 있다고 생각하시면 됩니다. 
+</p>
 
         
       </section>
@@ -356,18 +350,7 @@ Top1 Accuracy의 경우에는 가장 가까운 클래스를 예측했을 때 정
         
       </footer>
 
-      <section class="page__share">
-  
-    <h4 class="page__share-title">Share on</h4>
-  
-
-  <a href="https://twitter.com/intent/tweet?text=Top1+Accuracy%EC%99%80+Top5+Accuracy+%EC%9D%B4%ED%95%B4%ED%95%98%EA%B8%B0%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fsecond-post%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
-
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fsecond-post%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
-
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fsecond-post%2F" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
-</section>
-
+      
 
       
   <nav class="pagination">
@@ -399,25 +382,15 @@ Top1 Accuracy의 경우에는 가장 가까운 클래스를 예측했을 때 정
 <div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
-      <div class="archive__item-teaser">
-        <img src="/assets/images/blog_profile.JPG" alt="">
-      </div>
-    
     <h2 class="archive__item-title" itemprop="headline">
       
         <a href="/blog/third-post/" rel="permalink">[HTML/CSS] 모바일에서 hover 효과 없애기
 </a>
       
     </h2>
+    <!--  -->
     
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
-
-
-
-
-  less than 1 minute read
-
-</p>
+      <p class="page__meta"><i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i> August 28 2020</p>
     
     <p class="archive__item-excerpt" itemprop="description">반응형 웹페이지 만들기
 </p>
@@ -432,25 +405,15 @@ Top1 Accuracy의 경우에는 가장 가까운 클래스를 예측했을 때 정
 <div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
-      <div class="archive__item-teaser">
-        <img src="/assets/images/blog_profile.JPG" alt="">
-      </div>
-    
     <h2 class="archive__item-title" itemprop="headline">
       
         <a href="/assignment/" rel="permalink">CAM(Class Activation Map) Implementation
 </a>
       
     </h2>
+    <!--  -->
     
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
-
-
-
-
-  5 minute read
-
-</p>
+      <p class="page__meta"><i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i> August 04 2020</p>
     
     <p class="archive__item-excerpt" itemprop="description">Learning Deep Features for Discriminative Localization
 </p>
@@ -465,25 +428,15 @@ Top1 Accuracy의 경우에는 가장 가까운 클래스를 예측했을 때 정
 <div class="grid__item">
   <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
     
-      <div class="archive__item-teaser">
-        <img src="/assets/images/blog_profile.JPG" alt="">
-      </div>
-    
     <h2 class="archive__item-title" itemprop="headline">
       
         <a href="/blog/first-post/" rel="permalink">github.io 블로그 시작하기
 </a>
       
     </h2>
+    <!--  -->
     
-      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
-
-
-
-
-  less than 1 minute read
-
-</p>
+      <p class="page__meta"><i class="far fa-fw fa-calendar-alt" aria-hidden="true"></i> May 02 2020</p>
     
     <p class="archive__item-excerpt" itemprop="description">GitHub Blog 서비스인 github.io 블로그 시작하기로 했다.
 </p>

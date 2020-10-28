@@ -3,49 +3,65 @@ title: "CAM(Class Activation Map) Implementation"
 excerpt: "Learning Deep Features for Discriminative Localization"
 use_math: true
 comments: true
+toc: true
+toc_sticky: true
+toc_label: Content
 
 last_modified_at: 2020-08-04T03:41
 ---
 
-
-Today, I'm going to talk about a paper, 'Learning Deep Features for Discriminative Localization'([Zhou+ CVPR16](https://arxiv.org/pdf/1512.04150.pdf)).
+<br>
+<p align="justify">
+Today, I'm going to talk about a paper, 'Learning Deep Features for Discriminative Localization'
+(<a href="https://arxiv.org/pdf/1512.04150.pdf">Zhou+ CVPR16</a>).
 I will review this paper lightly first and try to implement the main functions of CAM with Pytorch, which are introduced in the paper.  
+</p>
   
 ## Background
 
+<p align="justify">
 Over a long history of CNN, people made a great effort to increase the accuracy of the trained model. Since 2012, deep learning techniques have developed overwhelmingly 
 and have now surpassed human beings in terms of object recognition.
 However, what they had known was that filters could find the edge of an object at the shallow layers and capture the high-dimensional features as the network goes deeper.
 The important thing is, they didn't know why the machine made such a judgment when it was asked to guess what the object was. 
 That is to say, there was not any method that could explain the process of the machine's thinking.  
-  
-*CAM*, which was developed by Bolei Zhou+ in 2016, is the very way to solve this problem. 
+<br><br>
+<em>CAM</em>, which was developed by Bolei Zhou+ in 2016, is the very way to solve this problem. 
 Using CAM, we can interpret an image from the machine's point of view and explain which parts of the image are utilized to make a decision.
+</p>
 
 ## Introduction
 
+<p align="justify">
 In this paper, the author showed that trained CNN model is successfully able to localize the discriminative regions of an object for classification despite no data on the location
 of the object was provided.  
+</p>
 
+<p align="justify">
 Generally, a CNN model has a Fully-Connected layer(FC) at the last part of the network, which is used to generate the final output. To use the FC layer, however, the features 
 need to be flattened while losing the spatial information that convolution layers accumulated through the previous parts of the network.
-This is the main reason that makes the model lose the ability to localize objects.  
+This is the main reason that makes the model lose the ability to localize objects.  <br>
 Recently, popular CNN models such as NIN(Network in Network) and GoogLeNet have been proposed to avoid FC layer not only to keep the localization ability which is mentioned 
-above, but also to minimize the number of parameters while maintaining high performance.  
+above, but also to minimize the number of parameters while maintaining high performance.  <br>
 In order to achive this, the author just applied GAP(global average pooling) to the model.
 The use of GAP prevented overfitting during training and encouraged the network to identify the complete extent of the object at the same time.
 After the application of GAP, trained CNN model actually gets to build a generic localizable deep representation that exposes the implicit attention of CNNs on an image.
+</p>
 
+<p align="justify">
 What we have to look at is that while GAP is not a novel techinique at all, which is even simple technique with little computational cost, the unique observation that it can be
-applied for accurate discriminative localizations offered a new paradigm in ML model analysis.  
+applied for accurate discriminative localizations offered a new paradigm in ML model analysis.  <br>
 This approach should be the core contribution of this paper and it provides us with another glimpse into the soul of CNNs.  
+</p>
 
 ## Class Activation Map(CAM)
 
+<p align="justify">
 CAM actually works at the end of the network, just before the final output layer(softmax in the case of categorization).
 At this point, GAP is applied to the convolutional feature maps and the features after the GAP layer finally pass through the last FC layer.
 (This network uses only one FC layer)
 And then, CAM identifies the importance of the image regions by projecting back the weights of the output layer onto the convolutional feature maps. 
+</p>
 
 **To explain the concept with equations,**  
 >Let $f_k(x,y)$ represent the activation of unit k in the last convolutional layer at spatial location (x,y). Then, for unit k, the result of performing GAP is expressed
@@ -63,20 +79,26 @@ like this.
 If we define $M_c$ as the CAM for class c, where each spatial element is given by $M_c(x, y)$ = $\sum_k w_k^c f_k(x, y)$, we can find $S_c = \sum_{x, y} M_c(x, y)$.  
 Hence, $M_c(x,y)$ directly indicates the importance of the activation at spatial grid (x,y) leading to the classification of an image to class c.
 
+<p align="justify">
 Therefore, the class activation map is simply a weighted linear sum of the presence of visual patterns at different spatial location. By simply upsampling the class activation map 
 to the size of the input image, the regions of the image that are most relevant to the particular category can be identified.
+</p>
 
 ![structure](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/CAM%20structure.png?raw=true){: .align-center}
 
 ## Implementation
 
+<p align="justify">
 I tried to implement the main functions of the original project and visually check their results.
-You can refer to the code [here(CAM Implementation)](https://github.com/froggydisk/CAM).
+You can refer to the code <a href="https://github.com/froggydisk/CAM">here(CAM Implementation)</a>.
 I used Pytorch and you can simply run the code on GoogleColab. 
+</p>
 
+<p align="justify">
 I made a very simple network first and used CIFAR10 for training.
 After the training is finished, the model becomes able to classify an object and we can find the class with the highest probability.
 Then, we can draw a heatmap by multiplying the corresponding weights with each feature maps that came out from the last convolutional layer.  
+</p>
 
 The code below shows the main parts of the CAM function.
 
