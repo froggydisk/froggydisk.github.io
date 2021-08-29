@@ -1,5 +1,5 @@
 ---
-title: "[Pytorch] Tensor element를 softcopy 하는 법"
+title: "[Pytorch] Tensor element를 mutable하게 복사하기"
 excerpt: "머신러닝/딥러닝"
 #author_profile: false
 
@@ -12,7 +12,7 @@ last_modified_at: 2021-08-29T
 ---
 
 <br>
-여러 문서를 찾아보았지만 Tensor 내부의 element를 복사(copy)할 때 softcopy하는 방법을 찾지 못하였다.
+일반적인 경우, 텐서 간의 복사는 복사된 참조 변수의 수정이 기존 참조 변수의 값에 똑같은 영향을 미친다.
 예를 들면
 
 ```python
@@ -24,7 +24,7 @@ a[0] = 4
 print(b) #tensor([4., 2., 3.])
 ```
 
-일반적인 경우에는 텐서 간의 softcopy는 잘 된다. 하지만
+하지만
 
 ```python
 a = torch.tensor([1.,2.,3.])
@@ -37,8 +37,8 @@ a[1] = 3
 print(b) #tensor([1., 2., 3., 2.])
 ```
 
-위와 같이 a와 b의 길이가 다르고 a의 요소들을 b에 배분하는 형식인 경우, 요소 간의 softcopy는 불가능하다.
-대신 b가 리스트나 numpy배열일 경우에는 아래처럼 softcopy가 가능하다.
+위와 같이 a와 b의 길이가 다르고 a의 요소들을 b에 배분하는 형식인 경우, 즉 텐서 요소 간의 복사에 있어서는 복사된 참조 변수의 수정이 기존 참조 변수에 영향을 미치지 못한다.
+대신 b가 리스트나 numpy배열일 경우에는 b의 각 요소는 아래처럼 mutable하다. 
 
 ```python
 a = torch.tensor([1.,2.,3.])

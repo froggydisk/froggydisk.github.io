@@ -22,4 +22,10 @@ var store = [{
         "tags": ["Blog"],
         "url": "http://localhost:4000/blog/third-post/",
         "teaser": null
+      },{
+        "title": "[Pytorch] Tensor element를 mutable하게 복사하기",
+        "excerpt":"일반적인 경우, 텐서 간의 복사는 복사된 참조 변수의 수정이 기존 참조 변수의 값에 똑같은 영향을 미친다. 예를 들면 import torch a = torch.tensor([1.,2.,3.]) b = a print(b) #tensor([1., 2., 3.]) a[0] = 4 print(b) #tensor([4., 2., 3.]) 하지만 a = torch.tensor([1.,2.,3.]) b = torch.tensor([0.,0.,0.,0.]) for i in range(3): b[i] =...","categories": ["Blog"],
+        "tags": ["Blog"],
+        "url": "http://localhost:4000/blog/fourth-post/",
+        "teaser": null
       }]
