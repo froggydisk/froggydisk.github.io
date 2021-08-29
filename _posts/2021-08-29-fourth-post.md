@@ -68,7 +68,6 @@ c = torch.stack(b) #tensor([1., 2., 3., 2.], grad_fn=<StackBackward>)
 ```python
 import torch
 import torch.optim
-device = torch.device("cuda")
 
 a = torch.tensor([1.,2.,3.], requires_grad=True)
 b = [0,0,0,0]
@@ -92,5 +91,5 @@ optimizer.step()
 print(b) #[tensor(1.0009, grad_fn=<AsStridedBackward>), tensor(1.9996, ...]
 print(a) #tensor([1.0009, 1.9996, 2.9995], requires_grad=True)
 ```
-a와 b가 성공적으로 동시 업데이트 된다.
+a와 b가 성공적으로 동시 업데이트 된다. 
 물론 단순히 1차원 텐서가 아니라 그 이상의 텐서에 대해서도 적용 가능하다. 
