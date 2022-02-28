@@ -55,7 +55,7 @@ If you see any typos or formatting errors in a post, or want to helping reduce b
 Yeaaa feel free to open a pull request.
 ## Support
 
-[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W7W7MJ4X) [![saweria.co](./assets/img/saweria-button.png)](https://saweria.co/piharpi)
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/W7W7MJ4X)
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).
