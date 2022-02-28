@@ -1,279 +1,277 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2021-08-29T22:01:01+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">A.I. Developer</title><subtitle>지나가던 대학원생의 블로그</subtitle><author><name>지나가던 대학원생</name></author><entry><title type="html">[Pytorch] Tensor element를 mutable하게 복사하기</title><link href="http://localhost:4000/blog/fourth-post/" rel="alternate" type="text/html" title="[Pytorch] Tensor element를 mutable하게 복사하기" /><published>2021-08-29T00:00:00+09:00</published><updated>2021-08-29T00:00:00+09:00</updated><id>http://localhost:4000/blog/fourth-post</id><content type="html" xml:base="http://localhost:4000/blog/fourth-post/">&lt;p&gt;&lt;br /&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2022-02-28T10:07:57+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">workspace</title><subtitle>He&apos;s writing in Bahasa about web technology and experience as a journal  for documentation things that he learned, meet him &lt;a href=&quot;https://github.com/piharpi&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;@github&lt;/a&gt;.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[Pytorch] Tensor element를 mutable하게 복사하기</title><link href="http://localhost:4000/fourth-post/" rel="alternate" type="text/html" title="[Pytorch] Tensor element를 mutable하게 복사하기" /><published>2021-08-29T00:00:00+07:00</published><updated>2021-08-29T00:00:00+07:00</updated><id>http://localhost:4000/fourth-post</id><content type="html" xml:base="http://localhost:4000/fourth-post/"><![CDATA[<p><br />
 일반적인 경우, 텐서 간의 복사는 복사된 참조 변수의 수정이 기존 참조 변수의 값에 똑같은 영향을 미친다.
-예를 들면&lt;/p&gt;
+예를 들면 아래와 같다.</p>
 
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;torch&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;torch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tensor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;2.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;3.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#tensor([1., 2., 3.])
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#tensor([4., 2., 3.])
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">torch</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">,</span><span class="mf">3.</span><span class="p">])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">a</span>
+<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1">#tensor([1., 2., 3.])
+</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1">#tensor([4., 2., 3.])
+</span></code></pre></div></div>
 
-&lt;p&gt;하지만&lt;/p&gt;
+<p>하지만 아래와 같이 a와 b의 길이가 다르고 a의 요소들을 b에 배분하는 형식인 경우, 즉 텐서 요소 간의 복사에 있어서는 복사된 참조 변수의 수정이 기존 참조 변수에 영향을 미치지 못한다.</p>
 
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;torch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tensor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;2.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;3.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;torch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tensor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#tensor([1., 2., 3., 2.])
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#tensor([1., 2., 3., 2.])
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">,</span><span class="mf">3.</span><span class="p">])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+  <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1">#tensor([1., 2., 3., 2.])
+</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1">#tensor([1., 2., 3., 2.])
+</span></code></pre></div></div>
 
-&lt;p&gt;위와 같이 a와 b의 길이가 다르고 a의 요소들을 b에 배분하는 형식인 경우, 즉 텐서 요소 간의 복사에 있어서는 복사된 참조 변수의 수정이 기존 참조 변수에 영향을 미치지 못한다.
-대신 b가 리스트나 numpy배열일 경우에는 b의 각 요소는 아래처럼 mutable하다.&lt;/p&gt;
+<p>위와는 조금 다르게, b가 텐서가 아니라 리스트나 numpy배열일 경우에 있어서 b의 각 요소는 아래처럼 mutable하다.</p>
 
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;torch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tensor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;2.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;3.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#[tensor(1.), tensor(2.), tensor(3.), tensor(2.)]
-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#[tensor(1.), tensor(3.), tensor(3.), tensor(3.)]
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">,</span><span class="mf">3.</span><span class="p">])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+  <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1">#[tensor(1.), tensor(2.), tensor(3.), tensor(2.)]
+</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1">#[tensor(1.), tensor(3.), tensor(3.), tensor(3.)]
+</span></code></pre></div></div>
 
-&lt;p&gt;다만 리스트나 넘파이를 사용할 경우에는 위의 예와 같이 리스트 안에 텐서가 여러개 들어가 있는 형태(list of tensors)가 되어버리는데 이를 그대로 torch.tensor(b)와 같이 텐서로 바꿔버리면 grad가 끊기면서 loss.backward()시에&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;RuntimeError: element 0 of tensors does not require grad and does not have a grad_fn&lt;/p&gt;
-&lt;/blockquote&gt;
+<p>다만 리스트나 넘파이를 사용할 경우에는 위의 예와 같이 리스트 안에 텐서가 여러개 들어가 있는 형태(list of tensors)가 되어버리는데 이를 그대로 torch.tensor(b)와 같이 텐서로 바꿔버리면 grad가 끊기면서 loss.backward()시에</p>
+<blockquote>
+  <p>RuntimeError: element 0 of tensors does not require grad and does not have a grad_fn</p>
+</blockquote>
 
-&lt;p&gt;와 같은 에러가 뜨게 된다. 그 때 쓸 수 있는 방법 중 하나가 torch.stack 이다.&lt;/p&gt;
+<p>와 같은 에러가 뜨게 된다. 그 때 쓸 수 있는 방법 중 하나가 torch.stack 이다.</p>
 
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;torch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stack&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#tensor([1., 2., 3., 2.], grad_fn=&amp;lt;StackBackward&amp;gt;)
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">stack</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1">#tensor([1., 2., 3., 2.], grad_fn=&lt;StackBackward&gt;)
+</span></code></pre></div></div>
 
-&lt;p&gt;이걸 쓰면 grad_fn을 유지하면서 list of tensors를 하나의 텐서로 만들어 줄 수 있다. 
-주의할 점은 새로운 변수 c에 선언하는게 아닌 b=torch.stack(b)와 같이 b에 덮어씌우게 되면 나중에 파라미터 업데이트 시에 b는 업데이트 되지 않는다. 이번 경우는 a와 b가 동시에 업데이트 되기를 원하므로 위와 같이 c에 새로운 텐서를 만들어주었다.&lt;/p&gt;
+<p>이걸 쓰면 grad_fn을 유지하면서 list of tensors를 하나의 텐서로 만들어 줄 수 있다. 
+주의할 점은 새로운 변수 c에 선언하는게 아닌 b=torch.stack(b)와 같이 b에 덮어씌우게 되면 나중에 파라미터 업데이트 시에 b는 업데이트 되지 않는다. 이번 경우는 a와 b가 동시에 업데이트 되기를 원하므로 위와 같이 c에 새로운 텐서를 만들어주었다.</p>
 
-&lt;p&gt;전체 코드는&lt;/p&gt;
+<p>전체 코드는</p>
 
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;torch&lt;/span&gt;
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;torch.optim&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;device&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;torch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;device&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;cuda&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.optim</span>
 
-&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;torch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tensor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;2.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;3.&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;requires_grad&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+<span class="n">a</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">,</span><span class="mf">3.</span><span class="p">],</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+  <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+<span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;my_loss&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;embedding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#contrastive loss
-&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;loss&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;embedding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()[:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;embedding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loss&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;optimizer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;torch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;optim&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SGD&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;0.001&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+<span class="k">def</span> <span class="nf">my_loss</span><span class="p">(</span><span class="n">embedding</span><span class="p">):</span> <span class="c1">#contrastive loss
+</span>    <span class="n">loss</span> <span class="o">=</span> <span class="o">-</span><span class="p">((</span><span class="n">embedding</span><span class="p">.</span><span class="n">exp</span><span class="p">()[:</span><span class="mi">1</span><span class="p">].</span><span class="nb">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">embedding</span><span class="p">.</span><span class="n">exp</span><span class="p">().</span><span class="nb">sum</span><span class="p">()).</span><span class="n">log</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">loss</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="n">SGD</span><span class="p">([</span><span class="n">a</span><span class="p">],</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
 
-&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;torch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stack&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+<span class="n">c</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">stack</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
 
-&lt;span class=&quot;n&quot;&gt;loss&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.0&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;loss&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;my_loss&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;optimizer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zero_grad&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;loss&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;backward&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;optimizer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;step&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+<span class="n">loss</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">my_loss</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="n">optimizer</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
+<span class="n">loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="n">optimizer</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
 
-&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#[tensor(1.0009, grad_fn=&amp;lt;AsStridedBackward&amp;gt;), tensor(1.9996, ...]
-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;#tensor([1.0009, 1.9996, 2.9995], requires_grad=True)
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;a와 b가 성공적으로 동시 업데이트 된다.
-물론 단순히 1차원 텐서가 아니라 그 이상의 텐서에 대해서도 적용 가능하다.&lt;/p&gt;</content><author><name>지나가던 대학원생</name></author><category term="Blog" /><summary type="html">머신러닝/딥러닝</summary></entry><entry><title type="html">[HTML/CSS] 모바일에서 hover 효과 없애기</title><link href="http://localhost:4000/blog/third-post/" rel="alternate" type="text/html" title="[HTML/CSS] 모바일에서 hover 효과 없애기" /><published>2020-08-28T00:00:00+09:00</published><updated>2020-08-28T00:00:00+09:00</updated><id>http://localhost:4000/blog/third-post</id><content type="html" xml:base="http://localhost:4000/blog/third-post/">&lt;p&gt;&lt;br /&gt;
-아이폰이나 아이패드와 같은 기기에서는 PC와는 다르게 hover 효과가 적용되지 않는다.&lt;br /&gt;
-그 이유는 마우스가 아닌 터치 방식을 사용하기 때문이다.&lt;br /&gt;
-그러다보니 모바일에서 드랍다운 메뉴 같은 경우, 한 번 누르면 계속 호버된 상태가 되어 효과가 사라지지 않는 경우가 있다.&lt;br /&gt;
-이 때 화면의 다른 부분을 누르면 호버효과가 사라지게 만들고 싶을 때 쓸만한 방법이 있다.&lt;/p&gt;
-&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;head&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;charset=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;utf-8&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;meta&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;viewport&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;content=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;width=device-width&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;title&amp;gt;&lt;/span&gt;모바일에서 hover 효과 없애기&lt;span class=&quot;nt&quot;&gt;&amp;lt;/title&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;link&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;style.css&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;rel=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;stylesheet&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text/css&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;style&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;@media&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;max-width&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;768px&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;button&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-          &lt;span class=&quot;nl&quot;&gt;-webkit-tap-highlight-color&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;transparent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/style&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/head&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;body&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;ontouchstart=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1">#[tensor(1.0009, grad_fn=&lt;AsStridedBackward&gt;), tensor(1.9996, ...]
+</span><span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="c1">#tensor([1.0009, 1.9996, 2.9995], requires_grad=True)
+</span></code></pre></div></div>
+<p>a와 b가 성공적으로 동시에 업데이트 된다. 
+물론 단순히 1차원 텐서가 아니라 그 이상의 텐서에 대해서도 적용 가능하다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Blog" /><summary type="html"><![CDATA[머신러닝/딥러닝]]></summary></entry><entry><title type="html">[HTML/CSS] 모바일에서 hover 효과 없애기</title><link href="http://localhost:4000/third-post/" rel="alternate" type="text/html" title="[HTML/CSS] 모바일에서 hover 효과 없애기" /><published>2020-08-28T00:00:00+07:00</published><updated>2020-08-28T00:00:00+07:00</updated><id>http://localhost:4000/third-post</id><content type="html" xml:base="http://localhost:4000/third-post/"><![CDATA[<p><br />
+아이폰이나 아이패드와 같은 기기에서는 PC와는 다르게 hover 효과가 적용되지 않는다.<br />
+그 이유는 마우스가 아닌 터치 방식을 사용하기 때문이다.<br />
+그러다보니 모바일에서 드랍다운 메뉴 같은 경우, 한 번 누르면 계속 호버된 상태가 되어 효과가 사라지지 않는 경우가 있다.<br />
+이 때 화면의 다른 부분을 누르면 호버효과가 사라지게 만들고 싶을 때 쓸만한 방법이 있다.</p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"utf-8"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;title&gt;</span>모바일에서 hover 효과 없애기<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"style.css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">type=</span><span class="s">"text/css"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;style&gt;</span>
+<span class="k">@media</span> <span class="p">(</span> <span class="n">max-width</span><span class="p">:</span> <span class="m">768px</span> <span class="p">){</span>
+        <span class="nt">button</span> <span class="p">{</span>
+          <span class="nl">-webkit-tap-highlight-color</span><span class="p">:</span><span class="nb">transparent</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="nt">&lt;/style&gt;</span>
+  <span class="nt">&lt;/head&gt;</span>
+  <span class="nt">&lt;body</span> <span class="na">ontouchstart=</span><span class="s">""</span><span class="nt">&gt;</span>
 
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;호버 효과를 적용하는 class의 style 안에 &lt;strong&gt;-webkit-tap-highlight-color:transparent;&lt;/strong&gt;를 넣어주고(터치 시 탭효과 제거)&lt;br /&gt;
-body에 &lt;strong&gt;ontouchstart=”“&lt;/strong&gt;를 적용하면 끝&lt;/p&gt;</content><author><name>지나가던 대학원생</name></author><category term="Blog" /><summary type="html">반응형 웹페이지 만들기</summary></entry><entry><title type="html">CAM(Class Activation Map) Implementation</title><link href="http://localhost:4000/assignment/" rel="alternate" type="text/html" title="CAM(Class Activation Map) Implementation" /><published>2020-08-04T00:00:00+09:00</published><updated>2020-08-04T03:41:00+09:00</updated><id>http://localhost:4000/assignment</id><content type="html" xml:base="http://localhost:4000/assignment/">&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot;&gt;
+  <span class="nt">&lt;/body&gt;</span>
+</code></pre></div></div>
+<p>호버 효과를 적용하는 class의 style 안에 <strong>-webkit-tap-highlight-color:transparent;</strong>를 넣어주고(터치 시 탭효과 제거)<br />
+body에 <strong>ontouchstart=”“</strong>를 적용하면 끝</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Blog" /><summary type="html"><![CDATA[반응형 웹페이지 만들기]]></summary></entry><entry><title type="html">CAM(Class Activation Map) Implementation</title><link href="http://localhost:4000/assignment/" rel="alternate" type="text/html" title="CAM(Class Activation Map) Implementation" /><published>2020-08-04T00:00:00+07:00</published><updated>2020-08-04T03:41:00+07:00</updated><id>http://localhost:4000/assignment</id><content type="html" xml:base="http://localhost:4000/assignment/"><![CDATA[<p><br /></p>
+<p align="justify">
 Today, I'm going to talk about a paper, 'Learning Deep Features for Discriminative Localization'
-(&lt;a href=&quot;https://arxiv.org/pdf/1512.04150.pdf&quot;&gt;Zhou+ CVPR16&lt;/a&gt;).
+(<a href="https://arxiv.org/pdf/1512.04150.pdf">Zhou+ CVPR16</a>).
 I will review this paper lightly first and try to implement the main functions of CAM with Pytorch, which are introduced in the paper.  
-&lt;/p&gt;
+</p>
 
-&lt;h2 id=&quot;background&quot;&gt;Background&lt;/h2&gt;
+<h2 id="background">Background</h2>
 
-&lt;p align=&quot;justify&quot;&gt;
+<p align="justify">
 Over a long history of CNN, people made a great effort to increase the accuracy of the trained model. Since 2012, deep learning techniques have developed overwhelmingly 
 and have now surpassed human beings in terms of object recognition.
 However, what they had known was that filters could find the edge of an object at the shallow layers and capture the high-dimensional features as the network goes deeper.
 The important thing is, they didn't know why the machine made such a judgment when it was asked to guess what the object was. 
 That is to say, there was not any method that could explain the process of the machine's thinking.  
-&lt;br /&gt;&lt;br /&gt;
-&lt;em&gt;CAM&lt;/em&gt;, which was developed by Bolei Zhou+ in 2016, is the very way to solve this problem. 
+<br /><br />
+<em>CAM</em>, which was developed by Bolei Zhou+ in 2016, is the very way to solve this problem. 
 Using CAM, we can interpret an image from the machine's point of view and explain which parts of the image are utilized to make a decision.
-&lt;/p&gt;
+</p>
 
-&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+<h2 id="introduction">Introduction</h2>
 
-&lt;p align=&quot;justify&quot;&gt;
+<p align="justify">
 In this paper, the author showed that trained CNN model is successfully able to localize the discriminative regions of an object for classification despite no data on the location
 of the object was provided.  
-&lt;/p&gt;
+</p>
 
-&lt;p align=&quot;justify&quot;&gt;
+<p align="justify">
 Generally, a CNN model has a Fully-Connected layer(FC) at the last part of the network, which is used to generate the final output. To use the FC layer, however, the features 
 need to be flattened while losing the spatial information that convolution layers accumulated through the previous parts of the network.
-This is the main reason that makes the model lose the ability to localize objects.  &lt;br /&gt;
+This is the main reason that makes the model lose the ability to localize objects.  <br />
 Recently, popular CNN models such as NIN(Network in Network) and GoogLeNet have been proposed to avoid FC layer not only to keep the localization ability which is mentioned 
-above, but also to minimize the number of parameters while maintaining high performance.  &lt;br /&gt;
+above, but also to minimize the number of parameters while maintaining high performance.  <br />
 In order to achive this, the author just applied GAP(global average pooling) to the model.
 The use of GAP prevented overfitting during training and encouraged the network to identify the complete extent of the object at the same time.
 After the application of GAP, trained CNN model actually gets to build a generic localizable deep representation that exposes the implicit attention of CNNs on an image.
-&lt;/p&gt;
+</p>
 
-&lt;p align=&quot;justify&quot;&gt;
+<p align="justify">
 What we have to look at is that while GAP is not a novel techinique at all, which is even simple technique with little computational cost, the unique observation that it can be
-applied for accurate discriminative localizations offered a new paradigm in ML model analysis.  &lt;br /&gt;
+applied for accurate discriminative localizations offered a new paradigm in ML model analysis.  <br />
 This approach should be the core contribution of this paper and it provides us with another glimpse into the soul of CNNs.  
-&lt;/p&gt;
+</p>
 
-&lt;h2 id=&quot;class-activation-mapcam&quot;&gt;Class Activation Map(CAM)&lt;/h2&gt;
+<h2 id="class-activation-mapcam">Class Activation Map(CAM)</h2>
 
-&lt;p align=&quot;justify&quot;&gt;
+<p align="justify">
 CAM actually works at the end of the network, just before the final output layer(softmax in the case of categorization).
 At this point, GAP is applied to the convolutional feature maps and the features after the GAP layer finally pass through the last FC layer.
 (This network uses only one FC layer)
 And then, CAM identifies the importance of the image regions by projecting back the weights of the output layer onto the convolutional feature maps. 
-&lt;/p&gt;
+</p>
 
-&lt;p&gt;&lt;strong&gt;To explain the concept with equations,&lt;/strong&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;Let $f_k(x,y)$ represent the activation of unit k in the last convolutional layer at spatial location (x,y). Then, for unit k, the result of performing GAP is expressed
+<p><strong>To explain the concept with equations,</strong><br />
+Let $f_k(x,y)$ represent the activation of unit k in the last convolutional layer at spatial location (x,y). Then, for unit k, the result of performing GAP is expressed
 as $F^k$ and it equals to $\sum_{x, y}f_k(x,y)$. Thus for a given class c, the input to the softmax, $S_c$ is $\sum_k w_{k}^{c}F_k$, where $w_{k}^{c}$ is the weight 
-corresponding to class c for unit k. Essentially, $w_{k}^{c}$ indicates the importnace of $F_k$ for class c.&lt;br /&gt;
-To sum up, it becomes&lt;/p&gt;
+corresponding to class c for unit k. Essentially, $w_{k}^{c}$ indicates the importnace of $F_k$ for class c. To sum up, it becomes like this.</p>
 
-  &lt;p&gt;$\begin{matrix}
-S_c &amp;amp;=&amp;amp; \sum_k w_k^c F_k &lt;br /&gt;
-&amp;amp;=&amp;amp; \sum_k w_c^k \sum_{x, y}f_k(x,y) &lt;br /&gt;
-&amp;amp;=&amp;amp; \sum_{x, y} \sum_k w_k^c f_k(x,y) 
-\end{matrix}$&lt;/p&gt;
+<p>$\begin{matrix}
+S_c &amp;=&amp; \sum_k w_k^c F_k <br />
+&amp;=&amp; \sum_k w_c^k \sum_{x, y}f_k(x,y) <br />
+&amp;=&amp; \sum_{x, y} \sum_k w_k^c f_k(x,y) 
+\end{matrix}$</p>
 
-  &lt;p&gt;like this.&lt;br /&gt;
-If we define $M_c$ as the CAM for class c, where each spatial element is given by $M_c(x, y)$ = $\sum_k w_k^c f_k(x, y)$, we can find $S_c = \sum_{x, y} M_c(x, y)$.&lt;br /&gt;
-Hence, $M_c(x,y)$ directly indicates the importance of the activation at spatial grid (x,y) leading to the classification of an image to class c.&lt;/p&gt;
-&lt;/blockquote&gt;
+<p>If we define $M_c$ as the CAM for class c, where each spatial element is given by $M_c(x, y)$ = $\sum_k w_k^c f_k(x, y)$, we can find $S_c = \sum_{x, y} M_c(x, y)$.
+Hence, $M_c(x,y)$ directly indicates the importance of the activation at spatial grid (x,y) leading to the classification of an image to class c.</p>
 
-&lt;p align=&quot;justify&quot;&gt;
+<p align="justify">
 Therefore, the class activation map is simply a weighted linear sum of the presence of visual patterns at different spatial location. By simply upsampling the class activation map 
 to the size of the input image, the regions of the image that are most relevant to the particular category can be identified.
-&lt;/p&gt;
+</p>
 
-&lt;p&gt;&lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/CAM%20structure.png?raw=true&quot; alt=&quot;structure&quot; class=&quot;align-center&quot; /&gt;&lt;/p&gt;
+<p><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/CAM%20structure.png?raw=true" alt="structure" class="align-center" /></p>
 
-&lt;h2 id=&quot;implementation&quot;&gt;Implementation&lt;/h2&gt;
+<h2 id="implementation">Implementation</h2>
 
-&lt;p align=&quot;justify&quot;&gt;
+<p align="justify">
 I tried to implement the main functions of the original project and visually check their results.
-You can refer to the code &lt;a href=&quot;https://github.com/froggydisk/CAM&quot;&gt;here(CAM Implementation)&lt;/a&gt;.
+You can refer to the code <a href="https://github.com/froggydisk/CAM">here(CAM Implementation)</a>.
 I used Pytorch and you can simply run the code on GoogleColab. 
-&lt;/p&gt;
+</p>
 
-&lt;p align=&quot;justify&quot;&gt;
+<p align="justify">
 I made a very simple network first and used CIFAR10 for training.
 After the training is finished, the model becomes able to classify an object and we can find the class with the highest probability.
 Then, we can draw a heatmap by multiplying the corresponding weights with each feature maps that came out from the last convolutional layer.  
-&lt;/p&gt;
+</p>
 
-&lt;p&gt;The code below shows the main parts of the CAM function.&lt;/p&gt;
+<p>The code below shows the main parts of the CAM function.</p>
 
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;feature_collection&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; 
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;get_feature&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;                                         &lt;span class=&quot;c1&quot;&gt;# get features from the input
-&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;feature&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;net&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;input&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;feature_collection&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;feature&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cpu&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numpy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">feature_collection</span> <span class="o">=</span> <span class="p">[]</span> 
+<span class="c1"># get features from the input
+</span><span class="k">def</span> <span class="nf">get_feature</span><span class="p">(</span><span class="nb">input</span><span class="p">):</span>                                         
+  <span class="n">_</span><span class="p">,</span> <span class="n">feature</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+  <span class="n">feature_collection</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">feature</span><span class="p">.</span><span class="n">cpu</span><span class="p">().</span><span class="n">data</span><span class="p">.</span><span class="n">numpy</span><span class="p">())</span>
 
-&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;list&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;net&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;parameters&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;weight_for_softmax&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;squeeze&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;params&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cpu&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;numpy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;# get weights from the final layer
-&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Do_CAM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;feature&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;weigth_for_softmax&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;class_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;                   &lt;span class=&quot;c1&quot;&gt;# draw a heatmap
-&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;upsample_size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;img_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;img_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;w&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;feature&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;shape&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dot&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;weight_for_softmax&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;class_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;feature&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reshape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;# (weights) x (feature maps)  
-&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reshape&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;h&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;w&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; 
-  &lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;max&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;np&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;uint8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;255&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cv2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;resize&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;upsample_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cam&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;By implementing this code, you can get a heatmap of the image you want to see.&lt;/p&gt;
+<span class="n">params</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">net</span><span class="p">.</span><span class="n">parameters</span><span class="p">())</span>
+<span class="c1"># get weights from the final layer
+</span><span class="n">weight_for_softmax</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">].</span><span class="n">cpu</span><span class="p">().</span><span class="n">data</span><span class="p">.</span><span class="n">numpy</span><span class="p">())</span>
 
-&lt;p&gt;&lt;strong&gt;Settings&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;dataset&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'CIFAR10'&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;img_size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;32&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;batch_size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;128&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;epoch&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;learning_rate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;0.001&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;These are the settings for my experiment. The number of epochs can vary depending on the condition.&lt;/p&gt;
+<span class="c1"># draw a heatmap
+</span><span class="k">def</span> <span class="nf">Do_CAM</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">weigth_for_softmax</span><span class="p">,</span> <span class="n">class_id</span><span class="p">):</span> 
+  <span class="n">upsample_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">img_size</span><span class="p">,</span> <span class="n">img_size</span><span class="p">)</span>
+  <span class="n">_</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">feature</span><span class="p">.</span><span class="n">shape</span>
+  <span class="c1"># (weights) x (feature maps)
+</span>  <span class="n">cam</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">dot</span><span class="p">(</span><span class="n">weight_for_softmax</span><span class="p">[</span><span class="n">class_id</span><span class="p">],</span><span class="n">feature</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="o">*</span><span class="n">w</span><span class="p">))</span>  
+  <span class="n">cam</span> <span class="o">=</span> <span class="n">cam</span><span class="p">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+  <span class="n">cam</span> <span class="o">=</span> <span class="p">(</span><span class="n">cam</span> <span class="o">-</span> <span class="n">np</span><span class="p">.</span><span class="nb">min</span><span class="p">(</span><span class="n">cam</span><span class="p">))</span> 
+  <span class="n">cam</span> <span class="o">=</span> <span class="n">cam</span> <span class="o">/</span> <span class="n">np</span><span class="p">.</span><span class="nb">max</span><span class="p">(</span><span class="n">cam</span><span class="p">)</span>
+  <span class="n">cam</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">uint8</span><span class="p">(</span><span class="mi">255</span> <span class="o">*</span> <span class="n">cam</span><span class="p">)</span>
+  <span class="n">cam</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">cam</span><span class="p">,</span> <span class="n">upsample_size</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">cam</span>
+</code></pre></div></div>
+<p>By implementing this code, you can get a heatmap of the image you want to see.</p>
 
-&lt;p&gt;Here are some results.&lt;/p&gt;
+<p><strong>Settings</strong></p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dataset</span> <span class="o">=</span> <span class="s">'CIFAR10'</span>
+<span class="n">img_size</span> <span class="o">=</span> <span class="mi">32</span>
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">epoch</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.001</span>
+</code></pre></div></div>
+<p>These are the settings for my experiment. The number of epochs can vary depending on the condition.</p>
 
-&lt;p&gt;&lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/bird1.jpg?raw=true&quot; alt=&quot;test1&quot; /&gt; &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/bird5.png?raw=true&quot; alt=&quot;cam1&quot; /&gt;&lt;br /&gt;
-&lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse1.jpg?raw=true&quot; alt=&quot;test2&quot; /&gt; &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse5-1.png?raw=true&quot; alt=&quot;cam2&quot; /&gt;&lt;br /&gt;
-&lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship1.jpeg?raw=true&quot; alt=&quot;test3&quot; /&gt; &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship40.png?raw=true&quot; alt=&quot;cam3&quot; /&gt;&lt;/p&gt;
+<p>Here are some results.</p>
 
-&lt;p&gt;The results show that class activation maps are highlighting the discriminative object parts detected by the CNN.&lt;/p&gt;
+<p><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/bird1.jpg?raw=true" alt="test1" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/bird5.png?raw=true" alt="cam1" /><br />
+<img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse1.jpg?raw=true" alt="test2" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse5-1.png?raw=true" alt="cam2" /><br />
+<img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship1.jpeg?raw=true" alt="test3" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship40.png?raw=true" alt="cam3" /></p>
 
-&lt;p&gt;While implementing, it would be a bit hard to see the results because the size of CIFAR10 images is 32x32.&lt;br /&gt;
+<p>The results show that class activation maps are highlighting the discriminative object parts detected by the CNN.</p>
+
+<p>While implementing, it would be a bit hard to see the results because the size of CIFAR10 images is 32x32.<br />
 I would recommend you to train the model with another dataset if possible, or just take a pretrained model like GoogLeNet for better results.
-If you use the pretrained model, you don’t need to train it anymore. You can use it as it is.&lt;/p&gt;
+If you use the pretrained model, you don’t need to train it anymore. You can use it as it is.</p>
 
-&lt;p&gt;And this is the results of comparison between 5-epoch-experiment and 50-epoch-experiment.
-I captured the model every 10 epochs during training and observed how the results change.&lt;/p&gt;
+<p>And this is the results of comparison between 5-epoch-experiment and 50-epoch-experiment.
+I captured the model every 10 epochs during training and observed how the results change.</p>
 
-&lt;p&gt;      5 Epoch            50 Epoch&lt;br /&gt;
-&lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-1.png?raw=true&quot; alt=&quot;epoch5-1&quot; title=&quot;5 epochs&quot; /&gt; &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-1.png?raw=true&quot; alt=&quot;epoch50-1&quot; title=&quot;50 epochs&quot; /&gt;&lt;br /&gt;
-&lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-2.png?raw=true&quot; alt=&quot;epoch5-2&quot; title=&quot;5 epochs&quot; /&gt; &lt;img src=&quot;https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-2.png?raw=true&quot; alt=&quot;epoch50-2&quot; title=&quot;50 epochs&quot; /&gt;&lt;/p&gt;
+<p>      5 Epoch            50 Epoch<br />
+<img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-1.png?raw=true" alt="epoch5-1" title="5 epochs" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-1.png?raw=true" alt="epoch50-1" title="50 epochs" /><br />
+<img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-2.png?raw=true" alt="epoch5-2" title="5 epochs" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-2.png?raw=true" alt="epoch50-2" title="50 epochs" /></p>
 
-&lt;p&gt;As expected, you can find the model concentrates on the details of the image as the number of epochs increases.
-Consequently, we can say global average pooling CNNs can perform accurate object localization.&lt;/p&gt;
+<p>As expected, you can find the model concentrates on the details of the image as the number of epochs increases.
+Consequently, we can say global average pooling CNNs can perform accurate object localization.</p>
 
-&lt;h2 id=&quot;reference&quot;&gt;Reference&lt;/h2&gt;
+<h2 id="reference">Reference</h2>
 
-&lt;p&gt;&lt;a href=&quot;https://kangbk0120.github.io/articles/2018-02/cam&quot;&gt;https://kangbk0120.github.io/articles/2018-02/cam&lt;/a&gt;&lt;/p&gt;</content><author><name>지나가던 대학원생</name></author><summary type="html">Learning Deep Features for Discriminative Localization</summary></entry><entry><title type="html">Top1 Accuracy와 Top5 Accuracy 이해하기</title><link href="http://localhost:4000/blog/second-post/" rel="alternate" type="text/html" title="Top1 Accuracy와 Top5 Accuracy 이해하기" /><published>2020-06-12T00:00:00+09:00</published><updated>2020-06-12T00:00:00+09:00</updated><id>http://localhost:4000/blog/second-post</id><content type="html" xml:base="http://localhost:4000/blog/second-post/">&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot;&gt;
-딥러닝 관련 논문을 읽다보면 Top1, Top5, Top10과 같은 말들을 자주 볼 수 있습니다. &lt;br /&gt;
-대충 감이 오기는 하지만 정확히 무엇을 의미하는 것일까요?  &lt;br /&gt;
-Top1 뒤에는 Accuracy가 오는 경우와 Loss가 오는 경우 두 가지가 있습니다.  &lt;br /&gt;
-Top1 Accuracy의 경우에는 가장 가까운 클래스를 예측했을 때 정답이었던 경우의 전체 경우의 수에 대한 비율을 의미합니다.&lt;br /&gt;
-반대로 Top1 Loss의 경우에는 가장 가까운 클래스를 예측했을 때 정답이 아니었던 경우의 전체 경우의 수에 대한 비율을 의미합니다.  &lt;br /&gt;
-예를 들어 강아지 고양이 미어캣 개구리 너구리를 구분하는 분류기가 있다고 합시다.&lt;br /&gt;
-위의 다섯 동물 중 어느 한 동물의 이미지를 분류기에 집어넣었더니 분류기의 마지막 층으로부터 Softmax 함수를 지나서 나온 결과가 (0.1, 0.15, 0.3, 0.4, 0.05)였다고 합시다.     &lt;br /&gt;
-벡터의 각 요소가 (강아지, 고양이, 미어캣, 개구리, 너구리)순으로 각각의 클래스로 분류될 확률이라고 한다면 이미지가 분류될 클래스 중에 가장 확률이 높은 것은 개구리가 됩니다.  &lt;br /&gt;
-같은 방법으로 두번째로 확률이 높은 클래스는 미어캣이 되겠네요.&lt;br /&gt;
-이미지가 분류될 확률이 높은 순으로 클래스를 나열하면 개구리 -&amp;gt; 미어캣 -&amp;gt; 고양이 -&amp;gt; 강아지 -&amp;gt; 너구리 순이 됩니다.  &lt;br /&gt;
-만약에 실제로 넣은 이미지가 개구리였다고 했을 때 Top1 Accuracy는 1이 되고 Top1 Loss는 0이 되겠네요.  &lt;br /&gt;
-예상하셨겠지만 Top5 Accuracy는 가장 가까운 클래스를 다섯 개 뽑았을 때 그 안에 정답이 존재한 경우의 비율을 의미합니다.&lt;br /&gt;
-참고로 분류기가 5개의 클래스 밖에 구분하지 못하므로 여기서는 Top5 Accuracy는 의미가 없다고 할 수 있습니다. &lt;br /&gt;
-입력 이미지가 위의 다섯 종류의 동물 중 하나라고 했을 때, 분류될 수 있는 클래스가 다섯개 뿐이므로 무조건 정답이 Top5 안에는 들어있게 되기 때문이죠.&lt;br /&gt;
-혹여나 입력 이미지가 위의 다섯 종류에 국한되어 있지 않는다면 이야기는 달라집니다만 여기서는 고려하지 않겠습니다.  &lt;br /&gt;
+<p><a href="https://kangbk0120.github.io/articles/2018-02/cam">https://kangbk0120.github.io/articles/2018-02/cam</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><summary type="html"><![CDATA[Learning Deep Features for Discriminative Localization]]></summary></entry><entry><title type="html">Top1 Accuracy와 Top5 Accuracy 이해하기</title><link href="http://localhost:4000/second-post/" rel="alternate" type="text/html" title="Top1 Accuracy와 Top5 Accuracy 이해하기" /><published>2020-06-12T00:00:00+07:00</published><updated>2020-06-12T00:00:00+07:00</updated><id>http://localhost:4000/second-post</id><content type="html" xml:base="http://localhost:4000/second-post/"><![CDATA[<p><br /></p>
+<p align="justify">
+딥러닝 관련 논문을 읽다보면 Top1, Top5, Top10과 같은 말들을 자주 볼 수 있습니다. <br />
+대충 감이 오기는 하지만 정확히 무엇을 의미하는 것일까요?  <br />
+Top1 뒤에는 Accuracy가 오는 경우와 Loss가 오는 경우 두 가지가 있습니다.  <br />
+Top1 Accuracy의 경우에는 가장 가까운 클래스를 예측했을 때 정답이었던 경우의 전체 경우의 수에 대한 비율을 의미합니다.<br />
+반대로 Top1 Loss의 경우에는 가장 가까운 클래스를 예측했을 때 정답이 아니었던 경우의 전체 경우의 수에 대한 비율을 의미합니다.  <br />
+예를 들어 강아지 고양이 미어캣 개구리 너구리를 구분하는 분류기가 있다고 합시다.<br />
+위의 다섯 동물 중 어느 한 동물의 이미지를 분류기에 집어넣었더니 분류기의 마지막 층으로부터 Softmax 함수를 지나서 나온 결과가 (0.1, 0.15, 0.3, 0.4, 0.05)였다고 합시다.     <br />
+벡터의 각 요소가 (강아지, 고양이, 미어캣, 개구리, 너구리)순으로 각각의 클래스로 분류될 확률이라고 한다면 이미지가 분류될 클래스 중에 가장 확률이 높은 것은 개구리가 됩니다.  <br />
+같은 방법으로 두번째로 확률이 높은 클래스는 미어캣이 되겠네요.<br />
+이미지가 분류될 확률이 높은 순으로 클래스를 나열하면 개구리 -&gt; 미어캣 -&gt; 고양이 -&gt; 강아지 -&gt; 너구리 순이 됩니다.  <br />
+만약에 실제로 넣은 이미지가 개구리였다고 했을 때 Top1 Accuracy는 1이 되고 Top1 Loss는 0이 되겠네요.  <br />
+예상하셨겠지만 Top5 Accuracy는 가장 가까운 클래스를 다섯 개 뽑았을 때 그 안에 정답이 존재한 경우의 비율을 의미합니다.<br />
+참고로 분류기가 5개의 클래스 밖에 구분하지 못하므로 여기서는 Top5 Accuracy는 의미가 없다고 할 수 있습니다. <br />
+입력 이미지가 위의 다섯 종류의 동물 중 하나라고 했을 때, 분류될 수 있는 클래스가 다섯개 뿐이므로 무조건 정답이 Top5 안에는 들어있게 되기 때문이죠.<br />
+혹여나 입력 이미지가 위의 다섯 종류에 국한되어 있지 않는다면 이야기는 달라집니다만 여기서는 고려하지 않겠습니다.  <br />
 보통 Top1 Accuracy + Top1 Loss = 1 이 되므로 Accuracy든 Loss든 결국에는 같은 이야기를 하고 있다고 생각하시면 됩니다. 
-&lt;/p&gt;</content><author><name>지나가던 대학원생</name></author><category term="Blog" /><summary type="html">논문에 자주 등장하는 Top1, Top5의 의미는?</summary></entry><entry><title type="html">github.io 블로그 시작하기</title><link href="http://localhost:4000/blog/first-post/" rel="alternate" type="text/html" title="github.io 블로그 시작하기" /><published>2020-05-02T00:00:00+09:00</published><updated>2019-05-04T22:06:00+09:00</updated><id>http://localhost:4000/blog/first-post</id><content type="html" xml:base="http://localhost:4000/blog/first-post/">&lt;p&gt;GitHub Blog 서비스인 github.io 블로그 시작하기로 했다.
-GitHub Blog 서비스의 이름은 Pages이다.&lt;/p&gt;
+</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Blog" /><summary type="html"><![CDATA[논문에 자주 등장하는 Top1, Top5의 의미는?]]></summary></entry><entry><title type="html">github.io 블로그 시작하기</title><link href="http://localhost:4000/first-post/" rel="alternate" type="text/html" title="github.io 블로그 시작하기" /><published>2020-05-02T00:00:00+07:00</published><updated>2019-05-04T20:06:00+07:00</updated><id>http://localhost:4000/first-post</id><content type="html" xml:base="http://localhost:4000/first-post/"><![CDATA[<p>GitHub Blog 서비스인 github.io 블로그 시작하기로 했다.
+GitHub Blog 서비스의 이름은 Pages이다.</p>
 
-&lt;p&gt;Pages가 다른 블로그 플랫폼 보다 편한 것 같아서 마음에 든다.
-다른 사람들도 같이 많이 사용했으면 좋겠다는 생각이 든다.&lt;/p&gt;
+<p>Pages가 다른 블로그 플랫폼 보다 편한 것 같아서 마음에 든다.
+다른 사람들도 같이 많이 사용했으면 좋겠다는 생각이 든다.</p>
 
-&lt;p&gt;YFM에서 정의한 제목을 이중 괄호 구문으로 본문에 추가할 수 있다.
+<p>YFM에서 정의한 제목을 이중 괄호 구문으로 본문에 추가할 수 있다.
 이 글의 제목은 github.io 블로그 시작하기이고
-마지막으로 수정된 시간은 2019-05-04 08:06:00 -0500이다.&lt;/p&gt;</content><author><name>지나가던 대학원생</name></author><category term="Blog" /><summary type="html">GitHub Blog 서비스인 github.io 블로그 시작하기로 했다.</summary></entry></feed>
+마지막으로 수정된 시간은 2019-05-04 08:06:00 -0500이다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Blog" /><summary type="html"><![CDATA[GitHub Blog 서비스인 github.io 블로그 시작하기로 했다.]]></summary></entry></feed>
