@@ -21,7 +21,6 @@ For demo <a href="https://klise.now.sh" target="_blank" rel="noopener">klise.now
 - [x] W3C **Validated**
 - [x] Lighthouse and PageSpeed **Passed**
 
-![Lighthouse Result](./lighthouse.png)
 
 ## Backlogs
 
