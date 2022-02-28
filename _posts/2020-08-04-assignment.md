@@ -82,7 +82,7 @@ Therefore, the class activation map is simply a weighted linear sum of the prese
 to the size of the input image, the regions of the image that are most relevant to the particular category can be identified.
 </p>
 
-![structure](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/CAM%20structure.png?raw=true){: .align-center}
+![structure](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/CAM%20structure.png?raw=true){: .align-center}
 
 ## Implementation
 
@@ -138,9 +138,9 @@ These are the settings for my experiment. The number of epochs can vary dependin
 
 Here are some results.  
 
-![test1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/bird1.jpg?raw=true) ![cam1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/bird5.png?raw=true)  
-![test2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse1.jpg?raw=true) ![cam2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse5-1.png?raw=true)  
-![test3](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship1.jpeg?raw=true) ![cam3](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship40.png?raw=true)  
+![test1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/bird1.jpg?raw=true) ![cam1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/bird5.png?raw=true)  
+![test2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/horse1.jpg?raw=true) ![cam2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/horse5-1.png?raw=true)  
+![test3](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/ship1.jpeg?raw=true) ![cam3](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/ship40.png?raw=true)  
 
 The results show that class activation maps are highlighting the discriminative object parts detected by the CNN.
 
@@ -152,8 +152,8 @@ And this is the results of comparison between 5-epoch-experiment and 50-epoch-ex
 I captured the model every 10 epochs during training and observed how the results change. 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5 Epoch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;50 Epoch  
-![epoch5-1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-1.png?raw=true "5 epochs") ![epoch50-1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-1.png?raw=true "50 epochs")  
-![epoch5-2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-2.png?raw=true "5 epochs") ![epoch50-2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-2.png?raw=true "50 epochs")
+![epoch5-1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/dog5-1.png?raw=true "5 epochs") ![epoch50-1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/dog50-1.png?raw=true "50 epochs")  
+![epoch5-2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/dog5-2.png?raw=true "5 epochs") ![epoch50-2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/dog50-2.png?raw=true "50 epochs")
 
 As expected, you can find the model concentrates on the details of the image as the number of epochs increases.
 Consequently, we can say global average pooling CNNs can perform accurate object localization.
