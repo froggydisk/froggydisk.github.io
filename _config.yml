@@ -21,7 +21,7 @@ author:
   avatar: /assets/img/profile.jpg # change with your own avatar
 
 # URL settings
-url: "https://klise.now.sh" #
+url: "https://froggydisk.github.io" #
 baseurl:
 permalink: /:title/
 google_analytics: # leave it blank if not wish
