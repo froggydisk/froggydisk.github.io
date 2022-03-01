@@ -260,7 +260,7 @@
       &:hover,
       &focus {
         color: $black;
-        -webkit-tap-highlight-color: transparent; // added; remove box when click on mobile
+        -webkit-tap-highlight-color: rgba(0,0,0,0); // added; remove box when click on mobile
       }
     }
   }
