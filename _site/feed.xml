@@ -1,4 +1,78 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2022-02-28T10:07:57+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">workspace</title><subtitle>He&apos;s writing in Bahasa about web technology and experience as a journal  for documentation things that he learned, meet him &lt;a href=&quot;https://github.com/piharpi&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;@github&lt;/a&gt;.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[Pytorch] Tensor element를 mutable하게 복사하기</title><link href="http://localhost:4000/fourth-post/" rel="alternate" type="text/html" title="[Pytorch] Tensor element를 mutable하게 복사하기" /><published>2021-08-29T00:00:00+07:00</published><updated>2021-08-29T00:00:00+07:00</updated><id>http://localhost:4000/fourth-post</id><content type="html" xml:base="http://localhost:4000/fourth-post/"><![CDATA[<p><br />
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2022-03-01T12:19:22+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">workspace</title><subtitle>He&apos;s writing in Bahasa about web technology and experience as a journal  for documentation things that he learned, meet him &lt;a href=&quot;https://github.com/piharpi&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;@github&lt;/a&gt;.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">iOS 앱 심사상태를 디스코드로 공유하기 🍎</title><link href="http://localhost:4000/5th-post/" rel="alternate" type="text/html" title="iOS 앱 심사상태를 디스코드로 공유하기 🍎" /><published>2022-02-28T00:00:00+07:00</published><updated>2022-02-28T00:00:00+07:00</updated><id>http://localhost:4000/5th-post</id><content type="html" xml:base="http://localhost:4000/5th-post/"><![CDATA[<h1 id="개발중인-앱의-심사-상태-확인">개발중인 앱의 심사 상태 확인</h1>
+<p>개발자라면 <code class="language-plaintext highlighter-rouge">Appstore Connect</code> 사이트에 들어가면 현재 앱의 심사 상태를 확인할 수 있다. 하지만 엔지니어링 팀이 아니라면 권한이 없는 경우도 많기 때문에 모든 팀원이 앱의 현재 상태를 알고 있기란 쉽지 않다. 일일이 공유를 해주는 것도 하나의 방법이기는 하지만 이런 것들이 하나둘씩 쌓이기 시작하면 업무량이 계속해서 늘어나기 때문에 미리미리 자동화를 해두면 나중에 눈물의 작업을 하게 되는 것을 방지할 수 있다. 빠르게 오픈소스를 찾아보았더니 다행히도 <code class="language-plaintext highlighter-rouge">Slack</code>으로 심사 상태를 보내주는 툴이 이미 있었다. <br />
+오늘은 <a href="https://fernando.kr/ios/2020-11-08-ios-appstore-status-bot/">Fernando</a>님의 코드를 참고하여 <code class="language-plaintext highlighter-rouge">Discord</code>로 앱의 심사 상태를 보내주는 툴을 만들어보자.</p>
+
+<h1 id="사용하는-기능">사용하는 기능</h1>
+<p>● <a href="https://developer.apple.com/documentation/appstoreconnectapi">Appstore Connect API</a><br />
+● <a href="https://github.com/fastlane/fastlane/tree/master/spaceship">fastlane Spaceship</a><br />
+● <a href="https://docs.github.com/en/actions">GitHub Actions</a><br />
+● <a href="https://gist.github.com">GitHub Gist</a><br />
+● <a href="https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks">Discord Webhook</a></p>
+
+<h1 id="코드의-흐름">코드의 흐름</h1>
+<ol>
+  <li>Appstore Connect 사이트에서 API key를 발급받는다.</li>
+  <li>Spaceship 라이브러리를 이용하여 앱 심사 정보를 받아오는 코드를 짠다.</li>
+  <li>GitHub Actions를 사용하여 일정시간마다 위의 코드를 반복적으로 돌릴 수 있게 한다.</li>
+  <li>코드가 실행될 때마다 GitHub Gist에 앱의 현재 정보가 저장된다.</li>
+  <li>이전에 등록된 정보와 현재 앱의 정보가 다르면 Webhook을 이용하여 현재 앱의 심사 상태를 Discord로 보낸다.</li>
+</ol>
+
+<h1 id="툴의-특징">툴의 특징</h1>
+<p>● 설정이 직관적이고 간단<br />
+● 개인 서버가 없어도 작동 가능<br />
+<br />
+<code class="language-plaintext highlighter-rouge">Fernando</code>님의 글에서도 알 수 있듯이 <strong>간편함</strong>이 제일 중요하기에 봇 개발에 리소스를 쓰고 싶지 않은 분들을 위해 레포지토리 <a href="https://github.com/froggydisk/appstore-status-bot">Fork</a>만으로 작동할 수 있게 하였다.</p>
+
+<h1 id="사용법">사용법</h1>
+<ol>
+  <li>깃허브 레포지토리를 <a href="https://github.com/froggydisk/appstore-status-bot">Fork</a>합니다.</li>
+  <li>Appstore Connect에서 key ID, issuer ID, bundle ID, API Key file (.p8)을 발급받습니다.</li>
+  <li>Discord에서 Webhook url을 발급받습니다.</li>
+  <li>GitHub token을 발급받습니다. (발급시 gists와 repo 항목에 체크해주세요.)</li>
+  <li>앱 정보를 저장할 Gist의 url에서 맨 뒤의 ID만 저장해둡니다.<br />
+e.g.) https://gist.github.com/froggydisk/[이부분]</li>
+  <li>위에서 저장한 총 7개의 key를 Fork한 레포지토리의 secret에 하나씩 입력합니다.<br />
+<code class="language-plaintext highlighter-rouge">Settings</code> → <code class="language-plaintext highlighter-rouge">Secrets</code> → <code class="language-plaintext highlighter-rouge">Actions</code> → <code class="language-plaintext highlighter-rouge">New repositoy secret</code>
+    <blockquote>
+      <p>● PRIVATE_KEY: Appstore Connect API Key file (.p8)<br />
+● KEY_ID : Appstore Connect key ID<br />
+● ISSUER_ID : Appstore Connect issuer ID <br />
+● BUNDLE_ID : Appstore Connect bundle ID with comma<br />
+● DISCORD_WEBHOOK : Discord Webhook url<br />
+● GH_TOKEN: GitHub token<br />
+● GIST_ID: Gist url ID</p>
+
+    </blockquote>
+  </li>
+  <li>마지막으로 레포지토리의 <code class="language-plaintext highlighter-rouge">Actions</code> 섹션으로 가서 workflow를 활성화해주면 끝!</li>
+</ol>
+
+<h1 id="주의점">주의점</h1>
+<p>일단 discord로 메세지를 보내는 라이브러리는 정말 다양하게 있다! <a href="https://www.npmjs.com">npm</a>에서 마음에 드는 것을 찾아보자. npm으로 다운받은 뒤에는 discord.js의 코드를 사용법에 맞추어 바꿔주어야한다. Slack이나 Discord 이외에 다른 툴을 사용하는 경우에는 참고하자.<br />
+<br />
+다음은 <code class="language-plaintext highlighter-rouge">Fernando</code>님의 <a href="https://github.com/techinpark/appstore-status-bot">레포지토리</a>를 그대로 사용하다보면 가끔씩 오작동하는 이슈가 있어서 원인을 찾아보았다.</p>
+<h4 id="1-js의-비동기-처리">1. js의 비동기 처리</h4>
+<p>GitHub Actions에서 fetch.yml을 실행하다보면 우선적으로 Gist의 store.db 정보를 쭉 불러온다. 하지만 store.db 안의 내용이 길어지기 시작하면서 request.get 할 때 시간이 오래걸리기 시작하더니 store.db를 다 읽기 전에 현재 앱 상태와의 비교가 끝나버리는 경우가 있었다. 실제 심사 상태는 변화가 없는데 Discord로 알림이 가버렸다. 해결을 위해 앞에 간단하게 await를 붙여주었다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="n">function</span> <span class="n">getGist</span><span class="p">()</span> <span class="p">{</span>
+    <span class="p">(</span><span class="n">생략</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">request</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">function</span><span class="p">(</span><span class="n">error</span><span class="p">,</span> <span class="n">response</span><span class="p">,</span> <span class="n">body</span><span class="p">){</span>
+        <span class="p">(</span><span class="n">생략</span><span class="p">)</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<h4 id="2-특정-상태만-체크">2. 특정 상태만 체크</h4>
+<p>반대로 상태가 바뀌었는데도 알림이 안오는 경우도 있었다. 해결을 위해 현재 코드에서는 가장 최신 버전에 대해 모든 상태 변화를 체크하도록 수정했는데 혹시나 특정 상태에 대해서만 알림을 보내고 싶다면 <a href="https://github.com/fastlane/fastlane/blob/master/spaceship/docs/AppStoreConnect.md">Spaceship</a>의 문서를 잘 살펴보는 것을 추천한다. 아래는 Spaceship에서 버전을 가져오는 함수들이다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">app</span><span class="p">.</span><span class="n">get_live_app_store_version</span> <span class="c1"># the version that's currently available in the App Store
+</span><span class="n">app</span><span class="p">.</span><span class="n">get_edit_app_store_version</span> <span class="c1"># the version that's in `Prepare for Submission`, `Metadata Rejected`, `Rejected`, `Developer Rejcted`, `Waiting for Review`, `Invalid Binary` mode
+</span><span class="n">app</span><span class="p">.</span><span class="n">get_latest_app_store_version</span> <span class="c1"># the version that's the latest one
+</span><span class="n">app</span><span class="p">.</span><span class="n">get_pending_release_app_store_version</span> <span class="c1"># the version that's in `Pending Developer Release` or `Pending Apple Release` mode
+</span><span class="n">app</span><span class="p">.</span><span class="n">get_in_review_app_store_version</span> <span class="c1"># the version that is in `In Review` mode
+</span></code></pre></div></div>
+
+<h1 id="결과">결과</h1>
+<p><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/discord-noti.png?raw=true" width="600" /><br />
+제 때 알림이 온다!! 다만 GitHub Actions는 계정당 쓸 수 있는 시간이 한계가 있으므로 Cron Job을 너무 자주 돌리진 말자.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="API" /><summary type="html"><![CDATA[개발중인 앱의 심사 상태 확인 개발자라면 Appstore Connect 사이트에 들어가면 현재 앱의 심사 상태를 확인할 수 있다. 하지만 엔지니어링 팀이 아니라면 권한이 없는 경우도 많기 때문에 모든 팀원이 앱의 현재 상태를 알고 있기란 쉽지 않다. 일일이 공유를 해주는 것도 하나의 방법이기는 하지만 이런 것들이 하나둘씩 쌓이기 시작하면 업무량이 계속해서 늘어나기 때문에 미리미리 자동화를 해두면 나중에 눈물의 작업을 하게 되는 것을 방지할 수 있다. 빠르게 오픈소스를 찾아보았더니 다행히도 Slack으로 심사 상태를 보내주는 툴이 이미 있었다. 오늘은 Fernando님의 코드를 참고하여 Discord로 앱의 심사 상태를 보내주는 툴을 만들어보자.]]></summary></entry><entry><title type="html">Tensor element를 mutable하게 복사하기</title><link href="http://localhost:4000/4th-post/" rel="alternate" type="text/html" title="Tensor element를 mutable하게 복사하기" /><published>2021-08-29T00:00:00+07:00</published><updated>2021-08-29T00:00:00+07:00</updated><id>http://localhost:4000/4th-post</id><content type="html" xml:base="http://localhost:4000/4th-post/"><![CDATA[<p><br />
 일반적인 경우, 텐서 간의 복사는 복사된 참조 변수의 수정이 기존 참조 변수의 값에 똑같은 영향을 미친다.
 예를 들면 아래와 같다.</p>
 
@@ -75,7 +149,7 @@
 </span><span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="c1">#tensor([1.0009, 1.9996, 2.9995], requires_grad=True)
 </span></code></pre></div></div>
 <p>a와 b가 성공적으로 동시에 업데이트 된다. 
-물론 단순히 1차원 텐서가 아니라 그 이상의 텐서에 대해서도 적용 가능하다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Blog" /><summary type="html"><![CDATA[머신러닝/딥러닝]]></summary></entry><entry><title type="html">[HTML/CSS] 모바일에서 hover 효과 없애기</title><link href="http://localhost:4000/third-post/" rel="alternate" type="text/html" title="[HTML/CSS] 모바일에서 hover 효과 없애기" /><published>2020-08-28T00:00:00+07:00</published><updated>2020-08-28T00:00:00+07:00</updated><id>http://localhost:4000/third-post</id><content type="html" xml:base="http://localhost:4000/third-post/"><![CDATA[<p><br />
+물론 단순히 1차원 텐서가 아니라 그 이상의 텐서에 대해서도 적용 가능하다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Pytorch" /><summary type="html"><![CDATA[머신러닝/딥러닝]]></summary></entry><entry><title type="html">모바일에서 hover 효과 없애기</title><link href="http://localhost:4000/3rd-post/" rel="alternate" type="text/html" title="모바일에서 hover 효과 없애기" /><published>2020-08-28T00:00:00+07:00</published><updated>2020-08-28T00:00:00+07:00</updated><id>http://localhost:4000/3rd-post</id><content type="html" xml:base="http://localhost:4000/3rd-post/"><![CDATA[<p><br />
 아이폰이나 아이패드와 같은 기기에서는 PC와는 다르게 hover 효과가 적용되지 않는다.<br />
 그 이유는 마우스가 아닌 터치 방식을 사용하기 때문이다.<br />
 그러다보니 모바일에서 드랍다운 메뉴 같은 경우, 한 번 누르면 계속 호버된 상태가 되어 효과가 사라지지 않는 경우가 있다.<br />
@@ -100,7 +174,7 @@
   <span class="nt">&lt;/body&gt;</span>
 </code></pre></div></div>
 <p>호버 효과를 적용하는 class의 style 안에 <strong>-webkit-tap-highlight-color:transparent;</strong>를 넣어주고(터치 시 탭효과 제거)<br />
-body에 <strong>ontouchstart=”“</strong>를 적용하면 끝</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Blog" /><summary type="html"><![CDATA[반응형 웹페이지 만들기]]></summary></entry><entry><title type="html">CAM(Class Activation Map) Implementation</title><link href="http://localhost:4000/assignment/" rel="alternate" type="text/html" title="CAM(Class Activation Map) Implementation" /><published>2020-08-04T00:00:00+07:00</published><updated>2020-08-04T03:41:00+07:00</updated><id>http://localhost:4000/assignment</id><content type="html" xml:base="http://localhost:4000/assignment/"><![CDATA[<p><br /></p>
+body에 <strong>ontouchstart=”“</strong>를 적용하면 끝</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="HTML/CSS" /><summary type="html"><![CDATA[반응형 웹페이지 만들기]]></summary></entry><entry><title type="html">CAM: Class Activation Map Implementation</title><link href="http://localhost:4000/assignment/" rel="alternate" type="text/html" title="CAM: Class Activation Map Implementation" /><published>2020-08-04T00:00:00+07:00</published><updated>2020-08-04T03:41:00+07:00</updated><id>http://localhost:4000/assignment</id><content type="html" xml:base="http://localhost:4000/assignment/"><![CDATA[<p><br /></p>
 <p align="justify">
 Today, I'm going to talk about a paper, 'Learning Deep Features for Discriminative Localization'
 (<a href="https://arxiv.org/pdf/1512.04150.pdf">Zhou+ CVPR16</a>).
@@ -172,7 +246,7 @@ Therefore, the class activation map is simply a weighted linear sum of the prese
 to the size of the input image, the regions of the image that are most relevant to the particular category can be identified.
 </p>
 
-<p><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/CAM%20structure.png?raw=true" alt="structure" class="align-center" /></p>
+<p><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/CAM%20structure.png?raw=true" alt="structure" class="align-center" /></p>
 
 <h2 id="implementation">Implementation</h2>
 
@@ -226,9 +300,9 @@ Then, we can draw a heatmap by multiplying the corresponding weights with each f
 
 <p>Here are some results.</p>
 
-<p><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/bird1.jpg?raw=true" alt="test1" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/bird5.png?raw=true" alt="cam1" /><br />
-<img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse1.jpg?raw=true" alt="test2" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/horse5-1.png?raw=true" alt="cam2" /><br />
-<img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship1.jpeg?raw=true" alt="test3" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/ship40.png?raw=true" alt="cam3" /></p>
+<p><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/bird1.jpg?raw=true" alt="test1" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/bird5.png?raw=true" alt="cam1" /><br />
+<img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/horse1.jpg?raw=true" alt="test2" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/horse5-1.png?raw=true" alt="cam2" /><br />
+<img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/ship1.jpeg?raw=true" alt="test3" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/ship40.png?raw=true" alt="cam3" /></p>
 
 <p>The results show that class activation maps are highlighting the discriminative object parts detected by the CNN.</p>
 
@@ -240,15 +314,15 @@ If you use the pretrained model, you don’t need to train it anymore. You can u
 I captured the model every 10 epochs during training and observed how the results change.</p>
 
 <p>      5 Epoch            50 Epoch<br />
-<img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-1.png?raw=true" alt="epoch5-1" title="5 epochs" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-1.png?raw=true" alt="epoch50-1" title="50 epochs" /><br />
-<img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog5-2.png?raw=true" alt="epoch5-2" title="5 epochs" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/images/dog50-2.png?raw=true" alt="epoch50-2" title="50 epochs" /></p>
+<img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/dog5-1.png?raw=true" alt="epoch5-1" title="5 epochs" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/dog50-1.png?raw=true" alt="epoch50-1" title="50 epochs" /><br />
+<img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/dog5-2.png?raw=true" alt="epoch5-2" title="5 epochs" /> <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/dog50-2.png?raw=true" alt="epoch50-2" title="50 epochs" /></p>
 
 <p>As expected, you can find the model concentrates on the details of the image as the number of epochs increases.
 Consequently, we can say global average pooling CNNs can perform accurate object localization.</p>
 
 <h2 id="reference">Reference</h2>
 
-<p><a href="https://kangbk0120.github.io/articles/2018-02/cam">https://kangbk0120.github.io/articles/2018-02/cam</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><summary type="html"><![CDATA[Learning Deep Features for Discriminative Localization]]></summary></entry><entry><title type="html">Top1 Accuracy와 Top5 Accuracy 이해하기</title><link href="http://localhost:4000/second-post/" rel="alternate" type="text/html" title="Top1 Accuracy와 Top5 Accuracy 이해하기" /><published>2020-06-12T00:00:00+07:00</published><updated>2020-06-12T00:00:00+07:00</updated><id>http://localhost:4000/second-post</id><content type="html" xml:base="http://localhost:4000/second-post/"><![CDATA[<p><br /></p>
+<p><a href="https://kangbk0120.github.io/articles/2018-02/cam">https://kangbk0120.github.io/articles/2018-02/cam</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Assignment" /><category term="Pytorch" /><summary type="html"><![CDATA[Learning Deep Features for Discriminative Localization]]></summary></entry><entry><title type="html">Top1 Accuracy와 Top5 Accuracy 이해하기</title><link href="http://localhost:4000/2nd-post/" rel="alternate" type="text/html" title="Top1 Accuracy와 Top5 Accuracy 이해하기" /><published>2020-06-12T00:00:00+07:00</published><updated>2020-06-12T00:00:00+07:00</updated><id>http://localhost:4000/2nd-post</id><content type="html" xml:base="http://localhost:4000/2nd-post/"><![CDATA[<p><br /></p>
 <p align="justify">
 딥러닝 관련 논문을 읽다보면 Top1, Top5, Top10과 같은 말들을 자주 볼 수 있습니다. <br />
 대충 감이 오기는 하지만 정확히 무엇을 의미하는 것일까요?  <br />
@@ -266,12 +340,8 @@ Top1 Accuracy의 경우에는 가장 가까운 클래스를 예측했을 때 정
 입력 이미지가 위의 다섯 종류의 동물 중 하나라고 했을 때, 분류될 수 있는 클래스가 다섯개 뿐이므로 무조건 정답이 Top5 안에는 들어있게 되기 때문이죠.<br />
 혹여나 입력 이미지가 위의 다섯 종류에 국한되어 있지 않는다면 이야기는 달라집니다만 여기서는 고려하지 않겠습니다.  <br />
 보통 Top1 Accuracy + Top1 Loss = 1 이 되므로 Accuracy든 Loss든 결국에는 같은 이야기를 하고 있다고 생각하시면 됩니다. 
-</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Blog" /><summary type="html"><![CDATA[논문에 자주 등장하는 Top1, Top5의 의미는?]]></summary></entry><entry><title type="html">github.io 블로그 시작하기</title><link href="http://localhost:4000/first-post/" rel="alternate" type="text/html" title="github.io 블로그 시작하기" /><published>2020-05-02T00:00:00+07:00</published><updated>2019-05-04T20:06:00+07:00</updated><id>http://localhost:4000/first-post</id><content type="html" xml:base="http://localhost:4000/first-post/"><![CDATA[<p>GitHub Blog 서비스인 github.io 블로그 시작하기로 했다.
-GitHub Blog 서비스의 이름은 Pages이다.</p>
-
-<p>Pages가 다른 블로그 플랫폼 보다 편한 것 같아서 마음에 든다.
-다른 사람들도 같이 많이 사용했으면 좋겠다는 생각이 든다.</p>
+</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Paper" /><summary type="html"><![CDATA[논문에 자주 등장하는 Top1, Top5의 의미는?]]></summary></entry><entry><title type="html">github.io 블로그 시작하기</title><link href="http://localhost:4000/1st-post/" rel="alternate" type="text/html" title="github.io 블로그 시작하기" /><published>2020-05-02T00:00:00+07:00</published><updated>2019-05-04T20:06:00+07:00</updated><id>http://localhost:4000/1st-post</id><content type="html" xml:base="http://localhost:4000/1st-post/"><![CDATA[<p>GitHub Blog 서비스인 github.io 블로그를 시작하기로 했다.</p>
 
 <p>YFM에서 정의한 제목을 이중 괄호 구문으로 본문에 추가할 수 있다.
-이 글의 제목은 github.io 블로그 시작하기이고
-마지막으로 수정된 시간은 2019-05-04 08:06:00 -0500이다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Blog" /><summary type="html"><![CDATA[GitHub Blog 서비스인 github.io 블로그 시작하기로 했다.]]></summary></entry></feed>
+이 글의 제목은 “github.io 블로그 시작하기”이고
+마지막으로 수정된 시간은 “2019-05-04 08:06:00 -0500”이다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Blog" /><summary type="html"><![CDATA[GitHub Blog 서비스인 github.io 블로그 시작하기로 했다.]]></summary></entry></feed>

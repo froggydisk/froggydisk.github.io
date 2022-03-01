@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>http://localhost:4000/first-post/</loc>
+<loc>http://localhost:4000/1st-post/</loc>
 <lastmod>2019-05-04T20:06:00+07:00</lastmod>
 </url>
 <url>
-<loc>http://localhost:4000/second-post/</loc>
+<loc>http://localhost:4000/2nd-post/</loc>
 <lastmod>2020-06-12T00:00:00+07:00</lastmod>
 </url>
 <url>
@@ -13,12 +13,16 @@
 <lastmod>2020-08-04T03:41:00+07:00</lastmod>
 </url>
 <url>
-<loc>http://localhost:4000/third-post/</loc>
+<loc>http://localhost:4000/3rd-post/</loc>
 <lastmod>2020-08-28T00:00:00+07:00</lastmod>
 </url>
 <url>
-<loc>http://localhost:4000/fourth-post/</loc>
+<loc>http://localhost:4000/4th-post/</loc>
 <lastmod>2021-08-29T00:00:00+07:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/5th-post/</loc>
+<lastmod>2022-02-28T00:00:00+07:00</lastmod>
 </url>
 <url>
 <loc>http://localhost:4000/about/</loc>
