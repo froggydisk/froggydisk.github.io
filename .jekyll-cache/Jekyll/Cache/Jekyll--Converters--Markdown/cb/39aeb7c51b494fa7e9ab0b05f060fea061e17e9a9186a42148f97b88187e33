@@ -1,0 +1,5 @@
+I"–<p>```python
+a {
+      color: $text-base-color;
+      -webkit-tap-highlight-color: rgba(0,0,0,0); // added; remove highlight when click on mobile</p>
+:ET

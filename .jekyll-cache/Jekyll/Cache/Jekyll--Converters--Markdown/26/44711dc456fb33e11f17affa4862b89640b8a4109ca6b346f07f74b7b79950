@@ -1,0 +1,5 @@
+I"z<p>```css
+a {
+      color: $text-base-color;
+      -webkit-tap-highlight-color: rgba(0,0,0,0); # or transparent;</p>
+:ET

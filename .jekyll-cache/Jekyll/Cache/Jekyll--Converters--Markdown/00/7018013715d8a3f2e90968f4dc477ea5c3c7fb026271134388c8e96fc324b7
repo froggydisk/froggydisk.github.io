@@ -1,0 +1,13 @@
+I"<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">a</span> <span class="p">{</span>
+      <span class="nl">color</span><span class="p">:</span> <span class="err">$</span><span class="n">text-base-color</span><span class="p">;</span>
+      <span class="nl">-webkit-tap-highlight-color</span><span class="p">:</span> <span class="n">rgba</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">);</span> <span class="err">#</span> <span class="err">or</span> <span class="err">transparent;</span>
+
+      <span class="err">&amp;:hover,</span>
+      <span class="err">&amp;focus</span> <span class="err">{</span>
+        <span class="nl">color</span><span class="p">:</span> <span class="err">$</span><span class="no">black</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="err">}</span>
+</code></pre></div></div>
+<p>위와 같이 <code class="language-plaintext highlighter-rouge">-webkit-tap-highlight-color: rgba(0,0,0,0);</code> 혹은 <code class="language-plaintext highlighter-rouge">transparent;</code> 를 적용하면 나타나지 않는다.</p>
+
+:ET
