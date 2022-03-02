@@ -246,7 +246,6 @@
   }
 
   .post-item-title {
-    width: 75%; // added
     margin: 0;
     border: 0;
     padding: 0;
@@ -256,11 +255,11 @@
 
     a {
       color: $text-base-color;
+      -webkit-tap-highlight-color: rgba(0,0,0,0); // added; remove box when click on mobile
 
       &:hover,
       &focus {
         color: $black;
-        -webkit-tap-highlight-color: rgba(0,0,0,0); // added; remove box when click on mobile
       }
     }
   }
