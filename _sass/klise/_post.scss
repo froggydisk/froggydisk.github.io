@@ -70,6 +70,7 @@
 // Post content
 .page-content {
   padding-top: 8px;
+  padding-bottom: 24px; // added;
 
   iframe {
     text-align: center;
@@ -194,7 +195,7 @@
 .post-nav {
   display: flex;
   position: relative;
-  margin-top: 5em;
+  margin-top: 2em; // revised
   border-top: 1px solid $light;
   line-height: 1.4;
 

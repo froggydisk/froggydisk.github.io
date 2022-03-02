@@ -3,9 +3,7 @@ title: "CAM: Class Activation Map Implementation"
 excerpt: "Learning Deep Features for Discriminative Localization"
 use_math: true
 comments: true
-toc: true
-toc_sticky: true
-toc_label: Content
+
 categories:
   - Assignment
 tags:
