@@ -1,47 +1,134 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url>
-<loc>http://localhost:4000/1st-post/</loc>
-<lastmod>2019-05-04T20:06:00+07:00</lastmod>
-</url>
-<url>
-<loc>http://localhost:4000/2nd-post/</loc>
-<lastmod>2020-06-12T00:00:00+07:00</lastmod>
-</url>
-<url>
-<loc>http://localhost:4000/assignment/</loc>
-<lastmod>2020-08-04T03:41:00+07:00</lastmod>
-</url>
-<url>
-<loc>http://localhost:4000/3rd-post/</loc>
-<lastmod>2020-08-28T00:00:00+07:00</lastmod>
-</url>
-<url>
-<loc>http://localhost:4000/4th-post/</loc>
-<lastmod>2021-08-29T00:00:00+07:00</lastmod>
-</url>
-<url>
-<loc>http://localhost:4000/5th-post/</loc>
-<lastmod>2022-02-28T00:00:00+07:00</lastmod>
-</url>
-<url>
-<loc>http://localhost:4000/6th-post/</loc>
-<lastmod>2022-03-02T00:00:00+07:00</lastmod>
-</url>
-<url>
-<loc>http://localhost:4000/7th-post/</loc>
-<lastmod>2022-03-03T00:00:00+07:00</lastmod>
-</url>
-<url>
-<loc>http://localhost:4000/about/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/archive/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/</loc>
-</url>
-<url>
-<loc>http://localhost:4000/tags/</loc>
-</url>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
+        xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    
+    <url>
+        <loc>http://localhost:4000/7th-post/</loc>
+        
+        <lastmod>2022-03-03T00:00:00+07:00</lastmod>
+        
+
+        
+        <changefreq>weekly</changefreq>
+        
+
+        
+        <priority>0.5</priority>
+        
+
+    </url>
+    
+    <url>
+        <loc>http://localhost:4000/6th-post/</loc>
+        
+        <lastmod>2022-03-02T00:00:00+07:00</lastmod>
+        
+
+        
+        <changefreq>weekly</changefreq>
+        
+
+        
+        <priority>0.5</priority>
+        
+
+    </url>
+    
+    <url>
+        <loc>http://localhost:4000/5th-post/</loc>
+        
+        <lastmod>2022-02-28T00:00:00+07:00</lastmod>
+        
+
+        
+        <changefreq>weekly</changefreq>
+        
+
+        
+        <priority>0.5</priority>
+        
+
+    </url>
+    
+    <url>
+        <loc>http://localhost:4000/4th-post/</loc>
+        
+        <lastmod>2021-08-29T00:00:00+07:00</lastmod>
+        
+
+        
+        <changefreq>weekly</changefreq>
+        
+
+        
+        <priority>0.5</priority>
+        
+
+    </url>
+    
+    <url>
+        <loc>http://localhost:4000/3rd-post/</loc>
+        
+        <lastmod>2020-08-28T00:00:00+07:00</lastmod>
+        
+
+        
+        <changefreq>weekly</changefreq>
+        
+
+        
+        <priority>0.5</priority>
+        
+
+    </url>
+    
+    <url>
+        <loc>http://localhost:4000/assignment/</loc>
+        
+        <lastmod>2020-08-04T00:00:00+07:00</lastmod>
+        
+
+        
+        <changefreq>weekly</changefreq>
+        
+
+        
+        <priority>0.5</priority>
+        
+
+    </url>
+    
+    <url>
+        <loc>http://localhost:4000/2nd-post/</loc>
+        
+        <lastmod>2020-06-12T00:00:00+07:00</lastmod>
+        
+
+        
+        <changefreq>weekly</changefreq>
+        
+
+        
+        <priority>0.5</priority>
+        
+
+    </url>
+    
+    <url>
+        <loc>http://localhost:4000/1st-post/</loc>
+        
+        <lastmod>2020-05-02T00:00:00+07:00</lastmod>
+        
+
+        
+        <changefreq>weekly</changefreq>
+        
+
+        
+        <priority>0.5</priority>
+        
+
+    </url>
+    
 </urlset>
