@@ -4,7 +4,7 @@
       "title"    : "Buy me a coffee 버튼 만들기 ☕️",
       "description" : "",
       "tags"     : "HTML, CSS",
-      "url"      : "/7th-post/",
+      "url"      : "/seventh-post/",
       "date"     : "2022-03-03 00:00:00 +0700"
     } ,
   
@@ -12,7 +12,7 @@
       "title"    : "모바일에서 영역 터치 시 발생하는 하이라이트 제거",
       "description" : "",
       "tags"     : "CSS",
-      "url"      : "/6th-post/",
+      "url"      : "/sixth-post/",
       "date"     : "2022-03-02 00:00:00 +0700"
     } ,
   
@@ -20,7 +20,7 @@
       "title"    : "iOS 앱 심사상태를 디스코드로 공유하기 🍎",
       "description" : "",
       "tags"     : "API",
-      "url"      : "/5th-post/",
+      "url"      : "/fifth-post/",
       "date"     : "2022-02-28 00:00:00 +0700"
     } ,
   
@@ -28,7 +28,7 @@
       "title"    : "Tensor element를 mutable하게 복사하기",
       "description" : "",
       "tags"     : "Pytorch",
-      "url"      : "/4th-post/",
+      "url"      : "/fourth-post/",
       "date"     : "2021-08-29 00:00:00 +0700"
     } ,
   
@@ -36,7 +36,7 @@
       "title"    : "모바일에서 hover 효과 없애기",
       "description" : "",
       "tags"     : "HTML/CSS",
-      "url"      : "/3rd-post/",
+      "url"      : "/third-post/",
       "date"     : "2020-08-28 00:00:00 +0700"
     } ,
   
@@ -52,7 +52,7 @@
       "title"    : "Top1 Accuracy와 Top5 Accuracy 이해하기",
       "description" : "",
       "tags"     : "Paper",
-      "url"      : "/2nd-post/",
+      "url"      : "/second-post/",
       "date"     : "2020-06-12 00:00:00 +0700"
     } ,
   
@@ -60,7 +60,7 @@
       "title"    : "github.io 블로그 시작하기",
       "description" : "",
       "tags"     : "Blog",
-      "url"      : "/1st-post/",
+      "url"      : "/first-post/",
       "date"     : "2020-05-02 00:00:00 +0700"
     } 
   

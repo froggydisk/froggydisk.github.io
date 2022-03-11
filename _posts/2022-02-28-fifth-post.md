@@ -58,13 +58,11 @@ e.g.) https://gist.github.com/froggydisk/[이부분]
 <br>
 다음은 `Fernando`님의 [레포지토리](https://github.com/techinpark/appstore-status-bot)를 그대로 사용하다보면 가끔씩 오작동하는 이슈가 있어서 원인을 찾아보았다. 
 #### 1. js의 비동기 처리
-GitHub Actions에서 fetch.yml을 실행하다보면 우선적으로 Gist의 store.db 정보를 쭉 불러온다. 하지만 store.db 안의 내용이 길어지기 시작하면서 request.get 할 때 시간이 오래걸리기 시작하더니 store.db를 다 읽기 전에 현재 앱 상태와의 비교가 끝나버리는 경우가 있었다. 실제 심사 상태는 변화가 없는데 Discord로 알림이 가버렸다. 해결을 위해 앞에 간단하게 await를 붙여주었다. 
+GitHub Actions에서 fetch.yml을 실행하다보면 우선적으로 Gist의 store.db 정보를 쭉 불러온다. 하지만 store.db 안의 내용이 길어지기 시작하면서 request.get 할 때 시간이 오래걸리기 시작하더니 store.db를 다 읽기 전에 현재 앱 상태와의 비교가 끝나버리는 경우가 있었다. 실제 심사 상태는 변화가 없는데 Discord로 알림이 가버렸다. 해결을 위해 앞에 async/await를 사용하였다. 
 ```python
-async function getGist() {
+async function main() {
+    await getGist();
     (생략)
-    await request.get(options, function(error, response, body){
-        (생략)
-    });
 }
 ```
 #### 2. 최신 버전만 체크

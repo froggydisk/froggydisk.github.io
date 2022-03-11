@@ -4,7 +4,7 @@
         xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     
     <url>
-        <loc>http://localhost:4000/7th-post/</loc>
+        <loc>http://localhost:4000/seventh-post/</loc>
         
         <lastmod>2022-03-03T00:00:00+07:00</lastmod>
         
@@ -20,7 +20,7 @@
     </url>
     
     <url>
-        <loc>http://localhost:4000/6th-post/</loc>
+        <loc>http://localhost:4000/sixth-post/</loc>
         
         <lastmod>2022-03-02T00:00:00+07:00</lastmod>
         
@@ -36,7 +36,7 @@
     </url>
     
     <url>
-        <loc>http://localhost:4000/5th-post/</loc>
+        <loc>http://localhost:4000/fifth-post/</loc>
         
         <lastmod>2022-02-28T00:00:00+07:00</lastmod>
         
@@ -52,7 +52,7 @@
     </url>
     
     <url>
-        <loc>http://localhost:4000/4th-post/</loc>
+        <loc>http://localhost:4000/fourth-post/</loc>
         
         <lastmod>2021-08-29T00:00:00+07:00</lastmod>
         
@@ -68,7 +68,7 @@
     </url>
     
     <url>
-        <loc>http://localhost:4000/3rd-post/</loc>
+        <loc>http://localhost:4000/third-post/</loc>
         
         <lastmod>2020-08-28T00:00:00+07:00</lastmod>
         
@@ -100,7 +100,7 @@
     </url>
     
     <url>
-        <loc>http://localhost:4000/2nd-post/</loc>
+        <loc>http://localhost:4000/second-post/</loc>
         
         <lastmod>2020-06-12T00:00:00+07:00</lastmod>
         
@@ -116,7 +116,7 @@
     </url>
     
     <url>
-        <loc>http://localhost:4000/1st-post/</loc>
+        <loc>http://localhost:4000/first-post/</loc>
         
         <lastmod>2020-05-02T00:00:00+07:00</lastmod>
         
