@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "구글 서치 콘솔에서 리디렉션 오류로 색인 등록이 안될 때",
+      "description" : "",
+      "tags"     : "Seacrh Index",
+      "url"      : "/eighth-post/",
+      "date"     : "2022-03-24 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "Buy me a coffee 버튼 만들기 ☕️",
       "description" : "",
       "tags"     : "HTML, CSS",
