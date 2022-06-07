@@ -6,6 +6,10 @@
   url: /archive/
   external: false
 
+- title: velog
+  url: https://velog.io/@frog
+  external: true
+
 # - title: about
 #   url: /about/
 #   external: false # set true if you using external link, see below
