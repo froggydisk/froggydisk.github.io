@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "React Native Bottom Tab Navigator 없애기",
+      "description" : "",
+      "tags"     : "React Native, Navigator",
+      "url"      : "/nineth-post/",
+      "date"     : "2022-10-26 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "구글 서치 콘솔에서 리디렉션 오류로 색인 등록이 안될 때",
       "description" : "",
       "tags"     : "Seacrh Index",
