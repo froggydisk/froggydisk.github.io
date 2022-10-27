@@ -7,7 +7,7 @@ categories:
 categories:
   - Blog
 tags:
-  - Paper
+  - Image Recognition
 last_modified_at: 2020-06-12T
 ---
 

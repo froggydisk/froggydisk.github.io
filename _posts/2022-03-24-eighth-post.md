@@ -6,7 +6,7 @@ categories:
 categories:
   - Blog
 tags:
-  - Seacrh Index
+  - Google Search Console
 last_modified_at: 2022-03-24T
 ---
 

@@ -1,12 +1,12 @@
 ---
-title: "React Native Bottom Tab Navigator 없애기"
+title: "[React Native] Bottom Tab Navigator 없애기"
 
 comments: true
 categories:
 categories:
   - Blog
 tags:
-  - React Native, Navigator
+  - React Native
 last_modified_at: 2022-10-26T
 ---
 

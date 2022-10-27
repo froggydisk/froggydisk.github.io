@@ -6,7 +6,7 @@ categories:
 categories:
   - Blog
 tags:
-  - HTML, CSS
+  - HTML/CSS
 last_modified_at: 2022-03-03T
 ---
 

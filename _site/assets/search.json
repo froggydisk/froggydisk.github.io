@@ -1,9 +1,17 @@
 [
   
     {
-      "title"    : "React Native Bottom Tab Navigator 없애기",
+      "title"    : "[React Native] Draggable Button과 ScrollView",
       "description" : "",
-      "tags"     : "React Native, Navigator",
+      "tags"     : "React Native",
+      "url"      : "/tenth-post/",
+      "date"     : "2022-10-27 00:00:00 +0700"
+    } ,
+  
+    {
+      "title"    : "[React Native] Bottom Tab Navigator 없애기",
+      "description" : "",
+      "tags"     : "React Native",
       "url"      : "/nineth-post/",
       "date"     : "2022-10-26 00:00:00 +0700"
     } ,
@@ -11,7 +19,7 @@
     {
       "title"    : "구글 서치 콘솔에서 리디렉션 오류로 색인 등록이 안될 때",
       "description" : "",
-      "tags"     : "Seacrh Index",
+      "tags"     : "Google Search Console",
       "url"      : "/eighth-post/",
       "date"     : "2022-03-24 00:00:00 +0700"
     } ,
@@ -19,7 +27,7 @@
     {
       "title"    : "Buy me a coffee 버튼 만들기 ☕️",
       "description" : "",
-      "tags"     : "HTML, CSS",
+      "tags"     : "HTML/CSS",
       "url"      : "/seventh-post/",
       "date"     : "2022-03-03 00:00:00 +0700"
     } ,
@@ -35,7 +43,7 @@
     {
       "title"    : "iOS 앱 심사상태를 디스코드로 공유하기 🍎",
       "description" : "",
-      "tags"     : "API",
+      "tags"     : "API, Discord",
       "url"      : "/fifth-post/",
       "date"     : "2022-02-28 00:00:00 +0700"
     } ,
@@ -67,7 +75,7 @@
     {
       "title"    : "Top1 Accuracy와 Top5 Accuracy 이해하기",
       "description" : "",
-      "tags"     : "Paper",
+      "tags"     : "Image Recognition",
       "url"      : "/second-post/",
       "date"     : "2020-06-12 00:00:00 +0700"
     } ,

@@ -6,7 +6,7 @@ categories:
 categories:
   - Blog
 tags:
-  - API
+  - API, Discord
 last_modified_at: 2022-02-28T
 ---
 
