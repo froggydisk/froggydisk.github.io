@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "[React Native] Android Gradle plugin 의존성 에러",
+      "description" : "",
+      "tags"     : "React Native, Android",
+      "url"      : "/eleventh-post/",
+      "date"     : "2022-11-07 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[React Native] Draggable Button과 ScrollView",
       "description" : "",
       "tags"     : "React Native",
