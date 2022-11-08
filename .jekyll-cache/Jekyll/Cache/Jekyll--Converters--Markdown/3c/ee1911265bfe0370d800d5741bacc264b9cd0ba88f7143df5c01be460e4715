@@ -1,0 +1,31 @@
+I"�<p>● 서버 코드</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">multer</span><span class="p">.</span><span class="nx">diskStorage</span><span class="p">({</span>
+  <span class="na">destination</span><span class="p">:</span> <span class="k">async</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">userId</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">)).</span><span class="nx">userId</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">dir</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">./uploads/</span><span class="dl">"</span> <span class="o">+</span> <span class="nx">userId</span><span class="p">;</span> <span class="c1">// See here!</span>
+    <span class="k">try</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">fs</span><span class="p">.</span><span class="nx">existsSync</span><span class="p">(</span><span class="nx">dir</span><span class="p">))</span> <span class="p">{</span> <span class="c1">// 해당 유저의 디렉토리가 있는지 확인</span>
+        <span class="nx">fs</span><span class="p">.</span><span class="nx">mkdirSync</span><span class="p">(</span><span class="nx">dir</span><span class="p">,</span> <span class="p">{</span> <span class="na">recursive</span><span class="p">:</span> <span class="kc">true</span> <span class="p">});</span> <span class="c1">// 없다면 디렉토리를 생성</span>
+      <span class="p">}</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">dir</span><span class="p">);</span>
+  <span class="p">},</span>
+  <span class="na">filename</span><span class="p">:</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="s2">`</span><span class="p">${</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()}</span><span class="s2">_</span><span class="p">${</span><span class="nx">file</span><span class="p">.</span><span class="nx">originalname</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span> 
+  <span class="p">},</span>
+<span class="p">});</span>
+</code></pre></div></div>
+<p>Multer를 사용하여 이미지를 업로드할 때 유저별로 폴더를 만들어서 따로 저장하려고 하는데 자꾸 에러가 났다. 
+<br />
+디렉토리를 생성하지 못하는 걸로 보아 함수를 fs쪽 함수를 잘못 사용하고 있나 싶어서 열심히 찾아보았으나 아무런 효과를 볼 수 없었다. 
+<br />
+오랜 시간 끝에 아무생각 없이 /uploads/로 되어 있던 절대경로를 마침표를 붙여 상대경로로 만들어주었더니 정상적으로 작동하였다. 
+<br />
+서버에 따라 마침표가 필요할 때가 있고 아닐 때가 있으므로 둘 다 해보고 되는 것으로 하면 되겠다. 
+<br />
+여기서 중요한 것은 항상 경로 체크를 동반하는 것이 무의미한 시간 낭비를 피할 수 있다는 것이다. 
+<br />
+참고를 위해 클라이언트쪽 코드도 남겨둔다.</p>
+:ET
