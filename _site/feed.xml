@@ -1,4 +1,27 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2022-11-08T21:40:12+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[Multer] Error: ENOENT: no such file or directory</title><link href="http://localhost:4000/twelveth-post/" rel="alternate" type="text/html" title="[Multer] Error: ENOENT: no such file or directory" /><published>2022-11-08T00:00:00+07:00</published><updated>2022-11-08T00:00:00+07:00</updated><id>http://localhost:4000/twelveth-post</id><content type="html" xml:base="http://localhost:4000/twelveth-post/"><![CDATA[<p>● 서버 코드</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2022-11-09T20:34:57+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[React Native] 서버에서 이미지를 fetch 해올 때 화면에 제대로 나타나지 않는 현상</title><link href="http://localhost:4000/thirteenth-post/" rel="alternate" type="text/html" title="[React Native] 서버에서 이미지를 fetch 해올 때 화면에 제대로 나타나지 않는 현상" /><published>2022-11-09T00:00:00+07:00</published><updated>2022-11-09T00:00:00+07:00</updated><id>http://localhost:4000/thirteenth-post</id><content type="html" xml:base="http://localhost:4000/thirteenth-post/"><![CDATA[<p>글을 쓰면서도 조금은 부끄럽지만 가끔은 정말 간단한 걸로 몇 시간을 헤매고는 한다. 
+<br />
+React Native에서 Multer를 이용하여 서버에서 이미지를 불러오는데 다운 받아온 이미지가 화면에 표시되지 않는 현상이 있었다. 
+<br />
+공식 문서를 그대로 따라서 fetch 함수를 사용하였고 uri도 로그에 제대로 찍혀 있는데도 계속 문제가 남아있어 머리를 꽁꽁 싸맸다.
+<br />
+나중에 보니 해결 방법은 매우 간단했다. 
+<br />
+잊고 있었던 것이다. 샘플 이미지는 전부 local의 asset 폴더에 저장하여 사용하고 있었기에 그동안 신경쓰지 않고 있었지만 사실 <code class="language-plaintext highlighter-rouge">이미지는 width와 height를 지정해주는 것이 좋다</code>는 것을.
+<br />
+그렇다. fetch 문제인 줄 알고 axios로 바꿔도 보고 하였지만 결국 설정 문제였던 것이다. 
+resizeMode 옵션을 너무 신뢰하고 있었는지 이를 눈치채는데 오랜 시간이 걸렸다. 
+한 번도 아니고 두 번이나 똑같은 문제로 헤맨 전적이 있다. 
+<br />
+누군가는 시간을 아끼기 바란다.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="n">Image</span><span class="w">
+    </span><span class="n">source</span><span class="o">=</span><span class="p">{</span><span class="w"> </span><span class="p">{</span><span class="n">uri</span><span class="o">:</span><span class="w"> </span><span class="n">URI</span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w">
+    </span><span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="w"> </span><span class="p">{</span><span class="n">height</span><span class="o">:</span><span class="w"> </span><span class="m">100</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="o">:</span><span class="w"> </span><span class="m">100</span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span><span class="o">/&gt;</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="참고">참고</h3>
+<p><a href="https://reactnative.dev/docs/image">React Native Doc. - Image</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, Multer" /><summary type="html"><![CDATA[글을 쓰면서도 조금은 부끄럽지만 가끔은 정말 간단한 걸로 몇 시간을 헤매고는 한다. React Native에서 Multer를 이용하여 서버에서 이미지를 불러오는데 다운 받아온 이미지가 화면에 표시되지 않는 현상이 있었다. 공식 문서를 그대로 따라서 fetch 함수를 사용하였고 uri도 로그에 제대로 찍혀 있는데도 계속 문제가 남아있어 머리를 꽁꽁 싸맸다. 나중에 보니 해결 방법은 매우 간단했다. 잊고 있었던 것이다. 샘플 이미지는 전부 local의 asset 폴더에 저장하여 사용하고 있었기에 그동안 신경쓰지 않고 있었지만 사실 이미지는 width와 height를 지정해주는 것이 좋다는 것을. 그렇다. fetch 문제인 줄 알고 axios로 바꿔도 보고 하였지만 결국 설정 문제였던 것이다. resizeMode 옵션을 너무 신뢰하고 있었는지 이를 눈치채는데 오랜 시간이 걸렸다. 한 번도 아니고 두 번이나 똑같은 문제로 헤맨 전적이 있다. 누군가는 시간을 아끼기 바란다.]]></summary></entry><entry><title type="html">[Multer] Error: ENOENT: no such file or directory</title><link href="http://localhost:4000/twelveth-post/" rel="alternate" type="text/html" title="[Multer] Error: ENOENT: no such file or directory" /><published>2022-11-08T00:00:00+07:00</published><updated>2022-11-08T00:00:00+07:00</updated><id>http://localhost:4000/twelveth-post</id><content type="html" xml:base="http://localhost:4000/twelveth-post/"><![CDATA[<p>● 서버 코드</p>
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">multer</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">multer</span><span class="dl">"</span><span class="p">);</span>
 <span class="kd">const</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">fs</span><span class="dl">"</span><span class="p">);</span>
 
@@ -525,29 +548,4 @@ e.g.) https://gist.github.com/froggydisk/[이부분]</li>
 </span><span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="c1">#tensor([1.0009, 1.9996, 2.9995], requires_grad=True)
 </span></code></pre></div></div>
 <p>a와 b가 성공적으로 동시에 업데이트 된다. 
-물론 단순히 1차원 텐서가 아니라 그 이상의 텐서에 대해서도 적용 가능하다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Pytorch" /><summary type="html"><![CDATA[머신러닝/딥러닝]]></summary></entry><entry><title type="html">모바일에서 hover 효과 없애기</title><link href="http://localhost:4000/third-post/" rel="alternate" type="text/html" title="모바일에서 hover 효과 없애기" /><published>2020-08-28T00:00:00+07:00</published><updated>2020-08-28T00:00:00+07:00</updated><id>http://localhost:4000/third-post</id><content type="html" xml:base="http://localhost:4000/third-post/"><![CDATA[<p><br />
-아이폰이나 아이패드와 같은 기기에서는 PC와는 다르게 hover 효과가 적용되지 않는다.<br />
-그 이유는 마우스가 아닌 터치 방식을 사용하기 때문이다.<br />
-그러다보니 모바일에서 드랍다운 메뉴 같은 경우, 한 번 누르면 계속 호버된 상태가 되어 효과가 사라지지 않는 경우가 있다.<br />
-이 때 화면의 다른 부분을 누르면 호버효과가 사라지게 만들고 싶을 때 쓸만한 방법이 있다.</p>
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="nt">&lt;html&gt;</span>
-  <span class="nt">&lt;head&gt;</span>
-    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"utf-8"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;title&gt;</span>모바일에서 hover 효과 없애기<span class="nt">&lt;/title&gt;</span>
-    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"style.css"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">type=</span><span class="s">"text/css"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;style&gt;</span>
-<span class="k">@media</span> <span class="p">(</span> <span class="n">max-width</span><span class="p">:</span> <span class="m">768px</span> <span class="p">){</span>
-        <span class="nt">button</span> <span class="p">{</span>
-          <span class="nl">-webkit-tap-highlight-color</span><span class="p">:</span><span class="nb">transparent</span><span class="p">;</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="nt">&lt;/style&gt;</span>
-  <span class="nt">&lt;/head&gt;</span>
-  <span class="nt">&lt;body</span> <span class="na">ontouchstart=</span><span class="s">""</span><span class="nt">&gt;</span>
-
-  <span class="nt">&lt;/body&gt;</span>
-</code></pre></div></div>
-<p>호버 효과를 적용하는 class의 style 안에 <strong>-webkit-tap-highlight-color:transparent;</strong>를 넣어주고(터치 시 탭효과 제거)<br />
-body에 <strong>ontouchstart=”“</strong>를 적용하면 끝</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="HTML/CSS" /><summary type="html"><![CDATA[반응형 웹페이지 만들기]]></summary></entry></feed>
+물론 단순히 1차원 텐서가 아니라 그 이상의 텐서에 대해서도 적용 가능하다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Pytorch" /><summary type="html"><![CDATA[머신러닝/딥러닝]]></summary></entry></feed>
