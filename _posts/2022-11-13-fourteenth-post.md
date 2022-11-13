@@ -10,7 +10,7 @@ tags:
 last_modified_at: 2022-11-13T
 ---
 
-<p align="center"><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/black_screen.png?raw=true" width="250" height="500"></p>
+<p align="center"><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/black_screen.png?raw=true" width="250" height="500" style="border: 1px solid black"></p>
 
 어느 순간부터 빌드는 되는데 화면에 아무것도 나타나지 않는 증상이 나타났다. 빌드는 성공하였기 때문에 라이브러리를 설치하면서 어딘가 설정이 꼬인건가 싶었다. 
 
