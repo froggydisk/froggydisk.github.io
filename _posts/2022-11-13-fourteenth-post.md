@@ -10,7 +10,7 @@ tags:
 last_modified_at: 2022-11-13T
 ---
 
-<p align="center"><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/black_screen.png?raw=true" width="250" height="500" style="border: 1px solid black"></p>
+<p align="center"><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/black_screen.png?raw=true" width="250" height="500" style="border: 1px solid black></p>
 
 어느 순간부터 빌드는 되는데 화면에 아무것도 나타나지 않는 증상이 나타났다. 빌드는 성공하였기 때문에 라이브러리를 설치하면서 어딘가 설정이 꼬인건가 싶었다. 
 
@@ -42,12 +42,12 @@ const range = count => {
 설마 JS 코드 오타를 잡아주지 않는다고는 생각하지 않았기에 더욱더 헤맸던 것 같다. 
 
 ### 결론
-● **문제**: 앱을 빌드했을 때 Bundle 100% 혹은 Metro Loading... 문구에서 화면이 멈추고 하얀색 공백 화면만 떠있는 현상.
+● **문제**: 앱을 빌드했을 때 Bundle 100% 혹은 Loading from Metro... 문구에서 화면이 멈추고 하얀색 공백 화면만 떠있는 현상.
 <br>
 ● **해결**: 자바스크립트 문법이 틀린 것이 없나 살펴보고 수정한다. (혹은 최근에 설치한 라이브러리가 문제일 수 있다)
 
 
-● **Issue**: The simulator is stuck with the message 'Bundle 100%' or 'Metro Loading...' on the white screen.
+● **Issue**: The simulator is stuck with the message 'Bundle 100%' or 'Loading from Metro...' on the white screen.
 <br>
 ● **How to solve**: Check the grammar of your JavaScript code. Metro doesn't let you know the typo of JS code, but just stops the App.
 
