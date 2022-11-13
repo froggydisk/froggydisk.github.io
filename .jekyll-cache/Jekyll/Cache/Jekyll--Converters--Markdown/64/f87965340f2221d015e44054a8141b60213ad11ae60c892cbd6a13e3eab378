@@ -1,4 +1,6 @@
-I"�<p>어느 순간부터 빌드는 되는데 화면에 아무것도 나타나지 않는 증상이 나타났다. 빌드는 성공하였기 때문에 라이브러리를 설치하면서 어딘가 설정이 꼬인건가 싶었다.</p>
+I"@<p align="center"><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/black_screen.png?raw=true" width="300" height="600" /></p>
+
+<p>어느 순간부터 빌드는 되는데 화면에 아무것도 나타나지 않는 증상이 나타났다. 빌드는 성공하였기 때문에 라이브러리를 설치하면서 어딘가 설정이 꼬인건가 싶었다.</p>
 
 <p>node_modules를 지웠다 설치하고를 몇 번이나 반복하였지만 해결되지 않았다. 당연히 캐시 삭제 정도로는 어림도 없었다.</p>
 
@@ -31,9 +33,9 @@
 <br />
 ● <strong>해결</strong>: 자바스크립트 문법이 틀린 것이 없나 살펴보고 수정한다. (혹은 최근에 설치한 라이브러리가 문제일 수 있다)</p>
 
-<p>● <strong>Issue</strong>: The simulator is stuck with the message ‘Bundle 100%’ or ‘Metro Loading…’ on white screen.
+<p>● <strong>Issue</strong>: The simulator is stuck with the message ‘Bundle 100%’ or ‘Metro Loading…’ on the white screen.
 <br />
-● <strong>How to solve</strong>: Check the grammar of your JavaScript code. Metro doesn’t let you know the typo of JS code, but just stop the App.</p>
+● <strong>How to solve</strong>: Check the grammar of your JavaScript code. Metro doesn’t let you know the typo of JS code, but just stops the App.</p>
 
 <h3 id="참고">참고</h3>
 <p><a href="https://github.com/facebook/react-native/issues/26605">Blank Screen Issue on iOS #26605</a></p>

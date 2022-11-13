@@ -10,6 +10,8 @@ tags:
 last_modified_at: 2022-11-13T
 ---
 
+<p align="center"><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/black_screen.png?raw=true" width="250" height="500"></p>
+
 어느 순간부터 빌드는 되는데 화면에 아무것도 나타나지 않는 증상이 나타났다. 빌드는 성공하였기 때문에 라이브러리를 설치하면서 어딘가 설정이 꼬인건가 싶었다. 
 
 node_modules를 지웠다 설치하고를 몇 번이나 반복하였지만 해결되지 않았다. 당연히 캐시 삭제 정도로는 어림도 없었다. 
