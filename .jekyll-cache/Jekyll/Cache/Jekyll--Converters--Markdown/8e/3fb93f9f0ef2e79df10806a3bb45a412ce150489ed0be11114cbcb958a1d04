@@ -1,4 +1,4 @@
-I"`<p align="center"><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/black_screen.png?raw=true" width="250" height="500" style="border: 1px solid black" /></p>
+I"f<p align="center"><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/black_screen.png?raw=true" width="250" height="500" style="border: 1px solid black" /></p>
 
 <p>어느 순간부터 빌드는 되는데 화면에 아무것도 나타나지 않는 증상이 나타났다. 빌드는 성공하였기 때문에 라이브러리를 설치하면서 어딘가 설정이 꼬인건가 싶었다.</p>
 
@@ -14,7 +14,7 @@
 
 <p>하지만 디버깅까지 제대로 해준다고는 하지 않았다…</p>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">range</span> <span class="o">=</span> <span class="nx">count</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">range</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">array</span> <span class="o">=</span> <span class="p">[];</span>
   <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">;</span> <span class="nx">i</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">array</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
@@ -29,11 +29,11 @@
 <p>설마 JS 코드 오타를 잡아주지 않는다고는 생각하지 않았기에 더욱더 헤맸던 것 같다.</p>
 
 <h3 id="결론">결론</h3>
-<p>● <strong>문제</strong>: 앱을 빌드했을 때 Bundle 100% 혹은 Metro Loading… 문구에서 화면이 멈추고 하얀색 공백 화면만 떠있는 현상.
+<p>● <strong>문제</strong>: 앱을 빌드했을 때 Bundle 100% 혹은 Loading from Metro… 문구에서 화면이 멈추고 하얀색 공백 화면만 떠있는 현상.
 <br />
 ● <strong>해결</strong>: 자바스크립트 문법이 틀린 것이 없나 살펴보고 수정한다. (혹은 최근에 설치한 라이브러리가 문제일 수 있다)</p>
 
-<p>● <strong>Issue</strong>: The simulator is stuck with the message ‘Bundle 100%’ or ‘Metro Loading…’ on the white screen.
+<p>● <strong>Issue</strong>: The simulator is stuck with the message ‘Bundle 100%’ or ‘Loading from Metro…’ on the white screen.
 <br />
 ● <strong>How to solve</strong>: Check the grammar of your JavaScript code. Metro doesn’t let you know the typo of JS code, but just stops the App.</p>
 
