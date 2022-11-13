@@ -1,4 +1,42 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2022-11-09T20:34:57+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[React Native] 서버에서 이미지를 fetch 해올 때 화면에 제대로 나타나지 않는 현상</title><link href="http://localhost:4000/thirteenth-post/" rel="alternate" type="text/html" title="[React Native] 서버에서 이미지를 fetch 해올 때 화면에 제대로 나타나지 않는 현상" /><published>2022-11-09T00:00:00+07:00</published><updated>2022-11-09T00:00:00+07:00</updated><id>http://localhost:4000/thirteenth-post</id><content type="html" xml:base="http://localhost:4000/thirteenth-post/"><![CDATA[<p>글을 쓰면서도 조금은 부끄럽지만 가끔은 정말 간단한 걸로 몇 시간을 헤매고는 한다. 
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2022-11-13T20:39:49+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[React Native] Blank screen issue on iOS</title><link href="http://localhost:4000/fourteenth-post/" rel="alternate" type="text/html" title="[React Native] Blank screen issue on iOS" /><published>2022-11-13T00:00:00+07:00</published><updated>2022-11-13T00:00:00+07:00</updated><id>http://localhost:4000/fourteenth-post</id><content type="html" xml:base="http://localhost:4000/fourteenth-post/"><![CDATA[<p>어느 순간부터 빌드는 되는데 화면에 아무것도 나타나지 않는 증상이 나타났다. 빌드는 성공하였기 때문에 라이브러리를 설치하면서 어딘가 설정이 꼬인건가 싶었다.</p>
+
+<p>node_modules를 지웠다 설치하고를 몇 번이나 반복하였지만 해결되지 않았다. 당연히 캐시 삭제 정도로는 어림도 없었다.</p>
+
+<p>에러 코드조차 나오지 않는 버그였기에 원인 분석부터가 막막했다. 새로운 프로젝트를 새로 하나 팔까 하다가 우선 깃 히스토리를 거슬러 올라가 보기로 하였다.</p>
+
+<p>다행히 메인 브랜치에 push 해놓은 버전은 빌드가 잘 되었다.</p>
+
+<p>이제부터는 다른 부분을 찾아내는 노가다이다. 라이브러리를 새로 설치하고 코드를 하나하나 비교하면서 바꾸어 주었는데 생각지도 못한 곳에서 버그를 재현할 수 있었다.</p>
+
+<p>일단, 인터넷에서 검색하면 React Native는 <code class="language-plaintext highlighter-rouge">자바스크립트 프레임워크</code>라고 나온다. 그러므로 당연히 자바스크립트 코드를 사용할 수 있다.</p>
+
+<p>하지만 디버깅까지 제대로 해준다고는 하지 않았다…</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">range</span> <span class="o">=</span> <span class="nx">count</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">array</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">;</span> <span class="nx">i</span> <span class="o">+=</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">array</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">array</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+<p>문제가 된 부분은 위와 같다. for문을 사용할 때 <code class="language-plaintext highlighter-rouge">i += 2</code>에서 <code class="language-plaintext highlighter-rouge">=</code>를 빼먹는 실수가 있었는데 Metro에서는 아무런 버그를 띄워주지 않는다.</p>
+
+<p>갑자기 멈춰버린 앱을 리로드하면 그때부터 버그 지옥이 시작되는 것이다.</p>
+
+<p>설마 JS 코드 오타를 잡아주지 않는다고는 생각하지 않았기에 더욱더 헤맸던 것 같다.</p>
+
+<h3 id="결론">결론</h3>
+<p>● <strong>문제</strong>: 앱을 빌드했을 때 Bundle 100% 혹은 Metro Loading… 문구에서 화면이 멈추고 하얀색 공백 화면만 떠있는 현상.
+<br />
+● <strong>해결</strong>: 자바스크립트 문법이 틀린 것이 없나 살펴보고 수정한다. (혹은 최근에 설치한 라이브러리가 문제일 수 있다)</p>
+
+<p>● <strong>Issue</strong>: The simulator is stuck with the message ‘Bundle 100%’ or ‘Metro Loading…’ on the white screen.
+<br />
+● <strong>How to solve</strong>: Check the grammar of your JavaScript code. Metro doesn’t let you know the typo of JS code, but just stops the App.</p>
+
+<h3 id="참고">참고</h3>
+<p><a href="https://github.com/facebook/react-native/issues/26605">Blank Screen Issue on iOS #26605</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, JavaScript" /><summary type="html"><![CDATA[어느 순간부터 빌드는 되는데 화면에 아무것도 나타나지 않는 증상이 나타났다. 빌드는 성공하였기 때문에 라이브러리를 설치하면서 어딘가 설정이 꼬인건가 싶었다.]]></summary></entry><entry><title type="html">[React Native] 서버에서 이미지를 fetch 해올 때 화면에 제대로 나타나지 않는 현상</title><link href="http://localhost:4000/thirteenth-post/" rel="alternate" type="text/html" title="[React Native] 서버에서 이미지를 fetch 해올 때 화면에 제대로 나타나지 않는 현상" /><published>2022-11-09T00:00:00+07:00</published><updated>2022-11-09T00:00:00+07:00</updated><id>http://localhost:4000/thirteenth-post</id><content type="html" xml:base="http://localhost:4000/thirteenth-post/"><![CDATA[<p>글을 쓰면서도 조금은 부끄럽지만 가끔은 정말 간단한 걸로 몇 시간을 헤매고는 한다. 
 <br />
 React Native에서 Multer를 이용하여 서버에서 이미지를 불러오는데 다운 받아온 이미지가 화면에 표시되지 않는 현상이 있었다. 
 <br />
@@ -98,7 +136,7 @@ resizeMode 옵션을 너무 신뢰하고 있었는지 이를 눈치채는데 오
 </code></pre></div></div>
 
 <h3 id="참고">참고</h3>
-<p><a href="https://stackoverflow.com/questions/68254686/error-enoent-no-such-file-or-directory-mkdir-when-trying-to-create-directory">Error: ENOENT: no such file or directory, mkdir when trying to create directory</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, NodeJS, Multer" /><summary type="html"><![CDATA[● 서버 코드 ```javascript const multer = require(“multer”); const fs = require(“fs”);]]></summary></entry><entry><title type="html">[React Native] Android Gradle plugin 의존성 에러</title><link href="http://localhost:4000/eleventh-post/" rel="alternate" type="text/html" title="[React Native] Android Gradle plugin 의존성 에러" /><published>2022-11-07T00:00:00+07:00</published><updated>2022-11-07T00:00:00+07:00</updated><id>http://localhost:4000/eleventh-post</id><content type="html" xml:base="http://localhost:4000/eleventh-post/"><![CDATA[<p>React Native로 개발을 하고는 있지만 주로 iOS 시뮬레이터만 보고 하다보니 오래만에 안드로이드 빌드를 하게 되었다. 
+<p><a href="https://stackoverflow.com/questions/68254686/error-enoent-no-such-file-or-directory-mkdir-when-trying-to-create-directory">Error: ENOENT: no such file or directory, mkdir when trying to create directory</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, NodeJS, Multer" /><summary type="html"><![CDATA[● 서버 코드 ```javascript const multer = require(“multer”); const fs = require(“fs”);]]></summary></entry><entry><title type="html">[React Native] Android Gradle plugin 의존성 에러</title><link href="http://localhost:4000/eleventh-post/" rel="alternate" type="text/html" title="[React Native] Android Gradle plugin 의존성 에러" /><published>2022-11-07T00:00:00+07:00</published><updated>2022-11-07T00:00:00+07:00</updated><id>http://localhost:4000/eleventh-post</id><content type="html" xml:base="http://localhost:4000/eleventh-post/"><![CDATA[<p>React Native로 개발을 하고는 있지만 주로 iOS 시뮬레이터만 보고 하다보니 오랜만에 안드로이드 빌드를 하게 되었다. 
 <br />
 안드로이드 스튜디오에 들어가서 아무 생각 없이 Gradle upgrade를 했더니 빌드가 안되기 시작했다. 
 <br />
@@ -127,7 +165,7 @@ react-native run-android를 하였을 때 what went wrong에 뜨는 에러는 �
 <h3 id="참고">참고</h3>
 <p><a href="https://icat2048.tistory.com/462">[Gradle] Android 빌드를 위한 Gradle Version 관리</a>
 <br />
-<a href="https://daewonyoon.tistory.com/293">[Android|Kotlin] Gradle Sync Issue: Android Gradle plugin supports only Kotlin Gradle plugin version … and higher</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, Android" /><summary type="html"><![CDATA[React Native로 개발을 하고는 있지만 주로 iOS 시뮬레이터만 보고 하다보니 오래만에 안드로이드 빌드를 하게 되었다. 안드로이드 스튜디오에 들어가서 아무 생각 없이 Gradle upgrade를 했더니 빌드가 안되기 시작했다. react-native run-android를 하였을 때 what went wrong에 뜨는 에러는 다음과 같다.]]></summary></entry><entry><title type="html">[React Native] Draggable Button과 ScrollView</title><link href="http://localhost:4000/tenth-post/" rel="alternate" type="text/html" title="[React Native] Draggable Button과 ScrollView" /><published>2022-10-27T00:00:00+07:00</published><updated>2022-10-27T00:00:00+07:00</updated><id>http://localhost:4000/tenth-post</id><content type="html" xml:base="http://localhost:4000/tenth-post/"><![CDATA[<p>리액트 네이티브를 이용하여 앱을 만들 때 이리저리 끌고 다닐 수 있는 버튼을 만들고 싶을 때가 있다. 
+<a href="https://daewonyoon.tistory.com/293">[Android|Kotlin] Gradle Sync Issue: Android Gradle plugin supports only Kotlin Gradle plugin version … and higher</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, Android" /><summary type="html"><![CDATA[React Native로 개발을 하고는 있지만 주로 iOS 시뮬레이터만 보고 하다보니 오랜만에 안드로이드 빌드를 하게 되었다. 안드로이드 스튜디오에 들어가서 아무 생각 없이 Gradle upgrade를 했더니 빌드가 안되기 시작했다. react-native run-android를 하였을 때 what went wrong에 뜨는 에러는 다음과 같다.]]></summary></entry><entry><title type="html">[React Native] Draggable Button과 ScrollView</title><link href="http://localhost:4000/tenth-post/" rel="alternate" type="text/html" title="[React Native] Draggable Button과 ScrollView" /><published>2022-10-27T00:00:00+07:00</published><updated>2022-10-27T00:00:00+07:00</updated><id>http://localhost:4000/tenth-post</id><content type="html" xml:base="http://localhost:4000/tenth-post/"><![CDATA[<p>리액트 네이티브를 이용하여 앱을 만들 때 이리저리 끌고 다닐 수 있는 버튼을 만들고 싶을 때가 있다. 
 <br />
 만들어놓고 화면에서 요리조리 움직이다보면 나름 재미가 있다. 
 <br />
@@ -471,81 +509,4 @@ e.g.) https://gist.github.com/froggydisk/[이부분]</li>
 <p><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/discord-noti.png?raw=true" width="600" /><br />
 제 때 알림이 온다!! 다만 GitHub Actions는 계정당 쓸 수 있는 시간이 한계가 있으므로 Cron Job을 너무 자주 돌리진 말자.<br />
 <br />
-📍 <a href="https://github.com/froggydisk/app-status-bot">코드 보러가기</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="API, Discord" /><summary type="html"><![CDATA[개발중인 앱의 심사 상태 확인 개발자라면 Appstore Connect 사이트에 들어가면 현재 앱의 심사 상태를 확인할 수 있다. 하지만 엔지니어링 팀이 아니라면 권한이 없는 경우도 많기 때문에 모든 팀원이 앱의 현재 상태를 알고 있기란 쉽지 않다. 일일이 공유를 해주는 것도 하나의 방법이기는 하지만 이런 것들이 하나둘씩 쌓이기 시작하면 업무량이 계속해서 늘어나기 때문에 미리미리 자동화를 해두면 나중에 눈물의 작업을 하게 되는 것을 방지할 수 있다. 빠르게 오픈소스를 찾아보았더니 다행히도 Slack으로 심사 상태를 보내주는 툴이 이미 있었다. 오늘은 Fernando님의 코드를 참고하여 Discord로 앱의 심사 상태를 보내주는 툴을 만들어보자.]]></summary></entry><entry><title type="html">Tensor element를 mutable하게 복사하기</title><link href="http://localhost:4000/fourth-post/" rel="alternate" type="text/html" title="Tensor element를 mutable하게 복사하기" /><published>2021-08-29T00:00:00+07:00</published><updated>2021-08-29T00:00:00+07:00</updated><id>http://localhost:4000/fourth-post</id><content type="html" xml:base="http://localhost:4000/fourth-post/"><![CDATA[<p><br />
-일반적인 경우, 텐서 간의 복사는 복사된 참조 변수의 수정이 기존 참조 변수의 값에 똑같은 영향을 미친다.
-예를 들면 아래와 같다.</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">torch</span>
-<span class="n">a</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">,</span><span class="mf">3.</span><span class="p">])</span>
-<span class="n">b</span> <span class="o">=</span> <span class="n">a</span>
-<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1">#tensor([1., 2., 3.])
-</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
-<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1">#tensor([4., 2., 3.])
-</span></code></pre></div></div>
-
-<p>하지만 아래와 같이 a와 b의 길이가 다르고 a의 요소들을 b에 배분하는 형식인 경우, 즉 텐서 요소 간의 복사에 있어서는 복사된 참조 변수의 수정이 기존 참조 변수에 영향을 미치지 못한다.</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">,</span><span class="mf">3.</span><span class="p">])</span>
-<span class="n">b</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">,</span><span class="mf">0.</span><span class="p">])</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
-  <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-<span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1">#tensor([1., 2., 3., 2.])
-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1">#tensor([1., 2., 3., 2.])
-</span></code></pre></div></div>
-
-<p>위와는 조금 다르게, b가 텐서가 아니라 리스트나 numpy배열일 경우에 있어서 b의 각 요소는 아래처럼 mutable하다.</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">,</span><span class="mf">3.</span><span class="p">])</span>
-<span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
-  <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-<span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1">#[tensor(1.), tensor(2.), tensor(3.), tensor(2.)]
-</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1">#[tensor(1.), tensor(3.), tensor(3.), tensor(3.)]
-</span></code></pre></div></div>
-
-<p>다만 리스트나 넘파이를 사용할 경우에는 위의 예와 같이 리스트 안에 텐서가 여러개 들어가 있는 형태(list of tensors)가 되어버리는데 이를 그대로 torch.tensor(b)와 같이 텐서로 바꿔버리면 grad가 끊기면서 loss.backward()시에</p>
-<blockquote>
-  <p>RuntimeError: element 0 of tensors does not require grad and does not have a grad_fn</p>
-</blockquote>
-
-<p>와 같은 에러가 뜨게 된다. 그 때 쓸 수 있는 방법 중 하나가 torch.stack 이다.</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">c</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">stack</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1">#tensor([1., 2., 3., 2.], grad_fn=&lt;StackBackward&gt;)
-</span></code></pre></div></div>
-
-<p>이걸 쓰면 grad_fn을 유지하면서 list of tensors를 하나의 텐서로 만들어 줄 수 있다. 
-주의할 점은 새로운 변수 c에 선언하는게 아닌 b=torch.stack(b)와 같이 b에 덮어씌우게 되면 나중에 파라미터 업데이트 시에 b는 업데이트 되지 않는다. 이번 경우는 a와 b가 동시에 업데이트 되기를 원하므로 위와 같이 c에 새로운 텐서를 만들어주었다.</p>
-
-<p>전체 코드는</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">torch.optim</span>
-
-<span class="n">a</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span><span class="mf">2.</span><span class="p">,</span><span class="mf">3.</span><span class="p">],</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
-  <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-<span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-
-<span class="k">def</span> <span class="nf">my_loss</span><span class="p">(</span><span class="n">embedding</span><span class="p">):</span> <span class="c1">#contrastive loss
-</span>    <span class="n">loss</span> <span class="o">=</span> <span class="o">-</span><span class="p">((</span><span class="n">embedding</span><span class="p">.</span><span class="n">exp</span><span class="p">()[:</span><span class="mi">1</span><span class="p">].</span><span class="nb">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">embedding</span><span class="p">.</span><span class="n">exp</span><span class="p">().</span><span class="nb">sum</span><span class="p">()).</span><span class="n">log</span><span class="p">())</span>
-    <span class="k">return</span> <span class="n">loss</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">optim</span><span class="p">.</span><span class="n">SGD</span><span class="p">([</span><span class="n">a</span><span class="p">],</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
-
-<span class="n">c</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">stack</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-
-<span class="n">loss</span> <span class="o">=</span> <span class="mf">0.0</span>
-<span class="n">loss</span> <span class="o">=</span> <span class="n">my_loss</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-<span class="n">optimizer</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
-<span class="n">loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
-<span class="n">optimizer</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
-
-<span class="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1">#[tensor(1.0009, grad_fn=&lt;AsStridedBackward&gt;), tensor(1.9996, ...]
-</span><span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="c1">#tensor([1.0009, 1.9996, 2.9995], requires_grad=True)
-</span></code></pre></div></div>
-<p>a와 b가 성공적으로 동시에 업데이트 된다. 
-물론 단순히 1차원 텐서가 아니라 그 이상의 텐서에 대해서도 적용 가능하다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Pytorch" /><summary type="html"><![CDATA[머신러닝/딥러닝]]></summary></entry></feed>
+📍 <a href="https://github.com/froggydisk/app-status-bot">코드 보러가기</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="API, Discord" /><summary type="html"><![CDATA[개발중인 앱의 심사 상태 확인 개발자라면 Appstore Connect 사이트에 들어가면 현재 앱의 심사 상태를 확인할 수 있다. 하지만 엔지니어링 팀이 아니라면 권한이 없는 경우도 많기 때문에 모든 팀원이 앱의 현재 상태를 알고 있기란 쉽지 않다. 일일이 공유를 해주는 것도 하나의 방법이기는 하지만 이런 것들이 하나둘씩 쌓이기 시작하면 업무량이 계속해서 늘어나기 때문에 미리미리 자동화를 해두면 나중에 눈물의 작업을 하게 되는 것을 방지할 수 있다. 빠르게 오픈소스를 찾아보았더니 다행히도 Slack으로 심사 상태를 보내주는 툴이 이미 있었다. 오늘은 Fernando님의 코드를 참고하여 Discord로 앱의 심사 상태를 보내주는 툴을 만들어보자.]]></summary></entry></feed>
