@@ -1,4 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2022-11-13T21:01:36+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[React Native] Blank screen issue on iOS</title><link href="http://localhost:4000/fourteenth-post/" rel="alternate" type="text/html" title="[React Native] Blank screen issue on iOS" /><published>2022-11-13T00:00:00+07:00</published><updated>2022-11-13T00:00:00+07:00</updated><id>http://localhost:4000/fourteenth-post</id><content type="html" xml:base="http://localhost:4000/fourteenth-post/"><![CDATA[<p align="center"><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/black_screen.png?raw=true" width="250" height="500" style="border: 1px solid black" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2022-11-21T22:15:10+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[React Native] BottomTabNavigator unmountOnBlur가 SafeAreaView에 미치는 영향</title><link href="http://localhost:4000/fifteenth-post/" rel="alternate" type="text/html" title="[React Native] BottomTabNavigator unmountOnBlur가 SafeAreaView에 미치는 영향" /><published>2022-11-21T00:00:00+07:00</published><updated>2022-11-21T00:00:00+07:00</updated><id>http://localhost:4000/fifteenth-post</id><content type="html" xml:base="http://localhost:4000/fifteenth-post/"><![CDATA[<p>React Native에서 Bottom Tab Navigator를 사용할 때 특정 탭을 누를 때마다 화면이 리렌더링 되도록 하고 싶을 때가 있다.</p>
+
+<p>그럴 때 사용하는 것이 <code class="language-plaintext highlighter-rouge">unmountOnBlur: true</code> 이다. 사용법은 아래 코드와 같다.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="err">{</span><span class="nn">createBottomTabNavigator</span><span class="o">}</span> <span class="n">from</span> <span class="err">'</span><span class="nd">@react</span><span class="o">-</span><span class="n">navigation</span><span class="o">/</span><span class="n">bottom</span><span class="o">-</span><span class="n">tabs</span><span class="err">'</span><span class="o">;</span>
+
+<span class="kd">const</span> <span class="nc">BottomTab</span> <span class="o">=</span> <span class="n">createBottomTabNavigator</span><span class="o">();</span>
+<span class="kd">const</span> <span class="nc">ExampleScreen</span> <span class="o">=</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="o">{</span>
+  <span class="k">return</span> <span class="o">(</span>
+    <span class="o">&lt;</span><span class="nc">BottomTab</span><span class="o">.</span><span class="na">Navigator</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nc">BottomTab</span><span class="o">.</span><span class="na">Screen</span>
+        <span class="n">name</span><span class="o">=</span><span class="s">"NavigatorMain"</span>
+        <span class="n">component</span><span class="o">={</span><span class="nc">NavigatorMain</span><span class="o">}</span>
+        <span class="n">options</span><span class="o">={</span> <span class="o">{</span>
+          <span class="nl">tabBarLabel:</span> <span class="err">'</span><span class="nc">Main</span><span class="err">'</span><span class="o">,</span>
+          <span class="nl">unmountOnBlur:</span> <span class="kc">true</span><span class="o">,</span> <span class="c1">// 이 부분</span>
+        <span class="o">}</span> <span class="o">}</span>
+      <span class="o">/&gt;</span>
+    <span class="o">&lt;/</span><span class="nc">BottomTab</span><span class="o">.</span><span class="na">Navigator</span><span class="o">&gt;</span>
+  <span class="o">)}</span>
+</code></pre></div></div>
+
+<p>문제는 해당 옵션을 사용하게 되면 리렌더링은 문제가 없지만 알 수 없는 깜빡임이 발생한다는 것이다.</p>
+
+<p>화면 렌더링 순서에 의해 발생하는 깜빡임으로, 사실 예민한 사람이 아니고서야 잘 눈치채지 못 할 지도 모른다.</p>
+
+<p>원인은 SafeAreaView의 적용 타이밍이 생각보다 빠르지 않다는 데에 있다.</p>
+
+<p>unmountOnBlur를 통해서 화면을 리렌더링할 시에는 <SafeAreaView> 태그 안의 요소가 먼저 그려진 뒤 status bar 만큼의 크기가 뒤늦게 margin값으로 내려온다.</SafeAreaView></p>
+
+<p>해결 방법은 단순히 SafeAreaView를 사용하지 않는 데에 있다.</p>
+
+<p>대신 react-native-status-bar-height라는 status bar의 높이를 알려주는 라이브러리가 있으니 그것을 통해 직접 컴포넌트에 스타일을 지정해 주면 된다.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="err">{</span><span class="nn">getStatusBarHeight</span><span class="o">}</span> <span class="n">from</span> <span class="err">'</span><span class="n">react</span><span class="o">-</span><span class="kd">native</span><span class="o">-</span><span class="n">status</span><span class="o">-</span><span class="n">bar</span><span class="o">-</span><span class="n">height</span><span class="err">'</span><span class="o">;</span>
+<span class="kd">const</span> <span class="nc">ExampleScreen</span> <span class="o">=</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="o">{</span>
+<span class="k">return</span> <span class="o">(</span>
+    <span class="o">&lt;</span><span class="nc">View</span>
+      <span class="n">style</span><span class="o">={</span> 
+        <span class="o">{</span>
+        <span class="nl">height:</span> <span class="nc">Dimensions</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="err">'</span><span class="n">window</span><span class="err">'</span><span class="o">).</span><span class="na">height</span><span class="o">,</span>
+        <span class="nl">top:</span> <span class="n">getStatusBarHeight</span><span class="o">()</span> <span class="c1">// 이 부분</span>
+        <span class="o">}</span>
+      <span class="o">}&gt;</span>
+      <span class="o">...</span> 
+    <span class="o">&lt;/</span><span class="nc">View</span><span class="o">&gt;</span>
+<span class="o">)}</span>
+</code></pre></div></div>
+
+<h3 id="참고">참고</h3>
+<p><a href="https://github.com/ovr/react-native-status-bar-height">react-native-status-bar-height</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native" /><summary type="html"><![CDATA[React Native에서 Bottom Tab Navigator를 사용할 때 특정 탭을 누를 때마다 화면이 리렌더링 되도록 하고 싶을 때가 있다.]]></summary></entry><entry><title type="html">[React Native] Blank screen issue on iOS</title><link href="http://localhost:4000/fourteenth-post/" rel="alternate" type="text/html" title="[React Native] Blank screen issue on iOS" /><published>2022-11-13T00:00:00+07:00</published><updated>2022-11-13T00:00:00+07:00</updated><id>http://localhost:4000/fourteenth-post</id><content type="html" xml:base="http://localhost:4000/fourteenth-post/"><![CDATA[<p align="center"><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/black_screen.png?raw=true" width="250" height="500" style="border: 1px solid black" /></p>
 
 <p>어느 순간부터 빌드는 되는데 화면에 아무것도 나타나지 않는 증상이 나타났다. 빌드는 성공하였기 때문에 라이브러리를 설치하면서 어딘가 설정이 꼬인건가 싶었다.</p>
 
@@ -437,78 +487,4 @@ react-native run-android를 하였을 때 what went wrong에 뜨는 에러는 �
       <span class="n">outline</span><span class="p">:</span> <span class="n">none</span><span class="p">;</span>
     <span class="p">}</span>
 <span class="p">}</span>
-</code></pre></div></div>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="CSS" /><summary type="html"><![CDATA[```python a { color: $text-base-color; -webkit-tap-highlight-color: rgba(0,0,0,0); # or transparent;]]></summary></entry><entry><title type="html">iOS 앱 심사상태를 디스코드로 공유하기 🍎</title><link href="http://localhost:4000/fifth-post/" rel="alternate" type="text/html" title="iOS 앱 심사상태를 디스코드로 공유하기 🍎" /><published>2022-02-28T00:00:00+07:00</published><updated>2022-02-28T00:00:00+07:00</updated><id>http://localhost:4000/fifth-post</id><content type="html" xml:base="http://localhost:4000/fifth-post/"><![CDATA[<h1 id="개발중인-앱의-심사-상태-확인">개발중인 앱의 심사 상태 확인</h1>
-<p>개발자라면 <code class="language-plaintext highlighter-rouge">Appstore Connect</code> 사이트에 들어가면 현재 앱의 심사 상태를 확인할 수 있다. 하지만 엔지니어링 팀이 아니라면 권한이 없는 경우도 많기 때문에 모든 팀원이 앱의 현재 상태를 알고 있기란 쉽지 않다. 일일이 공유를 해주는 것도 하나의 방법이기는 하지만 이런 것들이 하나둘씩 쌓이기 시작하면 업무량이 계속해서 늘어나기 때문에 미리미리 자동화를 해두면 나중에 눈물의 작업을 하게 되는 것을 방지할 수 있다. 빠르게 오픈소스를 찾아보았더니 다행히도 <code class="language-plaintext highlighter-rouge">Slack</code>으로 심사 상태를 보내주는 툴이 이미 있었다. <br />
-오늘은 <a href="https://fernando.kr/ios/2020-11-08-ios-appstore-status-bot/">Fernando</a>님의 코드를 참고하여 <code class="language-plaintext highlighter-rouge">Discord</code>로 앱의 심사 상태를 보내주는 툴을 만들어보자.</p>
-
-<h1 id="사용하는-기능">사용하는 기능</h1>
-<p>● <a href="https://developer.apple.com/documentation/appstoreconnectapi">Appstore Connect API</a><br />
-● <a href="https://github.com/fastlane/fastlane/tree/master/spaceship">fastlane Spaceship</a><br />
-● <a href="https://docs.github.com/en/actions">GitHub Actions</a><br />
-● <a href="https://gist.github.com">GitHub Gist</a><br />
-● <a href="https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks">Discord Webhook</a></p>
-
-<h1 id="코드의-흐름">코드의 흐름</h1>
-<ol>
-  <li>Appstore Connect 사이트에서 API key를 발급받는다.</li>
-  <li>Spaceship 라이브러리를 이용하여 앱 심사 정보를 받아오는 코드를 짠다.</li>
-  <li>GitHub Actions를 사용하여 일정시간마다 위의 코드를 반복적으로 돌릴 수 있게 한다.</li>
-  <li>코드가 실행될 때마다 GitHub Gist에 앱의 현재 정보가 저장된다.</li>
-  <li>이전에 등록된 정보와 현재 앱의 정보가 다르면 Webhook을 이용하여 현재 앱의 심사 상태를 Discord로 보낸다.</li>
-</ol>
-
-<h1 id="툴의-특징">툴의 특징</h1>
-<p>● 설정이 직관적이고 간단<br />
-● 개인 서버가 없어도 작동 가능<br />
-<br />
-<code class="language-plaintext highlighter-rouge">Fernando</code>님의 글에서도 알 수 있듯이 <strong>간편함</strong>이 제일 중요하기에 봇 개발에 리소스를 쓰고 싶지 않은 분들을 위해 레포지토리 <a href="https://github.com/froggydisk/app-status-bot">Fork</a>만으로 작동할 수 있게 하였다.</p>
-
-<h1 id="사용법">사용법</h1>
-<ol>
-  <li>깃허브 레포지토리를 <a href="https://github.com/froggydisk/app-status-bot">Fork</a>합니다.</li>
-  <li>Appstore Connect에서 key ID, issuer ID, bundle ID, API Key file (.p8)을 발급받습니다.</li>
-  <li>Discord에서 Webhook url을 발급받습니다.</li>
-  <li>GitHub token을 발급받습니다. (발급시 gists와 repo 항목에 체크해주세요.)</li>
-  <li>앱 정보를 저장할 Gist의 url에서 맨 뒤의 ID만 저장해둡니다.<br />
-e.g.) https://gist.github.com/froggydisk/[이부분]</li>
-  <li>위에서 저장한 총 7개의 key를 Fork한 레포지토리의 secret에 하나씩 입력합니다.<br />
-<code class="language-plaintext highlighter-rouge">Settings</code> → <code class="language-plaintext highlighter-rouge">Secrets</code> → <code class="language-plaintext highlighter-rouge">Actions</code> → <code class="language-plaintext highlighter-rouge">New repositoy secret</code>
-    <blockquote>
-      <p>● PRIVATE_KEY: Appstore Connect API Key file (.p8)<br />
-● KEY_ID : Appstore Connect key ID<br />
-● ISSUER_ID : Appstore Connect issuer ID <br />
-● BUNDLE_ID : Appstore Connect bundle ID with comma<br />
-● DISCORD_WEBHOOK : Discord Webhook url<br />
-● GH_TOKEN: GitHub token<br />
-● GIST_ID: Gist url ID</p>
-
-    </blockquote>
-  </li>
-  <li>마지막으로 레포지토리의 <code class="language-plaintext highlighter-rouge">Actions</code> 섹션으로 가서 workflow를 활성화해주면 끝!</li>
-</ol>
-
-<h1 id="주의점">주의점</h1>
-<p>일단 discord로 메세지를 보내는 라이브러리는 정말 다양하게 있다! <a href="https://www.npmjs.com">npm</a>에서 마음에 드는 것을 찾아보자. npm으로 다운받은 뒤에는 discord.js의 코드를 사용법에 맞추어 바꿔주어야한다. Slack이나 Discord 이외에 다른 툴을 사용하는 경우에는 참고하자.<br />
-<br />
-다음은 <code class="language-plaintext highlighter-rouge">Fernando</code>님의 <a href="https://github.com/techinpark/appstore-status-bot">레포지토리</a>를 그대로 사용하다보면 가끔씩 오작동하는 이슈가 있어서 원인을 찾아보았다.</p>
-<h4 id="1-js의-비동기-처리">1. js의 비동기 처리</h4>
-<p>GitHub Actions에서 fetch.yml을 실행하다보면 우선적으로 Gist의 store.db 정보를 쭉 불러온다. 하지만 store.db 안의 내용이 길어지기 시작하면서 request.get 할 때 시간이 오래걸리기 시작하더니 store.db를 다 읽기 전에 현재 앱 상태와의 비교가 끝나버리는 경우가 있었다. 실제 심사 상태는 변화가 없는데 Discord로 알림이 가버렸다. 해결을 위해 앞에 async/await를 사용하였다.</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="n">function</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="k">await</span> <span class="n">getGist</span><span class="p">();</span>
-    <span class="p">(</span><span class="n">생략</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<h4 id="2-최신-버전만-체크">2. 최신 버전만 체크</h4>
-<p>반대로 상태가 바뀌었는데도 알림이 안오는 경우도 있었다. 해결을 위해 현재 코드에서는 가장 최신 버전에 대해 모든 상태 변화를 체크하도록 수정했는데 혹시나 특정 상태에 대해서만 알림을 보내고 싶다면 <a href="https://github.com/fastlane/fastlane/blob/master/spaceship/docs/AppStoreConnect.md">Spaceship</a>의 문서를 잘 살펴보는 것을 추천한다. 아래는 Spaceship에서 버전을 가져오는 함수들이다.</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">app</span><span class="p">.</span><span class="n">get_live_app_store_version</span> <span class="c1"># the version that's currently available in the App Store
-</span><span class="n">app</span><span class="p">.</span><span class="n">get_edit_app_store_version</span> <span class="c1"># the version that's in `Prepare for Submission`, `Metadata Rejected`, `Rejected`, `Developer Rejcted`, `Waiting for Review`, `Invalid Binary` mode
-</span><span class="n">app</span><span class="p">.</span><span class="n">get_latest_app_store_version</span> <span class="c1"># the version that's the latest one
-</span><span class="n">app</span><span class="p">.</span><span class="n">get_pending_release_app_store_version</span> <span class="c1"># the version that's in `Pending Developer Release` or `Pending Apple Release` mode
-</span><span class="n">app</span><span class="p">.</span><span class="n">get_in_review_app_store_version</span> <span class="c1"># the version that is in `In Review` mode
-</span></code></pre></div></div>
-
-<h1 id="결과">결과</h1>
-<p><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/discord-noti.png?raw=true" width="600" /><br />
-제 때 알림이 온다!! 다만 GitHub Actions는 계정당 쓸 수 있는 시간이 한계가 있으므로 Cron Job을 너무 자주 돌리진 말자.<br />
-<br />
-📍 <a href="https://github.com/froggydisk/app-status-bot">코드 보러가기</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="API, Discord" /><summary type="html"><![CDATA[개발중인 앱의 심사 상태 확인 개발자라면 Appstore Connect 사이트에 들어가면 현재 앱의 심사 상태를 확인할 수 있다. 하지만 엔지니어링 팀이 아니라면 권한이 없는 경우도 많기 때문에 모든 팀원이 앱의 현재 상태를 알고 있기란 쉽지 않다. 일일이 공유를 해주는 것도 하나의 방법이기는 하지만 이런 것들이 하나둘씩 쌓이기 시작하면 업무량이 계속해서 늘어나기 때문에 미리미리 자동화를 해두면 나중에 눈물의 작업을 하게 되는 것을 방지할 수 있다. 빠르게 오픈소스를 찾아보았더니 다행히도 Slack으로 심사 상태를 보내주는 툴이 이미 있었다. 오늘은 Fernando님의 코드를 참고하여 Discord로 앱의 심사 상태를 보내주는 툴을 만들어보자.]]></summary></entry></feed>
+</code></pre></div></div>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="CSS" /><summary type="html"><![CDATA[```python a { color: $text-base-color; -webkit-tap-highlight-color: rgba(0,0,0,0); # or transparent;]]></summary></entry></feed>

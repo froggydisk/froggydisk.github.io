@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "[React Native] BottomTabNavigator unmountOnBlur가 SafeAreaView에 미치는 영향",
+      "description" : "",
+      "tags"     : "React Native",
+      "url"      : "/fifteenth-post/",
+      "date"     : "2022-11-21 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[React Native] Blank screen issue on iOS",
       "description" : "",
       "tags"     : "React Native, JavaScript",
