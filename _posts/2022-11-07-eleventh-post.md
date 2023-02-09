@@ -27,7 +27,7 @@ kotlin-gradle-plugin:1.6.10
 
 아마 Gradle plugin의 버전이 높아서 react-native-safe-area-context의 의존성과 맞지 않는다는 이야기 같다. 
 <br>
-한참의 고민하다가 Gradle 업데이트를 한 것이 생각나서 급하게 다운그레이드를 해주었다. 
+한참을 고민하다가 Gradle 업데이트를 한 것이 생각나서 급하게 다운그레이드를 해주었다. 
 <br>
 다운그레이드는 별게 없다. 프로젝트의 android 폴더 안에 있는 build.gradle 파일을 수정해 주기만 하면 된다.
 

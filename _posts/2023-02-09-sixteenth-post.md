@@ -60,7 +60,7 @@ Redefinition of module ‘Firebase’ 혹은 Redefinition of module 'FirebaseCor
 
 필자의 경우에는 flipper를 사용하지 않으니 MQTT가 작동하지 않는 버그를 만났다. ([stackoverflow](https://stackoverflow.com/questions/72289521/swift-pods-cannot-yet-be-integrated-as-static-libraries-firebasecoreinternal-lib))
 
-잘 되는 사람은 그대로 진행해도 되지만 개인적으로는 `use_frameworks! :linkage => :static`보다는 not found 모듈을 일일히 `pod [모듈], :modular_headers => true` 해주는 것을 추천한다.
+잘 되는 사람은 그대로 진행해도 되지만 개인적으로는 `use_frameworks! :linkage => :static`보다는 not found 모듈을 일일이 `pod [모듈], :modular_headers => true` 해주는 것을 추천한다.
 
 그래서 Redefinition 에러는 어떻게 해결하느냐고?
 
@@ -69,7 +69,7 @@ Redefinition of module ‘Firebase’ 혹은 Redefinition of module 'FirebaseCor
 잘 생각해보면 Firebase 홈페이지에서 처음으로 앱을 등록할 때 `firebase-ios-sdk` 패키지를 Xcode 상에서 등록하라는 가이드를 받는다. 시키는대로 착실하게 진행한 사람은 아마도 위와 같은 에러를 만날 것이다. 
 하지만 우리는 2번에서 `FirebaseCore` 라이브러리를 수동으로 다운받았기에 사실상 같은 기능을 하는 필요없는 패키지를 다운받은 것이다. 
 
-생각해보면 firebase-ios-sdk가 있는데도 모듈을 찾지 못해서 수동으로 다운받았더니 적반하장으로 왜 다시 정의하냐고 에러를 주는 것이다. 어딘가 꼬여있음이 분명하다.
+웃기게도 firebase-ios-sdk가 모듈을 찾지 못해서 수동으로 다운받았더니 적반하장으로 왜 다시 정의하냐고 에러를 주는 것이다. 어딘가 꼬여있음이 분명하다.
 
 아무튼! 이러한 사실을 깨달았다면 이제 해결은 간단하다. 
 
