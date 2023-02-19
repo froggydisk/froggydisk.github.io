@@ -1,4 +1,4 @@
-I"�/<p>앱을 만들다보면 어느 순간 노티 기능을 적용해야할 때가 온다. 차근차근 개발을 진행하다보니 나 또한 어느새 그러한 페이즈에 도달해 있었다.</p>
+I"�0<p>앱을 만들다보면 어느 순간 노티 기능을 적용해야할 때가 온다. 차근차근 개발을 진행하다보니 나 또한 어느새 그러한 페이즈에 도달해 있었다.</p>
 
 <p>검색해보니 React Native로 앱을 만들 때 노티 기능은 보통 Firebase를 연동하는 경우가 많은 듯하다.</p>
 
@@ -45,7 +45,7 @@ you may set `use_modular_headers!` globally in your Podfile, or specify `:modula
 
 <p>필자의 경우에는 flipper를 사용하지 않으니 MQTT가 작동하지 않는 버그를 만났다. (<a href="https://stackoverflow.com/questions/72289521/swift-pods-cannot-yet-be-integrated-as-static-libraries-firebasecoreinternal-lib">stackoverflow</a>)</p>
 
-<p>잘 되는 사람은 그대로 진행해도 되지만 개인적으로는 <code class="language-plaintext highlighter-rouge">use_frameworks! :linkage =&gt; :static</code>보다는 not found 모듈을 일일히 <code class="language-plaintext highlighter-rouge">pod [모듈], :modular_headers =&gt; true</code> 해주는 것을 추천한다.</p>
+<p>잘 되는 사람은 그대로 진행해도 되지만 개인적으로는 <code class="language-plaintext highlighter-rouge">use_frameworks! :linkage =&gt; :static</code>보다는 not found 모듈을 일일이 <code class="language-plaintext highlighter-rouge">pod [모듈], :modular_headers =&gt; true</code> 해주는 것을 추천한다.</p>
 
 <p>그래서 Redefinition 에러는 어떻게 해결하느냐고?</p>
 
@@ -54,13 +54,15 @@ you may set `use_modular_headers!` globally in your Podfile, or specify `:modula
 <p>잘 생각해보면 Firebase 홈페이지에서 처음으로 앱을 등록할 때 <code class="language-plaintext highlighter-rouge">firebase-ios-sdk</code> 패키지를 Xcode 상에서 등록하라는 가이드를 받는다. 시키는대로 착실하게 진행한 사람은 아마도 위와 같은 에러를 만날 것이다. 
 하지만 우리는 2번에서 <code class="language-plaintext highlighter-rouge">FirebaseCore</code> 라이브러리를 수동으로 다운받았기에 사실상 같은 기능을 하는 필요없는 패키지를 다운받은 것이다.</p>
 
-<p>생각해보면 firebase-ios-sdk가 있는데도 모듈을 찾지 못해서 수동으로 다운받았더니 적반하장으로 왜 다시 정의하냐고 에러를 주는 것이다. 어딘가 꼬여있음이 분명하다.</p>
+<p>웃기게도 firebase-ios-sdk가 모듈을 찾지 못해서 수동으로 다운받았더니 적반하장으로 왜 다시 정의하냐고 에러를 주는 것이다. 어딘가 꼬여있음이 분명하다.</p>
 
 <p>아무튼! 이러한 사실을 깨달았다면 이제 해결은 간단하다.</p>
 
-<p><strong>Xcode에서 <code class="language-plaintext highlighter-rouge">firebase-ios-sdk를 삭제</code>해주면 된다.</strong> (<a href="https://stackoverflow.com/questions/70760326/flutter-on-ios-redefinition-of-module-firebase">stackoverflow</a>)</p>
+<p><strong>Xcode에서 firebase-ios-sdk를 삭제해주면 된다.</strong> (<a href="https://stackoverflow.com/questions/70760326/flutter-on-ios-redefinition-of-module-firebase">stackoverflow</a>)</p>
 
-<p>not found 에러와 redefinition 에러의 무한 반복에서 벗어나셨다면 축하드린다.</p>
+<p>이걸로 not found 에러와 redefinition 에러의 무한 반복에서 벗어나셨다면 축하드린다.</p>
+
+<p>필자는 이를 위해 꼬박 하루를 써버렸다. 언제나 가장 어려운 건 환경 세팅이라는 것에는 변함이 없다. 누군가는 시간을 절약하길 간절히 바란다.</p>
 
 <p>혹시나 참고를 원하시는 분이 있을까봐 Podfile 내용도 첨부한다.</p>
 
