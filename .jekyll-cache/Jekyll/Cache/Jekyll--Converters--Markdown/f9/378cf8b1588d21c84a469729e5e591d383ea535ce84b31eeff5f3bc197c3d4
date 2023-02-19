@@ -1,4 +1,4 @@
-I"�<p><br />
+I"�<p><br />
 딥러닝 관련 논문을 읽다보면 <code class="language-plaintext highlighter-rouge">Top1</code>, <code class="language-plaintext highlighter-rouge">Top5</code>, <code class="language-plaintext highlighter-rouge">Top10</code>과 같은 말들을 자주 볼 수 있습니다.<br />
 대충 감이 오기는 하지만 정확히 무엇을 의미하는 것일까요?<br />
 대표적으로 Top1 뒤에는 Accuracy가 오는 경우와 Loss가 오는 경우 이렇게 두 가지가 있습니다.</p>
@@ -15,7 +15,6 @@
 
 <h1 id="️-예제">☀️ 예제</h1>
 <p>예를 들어 강아지, 고양이, 미어캣, 개구리, 너구리를 구분하는 분류기가 있다고 합시다.<br />
-<br />
 <img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/2nd-1.png?raw=true" alt="ex-1" />
 <br />
 위의 다섯 동물 중 어느 한 동물의 이미지를 분류기에 집어넣었더니 분류기의 마지막 층으로부터 <code class="language-plaintext highlighter-rouge">Softmax 함수</code>를 지나서 나온 결과가 (0.1, 0.15, 0.3, 0.4, 0.05) 였다고 합시다. <br />
