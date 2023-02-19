@@ -153,7 +153,9 @@ If you use the pretrained model, you don't need to train it anymore. You can use
 And this is the results of comparison between 5-epoch-experiment and 50-epoch-experiment.
 I captured the model every 10 epochs during training and observed how the results change. 
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5 Epoch &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;50 Epoch  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5 Epoch 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+50 Epoch  
 ![epoch5-1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/dog5-1.png?raw=true "5 epochs") ![epoch50-1](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/dog50-1.png?raw=true "50 epochs")  
 ![epoch5-2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/dog5-2.png?raw=true "5 epochs") ![epoch50-2](https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/dog50-2.png?raw=true "50 epochs")
 
