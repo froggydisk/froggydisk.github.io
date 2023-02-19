@@ -119,7 +119,7 @@ target 'example_app' do
 end
 ```
 
-스택오버플로우를 보다보면 `$RNFirebaseAsStaticFramework = true;`를 추가하라는 글도 많은데 정확히 어떠한 역할을 해주는 지는 모르겠으나 필자의 경우에는 굳이 추가해주지 않아도 문제는 없었다.
+스택오버플로우를 보다보면 `$RNFirebaseAsStaticFramework = true;`를 추가하라는 글도 많은데 `use_frameworks! :linkage => :static`를 사용하지 않는다면 굳이 추가해주지 않아도 된다. React Native Firebase [공식 문서](https://rnfirebase.io)에도 잘 나와있으니 한번쯤 확인해보는 것도 좋겠다.
 
 
 

@@ -1,4 +1,4 @@
-I"�0<p>앱을 만들다보면 어느 순간 노티 기능을 적용해야할 때가 온다. 차근차근 개발을 진행하다보니 나 또한 어느새 그러한 페이즈에 도달해 있었다.</p>
+I"/1<p>앱을 만들다보면 어느 순간 노티 기능을 적용해야할 때가 온다. 차근차근 개발을 진행하다보니 나 또한 어느새 그러한 페이즈에 도달해 있었다.</p>
 
 <p>검색해보니 React Native로 앱을 만들 때 노티 기능은 보통 Firebase를 연동하는 경우가 많은 듯하다.</p>
 
@@ -103,6 +103,6 @@ you may set `use_modular_headers!` globally in your Podfile, or specify `:modula
 <span class="n">end</span>
 </code></pre></div></div>
 
-<p>스택오버플로우를 보다보면 <code class="language-plaintext highlighter-rouge">$RNFirebaseAsStaticFramework = true;</code>를 추가하라는 글도 많은데 정확히 어떠한 역할을 해주는 지는 모르겠으나 필자의 경우에는 굳이 추가해주지 않아도 문제는 없었다.</p>
+<p>스택오버플로우를 보다보면 <code class="language-plaintext highlighter-rouge">$RNFirebaseAsStaticFramework = true;</code>를 추가하라는 글도 많은데 <code class="language-plaintext highlighter-rouge">use_frameworks! :linkage =&gt; :static</code>를 사용하지 않는다면 굳이 추가해주지 않아도 된다. React Native Firebase <a href="https://rnfirebase.io">공식 문서</a>에도 잘 나와있으니 한번쯤 확인해보는 것도 좋겠다.</p>
 
 :ET
