@@ -1,4 +1,67 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2023-02-19T22:30:58+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[React Native] iOS 푸쉬 알림을 위해 Firebase를 적용하면서 만난 에러들</title><link href="http://localhost:4000/sixteenth-post/" rel="alternate" type="text/html" title="[React Native] iOS 푸쉬 알림을 위해 Firebase를 적용하면서 만난 에러들" /><published>2023-02-09T00:00:00+07:00</published><updated>2023-02-09T00:00:00+07:00</updated><id>http://localhost:4000/sixteenth-post</id><content type="html" xml:base="http://localhost:4000/sixteenth-post/"><![CDATA[<p>앱을 만들다보면 어느 순간 노티 기능을 적용해야할 때가 온다. 차근차근 개발을 진행하다보니 나 또한 어느새 그러한 페이즈에 도달해 있었다.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2023-03-09T20:31:50+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[k8s] 로컬에서 원격 하버 저장소로 도커 이미지 업로드</title><link href="http://localhost:4000/seventeenth-post/" rel="alternate" type="text/html" title="[k8s] 로컬에서 원격 하버 저장소로 도커 이미지 업로드" /><published>2023-03-09T00:00:00+07:00</published><updated>2023-03-09T00:00:00+07:00</updated><id>http://localhost:4000/seventeenth-post</id><content type="html" xml:base="http://localhost:4000/seventeenth-post/"><![CDATA[<h1 id="-도커-원격-로그인">📌 도커 원격 로그인</h1>
+
+<p>쿠버네티스 상에 하버 서비스를 띄우는데 성공했다면 로컬에서 도커 이미지를 보낼 준비가 된 것이다.</p>
+
+<p>로그인 방법은 간단하다. 단, 기본적으로 로컬에 도커가 돌고 있어야 한다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sudo</span> <span class="n">docker</span> <span class="n">login</span> <span class="p">[</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">하버도메인</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>만약 이 과정에서 로그인 에러가 발생했다면 해결 방법은 두 가지이다. (<a href="https://qkqhxla1.tistory.com/1123">참고</a>)</p>
+
+<h3 id="-에러">🔒 에러</h3>
+<p><strong><code class="language-plaintext highlighter-rouge">Error saving credentials: error storing credentials - err: exit status 1, out: ''</code></strong></p>
+
+<h3 id="-해결">🔑 해결</h3>
+<p>● <code class="language-plaintext highlighter-rouge">~/.docker/config.json</code> 파일에서 <code class="language-plaintext highlighter-rouge">"credsStore":</code>의 내용을 <code class="language-plaintext highlighter-rouge">""</code>로 수정한다.</p>
+
+<p>● 혹은 <code class="language-plaintext highlighter-rouge">~/.docker/config.json</code> 파일을 삭제해준다.</p>
+
+<p>이후 도커를 재시작하고 다시 로그인을 시도한다.</p>
+
+<h1 id="-도커-이미지-업로드">📌 도커 이미지 업로드</h1>
+
+<p>로그인에 성공하였다면 실제로 push를 해 볼 차례이다. push 순서는 다음과 같다.</p>
+<ol>
+  <li>원격 하버 저장소에 로그인</li>
+  <li>원하는 도커 이미지의 태그 생성</li>
+  <li>저장소에 push</li>
+</ol>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 로그인
+</span><span class="n">sudo</span> <span class="n">docker</span> <span class="n">login</span> <span class="p">[</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">하버도메인</span><span class="p">]</span>
+<span class="c1"># push할 이미지를 찾는다. 없으면 허브에서 pull 해온다.
+</span><span class="n">sudo</span> <span class="n">docker</span> <span class="n">images</span> 
+<span class="c1"># 도커 이미지에 tag를 붙여준다.
+</span><span class="n">sudo</span> <span class="n">docker</span> <span class="n">tag</span> <span class="p">[</span><span class="n">선택한</span> <span class="n">도커이미지</span><span class="p">]</span> <span class="p">[</span><span class="n">하버도메인</span><span class="p">]</span><span class="o">/</span><span class="p">[</span><span class="n">프로젝트명</span><span class="p">]</span><span class="o">/</span><span class="p">[</span><span class="n">도커이미지</span><span class="p">]:[</span><span class="n">버전명</span><span class="p">]</span>
+<span class="c1"># 저장소에 push
+</span><span class="n">sudo</span> <span class="n">docker</span> <span class="n">push</span> <span class="p">[</span><span class="n">하버도메인</span><span class="p">]</span><span class="o">/</span><span class="p">[</span><span class="n">프로젝트명</span><span class="p">]</span><span class="o">/</span><span class="p">[</span><span class="n">도커이미지</span><span class="p">]:[</span><span class="n">버전명</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>주의할 점은 하버 포탈에 해당 프로젝트가 이미 생성된 상태여야 한다는 것이다. 다만 버전명은 꼭 숫자가 아니어도 된다.</p>
+
+<p>예를 들면 다음과 같다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo docker tag harbor.domain.io/my-project/busybox:0.1
+</code></pre></div></div>
+
+<h3 id="-에러-1">🔒 에러</h3>
+<p>만약 push가 정상적으로 되지 않고 <strong><code class="language-plaintext highlighter-rouge">Retrying in 5 seconds</code></strong>와 같은 메시지가 반복된다면 아래와 같이 해결한다.</p>
+
+<h3 id="-해결-1">🔑 해결</h3>
+<p>헬름을 통해 다운받았다면 하버의 deployment yaml 파일이 존재할 것이다. 파일 내용의 한 부분만 수정해주면 된다. (<a href="https://www.claudiokuenzler.com/blog/958/running-harbor-registry-behind-reverse-proxy-solve-docker-push-errors">참고</a>)</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">...</span>
+<span class="n">registry</span><span class="p">:</span>
+	<span class="p">...</span>
+	<span class="n">relativeurls</span><span class="p">:</span> <span class="n">true</span> <span class="c1"># false에서 true로 변경
+</span></code></pre></div></div>
+
+<p>그 이후에는 변경 사항을 적용해 주면 된다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">helm</span> <span class="n">upgrade</span> <span class="o">--</span><span class="n">install</span> <span class="n">harbor</span> <span class="n">harbor</span><span class="o">/</span><span class="n">harbor</span> <span class="o">-</span><span class="n">f</span> <span class="n">my</span><span class="o">-</span><span class="n">values</span><span class="p">.</span><span class="n">yaml</span> <span class="o">-</span><span class="n">n</span> <span class="n">harbor</span>
+</code></pre></div></div>
+
+<p>온프레미스 관련 에러는 항상 레퍼런스가 적어 해결이 어렵다. 누군가에게는 도움이 되었길 빈다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Kubernetes, Harbor, Helm, Docker" /><summary type="html"><![CDATA[📌 도커 원격 로그인]]></summary></entry><entry><title type="html">[React Native] iOS 푸쉬 알림을 위해 Firebase를 적용하면서 만난 에러들</title><link href="http://localhost:4000/sixteenth-post/" rel="alternate" type="text/html" title="[React Native] iOS 푸쉬 알림을 위해 Firebase를 적용하면서 만난 에러들" /><published>2023-02-09T00:00:00+07:00</published><updated>2023-02-09T00:00:00+07:00</updated><id>http://localhost:4000/sixteenth-post</id><content type="html" xml:base="http://localhost:4000/sixteenth-post/"><![CDATA[<p>앱을 만들다보면 어느 순간 노티 기능을 적용해야할 때가 온다. 차근차근 개발을 진행하다보니 나 또한 어느새 그러한 페이즈에 도달해 있었다.</p>
 
 <p>검색해보니 React Native로 앱을 만들 때 노티 기능은 보통 Firebase를 연동하는 경우가 많은 듯하다.</p>
 
@@ -460,124 +523,4 @@ react-native run-android를 하였을 때 what went wrong에 뜨는 에러는 �
 희망을 품고 또 며칠을 기다렸지만 리디렉션 오류는 해결되지 않았다.<br />
 사이트맵을 읽을 때까지 기다려야하나 고민하던 찰나 URL경로 끝에 <code class="language-plaintext highlighter-rouge">/</code> 를 붙여보자는 생각이 들어서 즉시 실행해 옮겼다.<br />
 결과는 성공!<br />
-이유는 모르겠지만 <code class="language-plaintext highlighter-rouge">https://froggydisk.github.io/seventh-post/</code> 의 URL로 색인 생성 요청을 하였더니 리디렉션 오류가 사라지고 색인 등록에 성공하였다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Google Search Console" /><summary type="html"><![CDATA[이번에 블로그 테마를 바꾸면서 Google Search Console 설정을 다시 해 줄 필요가 있었다. 하지만 사이트맵을 새로 등록해도 바로 읽어들이지 못하였다. 결국 이전 블로그 글은 구글 검색이 되는데 404에러가 뜨고 새로 등록한 글들은 검색이 안되는 상황에 맞닥뜨렸다. 이는 블로그 글들의 파일경로가 바뀌면서 주소가 변경되었기 때문인데 마냥 기다릴 수만은 없었기에 색인 생성 요청을 해보았다. 며칠이 지난 후에 결과가 나왔는데 리디렉션 오류로 여전히 구글 검색이 안되었다. 다른 블로그를 찾아보니 구글이 크롤링을 할 때 숫자 하나 차이는 구별하지 못하기 때문이라는 글이 있어서 URL의 숫자부분을 전부 문자로 바꾸어주었다. 예를 들어 기존의 URL이 https://froggydisk.github.io/7th-post 와 같았다면 변경 후에는 https://froggydisk.github.io/seventh-post 이 되었다. 희망을 품고 또 며칠을 기다렸지만 리디렉션 오류는 해결되지 않았다. 사이트맵을 읽을 때까지 기다려야하나 고민하던 찰나 URL경로 끝에 / 를 붙여보자는 생각이 들어서 즉시 실행해 옮겼다. 결과는 성공! 이유는 모르겠지만 https://froggydisk.github.io/seventh-post/ 의 URL로 색인 생성 요청을 하였더니 리디렉션 오류가 사라지고 색인 등록에 성공하였다.]]></summary></entry><entry><title type="html">Buy me a coffee 버튼 만들기 ☕️</title><link href="http://localhost:4000/seventh-post/" rel="alternate" type="text/html" title="Buy me a coffee 버튼 만들기 ☕️" /><published>2022-03-03T00:00:00+07:00</published><updated>2022-03-03T00:00:00+07:00</updated><id>http://localhost:4000/seventh-post</id><content type="html" xml:base="http://localhost:4000/seventh-post/"><![CDATA[<p>여러 블로그를 돌아다니다보니 포스트 아래쪽에 달려있는 예쁜 버튼들에 눈길이 갔다. <code class="language-plaintext highlighter-rouge">Buy me a coffee</code>로도 유명한 후원 버튼이었는데 애드 포스트가 덕지덕지 붙어있는 것보다 훨씬 깔끔해 보여서 한 번 만들어보기로 하였다. 후원보다는 디자인적인 욕심이 큰 것 같다.</p>
-
-<h1 id="순서">순서</h1>
-<ol>
-  <li>우선 마음에 드는 버튼 디자인을 찾거나 직접 디자인한다. 나의 경우에는 여러 레퍼런스를 찾아보았는데 <a href="https://velog.io/@whdnjsdyd111/CSS-버튼-이쁘게-꾸미기">waster.log</a>에서 많은 도움을 받았다.</li>
-  <li>다음으로는 버튼에 단순히 <code class="language-plaintext highlighter-rouge">onclick="location.href=</code>를 붙여주면 끝이난다.</li>
-</ol>
-
-<p>하나는 카카오, 다른 하나는 <code class="language-plaintext highlighter-rouge">buy me a coffee</code>로 해서 총 두 개의 버튼을 만들었다. 카카오는 모바일에서만 가능하고 카카오계정이 드러나다보니 조금 노골적인 느낌이 들었다. <code class="language-plaintext highlighter-rouge">buy me a coffee</code>는 후원페이지도 직접 꾸밀 수 있고 깔끔한 UI가 마음에 들었는데 후원 절차가 비교적 까다롭고 한화 결제가 불가능하다는 것이 마음에 걸렸다. 또한 일정 금액 이상이 아니면 인출도 불가능하다.</p>
-
-<p>코드는 아래와 같다.</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="err">!</span><span class="n">DOCTYPE</span> <span class="n">html</span><span class="o">&gt;</span>
-<span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
-  <span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
-    <span class="o">&lt;</span><span class="n">script</span> <span class="n">src</span><span class="o">=</span><span class="s">"[fontawesome사이트에서 발급되는 url]"</span> <span class="n">crossorigin</span><span class="o">=</span><span class="s">"anonymous"</span><span class="o">&gt;&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
-  <span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
-  <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
-    <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s">"support-link-btn"</span><span class="o">&gt;</span>
-      <span class="o">&lt;</span><span class="n">button</span> <span class="n">class</span><span class="o">=</span><span class="s">"w-btn w-btn-yellow"</span> <span class="n">onclick</span><span class="o">=</span><span class="s">"location.href='[카카오페이 송금 url]'"</span><span class="o">&gt;</span>
-        <span class="o">&lt;</span><span class="n">span</span><span class="o">&gt;</span><span class="n">Give</span> <span class="n">me</span> <span class="n">a</span> <span class="n">kakao</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span>
-        <span class="o">&lt;</span><span class="n">i</span> <span class="n">class</span><span class="o">=</span><span class="s">"fa-solid fa-heart fa-beat"</span> <span class="n">style</span><span class="o">=</span><span class="s">"--fa-animation-duration: 1s;"</span><span class="o">&gt;&lt;/</span><span class="n">i</span><span class="o">&gt;</span>
-      <span class="o">&lt;/</span><span class="n">button</span><span class="o">&gt;</span>
-      <span class="o">&lt;</span><span class="n">button</span> <span class="n">class</span><span class="o">=</span><span class="s">"w-btn w-btn-gra1 w-btn-gra-anim"</span> <span class="n">onclick</span><span class="o">=</span><span class="s">"location.href='[buy me a coffee 후원페이지 url]'"</span><span class="o">&gt;</span>
-        <span class="o">&lt;</span><span class="n">span</span><span class="o">&gt;</span><span class="n">Buy</span> <span class="n">me</span> <span class="n">a</span> <span class="n">coffee</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span>
-        <span class="o">&lt;</span><span class="n">i</span> <span class="n">class</span><span class="o">=</span><span class="s">"fa-solid fa-mug-hot"</span><span class="o">&gt;&lt;/</span><span class="n">i</span><span class="o">&gt;</span>
-      <span class="o">&lt;/</span><span class="n">button</span><span class="o">&gt;</span>
-    <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
-  <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
-<span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
-
-
-<span class="o">&lt;</span><span class="n">style</span> <span class="nb">type</span><span class="o">=</span><span class="s">"text/css"</span><span class="o">&gt;</span>
-<span class="o">@</span><span class="kn">import</span> <span class="nn">url</span><span class="p">(</span><span class="s">"https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&amp;display=swap"</span><span class="p">);</span>
-
-<span class="c1"># 버튼 위치 조정
-</span><span class="p">.</span><span class="n">support</span><span class="o">-</span><span class="n">link</span><span class="o">-</span><span class="n">btn</span> <span class="p">{</span>
-      <span class="n">text</span><span class="o">-</span><span class="n">align</span><span class="p">:</span> <span class="n">center</span><span class="p">;</span>
-      <span class="n">margin</span><span class="o">-</span><span class="n">top</span><span class="p">:</span> <span class="mi">3</span><span class="n">em</span><span class="p">;</span>
-  <span class="p">}</span>
-
-<span class="c1"># 버튼 디자인 설정
-</span><span class="p">.</span><span class="n">w</span><span class="o">-</span><span class="n">btn</span> <span class="p">{</span>
-    <span class="n">font</span><span class="o">-</span><span class="n">size</span><span class="p">:</span> <span class="mf">0.8</span><span class="n">em</span><span class="p">;</span>
-    <span class="n">position</span><span class="p">:</span> <span class="n">relative</span><span class="p">;</span>
-    <span class="n">border</span><span class="p">:</span> <span class="n">none</span><span class="p">;</span>
-    <span class="n">display</span><span class="p">:</span> <span class="n">inline</span><span class="o">-</span><span class="n">block</span><span class="p">;</span>
-    <span class="n">padding</span><span class="p">:</span> <span class="mi">15</span><span class="n">px</span> <span class="mi">30</span><span class="n">px</span><span class="p">;</span>
-    <span class="n">border</span><span class="o">-</span><span class="n">radius</span><span class="p">:</span> <span class="mi">15</span><span class="n">px</span><span class="p">;</span>
-    <span class="n">font</span><span class="o">-</span><span class="n">family</span><span class="p">:</span> <span class="s">"paybooc-Light"</span><span class="p">,</span> <span class="n">sans</span><span class="o">-</span><span class="n">serif</span><span class="p">;</span>
-    <span class="n">box</span><span class="o">-</span><span class="n">shadow</span><span class="p">:</span> <span class="mi">0</span> <span class="mi">15</span><span class="n">px</span> <span class="mi">35</span><span class="n">px</span> <span class="n">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">);</span>
-    <span class="n">text</span><span class="o">-</span><span class="n">decoration</span><span class="p">:</span> <span class="n">none</span><span class="p">;</span>
-    <span class="n">font</span><span class="o">-</span><span class="n">weight</span><span class="p">:</span> <span class="mi">600</span><span class="p">;</span>
-    <span class="n">transition</span><span class="p">:</span> <span class="mf">0.25</span><span class="n">s</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="p">.</span><span class="n">w</span><span class="o">-</span><span class="n">btn</span><span class="p">:</span><span class="n">hover</span> <span class="p">{</span>
-    <span class="n">transform</span><span class="p">:</span> <span class="n">scale</span><span class="p">(</span><span class="mf">1.1</span><span class="p">);</span>
-    <span class="n">cursor</span><span class="p">:</span> <span class="n">pointer</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="p">.</span><span class="n">w</span><span class="o">-</span><span class="n">btn</span><span class="p">:</span><span class="n">active</span> <span class="p">{</span>
-    <span class="n">transform</span><span class="p">:</span> <span class="n">scale</span><span class="p">(</span><span class="mf">1.1</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="c1"># hover 시 물결 효과
-</span><span class="o">@</span><span class="n">keyframes</span> <span class="n">ring</span> <span class="p">{</span>
-    <span class="mi">0</span><span class="o">%</span> <span class="p">{</span>
-        <span class="n">width</span><span class="p">:</span> <span class="mi">30</span><span class="n">px</span><span class="p">;</span>
-        <span class="n">height</span><span class="p">:</span> <span class="mi">30</span><span class="n">px</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="mi">100</span><span class="o">%</span> <span class="p">{</span>
-        <span class="n">width</span><span class="p">:</span> <span class="mi">300</span><span class="n">px</span><span class="p">;</span>
-        <span class="n">height</span><span class="p">:</span> <span class="mi">300</span><span class="n">px</span><span class="p">;</span>
-        <span class="n">border</span><span class="o">-</span><span class="n">color</span><span class="p">:</span> <span class="n">transparent</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="p">.</span><span class="n">w</span><span class="o">-</span><span class="n">btn</span><span class="p">:</span><span class="n">hover</span><span class="p">::</span><span class="n">after</span> <span class="p">{</span>
-    <span class="n">content</span><span class="p">:</span> <span class="s">""</span><span class="p">;</span>
-    <span class="n">border</span><span class="o">-</span><span class="n">radius</span><span class="p">:</span> <span class="mi">100</span><span class="o">%</span><span class="p">;</span>
-    <span class="n">border</span><span class="p">:</span> <span class="mi">6</span><span class="n">px</span> <span class="n">solid</span> <span class="c1">#9dc8c8;
-</span>    <span class="n">position</span><span class="p">:</span> <span class="n">absolute</span><span class="p">;</span>
-    <span class="n">z</span><span class="o">-</span><span class="n">index</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
-    <span class="n">top</span><span class="p">:</span> <span class="mi">50</span><span class="o">%</span><span class="p">;</span>
-    <span class="n">left</span><span class="p">:</span> <span class="mi">50</span><span class="o">%</span><span class="p">;</span>
-    <span class="n">transform</span><span class="p">:</span> <span class="n">translate</span><span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="o">%</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="o">%</span><span class="p">);</span>
-    <span class="n">animation</span><span class="p">:</span> <span class="n">ring</span> <span class="mf">1.5</span><span class="n">s</span> <span class="n">infinite</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="c1"># 카카오 버튼
-</span><span class="p">.</span><span class="n">w</span><span class="o">-</span><span class="n">btn</span><span class="o">-</span><span class="n">yellow</span> <span class="p">{</span>
-  <span class="n">background</span><span class="o">-</span><span class="n">color</span><span class="p">:</span> <span class="c1">#fce205;
-</span>  <span class="n">color</span><span class="p">:</span> <span class="c1">#3B240B;
-</span><span class="p">}</span>
-
-<span class="c1"># buy me a coffee 버튼
-</span><span class="p">.</span><span class="n">w</span><span class="o">-</span><span class="n">btn</span><span class="o">-</span><span class="n">gra1</span> <span class="p">{</span>
-    <span class="n">background</span><span class="p">:</span> <span class="n">linear</span><span class="o">-</span><span class="n">gradient</span><span class="p">(</span><span class="o">-</span><span class="mi">45</span><span class="n">deg</span><span class="p">,</span> <span class="c1">#ee7752, #e73c7e, #23a6d5, #23d5ab);
-</span>    <span class="n">color</span><span class="p">:</span> <span class="n">white</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="p">.</span><span class="n">w</span><span class="o">-</span><span class="n">btn</span><span class="o">-</span><span class="n">gra</span><span class="o">-</span><span class="n">anim</span> <span class="p">{</span>
-    <span class="n">background</span><span class="o">-</span><span class="n">size</span><span class="p">:</span> <span class="mi">400</span><span class="o">%</span> <span class="mi">400</span><span class="o">%</span><span class="p">;</span>
-    <span class="n">animation</span><span class="p">:</span> <span class="n">gradient</span> <span class="mi">7</span><span class="n">s</span> <span class="n">ease</span> <span class="n">infinite</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="o">@</span><span class="n">keyframes</span> <span class="n">gradient</span> <span class="p">{</span>
-    <span class="mi">0</span><span class="o">%</span> <span class="p">{</span>
-        <span class="n">background</span><span class="o">-</span><span class="n">position</span><span class="p">:</span> <span class="mi">0</span><span class="o">%</span> <span class="mi">50</span><span class="o">%</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="mi">50</span><span class="o">%</span> <span class="p">{</span>
-        <span class="n">background</span><span class="o">-</span><span class="n">position</span><span class="p">:</span> <span class="mi">100</span><span class="o">%</span> <span class="mi">50</span><span class="o">%</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="mi">100</span><span class="o">%</span> <span class="p">{</span>
-        <span class="n">background</span><span class="o">-</span><span class="n">position</span><span class="p">:</span> <span class="mi">0</span><span class="o">%</span> <span class="mi">50</span><span class="o">%</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-<span class="o">&lt;/</span><span class="n">style</span><span class="o">&gt;</span>
-</code></pre></div></div>
-
-<p>버튼 안에 들어갈 아이콘을 찾을 때는 <a href="https://fontawesome.com">fontawesome</a>을 추천한다. 완성본은 footer쪽을 보세요! ⬇️</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="HTML/CSS" /><summary type="html"><![CDATA[여러 블로그를 돌아다니다보니 포스트 아래쪽에 달려있는 예쁜 버튼들에 눈길이 갔다. Buy me a coffee로도 유명한 후원 버튼이었는데 애드 포스트가 덕지덕지 붙어있는 것보다 훨씬 깔끔해 보여서 한 번 만들어보기로 하였다. 후원보다는 디자인적인 욕심이 큰 것 같다.]]></summary></entry></feed>
+이유는 모르겠지만 <code class="language-plaintext highlighter-rouge">https://froggydisk.github.io/seventh-post/</code> 의 URL로 색인 생성 요청을 하였더니 리디렉션 오류가 사라지고 색인 등록에 성공하였다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Google Search Console" /><summary type="html"><![CDATA[이번에 블로그 테마를 바꾸면서 Google Search Console 설정을 다시 해 줄 필요가 있었다. 하지만 사이트맵을 새로 등록해도 바로 읽어들이지 못하였다. 결국 이전 블로그 글은 구글 검색이 되는데 404에러가 뜨고 새로 등록한 글들은 검색이 안되는 상황에 맞닥뜨렸다. 이는 블로그 글들의 파일경로가 바뀌면서 주소가 변경되었기 때문인데 마냥 기다릴 수만은 없었기에 색인 생성 요청을 해보았다. 며칠이 지난 후에 결과가 나왔는데 리디렉션 오류로 여전히 구글 검색이 안되었다. 다른 블로그를 찾아보니 구글이 크롤링을 할 때 숫자 하나 차이는 구별하지 못하기 때문이라는 글이 있어서 URL의 숫자부분을 전부 문자로 바꾸어주었다. 예를 들어 기존의 URL이 https://froggydisk.github.io/7th-post 와 같았다면 변경 후에는 https://froggydisk.github.io/seventh-post 이 되었다. 희망을 품고 또 며칠을 기다렸지만 리디렉션 오류는 해결되지 않았다. 사이트맵을 읽을 때까지 기다려야하나 고민하던 찰나 URL경로 끝에 / 를 붙여보자는 생각이 들어서 즉시 실행해 옮겼다. 결과는 성공! 이유는 모르겠지만 https://froggydisk.github.io/seventh-post/ 의 URL로 색인 생성 요청을 하였더니 리디렉션 오류가 사라지고 색인 등록에 성공하였다.]]></summary></entry></feed>
