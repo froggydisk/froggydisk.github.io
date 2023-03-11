@@ -9,7 +9,7 @@ tags:
 last_modified_at: 2023-03-11T
 ---
 
-<p align="center"><img src="" width="250" height="500" style="border: 1px solid black" /></p>
+<p align="center"><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/18th.png?raw=true" width="250" height="500" style="border: 1px solid black" /></p>
 
 
 # 📌 Credential을 등록하려해도 등록이 안 될 때
