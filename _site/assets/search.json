@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "[k8s] Jenkins에서 Credential 등록 불가 에러",
+      "description" : "",
+      "tags"     : "Kubernetes, Jenkins, Nginx",
+      "url"      : "/eighteenth-post/",
+      "date"     : "2023-03-11 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[k8s] 로컬에서 원격 하버 저장소로 도커 이미지 업로드",
       "description" : "",
       "tags"     : "Kubernetes, Harbor, Helm, Docker",

@@ -4,6 +4,22 @@
         xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     
     <url>
+        <loc>http://localhost:4000/eighteenth-post/</loc>
+        
+        <lastmod>2023-03-11T00:00:00+07:00</lastmod>
+        
+
+        
+        <changefreq>weekly</changefreq>
+        
+
+        
+        <priority>0.5</priority>
+        
+
+    </url>
+    
+    <url>
         <loc>http://localhost:4000/seventeenth-post/</loc>
         
         <lastmod>2023-03-09T00:00:00+07:00</lastmod>
