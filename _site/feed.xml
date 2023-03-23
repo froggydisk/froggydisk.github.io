@@ -1,4 +1,92 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2023-03-22T21:01:54+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[k8s] 사설 저장소에서 도커 이미지 받아오기 실패</title><link href="http://localhost:4000/nineteenth-post/" rel="alternate" type="text/html" title="[k8s] 사설 저장소에서 도커 이미지 받아오기 실패" /><published>2023-03-22T00:00:00+07:00</published><updated>2023-03-22T00:00:00+07:00</updated><id>http://localhost:4000/nineteenth-post</id><content type="html" xml:base="http://localhost:4000/nineteenth-post/"><![CDATA[<h1 id="-에러">🔒 에러</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2023-03-23T22:09:26+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[Ubuntu] Nvidia 드라이버 설치 후 ssh 접속 불가 문제</title><link href="http://localhost:4000/20th-post/" rel="alternate" type="text/html" title="[Ubuntu] Nvidia 드라이버 설치 후 ssh 접속 불가 문제" /><published>2023-03-23T00:00:00+07:00</published><updated>2023-03-23T00:00:00+07:00</updated><id>http://localhost:4000/20th-post</id><content type="html" xml:base="http://localhost:4000/20th-post/"><![CDATA[<h1 id="대상">대상</h1>
+<p>이 글은 Nvidia GPU가 설치된 우분투 서버에 ssh 접속을 하기 위해 세팅을 하시는 분들을 대상으로 합니다.</p>
+
+<h1 id="1-nvidia-드라이버-설치">1. Nvidia 드라이버 설치</h1>
+
+<h3 id="장치-확인">장치 확인</h3>
+<p>먼저 GPU 장치가 잘 인식되어 있는지 확인한다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">lshw</span> <span class="o">-</span><span class="n">C</span> <span class="n">display</span>
+</code></pre></div></div>
+
+<h3 id="설치">설치</h3>
+<p>Nvidia 드라이버 설치를 위해서는 우선 <code class="language-plaintext highlighter-rouge">ubuntu-drivers</code>가 필요합니다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">ubuntu</span><span class="o">-</span><span class="n">drivers</span><span class="o">-</span><span class="n">common</span>
+</code></pre></div></div>
+<p>이후 ubuntu-drivers를 이용하여 권장 설치를 진행한다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sudo</span> <span class="n">add</span><span class="o">-</span><span class="n">apt</span><span class="o">-</span><span class="n">repository</span> <span class="n">ppa</span><span class="p">:</span><span class="n">graphics</span><span class="o">-</span><span class="n">drivers</span><span class="o">/</span><span class="n">ppa</span>
+<span class="n">sudo</span> <span class="n">apt</span> <span class="n">update</span>
+<span class="n">sudo</span> <span class="n">ubuntu</span><span class="o">-</span><span class="n">drivers</span> <span class="n">autoinstall</span>
+</code></pre></div></div>
+<p>시간이 조금 걸리므로 조급해하지 말자. 설치가 완료되었다면 재부팅으로 마무리한다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sudo</span> <span class="n">reboot</span>
+</code></pre></div></div>
+<p>이제 <code class="language-plaintext highlighter-rouge">nvidia-smi</code> 명령어로 GPU의 현재 상태를 볼 수 있다.</p>
+
+<p>혹시라도 귀찮아서 재부팅을 안하는 분은 아래와 같은 에러를 만날 수 있으니 귀찮더라도 꼭 하자.</p>
+
+<p>⚠️ <strong>NVIDIA-SMI has failed because it couldn’t communicate with the NVIDIA driver.</strong><br />
+<strong>Make sure that the latest NVIDIA driver is installed and running.</strong></p>
+
+<p>nvidia-smi보다 좀 더 간단하게 볼 수 있는 툴로는 <code class="language-plaintext highlighter-rouge">gpustat</code>을 추천한다. 설치도 간단하다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pip</span> <span class="n">install</span> <span class="n">gpustat</span>
+</code></pre></div></div>
+<p><code class="language-plaintext highlighter-rouge">gpustat</code>을 입력하면 GPU 상태를 보여준다.</p>
+
+<h3 id="참고">참고</h3>
+<p><a href="https://pstudio411.tistory.com/entry/Ubuntu-2004-Nvidia%EB%93%9C%EB%9D%BC%EC%9D%B4%EB%B2%84-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0">Nvidia드라이버 설치하기</a></p>
+
+<p><br /></p>
+
+<h1 id="2-설치-이후-만나는-상황">2. 설치 이후 만나는 상황</h1>
+
+<h3 id="-문제">🔒 문제</h3>
+
+<p>📍 <strong><code class="language-plaintext highlighter-rouge">처음에는 ssh가 잘 되다가 어느 순간부터 접속이 되지 않는다</code></strong></p>
+
+<p>Nvidia 드라이버의 호환성 문제로 인해 컴퓨터가 다운되는 것이라고 예상해서 여러번의 재설치를 거쳤으나 해결되지 않았다.</p>
+
+<p>이는 모니터를 연결해 놓지 않는 서버 컴퓨터의 특성상 놓치기 쉬운 부분인데 알고 보니 단순히 절전 모드에 들어간 것이었다.</p>
+
+<p>Nvidia 드라이버를 설치하면 재부팅시 디폴트 모드가 GUI 모드로 변경되고 절전 모드도 자동으로 세팅된다.</p>
+
+<p>이를 해결하기 위해서는 컴퓨터의 절전 모드 진입을 막아야 하는데 가능한 방법은 총 두 가지이다.</p>
+
+<h3 id="-해결">🔑 해결</h3>
+
+<p>📍 <strong><code class="language-plaintext highlighter-rouge">명령어로 절전 모드를 끈다</code></strong> (<a href="https://heekangpark.github.io/linux/ubuntu-server-sleep">참고</a>)</p>
+
+<p>한 줄이면 가능하다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">mask</span> <span class="n">sleep</span><span class="p">.</span><span class="n">target</span> <span class="n">suspend</span><span class="p">.</span><span class="n">target</span> <span class="n">hibernate</span><span class="p">.</span><span class="n">target</span> <span class="n">hybrid</span><span class="o">-</span><span class="n">sleep</span><span class="p">.</span><span class="n">target</span>
+</code></pre></div></div>
+
+<p>아래 명령어로 설정이 잘 되었는지 확인한다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">systemctl</span> <span class="n">status</span> <span class="n">sleep</span><span class="p">.</span><span class="n">target</span> <span class="n">suspend</span><span class="p">.</span><span class="n">target</span> <span class="n">hibernate</span><span class="p">.</span><span class="n">target</span> <span class="n">hybrid</span><span class="o">-</span><span class="n">sleep</span><span class="p">.</span><span class="n">target</span>
+</code></pre></div></div>
+<p><br /></p>
+
+<p>📍 <strong><code class="language-plaintext highlighter-rouge">기본 모드를 CLI 모드로 전환한다</code></strong> (<a href="https://booiljung.github.io/technical_articles/linux/switch_gui_and_cli.html">참고</a>)</p>
+
+<p>관련 설정 파일은 아래의 위치에 있다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sudo</span> <span class="n">vim</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">default</span><span class="o">/</span><span class="n">grub</span>
+</code></pre></div></div>
+
+<p>다음 3가지 사항에 대해 수정한다.</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">GRUB_CMDLINE_LINUX_DEFAULT=""</code>를 주석 처리</li>
+  <li><code class="language-plaintext highlighter-rouge">GRUB_CMDLINE_LINUX="text"</code>로 변경</li>
+  <li><code class="language-plaintext highlighter-rouge">GRUB_TERMINAL=console</code>의 주석 제거</li>
+</ul>
+
+<p>esc → :wq → enter 순으로 변경 사항을 저장한 뒤 아래 명령어로 적용한다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">grub</span> <span class="c1"># 변경 사항 적용
+</span><span class="n">sudo</span> <span class="n">systemctl</span> <span class="nb">set</span><span class="o">-</span><span class="n">default</span> <span class="n">multi</span><span class="o">-</span><span class="n">user</span><span class="p">.</span><span class="n">target</span>
+<span class="n">sudo</span> <span class="n">reboot</span> <span class="c1"># 재부팅
+</span></code></pre></div></div>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Linux, Ubuntu, Nvidia" /><summary type="html"><![CDATA[대상 이 글은 Nvidia GPU가 설치된 우분투 서버에 ssh 접속을 하기 위해 세팅을 하시는 분들을 대상으로 합니다.]]></summary></entry><entry><title type="html">[k8s] 사설 저장소에서 도커 이미지 받아오기 실패</title><link href="http://localhost:4000/nineteenth-post/" rel="alternate" type="text/html" title="[k8s] 사설 저장소에서 도커 이미지 받아오기 실패" /><published>2023-03-22T00:00:00+07:00</published><updated>2023-03-22T00:00:00+07:00</updated><id>http://localhost:4000/nineteenth-post</id><content type="html" xml:base="http://localhost:4000/nineteenth-post/"><![CDATA[<h1 id="-에러">🔒 에러</h1>
 <p>쿠버네티스에서 yaml 파일을 작성할 때 도커 이미지를 사용하는 파드를 생성하려고 했으나 제대로 생성이 되지 않고 계속해서 <code class="language-plaintext highlighter-rouge">ImagePullBackOff</code> 상태가 되었다. Kubernetes Dashboard를 통해서 보니 다음과 같은 <strong>401 Unauthorized</strong> 에러 메시지가 떠있었다.</p>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Failed to pull image: rpc error: code = Unknown desc = failed to pull and unpack image: 
 failed to resolve reference: pulling from host failed with status code [manifests latest]: 
@@ -487,67 +575,4 @@ react-native run-android를 하였을 때 what went wrong에 뜨는 에러는 �
 <h3 id="참고">참고</h3>
 <p><a href="https://icat2048.tistory.com/462">[Gradle] Android 빌드를 위한 Gradle Version 관리</a>
 <br />
-<a href="https://daewonyoon.tistory.com/293">[Android|Kotlin] Gradle Sync Issue: Android Gradle plugin supports only Kotlin Gradle plugin version … and higher</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, Android" /><summary type="html"><![CDATA[React Native로 개발을 하고는 있지만 주로 iOS 시뮬레이터만 보고 하다보니 오랜만에 안드로이드 빌드를 하게 되었다. 안드로이드 스튜디오에 들어가서 아무 생각 없이 Gradle upgrade를 했더니 빌드가 안되기 시작했다. react-native run-android를 하였을 때 what went wrong에 뜨는 에러는 다음과 같다.]]></summary></entry><entry><title type="html">[React Native] Draggable Button과 ScrollView</title><link href="http://localhost:4000/tenth-post/" rel="alternate" type="text/html" title="[React Native] Draggable Button과 ScrollView" /><published>2022-10-27T00:00:00+07:00</published><updated>2022-10-27T00:00:00+07:00</updated><id>http://localhost:4000/tenth-post</id><content type="html" xml:base="http://localhost:4000/tenth-post/"><![CDATA[<p>리액트 네이티브를 이용하여 앱을 만들 때 이리저리 끌고 다닐 수 있는 버튼을 만들고 싶을 때가 있다. 
-<br />
-만들어놓고 화면에서 요리조리 움직이다보면 나름 재미가 있다. 
-<br />
-바퀴를 다시 발명하지 말라고 누군가 그랬던가. 구현을 위해 필자가 사용한 것은 <code class="language-plaintext highlighter-rouge">react-native-draggable</code>이라는 이미 잘 만들어진 라이브러리이다.</p>
-
-<h3 id="설치">설치</h3>
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">npm</span> <span class="nx">install</span> <span class="nx">react</span><span class="o">-</span><span class="nx">native</span><span class="o">-</span><span class="nx">draggable</span>
-
-<span class="nx">cd</span> <span class="nx">ios</span>
-<span class="nx">arch</span> <span class="o">-</span><span class="nx">x86_64</span> <span class="nx">pod</span> <span class="nx">install</span> <span class="c1">// m1이 아닌 경우에는 그냥 pod install</span>
-</code></pre></div></div>
-
-<h3 id="사용">사용</h3>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">Draggable</span> <span class="n">from</span> <span class="err">'</span><span class="n">react</span><span class="o">-</span><span class="kd">native</span><span class="o">-</span><span class="n">draggable</span><span class="err">'</span><span class="o">;</span>
-
-<span class="o">&lt;</span><span class="nc">Draggable</span><span class="o">&gt;</span>
-    <span class="o">&lt;</span><span class="nc">View</span><span class="o">&gt;</span> <span class="o">[</span><span class="n">내용</span><span class="o">]</span> <span class="o">&lt;/</span><span class="nc">View</span><span class="o">&gt;</span>
-<span class="o">&lt;/</span><span class="nc">Draggable</span><span class="o">&gt;</span>
-</code></pre></div></div>
-<p><br />
-이처럼 설치하고 사용하는 것은 매우 간단하다. 
-<br />
-하지만 늘 그렇듯 항상 단독으로 사용할 때는 괜찮은데 여러 기능들이 맞물리면서 문제가 발생한다. 
-<br />
-오늘 얘기할 내용은 <code class="language-plaintext highlighter-rouge">Draggable Button</code>을 사용할 때 주의해야 할 점이다.</p>
-
-<h3 id="주의">주의</h3>
-<p>리액트 네이티브의 특성상 가장 아래에 위치한 컴포넌트가 화면 z축 최상단에 위치하게 된다. 즉 <code class="language-plaintext highlighter-rouge">Draggable Button</code>을 코드 상에서 가장 아래쪽에 배치해야한다.</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">return</span><span class="o">(</span>
-    <span class="o">&lt;</span><span class="nc">View</span><span class="o">&gt;</span>
-        <span class="o">[</span><span class="n">화면</span> <span class="n">내용</span><span class="o">]...</span>
-        <span class="o">&lt;</span><span class="nc">Draggable</span><span class="o">&gt;&lt;/</span><span class="nc">Draggable</span><span class="o">&gt;</span>
-    <span class="o">&lt;/</span><span class="nc">View</span><span class="o">&gt;</span>
-<span class="o">)</span>
-</code></pre></div></div>
-<p>이렇게만해도 다행히 iOS에서는 (웬일로) 잘 동작하지만 여러 제스쳐가 동시에 입력되어야 하는 스크린에서는 기능들이 원하는 대로 작동하지 않을 때가 많다. 
-<br />
-특히 ScrollView 안에서는 스크롤 동작과 타이밍이 겹치면서 버튼을 원하는대로 움직이기 전에 화면 스크롤이 되어버린다. 따라서 버튼을 눌렀을 때 스크롤 기능을 멈춰주고
-버튼에서 손을 떼었을 때 다시 스크롤 기능을 살려줄 필요가 있다. 
-<br />
-처음 개발을 하였을 때는 EventListener가 대체 어디에 쓰이는 걸까 긴가민가 했는데 이제 보면 절대 없어서는 안 될 기능이다.</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="o">[</span><span class="n">scrollable</span><span class="o">,</span> <span class="n">setScrollable</span><span class="o">]</span> <span class="o">=</span> <span class="nc">React</span><span class="o">.</span><span class="na">useState</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
-
-<span class="k">return</span><span class="o">(</span>
-    <span class="o">&lt;</span><span class="nc">View</span><span class="o">&gt;</span>
-        <span class="o">&lt;</span><span class="nc">ScrollView</span> <span class="n">scrollEnabled</span><span class="o">={</span><span class="n">scrollable</span><span class="o">}&gt;</span>
-	    <span class="o">[</span><span class="n">화면</span> <span class="n">내용</span><span class="o">]...</span>
-            <span class="o">&lt;</span><span class="nc">Draggable</span>
-            <span class="c1">// 버튼을 눌렀을 때의 이벤트</span>
-            <span class="n">onPressIn</span><span class="o">={()</span> <span class="o">=&gt;</span> <span class="n">setScrollable</span><span class="o">(</span><span class="kc">false</span><span class="o">)}</span>
-            <span class="c1">// 버튼에서 손을 떼었을 때의 이벤트</span>
-            <span class="n">onPressOut</span><span class="o">={()</span> <span class="o">=&gt;</span> <span class="n">setScrollable</span><span class="o">(</span><span class="kc">true</span><span class="o">)}</span>
-            <span class="o">&gt;&lt;/</span><span class="nc">Draggable</span><span class="o">&gt;</span>
-        <span class="o">&lt;/</span><span class="nc">ScrollView</span><span class="o">&gt;</span>
-    <span class="o">&lt;/</span><span class="nc">View</span><span class="o">&gt;</span>
-<span class="o">)</span>
-</code></pre></div></div>
-
-<p><code class="language-plaintext highlighter-rouge">Draggable Button</code>말고도 제스쳐가 필요한 컴포넌트가 하나의 스크린 상에 복수개 존재할 때는 이렇게 구현해 주면 충돌을 막을 수 있다!</p>
-
-<h3 id="참고">참고</h3>
-<p><a href="https://github.com/tongyy/react-native-draggable">Draggable Button GitHub</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native" /><summary type="html"><![CDATA[리액트 네이티브를 이용하여 앱을 만들 때 이리저리 끌고 다닐 수 있는 버튼을 만들고 싶을 때가 있다. 만들어놓고 화면에서 요리조리 움직이다보면 나름 재미가 있다. 바퀴를 다시 발명하지 말라고 누군가 그랬던가. 구현을 위해 필자가 사용한 것은 react-native-draggable이라는 이미 잘 만들어진 라이브러리이다.]]></summary></entry></feed>
+<a href="https://daewonyoon.tistory.com/293">[Android|Kotlin] Gradle Sync Issue: Android Gradle plugin supports only Kotlin Gradle plugin version … and higher</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, Android" /><summary type="html"><![CDATA[React Native로 개발을 하고는 있지만 주로 iOS 시뮬레이터만 보고 하다보니 오랜만에 안드로이드 빌드를 하게 되었다. 안드로이드 스튜디오에 들어가서 아무 생각 없이 Gradle upgrade를 했더니 빌드가 안되기 시작했다. react-native run-android를 하였을 때 what went wrong에 뜨는 에러는 다음과 같다.]]></summary></entry></feed>

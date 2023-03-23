@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "[Ubuntu] Nvidia 드라이버 설치 후 ssh 접속 불가 문제",
+      "description" : "",
+      "tags"     : "Linux, Ubuntu, Nvidia",
+      "url"      : "/20th-post/",
+      "date"     : "2023-03-23 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[k8s] 사설 저장소에서 도커 이미지 받아오기 실패",
       "description" : "",
       "tags"     : "Kubernetes, Harbor",
