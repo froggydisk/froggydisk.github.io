@@ -1,4 +1,136 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2023-03-23T22:09:26+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[Ubuntu] Nvidia 드라이버 설치 후 ssh 접속 불가 문제</title><link href="http://localhost:4000/20th-post/" rel="alternate" type="text/html" title="[Ubuntu] Nvidia 드라이버 설치 후 ssh 접속 불가 문제" /><published>2023-03-23T00:00:00+07:00</published><updated>2023-03-23T00:00:00+07:00</updated><id>http://localhost:4000/20th-post</id><content type="html" xml:base="http://localhost:4000/20th-post/"><![CDATA[<h1 id="대상">대상</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2023-04-02T15:37:11+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[Jenkins] 젠킨스에서 도커 이미지를 빌드할 때 발생하는 이슈들</title><link href="http://localhost:4000/21th-post/" rel="alternate" type="text/html" title="[Jenkins] 젠킨스에서 도커 이미지를 빌드할 때 발생하는 이슈들" /><published>2023-04-02T00:00:00+07:00</published><updated>2023-04-02T00:00:00+07:00</updated><id>http://localhost:4000/21th-post</id><content type="html" xml:base="http://localhost:4000/21th-post/"><![CDATA[<h1 id="작업-환경">작업 환경</h1>
+<hr />
+<p>젠킨스를 통해 깃허브에서 도커 이미지를 빌드하여 이미지 저장소로 올리는 과정에서 발생하는 이슈들을 다룹니다.<br />
+이 글은 CI 파이프라인 구축을 설명하고 있지 않습니다. 환경 구축은 아래 출처를 참고해주세요.</p>
+
+<p>● <a href="https://smoh.tistory.com/420">Jenkins로 Docker 이미지 빌드하기</a><br />
+● <a href="https://zunoxi.tistory.com/131">젠킨스 연동 및 push 하기</a></p>
+
+<h1 id="설정-파일">설정 파일</h1>
+<hr />
+
+<p>젠킨스가 깃허브에서 코드를 받아와서 도커 이미지를 빌드할 때 필요로 하는 파일이 두 가지 존재한다. 하나는 Jenkinsfile이고 나머지는 Dockerfile이다. 두 파일은 코드의 루트 경로에 위치하고 있어야 한다.<br />
+처음 작성할 때 막막했던 기억이 있어 누군가는 필요할 것 같아 첨부해 둔다.</p>
+
+<h3 id="-jenkinsfile">📌 Jenkinsfile</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">app</span>
+<span class="n">node</span> <span class="p">{</span>        
+    <span class="n">stage</span><span class="p">(</span><span class="s">'Checkout'</span><span class="p">){</span>            
+        <span class="n">checkout</span> <span class="n">scm</span>            
+    <span class="p">}</span>
+    
+    <span class="n">stage</span><span class="p">(</span><span class="s">'Build image'</span><span class="p">){</span>                       
+        <span class="n">app</span> <span class="o">=</span> <span class="n">docker</span><span class="p">.</span><span class="n">build</span><span class="p">(</span><span class="s">"[저장소도메인]/[프로젝트명]/[이미지명]"</span><span class="p">)</span>
+        <span class="c1"># 예를 들면 "harbor.test.io/example-project/test-image"
+</span>        <span class="c1"># 하버의 경우 프로젝트는 사전에 생성해 놓아야하지만 이미지는 자동 생성된다.
+</span>    <span class="p">}</span>
+	
+    <span class="c1"># withRegistry 안에는 저장소 도메인과 젠킨스에 미리 등록해 놓은 Credential의 ID를 적어준다.
+</span>    <span class="c1"># 예를 들면 docker.withRegistry('https://harbor.test.io', 'Harbor')
+</span>    <span class="n">stage</span><span class="p">(</span><span class="s">'Push image'</span><span class="p">){</span> 
+        <span class="n">docker</span><span class="p">.</span><span class="n">withRegistry</span><span class="p">(</span><span class="s">'https://[저장소도메인]'</span><span class="p">,</span> <span class="s">'[CredID]'</span><span class="p">){</span>
+            <span class="n">app</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="s">"${env.BUILD_NUMBER}"</span><span class="p">)</span>
+            <span class="n">app</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="s">"latest"</span><span class="p">)</span>
+        <span class="p">}</span>                
+    <span class="p">}</span>		
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>모든 이미지에는 젠킨스 프로세스 번호가 붙고 가장 최근에 올라간 도커 이미지에만 latest 태그가 붙는다.</p>
+
+<h3 id="-dockerfile">📌 Dockerfile</h3>
+<p>Dockerfile은 구축하고자 하는 환경에 따라 이미지 파일이 다를 수 있다. 본인의 환경에 맞는 이미지를 가져오자.<br />
+아래는 python이 깔려있는 nodeJS 이미지를 이용하여 서버를 실행하는 예시이다.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">FROM</span> <span class="n">nikolaik</span><span class="o">/</span><span class="n">python</span><span class="o">-</span><span class="n">nodejs</span><span class="p">:</span><span class="n">python3</span><span class="p">.</span><span class="mi">8</span><span class="o">-</span><span class="n">nodejs16</span> 
+
+<span class="n">WORKDIR</span> <span class="o">/</span><span class="n">app</span>
+
+<span class="n">COPY</span> <span class="p">.</span> <span class="o">/</span><span class="n">app</span>
+
+<span class="n">RUN</span> <span class="n">npm</span> <span class="n">install</span> <span class="o">&amp;&amp;</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="p">.</span><span class="n">txt</span>
+
+<span class="n">EXPOSE</span> <span class="mi">8080</span>
+
+<span class="n">CMD</span> <span class="p">[</span> <span class="s">"node"</span><span class="p">,</span> <span class="s">"app.js"</span> <span class="p">]</span>
+</code></pre></div></div>
+<p>COPY를 할 때에는 COPY [복사해 올 곳] [복사해 갈 곳] 순으로 적는데 복사해 올 곳은 상대경로로, 복사해 갈 곳은 절대경로로 적는 것이 원칙이다. 꼭 지키지 않아도 동작에는 이상이 없긴 하다.</p>
+
+<h1 id="에러">에러</h1>
+<hr />
+
+<p>다음은 위의 구축 과정에서 발생하기 쉬운 에러와 그 해결 방안을 설명한다.</p>
+
+<h3 id="-에러-1">🔒 에러 1</h3>
+
+<p><strong><code class="language-plaintext highlighter-rouge">groovy.lang.missingpropertyexception: No such property: docker for class: groovy.lang.Binding</code></strong></p>
+
+<p>🔑 해결: Jenkins에서 Docker Pipeline 플러그인 설치 (<a href="https://may9noy.tistory.com/990">참고</a>)</p>
+
+<h3 id="-에러-2">🔒 에러 2</h3>
+
+<p><strong><code class="language-plaintext highlighter-rouge">/var/run/docker.sock: connect: permission denied</code></strong></p>
+
+<p>🔑 해결: 모든 노드에서 sudo chmod 666 /var/run/docker.sock로 접근 권한 허용(<a href="https://may9noy.tistory.com/990">참고</a>)</p>
+
+<h3 id="-에러-3">🔒 에러 3</h3>
+
+<p><strong><code class="language-plaintext highlighter-rouge">script.sh 1 docker not found</code></strong></p>
+
+<p>🔑 해결: jenkins deployment 파일에서 volume mount를 추가 (<a href="https://anfrhrl5555.tistory.com/137">참고</a>)</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">apiVersion</span><span class="p">:</span> <span class="n">apps</span><span class="o">/</span><span class="n">v1</span>
+<span class="n">kind</span><span class="p">:</span> <span class="n">Deployment</span>
+<span class="n">metadata</span><span class="p">:</span>
+  <span class="n">name</span><span class="p">:</span> <span class="n">jenkins</span>
+  <span class="n">namespace</span><span class="p">:</span> <span class="n">jenkins</span>
+<span class="n">spec</span><span class="p">:</span>
+  <span class="n">replicas</span><span class="p">:</span> <span class="mi">1</span>
+  <span class="n">selector</span><span class="p">:</span>
+    <span class="n">matchLabels</span><span class="p">:</span>
+      <span class="n">app</span><span class="p">:</span> <span class="n">jenkins</span>
+  <span class="n">template</span><span class="p">:</span>
+    <span class="n">metadata</span><span class="p">:</span>
+      <span class="n">labels</span><span class="p">:</span>
+        <span class="n">app</span><span class="p">:</span> <span class="n">jenkins</span>
+    <span class="n">spec</span><span class="p">:</span>
+      <span class="n">containers</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">jenkins</span>
+        <span class="n">image</span><span class="p">:</span> <span class="n">jenkins</span><span class="o">/</span><span class="n">jenkins</span><span class="p">:</span><span class="n">lts</span>
+        <span class="n">ports</span><span class="p">:</span>
+          <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">httpe</span><span class="o">-</span><span class="n">port</span>
+            <span class="n">containerPort</span><span class="p">:</span> <span class="mi">8080</span>
+          <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">jnlp</span><span class="o">-</span><span class="n">port</span>
+            <span class="n">containerPort</span><span class="p">:</span> <span class="mi">50000</span>
+        <span class="n">volumeMounts</span><span class="p">:</span>
+          <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">jenkins</span><span class="o">-</span><span class="n">data</span>
+            <span class="n">mountPath</span><span class="p">:</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">jenkins_home</span>
+          <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">docker</span><span class="o">-</span><span class="n">socket</span>
+            <span class="n">mountPath</span><span class="p">:</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">docker</span><span class="p">.</span><span class="n">sock</span>
+          <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">docker</span><span class="o">-</span><span class="nb">bin</span>
+            <span class="n">mountPath</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">docker</span> 
+      <span class="n">volumes</span><span class="p">:</span>
+        <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">jenkins</span><span class="o">-</span><span class="n">data</span>
+          <span class="n">persistentVolumeClaim</span><span class="p">:</span>
+            <span class="n">claimName</span><span class="p">:</span> <span class="n">jenkins</span><span class="o">-</span><span class="n">pvc</span>
+        <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">docker</span><span class="o">-</span><span class="n">socket</span>
+          <span class="n">hostPath</span><span class="p">:</span>
+            <span class="n">path</span><span class="p">:</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">docker</span><span class="p">.</span><span class="n">sock</span>
+            <span class="nb">type</span><span class="p">:</span> <span class="n">Socket</span>
+        <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">docker</span><span class="o">-</span><span class="nb">bin</span>
+          <span class="n">hostPath</span><span class="p">:</span>
+            <span class="n">path</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">docker</span>
+            <span class="nb">type</span><span class="p">:</span> <span class="n">File</span>
+</code></pre></div></div>
+
+<h3 id="-에러-4">🔒 에러 4</h3>
+
+<p><strong><code class="language-plaintext highlighter-rouge">stat /var/lib/docker/tmp: no such file or directory</code></strong></p>
+
+<p>🔑 해결: Jenkins 파드가 돌고 있는 노드에 도커가 제대로 실행되고 있지 않는 상태일 가능성이 높다. 해당 노드에서 sudo service docker restart를 한 뒤 /var/lib/docker 파일 안에 파일이 제대로 생성되어 있는지 확인한다. docker파일은 sudo chmod 755 docker로 접근 권한을 주어야 확인이 가능하다.</p>
+
+<h1 id="결과">결과</h1>
+
+<p>33번만에 성공했다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Jenkins, Docker, Harbor" /><summary type="html"><![CDATA[작업 환경 젠킨스를 통해 깃허브에서 도커 이미지를 빌드하여 이미지 저장소로 올리는 과정에서 발생하는 이슈들을 다룹니다. 이 글은 CI 파이프라인 구축을 설명하고 있지 않습니다. 환경 구축은 아래 출처를 참고해주세요.]]></summary></entry><entry><title type="html">[Ubuntu] Nvidia 드라이버 설치 후 ssh 접속 불가 문제</title><link href="http://localhost:4000/20th-post/" rel="alternate" type="text/html" title="[Ubuntu] Nvidia 드라이버 설치 후 ssh 접속 불가 문제" /><published>2023-03-23T00:00:00+07:00</published><updated>2023-03-23T00:00:00+07:00</updated><id>http://localhost:4000/20th-post</id><content type="html" xml:base="http://localhost:4000/20th-post/"><![CDATA[<h1 id="대상">대상</h1>
 <p>이 글은 Nvidia GPU가 설치된 우분투 서버에 ssh 접속을 하기 위해 세팅을 하시는 분들을 대상으로 합니다.</p>
 
 <h1 id="1-nvidia-드라이버-설치">1. Nvidia 드라이버 설치</h1>
@@ -546,33 +678,4 @@ resizeMode 옵션을 너무 신뢰하고 있었는지 이를 눈치채는데 오
 </code></pre></div></div>
 
 <h3 id="참고">참고</h3>
-<p><a href="https://stackoverflow.com/questions/68254686/error-enoent-no-such-file-or-directory-mkdir-when-trying-to-create-directory">Error: ENOENT: no such file or directory, mkdir when trying to create directory</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, NodeJS, Multer" /><summary type="html"><![CDATA[● 서버 코드 ```javascript const multer = require(“multer”); const fs = require(“fs”);]]></summary></entry><entry><title type="html">[React Native] Android Gradle plugin 의존성 에러</title><link href="http://localhost:4000/eleventh-post/" rel="alternate" type="text/html" title="[React Native] Android Gradle plugin 의존성 에러" /><published>2022-11-07T00:00:00+07:00</published><updated>2022-11-07T00:00:00+07:00</updated><id>http://localhost:4000/eleventh-post</id><content type="html" xml:base="http://localhost:4000/eleventh-post/"><![CDATA[<p>React Native로 개발을 하고는 있지만 주로 iOS 시뮬레이터만 보고 하다보니 오랜만에 안드로이드 빌드를 하게 되었다. 
-<br />
-안드로이드 스튜디오에 들어가서 아무 생각 없이 Gradle upgrade를 했더니 빌드가 안되기 시작했다. 
-<br />
-react-native run-android를 하였을 때 what went wrong에 뜨는 에러는 다음과 같다.</p>
-
-<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">The</span><span class="w"> </span><span class="n">Android</span><span class="w"> </span><span class="n">Gradle</span><span class="w"> </span><span class="n">plugin</span><span class="w"> </span><span class="n">supports</span><span class="w"> </span><span class="n">only</span><span class="w"> </span><span class="n">kotlin</span><span class="o">-</span><span class="n">android</span><span class="o">-</span><span class="n">extensions</span><span class="w"> 
-</span><span class="n">Gradle</span><span class="w"> </span><span class="n">plugin</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="m">1.6.20</span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="n">higher.</span><span class="w"> 
-</span><span class="n">The</span><span class="w"> </span><span class="n">following</span><span class="w"> </span><span class="n">dependencies</span><span class="w"> </span><span class="n">do</span><span class="w"> </span><span class="n">not</span><span class="w"> </span><span class="n">satisfy</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">required</span><span class="w"> </span><span class="n">version</span><span class="o">:</span><span class="w"> 
-</span><span class="n">project</span><span class="w"> </span><span class="s1">':react-native-safe-area-context'</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">org.jetbrains.kotlin</span><span class="o">:</span><span class="w">
-</span><span class="n">kotlin</span><span class="o">-</span><span class="n">gradle</span><span class="o">-</span><span class="n">plugin</span><span class="o">:</span><span class="m">1.6.10</span><span class="w">
-</span></code></pre></div></div>
-
-<p>아마 Gradle plugin의 버전이 높아서 react-native-safe-area-context의 의존성과 맞지 않는다는 이야기 같다. 
-<br />
-한참을 고민하다가 Gradle 업데이트를 한 것이 생각나서 급하게 다운그레이드를 해주었다. 
-<br />
-다운그레이드는 별게 없다. 프로젝트의 android 폴더 안에 있는 build.gradle 파일을 수정해 주기만 하면 된다.</p>
-
-<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">dependencies</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="n">classpath</span><span class="p">(</span><span class="s1">'com.android.tools.build:gradle:7.2.2'</span><span class="p">)</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div></div>
-
-<p>gradle:x.x.x 부분에서 숫자만 이전 버전으로 변경해준다.</p>
-
-<h3 id="참고">참고</h3>
-<p><a href="https://icat2048.tistory.com/462">[Gradle] Android 빌드를 위한 Gradle Version 관리</a>
-<br />
-<a href="https://daewonyoon.tistory.com/293">[Android|Kotlin] Gradle Sync Issue: Android Gradle plugin supports only Kotlin Gradle plugin version … and higher</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, Android" /><summary type="html"><![CDATA[React Native로 개발을 하고는 있지만 주로 iOS 시뮬레이터만 보고 하다보니 오랜만에 안드로이드 빌드를 하게 되었다. 안드로이드 스튜디오에 들어가서 아무 생각 없이 Gradle upgrade를 했더니 빌드가 안되기 시작했다. react-native run-android를 하였을 때 what went wrong에 뜨는 에러는 다음과 같다.]]></summary></entry></feed>
+<p><a href="https://stackoverflow.com/questions/68254686/error-enoent-no-such-file-or-directory-mkdir-when-trying-to-create-directory">Error: ENOENT: no such file or directory, mkdir when trying to create directory</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, NodeJS, Multer" /><summary type="html"><![CDATA[● 서버 코드 ```javascript const multer = require(“multer”); const fs = require(“fs”);]]></summary></entry></feed>

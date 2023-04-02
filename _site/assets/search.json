@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "[Jenkins] 젠킨스에서 도커 이미지를 빌드할 때 발생하는 이슈들",
+      "description" : "",
+      "tags"     : "Jenkins, Docker, Harbor",
+      "url"      : "/21th-post/",
+      "date"     : "2023-04-02 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[Ubuntu] Nvidia 드라이버 설치 후 ssh 접속 불가 문제",
       "description" : "",
       "tags"     : "Linux, Ubuntu, Nvidia",
