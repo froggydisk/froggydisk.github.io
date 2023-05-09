@@ -1,4 +1,176 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2023-04-02T15:37:11+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[Jenkins] 젠킨스에서 도커 이미지를 빌드할 때 발생하는 이슈들</title><link href="http://localhost:4000/21th-post/" rel="alternate" type="text/html" title="[Jenkins] 젠킨스에서 도커 이미지를 빌드할 때 발생하는 이슈들" /><published>2023-04-02T00:00:00+07:00</published><updated>2023-04-02T00:00:00+07:00</updated><id>http://localhost:4000/21th-post</id><content type="html" xml:base="http://localhost:4000/21th-post/"><![CDATA[<h1 id="작업-환경">작업 환경</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2023-05-09T21:48:19+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">PyQt5가 다운로드 되지 않는 M1 맥북 이슈</title><link href="http://localhost:4000/23th-post/" rel="alternate" type="text/html" title="PyQt5가 다운로드 되지 않는 M1 맥북 이슈" /><published>2023-05-09T00:00:00+07:00</published><updated>2023-05-09T00:00:00+07:00</updated><id>http://localhost:4000/23th-post</id><content type="html" xml:base="http://localhost:4000/23th-post/"><![CDATA[<h3 id="-에러">🔒 에러</h3>
+
+<p><strong>pip install PyQt5를 해도 Preparing metadata(pyproject.toml)에서 넘어가지 않는 M1 맥북 이슈</strong>를 만났다. <em>(metadata-generation-failed, subprocess-exited-with-error)</em><br />
+문제 해결에 앞서 라이브러리 선택의 여유가 있는 사람들은 Pyside6나 PyQt6도 고려해보길 권한다.</p>
+
+<p>여러가지로 테스트 해본 결과는 다음과 같다.</p>
+
+<p>📄 테스트 리스트</p>
+<ul>
+  <li>pip install pyqt5 (실패)</li>
+  <li>pip3 install pyqt5 (실패)</li>
+  <li>python -m pip install pyqt5 (실패)</li>
+  <li>python3 -m pip install pyqt5 (실패)</li>
+</ul>
+
+<h3 id="-해결">🔑 해결</h3>
+<p>결국 해결방안은 Homebrew를 이용하는 것이었다.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">arch</span> <span class="nt">-arm64</span> brew <span class="nb">install </span>pyqt5
+</code></pre></div></div>
+<p><code class="language-plaintext highlighter-rouge">pip list</code>, <code class="language-plaintext highlighter-rouge">brew list</code>로 잘 설치가 되었는지 확인한다. 설치가 안되었다면 brew reinstall로 재설치를 진행한다.<br />
+만약 (conda)가상환경을 사용한다면 <code class="language-plaintext highlighter-rouge">python -m pip list</code> 와 <code class="language-plaintext highlighter-rouge">python3 -m pip list</code>를 둘 다 확인하여 어느곳에 설치되었는지 보고 상황에 맞게 python 또는 python3 명령어를 사용해야한다. 가상 환경이 아닌 로컬에서는 보통 <code class="language-plaintext highlighter-rouge">python -m pip list</code>와  <code class="language-plaintext highlighter-rouge">python3 -m pip list</code>의 결과가 같으므로 python과 python3 어느쪽을 사용하든 결과는 같다(따로 설정이 필요할 수 있다). 이후로 다른 라이브러리를 설치할 때도 명령어 버전에 맞게 설치해 주면 된다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python <span class="nt">-m</span> pip <span class="nb">install</span> <span class="o">[</span>라이브러리] 
+혹은
+python3 <span class="nt">-m</span> pip <span class="nb">install</span> <span class="o">[</span>라이브러리]
+</code></pre></div></div>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Python, pip" /><summary type="html"><![CDATA[🔒 에러]]></summary></entry><entry><title type="html">[React Native] 리액트 네이티브에서 달력 구현하기</title><link href="http://localhost:4000/22th-post/" rel="alternate" type="text/html" title="[React Native] 리액트 네이티브에서 달력 구현하기" /><published>2023-04-24T00:00:00+07:00</published><updated>2023-04-24T00:00:00+07:00</updated><id>http://localhost:4000/22th-post</id><content type="html" xml:base="http://localhost:4000/22th-post/"><![CDATA[<h1 id="라이브러리">라이브러리</h1>
+<hr />
+<p>리액트 네이티브로 앱을 만들 때는 달력을 구현해야할 일이 생각보다 자주 생긴다. 어떤 앱이든 시간의 흐름에 따라 과거 정보를 조회하는 경우가 많기 때문인데, 그렇기에 직접 구현해두면 두고두고 쓸 일이 많을 것이다. 물론 훌륭한 라이브러리가 많기 때문에 시간이 충분하지 않은 사람은 다른 사람의 힘을 빌리는 것도 때론 중요하다. 필자 또한 다른 사람이 짜놓은 코드를 빌려다가 내부만 조금 고쳐쓰는 경우가 많다.<br />
+그런 의미에서 오늘은 유명한 라이브러리 중 하나인 <a href="https://github.com/wix/react-native-calendars"><code class="language-plaintext highlighter-rouge">react-native-calendars</code></a>를 소개한다.</p>
+
+<h1 id="설치">설치</h1>
+<hr />
+<p>npm을 통해 설치해준다.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm i react-native-calendars
+</code></pre></div></div>
+<p>기본적인 사용법은 매우 간단하고 홈페이지에 자세한 설명이 나와있으니 참고하면 된다.</p>
+
+<h1 id="기능-구현">기능 구현</h1>
+<hr />
+<p>문제가 있다면 날짜를 클릭하였을 때 onPress 이벤트 설정을 직접해주어야 한다는 것이었고 기본 모듈에서는 달력 위의 숫자들을 눌러도 아무런 일도 일어나지 않는다. Agenda 기능도 지원하고 있으나 원하는 형태가 아니어서 어쩔 수 없이 구글링을 통해 직접 구현하였다. (<a href="https://devbksheen.tistory.com/entry/React-Native-%EB%8B%AC%EB%A0%A5-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0">참고</a>) 예시 코드는 다음과 같다.</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nx">React</span><span class="p">,</span> <span class="p">{</span><span class="nx">useState</span><span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span><span class="nx">View</span><span class="p">,</span> <span class="nx">Text</span><span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react-native</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span><span class="nx">SafeAreaView</span><span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react-native-safe-area-context</span><span class="dl">'</span><span class="p">;</span>
+<span class="k">import</span> <span class="p">{</span><span class="nx">CalendarList</span><span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">react-native-calendars</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">CalendarView</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">posts</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="na">id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+      <span class="na">title</span><span class="p">:</span> <span class="dl">'</span><span class="s1">제목입니다.</span><span class="dl">'</span><span class="p">,</span>
+      <span class="na">contents</span><span class="p">:</span> <span class="dl">'</span><span class="s1">내용입니다.</span><span class="dl">'</span><span class="p">,</span>
+      <span class="na">date</span><span class="p">:</span> <span class="dl">'</span><span class="s1">2022-10-08</span><span class="dl">'</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="na">id</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+      <span class="na">title</span><span class="p">:</span> <span class="dl">'</span><span class="s1">제목입니다.</span><span class="dl">'</span><span class="p">,</span>
+      <span class="na">contents</span><span class="p">:</span> <span class="dl">'</span><span class="s1">내용입니다.</span><span class="dl">'</span><span class="p">,</span>
+      <span class="na">date</span><span class="p">:</span> <span class="dl">'</span><span class="s1">2022-10-09</span><span class="dl">'</span><span class="p">,</span>
+    <span class="p">},</span>
+  <span class="p">];</span>
+
+<span class="c1">// 클릭한 날짜를 담는 변수</span>
+  <span class="kd">const</span> <span class="p">[</span><span class="nx">date</span><span class="p">,</span> <span class="nx">setDate</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">();</span>
+  <span class="kd">const</span> <span class="p">[</span><span class="nx">selectedDate</span><span class="p">,</span> <span class="nx">setSelectedDate</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">();</span>
+
+<span class="c1">// posts 안에 들어있는 모든 일정을 달력에 표시하기 위한 변수</span>
+  <span class="kd">const</span> <span class="nx">markedDates</span> <span class="o">=</span> <span class="nx">posts</span><span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">acc</span><span class="p">,</span> <span class="nx">current</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">acc</span><span class="p">[</span><span class="nx">current</span><span class="p">.</span><span class="nx">date</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="na">marked</span><span class="p">:</span> <span class="kc">true</span><span class="p">};</span>
+    <span class="k">return</span> <span class="nx">acc</span><span class="p">;</span>
+  <span class="p">},</span> <span class="p">{});</span>
+
+<span class="c1">// 날짜가 선택되었을 때 해당 날짜에 배경색을 입히기 위한 변수</span>
+  <span class="kd">const</span> <span class="nx">markedSelectedDates</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">...</span><span class="nx">markedDates</span><span class="p">,</span>
+    <span class="p">[</span><span class="nx">selectedDate</span><span class="p">]:</span> <span class="p">{</span>
+      <span class="na">selected</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="na">marked</span><span class="p">:</span> <span class="nx">markedDates</span><span class="p">[</span><span class="nx">selectedDate</span><span class="p">]?.</span><span class="nx">marked</span><span class="p">,</span>
+    <span class="p">},</span>
+  <span class="p">};</span>
+
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="o">&lt;</span><span class="nx">SafeAreaView</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span> <span class="p">{</span><span class="na">height</span><span class="p">:</span> <span class="dl">'</span><span class="s1">100%</span><span class="dl">'</span><span class="p">}}</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nx">CalendarList</span>
+        <span class="nx">horizontal</span><span class="o">=</span><span class="p">{</span><span class="kc">true</span><span class="p">}</span>
+        <span class="nx">pagingEnabled</span><span class="o">=</span><span class="p">{</span><span class="kc">true</span><span class="p">}</span>
+        <span class="nx">markedDates</span><span class="o">=</span><span class="p">{</span><span class="nx">markedSelectedDates</span><span class="p">}</span>
+        <span class="nx">onDayPress</span><span class="o">=</span><span class="p">{</span><span class="nx">day</span> <span class="o">=&gt;</span> <span class="p">{</span>
+          <span class="nx">setDate</span><span class="p">(</span><span class="nx">day</span><span class="p">);</span>
+          <span class="nx">setSelectedDate</span><span class="p">(</span><span class="nx">day</span><span class="p">.</span><span class="nx">dateString</span><span class="p">);</span>
+        <span class="p">}}</span>
+        <span class="nx">theme</span><span class="o">=</span><span class="p">{</span> <span class="p">{</span>
+          <span class="na">selectedDayBackgroundColor</span><span class="p">:</span> <span class="dl">'</span><span class="s1">#959CA7</span><span class="dl">'</span><span class="p">,</span>
+          <span class="na">monthTextColor</span><span class="p">:</span> <span class="dl">'</span><span class="s1">#959CA7</span><span class="dl">'</span><span class="p">,</span>
+          <span class="na">textDayFontWeight</span><span class="p">:</span> <span class="dl">'</span><span class="s1">500</span><span class="dl">'</span><span class="p">,</span>
+          <span class="na">textMonthFontWeight</span><span class="p">:</span> <span class="dl">'</span><span class="s1">600</span><span class="dl">'</span><span class="p">,</span>
+          <span class="na">textDayHeaderFontWeight</span><span class="p">:</span> <span class="dl">'</span><span class="s1">300</span><span class="dl">'</span><span class="p">,</span>
+          <span class="na">textMonthFontSize</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
+        <span class="p">}}</span>
+      <span class="sr">/</span><span class="err">&gt;
+</span>      <span class="p">{</span><span class="nx">date</span> <span class="o">&amp;&amp;</span> <span class="p">(</span>
+        <span class="o">&lt;</span><span class="nx">View</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span> <span class="p">{</span><span class="na">marginLeft</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="na">marginTop</span><span class="p">:</span> <span class="mi">10</span><span class="p">}}</span><span class="o">&gt;</span>
+          <span class="o">&lt;</span><span class="nx">Text</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span> <span class="p">{</span><span class="na">fontSize</span><span class="p">:</span> <span class="mi">11</span><span class="p">,</span> <span class="na">color</span><span class="p">:</span> <span class="dl">'</span><span class="s1">#959CA7</span><span class="dl">'</span><span class="p">,</span> <span class="na">textAlign</span><span class="p">:</span> <span class="dl">'</span><span class="s1">right</span><span class="dl">'</span><span class="p">}}</span><span class="o">&gt;</span>
+            <span class="na">Test</span><span class="p">:</span> <span class="nx">현재</span> <span class="nx">선택하신</span> <span class="nx">날짜는</span> <span class="p">{</span><span class="nx">date</span><span class="p">.</span><span class="nx">day</span><span class="p">}</span><span class="nx">일</span> <span class="nx">입니다</span><span class="p">.</span>
+          <span class="o">&lt;</span><span class="sr">/Text</span><span class="err">&gt;
+</span>        <span class="o">&lt;</span><span class="sr">/View</span><span class="err">&gt;
+</span>      <span class="p">)}</span>
+    <span class="o">&lt;</span><span class="sr">/SafeAreaView</span><span class="err">&gt;
+</span>  <span class="p">);</span>
+<span class="p">};</span>
+
+<span class="k">export</span> <span class="k">default</span> <span class="nx">CalendarView</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h1 id="버그">버그</h1>
+<hr />
+
+<p>커스터마이징을 적용할 때는 공식 문서 말고도 내부 코드를 뜯어보는 것을 추천한다.</p>
+
+<h3 id="-에러-1">🔒 에러 1</h3>
+
+<p>WeekCalendar에서 헤더를 한국어로 바꾸면 컨테이너와 영역이 겹치는 일이 발생한다. <a href="https://wix.github.io/react-native-calendars/docs/Components/Calendar">공식 문서</a>에서는 스타일 수정 방법에 대해 아래와 같이 설명하고 있다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">theme</span><span class="o">=</span><span class="p">{</span> <span class="p">{</span>
+  <span class="na">arrowColor</span><span class="p">:</span> <span class="dl">'</span><span class="s1">white</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">stylesheet.calendar.header</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">week</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">marginTop</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+      <span class="na">flexDirection</span><span class="p">:</span> <span class="dl">'</span><span class="s1">row</span><span class="dl">'</span><span class="p">,</span>
+      <span class="na">justifyContent</span><span class="p">:</span> <span class="dl">'</span><span class="s1">space-between</span><span class="dl">'</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span> <span class="p">}</span>
+</code></pre></div></div>
+<p>하지만 이는 WeekCalaendar에서는 적용이 되지 않는다. 해당 기능이 위치한 style.js 소스코드를 살펴보니 아래와 같이 export 방식이 달랐다.</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">...(</span><span class="nx">theme</span><span class="p">?.</span><span class="nx">stylesheet</span><span class="p">?.</span><span class="nx">expandable</span><span class="p">?.</span><span class="nx">main</span> <span class="o">||</span> <span class="p">{})</span>
+</code></pre></div></div>
+
+<h3 id="-해결">🔑 해결</h3>
+<p>node_modules 폴더 안을 고치는 것은 관리 이슈가 커지기 때문에 아래와 같이 내 코드에서 직접 설정해주는 방식을 택하였다.</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">CalendarProvider</span>
+  <span class="nx">date</span><span class="o">=</span><span class="p">{</span><span class="nx">date</span><span class="p">}</span>
+  <span class="nx">onDateChanged</span><span class="o">=</span><span class="p">{</span><span class="nx">d</span> <span class="o">=&gt;</span> <span class="nx">setDate</span><span class="p">(</span><span class="nx">d</span><span class="p">)}</span>
+  <span class="nx">style</span><span class="o">=</span><span class="p">{</span> <span class="p">{</span><span class="na">flex</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span> <span class="p">}</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nx">WeekCalendar</span>
+    <span class="nx">displayLoadingIndicator</span>
+    <span class="nx">allowShadow</span><span class="o">=</span><span class="p">{</span><span class="kc">false</span><span class="p">}</span>
+    <span class="nx">theme</span><span class="o">=</span><span class="p">{</span> <span class="p">{</span>
+      <span class="na">textDayFontSize</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+      <span class="na">textDayHeaderFontSize</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
+      <span class="na">stylesheet</span><span class="p">:</span> <span class="p">{</span><span class="na">expandable</span><span class="p">:</span> <span class="p">{</span><span class="na">main</span><span class="p">:</span> <span class="p">{</span><span class="na">container</span><span class="p">:</span> <span class="p">{</span><span class="na">marginTop</span><span class="p">:</span> <span class="mi">5</span><span class="p">}}}},</span> <span class="c1">// &lt;- 여기</span>
+    <span class="p">}</span> <span class="p">}</span>
+  <span class="sr">/</span><span class="err">&gt;
+</span><span class="o">&lt;</span><span class="sr">/CalendarProvider</span><span class="err">&gt;
+</span></code></pre></div></div>
+
+<p>theme 안에서 <code class="language-plaintext highlighter-rouge">stylesheet: {expandable: {main: {container: {marginTop: 5}}}}</code>와 같이 설정해주면 된다.</p>
+
+<h3 id="-에러-2">🔒 에러 2</h3>
+
+<p>WeekCalendar을 사용할 때 로딩이 너무 오래 걸리는 이슈가 존재한다. 📌 <a href="https://github.com/wix/react-native-calendars/issues/2214">깃허브 이슈</a></p>
+
+<h3 id="-해결-1">🔑 해결</h3>
+<p>이는 RecyclerListView에서 너무 많은 페이지가 미리 렌더링되고 있기 때문이다. RecyclerListView에 대한 정보는 <a href="https://github.com/Flipkart/recyclerlistview">다음</a>을 확인하자. 해당 페이지에서는 renderAheadOffset의 값을 가능한 낮게 설정하는 것을 권하고 있다. 높게 설정할수록 계산 비용이 많아지므로 로딩이 오래 걸리게 된다.<br />
+따라서 <code class="language-plaintext highlighter-rouge">node_modules/react-native-calendars/src/infinite-list/index.js</code>로 이동하여 RecyclerListView의 prop을 아래와 같이 바꾸어주면 된다.</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">RecyclerListView</span> 
+<span class="nx">ref</span><span class="o">=</span><span class="p">{</span><span class="nx">listRef</span><span class="p">}</span> 
+<span class="nx">isHorizontal</span><span class="o">=</span><span class="p">{</span><span class="nx">isHorizontal</span><span class="p">}</span> 
+<span class="p">...</span> 
+<span class="nx">renderAheadOffset</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span> <span class="o">*</span> <span class="nx">pageWidth</span><span class="p">}</span>   <span class="c1">// &lt;- 숫자를 0으로 수정한다.</span>
+<span class="p">...</span><span class="o">/&gt;</span>
+</code></pre></div></div>
+
+<p>누군가에게는 도움이 되었길 바란다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, react-native-calendars" /><summary type="html"><![CDATA[라이브러리 리액트 네이티브로 앱을 만들 때는 달력을 구현해야할 일이 생각보다 자주 생긴다. 어떤 앱이든 시간의 흐름에 따라 과거 정보를 조회하는 경우가 많기 때문인데, 그렇기에 직접 구현해두면 두고두고 쓸 일이 많을 것이다. 물론 훌륭한 라이브러리가 많기 때문에 시간이 충분하지 않은 사람은 다른 사람의 힘을 빌리는 것도 때론 중요하다. 필자 또한 다른 사람이 짜놓은 코드를 빌려다가 내부만 조금 고쳐쓰는 경우가 많다. 그런 의미에서 오늘은 유명한 라이브러리 중 하나인 react-native-calendars를 소개한다.]]></summary></entry><entry><title type="html">[Jenkins] 젠킨스에서 도커 이미지를 빌드할 때 발생하는 이슈들</title><link href="http://localhost:4000/21th-post/" rel="alternate" type="text/html" title="[Jenkins] 젠킨스에서 도커 이미지를 빌드할 때 발생하는 이슈들" /><published>2023-04-02T00:00:00+07:00</published><updated>2023-04-02T00:00:00+07:00</updated><id>http://localhost:4000/21th-post</id><content type="html" xml:base="http://localhost:4000/21th-post/"><![CDATA[<h1 id="작업-환경">작업 환경</h1>
 <hr />
 <p>젠킨스를 통해 깃허브에서 도커 이미지를 빌드하여 이미지 저장소로 올리는 과정에서 발생하는 이슈들을 다룹니다.<br />
 이 글은 CI 파이프라인 구축을 설명하고 있지 않습니다. 환경 구축은 아래 출처를 참고해주세요.</p>
@@ -578,104 +750,4 @@ you may set `use_modular_headers!` globally in your Podfile, or specify `:modula
 ● <strong>How to solve</strong>: Check the grammar of your JavaScript code. Metro doesn’t let you know the typo of JS code, but just stops the App.</p>
 
 <h3 id="참고">참고</h3>
-<p><a href="https://github.com/facebook/react-native/issues/26605">Blank Screen Issue on iOS #26605</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, JavaScript" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">[React Native] 서버에서 이미지를 fetch 해올 때 화면에 제대로 나타나지 않는 현상</title><link href="http://localhost:4000/thirteenth-post/" rel="alternate" type="text/html" title="[React Native] 서버에서 이미지를 fetch 해올 때 화면에 제대로 나타나지 않는 현상" /><published>2022-11-09T00:00:00+07:00</published><updated>2022-11-09T00:00:00+07:00</updated><id>http://localhost:4000/thirteenth-post</id><content type="html" xml:base="http://localhost:4000/thirteenth-post/"><![CDATA[<p>글을 쓰면서도 조금은 부끄럽지만 가끔은 정말 간단한 걸로 몇 시간을 헤매고는 한다. 
-<br />
-React Native에서 Multer를 이용하여 서버에서 이미지를 불러오는데 다운 받아온 이미지가 화면에 표시되지 않는 현상이 있었다. 
-<br />
-공식 문서를 그대로 따라서 fetch 함수를 사용하였고 uri도 로그에 제대로 찍혀 있는데도 계속 문제가 남아있어 머리를 꽁꽁 싸맸다.
-<br />
-나중에 보니 해결 방법은 매우 간단했다. 
-<br />
-잊고 있었던 것이다. 샘플 이미지는 전부 local의 asset 폴더에 저장하여 사용하고 있었기에 그동안 신경쓰지 않고 있었지만 사실 <code class="language-plaintext highlighter-rouge">이미지는 width와 height를 지정해주는 것이 좋다</code>는 것을.
-<br />
-그렇다. fetch 문제인 줄 알고 axios로 바꿔도 보고 하였지만 결국 설정 문제였던 것이다. 
-resizeMode 옵션을 너무 신뢰하고 있었는지 이를 눈치채는데 오랜 시간이 걸렸다. 
-한 번도 아니고 두 번이나 똑같은 문제로 헤맨 전적이 있다. 
-<br />
-누군가는 시간을 아끼기 바란다.</p>
-
-<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="n">Image</span><span class="w">
-    </span><span class="n">source</span><span class="o">=</span><span class="p">{</span><span class="w"> </span><span class="p">{</span><span class="n">uri</span><span class="o">:</span><span class="w"> </span><span class="n">URI</span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w">
-    </span><span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="w"> </span><span class="p">{</span><span class="n">height</span><span class="o">:</span><span class="w"> </span><span class="m">100</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="o">:</span><span class="w"> </span><span class="m">100</span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w">
-</span><span class="o">/&gt;</span><span class="w">
-</span></code></pre></div></div>
-
-<h3 id="참고">참고</h3>
-<p><a href="https://reactnative.dev/docs/image">React Native Doc. - Image</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, Multer" /><summary type="html"><![CDATA[글을 쓰면서도 조금은 부끄럽지만 가끔은 정말 간단한 걸로 몇 시간을 헤매고는 한다. React Native에서 Multer를 이용하여 서버에서 이미지를 불러오는데 다운 받아온 이미지가 화면에 표시되지 않는 현상이 있었다. 공식 문서를 그대로 따라서 fetch 함수를 사용하였고 uri도 로그에 제대로 찍혀 있는데도 계속 문제가 남아있어 머리를 꽁꽁 싸맸다. 나중에 보니 해결 방법은 매우 간단했다. 잊고 있었던 것이다. 샘플 이미지는 전부 local의 asset 폴더에 저장하여 사용하고 있었기에 그동안 신경쓰지 않고 있었지만 사실 이미지는 width와 height를 지정해주는 것이 좋다는 것을. 그렇다. fetch 문제인 줄 알고 axios로 바꿔도 보고 하였지만 결국 설정 문제였던 것이다. resizeMode 옵션을 너무 신뢰하고 있었는지 이를 눈치채는데 오랜 시간이 걸렸다. 한 번도 아니고 두 번이나 똑같은 문제로 헤맨 전적이 있다. 누군가는 시간을 아끼기 바란다.]]></summary></entry><entry><title type="html">[Multer] Error: ENOENT: no such file or directory</title><link href="http://localhost:4000/twelveth-post/" rel="alternate" type="text/html" title="[Multer] Error: ENOENT: no such file or directory" /><published>2022-11-08T00:00:00+07:00</published><updated>2022-11-08T00:00:00+07:00</updated><id>http://localhost:4000/twelveth-post</id><content type="html" xml:base="http://localhost:4000/twelveth-post/"><![CDATA[<p>● 서버 코드</p>
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">multer</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">multer</span><span class="dl">"</span><span class="p">);</span>
-<span class="kd">const</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">fs</span><span class="dl">"</span><span class="p">);</span>
-
-<span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">multer</span><span class="p">.</span><span class="nx">diskStorage</span><span class="p">({</span>
-  <span class="na">destination</span><span class="p">:</span> <span class="k">async</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">userId</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">)).</span><span class="nx">userId</span><span class="p">;</span>
-    <span class="kd">const</span> <span class="nx">dir</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">./upload/</span><span class="dl">"</span> <span class="o">+</span> <span class="nx">userId</span><span class="p">;</span> <span class="c1">// See here!</span>
-    <span class="k">try</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">fs</span><span class="p">.</span><span class="nx">existsSync</span><span class="p">(</span><span class="nx">dir</span><span class="p">))</span> <span class="p">{</span> <span class="c1">// 해당 유저의 디렉토리가 있는지 확인</span>
-        <span class="nx">fs</span><span class="p">.</span><span class="nx">mkdirSync</span><span class="p">(</span><span class="nx">dir</span><span class="p">,</span> <span class="p">{</span> <span class="na">recursive</span><span class="p">:</span> <span class="kc">true</span> <span class="p">});</span> <span class="c1">// 없다면 디렉토리를 생성</span>
-      <span class="p">}</span>
-    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">dir</span><span class="p">);</span>
-  <span class="p">},</span>
-  <span class="na">filename</span><span class="p">:</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="s2">`</span><span class="p">${</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()}</span><span class="s2">_</span><span class="p">${</span><span class="nx">file</span><span class="p">.</span><span class="nx">originalname</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span> 
-  <span class="p">},</span>
-<span class="p">});</span>
-<span class="kd">var</span> <span class="nx">save</span> <span class="o">=</span> <span class="nx">multer</span><span class="p">({</span> <span class="na">storage</span><span class="p">:</span> <span class="nx">storage</span> <span class="p">}).</span><span class="nx">array</span><span class="p">(</span><span class="dl">"</span><span class="s2">profileImage</span><span class="dl">"</span><span class="p">);</span>
-<span class="c1">// 한 장만 보낼 때는 .single("profileImage");를 써도 된다.</span>
-</code></pre></div></div>
-<p>Multer를 사용하여 이미지를 업로드할 때 유저별로 폴더를 만들어서 따로 저장하려고 하는데 자꾸 에러가 났다. 
-<br />
-디렉토리를 생성하지 못하는 걸로 보아 함수를 fs쪽 함수를 잘못 사용하고 있나 싶어서 열심히 찾아보았으나 아무런 진전이 없었다. 
-<br />
-오랜 시간 끝에 아무생각 없이 /upload/로 되어 있던 절대경로에 마침표를 붙여 상대경로로 만들어주었더니 정상적으로 작동하였다. 
-<br />
-서버 설정에 따라 마침표가 필요할 때가 있고 아닐 때가 있으므로 둘 다 해보고 되는 것으로 하면 되겠다. 
-<br />
-여기서 중요한 것은 항상 경로 체크를 선택지에 넣어두는 것이 무의미한 시간 낭비를 피할 수 있다는 것이다. 
-<br />
-참고를 위해 클라이언트쪽 코드도 남겨둔다.</p>
-
-<p>● 클라이언트 코드</p>
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">createFormData</span> <span class="o">=</span> <span class="p">(</span><span class="nx">image</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">data</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FormData</span><span class="p">();</span>
-    <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">body</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">key</span> <span class="o">=&gt;</span> <span class="p">{</span>
-      <span class="nx">data</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">body</span><span class="p">[</span><span class="nx">key</span><span class="p">]);</span>
-    <span class="p">});</span>
-    <span class="nx">data</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="dl">'</span><span class="s1">profileImage</span><span class="dl">'</span><span class="p">,</span> <span class="p">{</span> <span class="c1">// 필드명으로서, 서버에서 정의된 것과 동일해야한다.</span>
-      <span class="na">name</span><span class="p">:</span> <span class="nx">image</span><span class="p">.</span><span class="nx">name</span>
-      <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">multipart/form-data</span><span class="dl">'</span><span class="p">,</span>
-      <span class="na">uri</span><span class="p">:</span> <span class="nx">image</span><span class="p">.</span><span class="nx">uri</span><span class="p">,</span>
-    <span class="p">});</span>
-    <span class="k">return</span> <span class="nx">data</span><span class="p">;</span>
-  <span class="p">};</span>
-
-<span class="kd">const</span> <span class="nx">photoUpload</span> <span class="o">=</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="k">try</span> <span class="p">{</span>
-      <span class="nx">fetch</span><span class="p">(</span><span class="dl">'</span><span class="s1">http://localhost:8080/user/upload</span><span class="dl">'</span><span class="p">,</span> <span class="p">{</span>
-        <span class="na">method</span><span class="p">:</span> <span class="dl">'</span><span class="s1">POST</span><span class="dl">'</span><span class="p">,</span>
-        <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
-          <span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">multipart/form-data</span><span class="dl">'</span><span class="p">,</span>
-        <span class="p">},</span>
-        <span class="na">body</span><span class="p">:</span> <span class="nx">createFormData</span><span class="p">(</span><span class="nx">image</span><span class="p">,</span> <span class="p">{</span>
-          <span class="na">userId</span><span class="p">:</span> <span class="dl">"</span><span class="s2">tester</span><span class="dl">"</span><span class="p">,</span>
-        <span class="p">}),</span>
-      <span class="p">})</span>
-        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">response</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">())</span>
-        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">response</span> <span class="o">=&gt;</span> <span class="p">{</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">upload success</span><span class="dl">'</span><span class="p">,</span> <span class="nx">response</span><span class="p">);</span>
-        <span class="p">})</span>
-        <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="o">=&gt;</span> <span class="p">{</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">upload error</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
-        <span class="p">});</span>
-    <span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
-      <span class="nx">error</span> <span class="o">=&gt;</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
-      <span class="p">};</span>
-    <span class="p">}</span>
-  <span class="p">};</span>
-</code></pre></div></div>
-
-<h3 id="참고">참고</h3>
-<p><a href="https://stackoverflow.com/questions/68254686/error-enoent-no-such-file-or-directory-mkdir-when-trying-to-create-directory">Error: ENOENT: no such file or directory, mkdir when trying to create directory</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, NodeJS, Multer" /><summary type="html"><![CDATA[● 서버 코드 ```javascript const multer = require(“multer”); const fs = require(“fs”);]]></summary></entry></feed>
+<p><a href="https://github.com/facebook/react-native/issues/26605">Blank Screen Issue on iOS #26605</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, JavaScript" /><summary type="html"><![CDATA[]]></summary></entry></feed>
