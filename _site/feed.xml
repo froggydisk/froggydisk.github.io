@@ -1,4 +1,79 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2023-07-03T21:26:19+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[React Native] 안드로이드 스튜디오 Add configuration에서 No module만 선택 가능한 현상</title><link href="http://localhost:4000/24th-post/" rel="alternate" type="text/html" title="[React Native] 안드로이드 스튜디오 Add configuration에서 No module만 선택 가능한 현상" /><published>2023-07-03T00:00:00+07:00</published><updated>2023-07-03T00:00:00+07:00</updated><id>http://localhost:4000/24th-post</id><content type="html" xml:base="http://localhost:4000/24th-post/"><![CDATA[<h3 id="-에러">🔒 에러</h3>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2023-07-04T21:09:25+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[k8s] 새로운 워커노드를 추가하여 서버 증설하기</title><link href="http://localhost:4000/25th-post/" rel="alternate" type="text/html" title="[k8s] 새로운 워커노드를 추가하여 서버 증설하기" /><published>2023-07-04T00:00:00+07:00</published><updated>2023-07-04T00:00:00+07:00</updated><id>http://localhost:4000/25th-post</id><content type="html" xml:base="http://localhost:4000/25th-post/"><![CDATA[<p>마스터 노드의 설정이 이미 되어 있고 추가할 워커노드의 OS가 우분투 20.04 버전인 경우를 기준으로 설명하겠다.</p>
+
+<hr />
+<hr />
+<h1 id="-요약">📖 요약</h1>
+<p>● docker<br />
+● kubelet<br />
+● kubeadm<br />
+● kubectl<br />
+새로운 워커노드에 위 4가지를 설치해준다.<br />
+그리고 마스터 노드에서 토큰을 발급하여 새로 연결할 워커노드에 입력해주면 끝이다.</p>
+
+<hr />
+<hr />
+
+<h1 id="-진행">🎬 진행</h1>
+<p>생각보다 몹시 간단하다. 이제 하나하나 차근차근 진행해보자.</p>
+
+<h3 id="docker-설치">docker 설치</h3>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl <span class="nt">-fsSL</span> https://download.docker.com/linux/ubuntu/gpg | <span class="nb">sudo </span>gpg <span class="nt">--dearmor</span> <span class="nt">-o</span> /usr/share/keyrings/docker-archive-keyring.gpg
+<span class="nb">echo</span> <span class="se">\</span>
+  <span class="s2">"deb [arch=</span><span class="si">$(</span>dpkg <span class="nt">--print-architecture</span><span class="si">)</span><span class="s2"> signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu </span><span class="se">\</span><span class="s2">
+  </span><span class="si">$(</span>lsb_release <span class="nt">-cs</span><span class="si">)</span><span class="s2"> stable"</span> | <span class="nb">sudo tee</span> /etc/apt/sources.list.d/docker.list <span class="o">&gt;</span> /dev/null
+<span class="nb">sudo </span>apt-get update
+<span class="nb">sudo </span>apt-get <span class="nb">install </span>docker-ce docker-ce-cli containerd.io
+<span class="nb">sudo </span>docker version
+<span class="nb">sudo </span>systemctl <span class="nb">enable </span>docker
+<span class="nb">sudo </span>systemctl start docker
+</code></pre></div></div>
+
+<h3 id="kubelet-kubeadm-kubectl-설치">kubelet, kubeadm, kubectl 설치</h3>
+<p>한 줄씩 잘 입력해준다.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt-get update
+<span class="nb">sudo </span>apt-get <span class="nb">install</span> <span class="nt">-y</span> apt-transport-https ca-certificates curl
+curl <span class="nt">-s</span> https://packages.cloud.google.com/apt/doc/apt-key.gpg | <span class="nb">sudo </span>apt-key add -
+<span class="nb">echo</span> <span class="s2">"deb http://apt.kubernetes.io/ kubernetes-xenial main"</span> | <span class="nb">sudo tee</span> /etc/apt/sources.list.d/kubernetes.list
+<span class="nb">sudo </span>apt-get update
+<span class="nb">sudo </span>apt-get <span class="nb">install</span> <span class="nt">-y</span> kubelet kubeadm kubectl
+<span class="nb">sudo </span>apt-mark hold kubelet kubeadm kubectl
+<span class="nb">sudo </span>systemctl daemon-reload
+<span class="nb">sudo </span>systemctl restart kubelet
+</code></pre></div></div>
+
+<h3 id="토큰-발급-및-등록">토큰 발급 및 등록</h3>
+<p>우선, 마스터 노드에서 토큰을 발급한다.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>kubeadm token create <span class="nt">--print-join-command</span>
+</code></pre></div></div>
+<p>이렇게 하면 <code class="language-plaintext highlighter-rouge">kubeadm join &lt;Kubernetes API Server:PORT&gt; --token &lt;Token 값&gt; --discovery-token-ca-cert-hash sha256:&lt;Hash 값&gt;</code> 이러한 형태의 결과값이 나오는데 그대로 복사해서 새로운 워커노드 터미널에 붙여넣기 해주면 된다.</p>
+
+<p>각각의 값은 다음과 같이 확인할 수 있다.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># kubectl이 바라보는 API 서버 주소</span>
+kubectl cluster-info
+<span class="c"># token 값 확인</span>
+kubeadm token list
+<span class="c"># hash 값 확인</span>
+openssl x509 <span class="nt">-pubkey</span> <span class="nt">-in</span> /etc/kubernetes/pki/ca.crt | openssl rsa <span class="nt">-pubin</span> <span class="nt">-outform</span> der 2&gt;/dev/null | openssl dgst <span class="nt">-sha256</span> <span class="nt">-hex</span> | <span class="nb">sed</span> <span class="s1">'s/^.* //'</span>
+</code></pre></div></div>
+
+<h3 id="-에러">🔒 에러</h3>
+<p>위의 과정에서 아마도 다음과 같은 에러가 발생할 것이다.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>error execution phase preflight: <span class="o">[</span>preflight] Some fatal errors occurred:
+<span class="o">[</span>ERROR CRI]: container runtime is not running: output: <span class="nb">time</span><span class="o">=</span><span class="s2">"2020-11-25T12:58:32Z"</span> <span class="nv">level</span><span class="o">=</span>fatal <span class="nv">msg</span><span class="o">=</span><span class="s2">"getting status of runtime failed: rpc error: code = Unimplemented desc = unknown service runtime.v1alpha2.RuntimeService"</span>
+, error: <span class="nb">exit </span>status 1
+</code></pre></div></div>
+
+<h3 id="-해결">🔑 해결</h3>
+<p>아래와 같이 해결하면 된다.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo rm</span> /etc/containerd/config.toml
+<span class="nb">sudo </span>systemctl restart containerd
+</code></pre></div></div>
+
+<p>항상 느끼지만 대부분의 쿠버네티스 오류는 kubelet, docker, containerd, calico 이 네가지에서 자주 발생하는 것 같다.<br />
+마지막으로 마스터노드에 들어가서 <code class="language-plaintext highlighter-rouge">kubectl get node</code>를 해보자. 잘 인식이 된다면 성공이다.</p>
+
+<h1 id="참고">참고</h1>
+<p><a href="https://confluence.curvc.com/pages/releaseview.action?pageId=98048155">Ubuntu에서 쿠버네티스(k8s) 설치 가이드</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Kubernetes, On-premise" /><summary type="html"><![CDATA[마스터 노드의 설정이 이미 되어 있고 추가할 워커노드의 OS가 우분투 20.04 버전인 경우를 기준으로 설명하겠다.]]></summary></entry><entry><title type="html">[React Native] 안드로이드 스튜디오 Add configuration에서 No module만 선택 가능한 현상</title><link href="http://localhost:4000/24th-post/" rel="alternate" type="text/html" title="[React Native] 안드로이드 스튜디오 Add configuration에서 No module만 선택 가능한 현상" /><published>2023-07-03T00:00:00+07:00</published><updated>2023-07-03T00:00:00+07:00</updated><id>http://localhost:4000/24th-post</id><content type="html" xml:base="http://localhost:4000/24th-post/"><![CDATA[<h3 id="-에러">🔒 에러</h3>
 
 <p>React Native로 앱을 만들다보면 iOS 시뮬레이터가 너무 편해서 안드로이드를 소홀히 하게 되는 때가 있다.<br />
 안드로이드 apk 파일을 건네줄 필요가 있어서 오랜만에 안드로이드 스튜디오를 켰는데 이상하게 Run 아이콘이 있어야 할 자리에 <code class="language-plaintext highlighter-rouge">add configuration</code> 밖에 보이지 않았다.
@@ -670,54 +745,4 @@ you may set `use_modular_headers!` globally in your Podfile, or specify `:modula
 <span class="n">end</span>
 </code></pre></div></div>
 
-<p>스택오버플로우를 보다보면 <code class="language-plaintext highlighter-rouge">$RNFirebaseAsStaticFramework = true;</code>를 추가하라는 글도 많은데 <code class="language-plaintext highlighter-rouge">use_frameworks! :linkage =&gt; :static</code>를 사용하지 않는다면 굳이 추가해주지 않아도 된다. React Native Firebase <a href="https://rnfirebase.io">공식 문서</a>에도 잘 나와있으니 한번쯤 확인해보는 것도 좋겠다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, Firebase" /><summary type="html"><![CDATA[앱을 만들다보면 어느 순간 노티 기능을 적용해야할 때가 온다. 차근차근 개발을 진행하다보니 나 또한 어느새 그러한 페이즈에 도달해 있었다.]]></summary></entry><entry><title type="html">[React Native] BottomTabNavigator unmountOnBlur가 SafeAreaView에 미치는 영향</title><link href="http://localhost:4000/fifteenth-post/" rel="alternate" type="text/html" title="[React Native] BottomTabNavigator unmountOnBlur가 SafeAreaView에 미치는 영향" /><published>2022-11-21T00:00:00+07:00</published><updated>2022-11-21T00:00:00+07:00</updated><id>http://localhost:4000/fifteenth-post</id><content type="html" xml:base="http://localhost:4000/fifteenth-post/"><![CDATA[<p>React Native에서 Bottom Tab Navigator를 사용할 때 특정 탭을 누를 때마다 화면이 리렌더링 되도록 하고 싶을 때가 있다.</p>
-
-<p>그럴 때 사용하는 것이 <code class="language-plaintext highlighter-rouge">unmountOnBlur: true</code> 이다. 사용법은 아래 코드와 같다.</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="err">{</span><span class="nn">createBottomTabNavigator</span><span class="o">}</span> <span class="n">from</span> <span class="err">'</span><span class="nd">@react</span><span class="o">-</span><span class="n">navigation</span><span class="o">/</span><span class="n">bottom</span><span class="o">-</span><span class="n">tabs</span><span class="err">'</span><span class="o">;</span>
-
-<span class="kd">const</span> <span class="nc">BottomTab</span> <span class="o">=</span> <span class="n">createBottomTabNavigator</span><span class="o">();</span>
-<span class="kd">const</span> <span class="nc">ExampleScreen</span> <span class="o">=</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="o">{</span>
-  <span class="k">return</span> <span class="o">(</span>
-    <span class="o">&lt;</span><span class="nc">BottomTab</span><span class="o">.</span><span class="na">Navigator</span><span class="o">&gt;</span>
-      <span class="o">&lt;</span><span class="nc">BottomTab</span><span class="o">.</span><span class="na">Screen</span>
-        <span class="n">name</span><span class="o">=</span><span class="s">"NavigatorMain"</span>
-        <span class="n">component</span><span class="o">={</span><span class="nc">NavigatorMain</span><span class="o">}</span>
-        <span class="n">options</span><span class="o">={</span> <span class="o">{</span>
-          <span class="nl">tabBarLabel:</span> <span class="err">'</span><span class="nc">Main</span><span class="err">'</span><span class="o">,</span>
-          <span class="nl">unmountOnBlur:</span> <span class="kc">true</span><span class="o">,</span> <span class="c1">// 이 부분</span>
-        <span class="o">}</span> <span class="o">}</span>
-      <span class="o">/&gt;</span>
-    <span class="o">&lt;/</span><span class="nc">BottomTab</span><span class="o">.</span><span class="na">Navigator</span><span class="o">&gt;</span>
-  <span class="o">)}</span>
-</code></pre></div></div>
-
-<p>문제는 해당 옵션을 사용하게 되면 리렌더링은 문제가 없지만 알 수 없는 깜빡임이 발생한다는 것이다.</p>
-
-<p>화면 렌더링 순서에 의해 발생하는 깜빡임으로, 사실 예민한 사람이 아니고서야 잘 눈치채지 못 할 지도 모른다.</p>
-
-<p>원인은 SafeAreaView의 적용 타이밍이 생각보다 빠르지 않다는 데에 있다.</p>
-
-<p>unmountOnBlur를 통해서 화면을 리렌더링할 시에는 <SafeAreaView> 태그 안의 요소가 먼저 그려진 뒤 status bar 만큼의 크기가 뒤늦게 margin값으로 내려온다.</SafeAreaView></p>
-
-<p>해결 방법은 단순히 SafeAreaView를 사용하지 않는 데에 있다.</p>
-
-<p>대신 react-native-status-bar-height라는 status bar의 높이를 알려주는 라이브러리가 있으니 그것을 통해 직접 컴포넌트에 스타일을 지정해 주면 된다.</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="err">{</span><span class="nn">getStatusBarHeight</span><span class="o">}</span> <span class="n">from</span> <span class="err">'</span><span class="n">react</span><span class="o">-</span><span class="kd">native</span><span class="o">-</span><span class="n">status</span><span class="o">-</span><span class="n">bar</span><span class="o">-</span><span class="n">height</span><span class="err">'</span><span class="o">;</span>
-<span class="kd">const</span> <span class="nc">ExampleScreen</span> <span class="o">=</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="o">{</span>
-<span class="k">return</span> <span class="o">(</span>
-    <span class="o">&lt;</span><span class="nc">View</span>
-      <span class="n">style</span><span class="o">={</span> 
-        <span class="o">{</span>
-        <span class="nl">height:</span> <span class="nc">Dimensions</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="err">'</span><span class="n">window</span><span class="err">'</span><span class="o">).</span><span class="na">height</span><span class="o">,</span>
-        <span class="nl">top:</span> <span class="n">getStatusBarHeight</span><span class="o">()</span> <span class="c1">// 이 부분</span>
-        <span class="o">}</span>
-      <span class="o">}&gt;</span>
-      <span class="o">...</span> 
-    <span class="o">&lt;/</span><span class="nc">View</span><span class="o">&gt;</span>
-<span class="o">)}</span>
-</code></pre></div></div>
-
-<h3 id="참고">참고</h3>
-<p><a href="https://github.com/ovr/react-native-status-bar-height">react-native-status-bar-height</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native" /><summary type="html"><![CDATA[React Native에서 Bottom Tab Navigator를 사용할 때 특정 탭을 누를 때마다 화면이 리렌더링 되도록 하고 싶을 때가 있다.]]></summary></entry></feed>
+<p>스택오버플로우를 보다보면 <code class="language-plaintext highlighter-rouge">$RNFirebaseAsStaticFramework = true;</code>를 추가하라는 글도 많은데 <code class="language-plaintext highlighter-rouge">use_frameworks! :linkage =&gt; :static</code>를 사용하지 않는다면 굳이 추가해주지 않아도 된다. React Native Firebase <a href="https://rnfirebase.io">공식 문서</a>에도 잘 나와있으니 한번쯤 확인해보는 것도 좋겠다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, Firebase" /><summary type="html"><![CDATA[앱을 만들다보면 어느 순간 노티 기능을 적용해야할 때가 온다. 차근차근 개발을 진행하다보니 나 또한 어느새 그러한 페이즈에 도달해 있었다.]]></summary></entry></feed>

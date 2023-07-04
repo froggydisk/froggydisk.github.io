@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "[k8s] 새로운 워커노드를 추가하여 서버 증설하기",
+      "description" : "",
+      "tags"     : "Kubernetes, On-premise",
+      "url"      : "/25th-post/",
+      "date"     : "2023-07-04 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[React Native] 안드로이드 스튜디오 Add configuration에서 No module만 선택 가능한 현상",
       "description" : "",
       "tags"     : "React Native, Android Studio",
