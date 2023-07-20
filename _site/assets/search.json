@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "[React Native] TextInput으로 받은 String을 Number 타입으로 바꿔주기",
+      "description" : "",
+      "tags"     : "React Native",
+      "url"      : "/26th-post/",
+      "date"     : "2023-07-20 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[k8s] 새로운 워커노드를 추가하여 서버 증설하기",
       "description" : "",
       "tags"     : "Kubernetes, On-premise",
