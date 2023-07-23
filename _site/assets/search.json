@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "[React Native] 안드로이드 다크모드에서 텍스트 색이 모두 흰색으로 나오는 이슈",
+      "description" : "",
+      "tags"     : "React Native",
+      "url"      : "/27th-post/",
+      "date"     : "2023-07-23 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[React Native] TextInput으로 받은 String을 Number 타입으로 바꿔주기",
       "description" : "",
       "tags"     : "React Native",
