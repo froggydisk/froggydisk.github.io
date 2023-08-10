@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "[React Native] &amp;&amp; 구문 사용 시 Text 에러",
+      "description" : "",
+      "tags"     : "React Native",
+      "url"      : "/29th-post/",
+      "date"     : "2023-08-10 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[React Native] 처음 앱 진입시 로그인 상태에 따른 네비게이션 분기",
       "description" : "",
       "tags"     : "React Native",
