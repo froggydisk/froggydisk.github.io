@@ -1,4 +1,118 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2023-08-10T20:05:05+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[React Native] &amp;amp;&amp;amp; 구문 사용 시 Text 에러</title><link href="http://localhost:4000/29th-post/" rel="alternate" type="text/html" title="[React Native] &amp;amp;&amp;amp; 구문 사용 시 Text 에러" /><published>2023-08-10T00:00:00+07:00</published><updated>2023-08-10T00:00:00+07:00</updated><id>http://localhost:4000/29th-post</id><content type="html" xml:base="http://localhost:4000/29th-post/"><![CDATA[<p>개발 중에 예상치 못한 에러를 만나 기록해둔다.     <br />
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2023-08-17T21:26:58+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[React Native] 모서리가 둥근 삼각형 만들기</title><link href="http://localhost:4000/30th-post/" rel="alternate" type="text/html" title="[React Native] 모서리가 둥근 삼각형 만들기" /><published>2023-08-17T00:00:00+07:00</published><updated>2023-08-17T00:00:00+07:00</updated><id>http://localhost:4000/30th-post</id><content type="html" xml:base="http://localhost:4000/30th-post/"><![CDATA[<p>앱을 만들다가 도형을 그려야할 때가 오면 나도 모르게 한숨을 내쉬고 있다.        <br />
+디테일적인 부분까지 챙기려면 은근히 손이 많이 가는 작업이기 때문이다.</p>
+
+<p>오늘은 오전 내내 모서리가 둥근 삼각형을 그려야했기에 나중을 위해서 기록해둔다.</p>
+
+<h1 id="설계도">설계도</h1>
+<p>삼각형을 그리기 위한 방법에는 여러가지가 있지만 우리가 익히 알고 있는 일반적인 삼각형을 그리는 일은 어렵지 않다. 
+구글 검색을 해도 쉽게 나올 것이다.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">React</span> <span class="n">from</span> <span class="err">'</span><span class="n">react</span><span class="err">'</span><span class="o">;</span>
+<span class="kn">import</span> <span class="err">{</span> <span class="nn">View</span><span class="o">,</span> <span class="nc">StyleSheet</span> <span class="o">}</span> <span class="n">from</span> <span class="err">'</span><span class="n">react</span><span class="o">-</span><span class="kd">native</span><span class="err">'</span><span class="o">;</span>
+
+<span class="kd">const</span> <span class="nc">App</span> <span class="o">=</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="o">{</span>
+  <span class="k">return</span> <span class="o">(</span>
+    <span class="o">&lt;</span><span class="nc">View</span> <span class="n">style</span><span class="o">={</span><span class="n">styles</span><span class="o">.</span><span class="na">container</span><span class="o">}&gt;</span>
+      <span class="o">&lt;</span><span class="nc">View</span> <span class="n">style</span><span class="o">={</span><span class="n">styles</span><span class="o">.</span><span class="na">triangle</span><span class="o">}</span> <span class="o">/&gt;</span>
+    <span class="o">&lt;/</span><span class="nc">View</span><span class="o">&gt;</span>
+  <span class="o">);</span>
+<span class="o">};</span>
+
+<span class="kd">const</span> <span class="n">styles</span> <span class="o">=</span> <span class="nc">StyleSheet</span><span class="o">.</span><span class="na">create</span><span class="o">({</span>
+  <span class="nl">container:</span> <span class="o">{</span>
+    <span class="nl">flex:</span> <span class="mi">1</span><span class="o">,</span>
+    <span class="nl">justifyContent:</span> <span class="err">'</span><span class="n">center</span><span class="err">'</span><span class="o">,</span>
+    <span class="nl">alignItems:</span> <span class="err">'</span><span class="n">center</span><span class="err">'</span><span class="o">,</span>
+  <span class="o">},</span>
+  <span class="nl">triangle:</span> <span class="o">{</span>
+    <span class="nl">width:</span> <span class="mi">0</span><span class="o">,</span>
+    <span class="nl">height:</span> <span class="mi">0</span><span class="o">,</span>
+    <span class="nl">backgroundColor:</span> <span class="err">'</span><span class="n">transparent</span><span class="err">'</span><span class="o">,</span>
+    <span class="nl">borderStyle:</span> <span class="err">'</span><span class="n">solid</span><span class="err">'</span><span class="o">,</span>
+    <span class="nl">borderLeftWidth:</span> <span class="mi">50</span><span class="o">,</span>
+    <span class="nl">borderRightWidth:</span> <span class="mi">50</span><span class="o">,</span>
+    <span class="nl">borderBottomWidth:</span> <span class="mi">100</span><span class="o">,</span>
+    <span class="nl">borderLeftColor:</span> <span class="err">'</span><span class="n">transparent</span><span class="err">'</span><span class="o">,</span>
+    <span class="nl">borderRightColor:</span> <span class="err">'</span><span class="n">transparent</span><span class="err">'</span><span class="o">,</span>
+    <span class="nl">borderBottomColor:</span> <span class="err">'</span><span class="n">lime</span><span class="err">'</span><span class="o">,</span>
+  <span class="o">},</span>
+<span class="o">});</span>
+
+<span class="n">export</span> <span class="k">default</span> <span class="nc">App</span><span class="o">;</span>
+</code></pre></div></div>
+
+<p>위와 같은 코드로도 충분히 삼각형을 그릴 수 있다. 하지만 우리가 필요한 건 모서리가 “둥근” 삼각형이다.
+그렇다면 다른 접근 방식이 필요하다. 아래 그림을 보자.</p>
+<p align="center"><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/30th.png?raw=true" /></p>
+
+<p>필자는 세 개의 평행사변형(마름모)의 모서리를 borderRadius로 둥글게 만든 뒤 이를 합치는 방법을 사용했다. 굳이 이 방법을 사용하지 않더라도 <code class="language-plaintext highlighter-rouge">react-native-svg</code> 라이브러리를 이용하면 훨씬 좋은 방법이 있을 수 있으니 원치 않는 방법이라면 다른 방법을 찾아보기를 강력히 권한다.</p>
+
+<p>어쨌거나, 평행사변형 세 개를 잘 조작해야하는 것은 분명한데 그를 위해서는 transform을 잘 이용해야한다.
+transform으로도 할 수 있는 것은 여러가지 있지만 여기서는 rotate(돌리고), skewX(비틀고), scaleY(늘리기)를 사용할 것이다. 
+아래를 살펴보자.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nc">Triangle</span> <span class="o">=</span> <span class="o">({</span><span class="n">color</span><span class="o">,</span> <span class="n">size</span><span class="o">,</span> <span class="n">children</span><span class="o">})</span> <span class="o">=&gt;</span> <span class="o">{</span>
+  <span class="k">return</span> <span class="o">(</span>
+    <span class="o">&lt;</span><span class="nc">View</span>
+      <span class="n">style</span><span class="o">={</span> <span class="o">{</span>
+        <span class="nl">alignSelf:</span> <span class="err">'</span><span class="n">center</span><span class="err">'</span><span class="o">,</span>
+        <span class="nl">width:</span> <span class="n">size</span><span class="o">,</span>
+        <span class="nl">height:</span> <span class="n">size</span><span class="o">,</span>
+      <span class="o">}</span> <span class="o">}&gt;</span>
+      <span class="o">{</span><span class="cm">/* Upper Triangle */</span><span class="o">}</span>
+      <span class="o">&lt;</span><span class="nc">View</span>
+        <span class="n">style</span><span class="o">={</span> <span class="o">{</span>
+          <span class="nl">position:</span> <span class="err">'</span><span class="n">absolute</span><span class="err">'</span><span class="o">,</span>
+          <span class="nl">width:</span> <span class="err">'</span><span class="mi">100</span><span class="o">%</span><span class="err">'</span><span class="o">,</span>
+          <span class="nl">height:</span> <span class="err">'</span><span class="mi">100</span><span class="o">%</span><span class="err">'</span><span class="o">,</span>
+          <span class="nl">borderTopRightRadius:</span> <span class="mi">30</span><span class="o">,</span>
+          <span class="nl">backgroundColor:</span> <span class="n">color</span><span class="o">,</span>
+          <span class="nl">transform:</span> <span class="o">[{</span><span class="nl">rotate:</span> <span class="err">'</span><span class="o">-</span><span class="mi">60</span><span class="n">deg</span><span class="err">'</span><span class="o">},</span> <span class="o">{</span><span class="nl">skewX:</span> <span class="err">'</span><span class="o">-</span><span class="mi">30</span><span class="n">deg</span><span class="err">'</span><span class="o">},</span> <span class="o">{</span><span class="nl">scaleY:</span> <span class="mf">0.866</span><span class="o">}],</span>
+        <span class="o">}</span> <span class="o">}</span>
+      <span class="o">/&gt;</span>
+      <span class="o">{</span><span class="cm">/* Lower Triangle */</span><span class="o">}</span>
+      <span class="o">&lt;</span><span class="nc">View</span>
+        <span class="n">style</span><span class="o">={</span> <span class="o">{</span>
+          <span class="nl">position:</span> <span class="err">'</span><span class="n">absolute</span><span class="err">'</span><span class="o">,</span>
+          <span class="nl">width:</span> <span class="err">'</span><span class="mi">100</span><span class="o">%</span><span class="err">'</span><span class="o">,</span>
+          <span class="nl">height:</span> <span class="err">'</span><span class="mi">100</span><span class="o">%</span><span class="err">'</span><span class="o">,</span>
+          <span class="nl">borderTopRightRadius:</span> <span class="mi">30</span><span class="o">,</span>
+          <span class="nl">backgroundColor:</span> <span class="n">color</span><span class="o">,</span>
+          <span class="nl">transform:</span> <span class="o">[</span>
+            <span class="o">{</span><span class="nl">rotate:</span> <span class="err">'</span><span class="o">-</span><span class="mi">180</span><span class="n">deg</span><span class="err">'</span><span class="o">},</span>
+            <span class="o">{</span><span class="nl">skewX:</span> <span class="err">'</span><span class="o">-</span><span class="mi">30</span><span class="n">deg</span><span class="err">'</span><span class="o">},</span>
+            <span class="o">{</span><span class="nl">scaleY:</span> <span class="mf">0.866</span><span class="o">},</span>
+            <span class="o">{</span><span class="nl">translateY:</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">size</span><span class="o">},</span>
+          <span class="o">],</span>
+        <span class="o">}</span> <span class="o">}</span>
+      <span class="o">/&gt;</span>
+      <span class="o">{</span><span class="cm">/* Bottom Right Triangle */</span><span class="o">}</span>
+      <span class="o">&lt;</span><span class="nc">View</span>
+        <span class="n">style</span><span class="o">={</span> <span class="o">{</span>
+          <span class="nl">position:</span> <span class="err">'</span><span class="n">absolute</span><span class="err">'</span><span class="o">,</span>
+          <span class="nl">width:</span> <span class="err">'</span><span class="mi">100</span><span class="o">%</span><span class="err">'</span><span class="o">,</span>
+          <span class="nl">height:</span> <span class="err">'</span><span class="mi">100</span><span class="o">%</span><span class="err">'</span><span class="o">,</span>
+          <span class="nl">borderTopLeftRadius:</span> <span class="mi">30</span><span class="o">,</span>
+          <span class="nl">backgroundColor:</span> <span class="n">color</span><span class="o">,</span>
+          <span class="nl">transform:</span> <span class="o">[</span>
+            <span class="o">{</span><span class="nl">rotate:</span> <span class="err">'</span><span class="mi">180</span><span class="n">deg</span><span class="err">'</span><span class="o">},</span>
+            <span class="o">{</span><span class="nl">skewX:</span> <span class="err">'</span><span class="mi">30</span><span class="n">deg</span><span class="err">'</span><span class="o">},</span>
+            <span class="o">{</span><span class="nl">scaleY:</span> <span class="mf">0.866</span><span class="o">},</span>
+            <span class="o">{</span><span class="nl">translateY:</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">size</span><span class="o">},</span>
+          <span class="o">],</span>
+        <span class="o">}</span> <span class="o">}</span>
+      <span class="o">/&gt;</span>
+      <span class="o">{</span><span class="n">children</span><span class="o">}</span>
+    <span class="o">&lt;/</span><span class="nc">View</span><span class="o">&gt;</span>
+  <span class="o">);</span>
+<span class="o">};</span>
+</code></pre></div></div>
+
+<p>모든 사이즈에 맞추어 삼각형을 만들 수 있게 끔 transform의 변수 조정을 해주었다. 코드만 보아도 쉽게 이해할 수 있을 것이다.</p>
+
+<p>보통 도형 그리기는 노하우나 경험이 많이 필요하기에 잘 모르겠다면 우선 css로 되어있는 코드를 찾아보기를 권한다. 그 후 React Native 코드로 변환하는 과정을 거칠텐데 css 코드를 보아도 잘 이해가 안된다면 chatGPT에게 바꾸어 달라고 하자.</p>
+
+<p>복사 붙여넣기가 코딩 실력 상승에는 도움이 안 될 수 있으나 처음에 방향성을 잡을 때는 훌륭한 방법이다. 막막할 때 아까운 시간을 흘려보내기 보다는 무엇이라도 빠르게 방법을 찾아서 시도해 보는 것이 더 중요하다고 생각한다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native" /><summary type="html"><![CDATA[앱을 만들다가 도형을 그려야할 때가 오면 나도 모르게 한숨을 내쉬고 있다. 디테일적인 부분까지 챙기려면 은근히 손이 많이 가는 작업이기 때문이다.]]></summary></entry><entry><title type="html">[React Native] &amp;amp;&amp;amp; 구문 사용 시 Text 에러</title><link href="http://localhost:4000/29th-post/" rel="alternate" type="text/html" title="[React Native] &amp;amp;&amp;amp; 구문 사용 시 Text 에러" /><published>2023-08-10T00:00:00+07:00</published><updated>2023-08-10T00:00:00+07:00</updated><id>http://localhost:4000/29th-post</id><content type="html" xml:base="http://localhost:4000/29th-post/"><![CDATA[<p>개발 중에 예상치 못한 에러를 만나 기록해둔다.     <br />
 뜬금없이 <code class="language-plaintext highlighter-rouge">Error: Text strings must be rendered within a &lt;Text&gt; component.</code>에러를 만나게 되었는데 이는 주로 <Text>태그가 아니라 <View>안에 문자열을 사용하여 나타나는 에러다. 
 React로 개발을 하다가 React Native로 넘어오게 되거나 멀티로 개발을 할 때 흔히 하는 실수이다.</View></Text></p>
 
@@ -558,92 +672,4 @@ python3 <span class="nt">-m</span> pip <span class="nb">install</span> <span cla
 
 <h1 id="결과">결과</h1>
 
-<p>33번만에 성공했다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Jenkins, Docker, Harbor" /><summary type="html"><![CDATA[작업 환경 젠킨스를 통해 깃허브에서 도커 이미지를 빌드하여 이미지 저장소로 올리는 과정에서 발생하는 이슈들을 다룹니다. 이 글은 CI 파이프라인 구축을 설명하고 있지 않습니다. 환경 구축은 아래 출처를 참고해주세요.]]></summary></entry><entry><title type="html">[Ubuntu] Nvidia 드라이버 설치 후 ssh 접속 불가 문제</title><link href="http://localhost:4000/20th-post/" rel="alternate" type="text/html" title="[Ubuntu] Nvidia 드라이버 설치 후 ssh 접속 불가 문제" /><published>2023-03-23T00:00:00+07:00</published><updated>2023-03-23T00:00:00+07:00</updated><id>http://localhost:4000/20th-post</id><content type="html" xml:base="http://localhost:4000/20th-post/"><![CDATA[<h1 id="대상">대상</h1>
-<p>이 글은 Nvidia GPU가 설치된 우분투 서버에 ssh 접속을 하기 위해 세팅을 하시는 분들을 대상으로 합니다.</p>
-
-<h1 id="1-nvidia-드라이버-설치">1. Nvidia 드라이버 설치</h1>
-
-<h3 id="장치-확인">장치 확인</h3>
-<p>먼저 GPU 장치가 잘 인식되어 있는지 확인한다.</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">lshw</span> <span class="o">-</span><span class="n">C</span> <span class="n">display</span>
-</code></pre></div></div>
-
-<h3 id="설치">설치</h3>
-<p>Nvidia 드라이버 설치를 위해서는 우선 <code class="language-plaintext highlighter-rouge">ubuntu-drivers</code>가 필요합니다.</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">ubuntu</span><span class="o">-</span><span class="n">drivers</span><span class="o">-</span><span class="n">common</span>
-</code></pre></div></div>
-<p>이후 ubuntu-drivers를 이용하여 권장 설치를 진행한다.</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sudo</span> <span class="n">add</span><span class="o">-</span><span class="n">apt</span><span class="o">-</span><span class="n">repository</span> <span class="n">ppa</span><span class="p">:</span><span class="n">graphics</span><span class="o">-</span><span class="n">drivers</span><span class="o">/</span><span class="n">ppa</span>
-<span class="n">sudo</span> <span class="n">apt</span> <span class="n">update</span>
-<span class="n">sudo</span> <span class="n">ubuntu</span><span class="o">-</span><span class="n">drivers</span> <span class="n">autoinstall</span>
-</code></pre></div></div>
-<p>시간이 조금 걸리므로 조급해하지 말자. 설치가 완료되었다면 재부팅으로 마무리한다.</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sudo</span> <span class="n">reboot</span>
-</code></pre></div></div>
-<p>이제 <code class="language-plaintext highlighter-rouge">nvidia-smi</code> 명령어로 GPU의 현재 상태를 볼 수 있다.</p>
-
-<p>혹시라도 귀찮아서 재부팅을 안하는 분은 아래와 같은 에러를 만날 수 있으니 귀찮더라도 꼭 하자.</p>
-
-<p>⚠️ <strong>NVIDIA-SMI has failed because it couldn’t communicate with the NVIDIA driver.</strong><br />
-<strong>Make sure that the latest NVIDIA driver is installed and running.</strong></p>
-
-<p>nvidia-smi보다 좀 더 간단하게 볼 수 있는 툴로는 <code class="language-plaintext highlighter-rouge">gpustat</code>을 추천한다. 설치도 간단하다.</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pip</span> <span class="n">install</span> <span class="n">gpustat</span>
-</code></pre></div></div>
-<p><code class="language-plaintext highlighter-rouge">gpustat</code>을 입력하면 GPU 상태를 보여준다.</p>
-
-<h3 id="참고">참고</h3>
-<p><a href="https://pstudio411.tistory.com/entry/Ubuntu-2004-Nvidia%EB%93%9C%EB%9D%BC%EC%9D%B4%EB%B2%84-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0">Nvidia드라이버 설치하기</a></p>
-
-<p><br /></p>
-
-<h1 id="2-설치-이후-만나는-상황">2. 설치 이후 만나는 상황</h1>
-
-<h3 id="-문제">🔒 문제</h3>
-
-<p>📍 <strong><code class="language-plaintext highlighter-rouge">처음에는 ssh가 잘 되다가 어느 순간부터 접속이 되지 않는다</code></strong></p>
-
-<p>Nvidia 드라이버의 호환성 문제로 인해 컴퓨터가 다운되는 것이라고 예상해서 여러번의 재설치를 거쳤으나 해결되지 않았다.</p>
-
-<p>이는 모니터를 연결해 놓지 않는 서버 컴퓨터의 특성상 놓치기 쉬운 부분인데 알고 보니 단순히 절전 모드에 들어간 것이었다.</p>
-
-<p>Nvidia 드라이버를 설치하면 재부팅시 디폴트 모드가 GUI 모드로 변경되고 절전 모드도 자동으로 세팅된다.</p>
-
-<p>이를 해결하기 위해서는 컴퓨터의 절전 모드 진입을 막아야 하는데 가능한 방법은 총 두 가지이다.</p>
-
-<h3 id="-해결">🔑 해결</h3>
-
-<p>📍 <strong><code class="language-plaintext highlighter-rouge">명령어로 절전 모드를 끈다</code></strong> (<a href="https://heekangpark.github.io/linux/ubuntu-server-sleep">참고</a>)</p>
-
-<p>한 줄이면 가능하다.</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sudo</span> <span class="n">systemctl</span> <span class="n">mask</span> <span class="n">sleep</span><span class="p">.</span><span class="n">target</span> <span class="n">suspend</span><span class="p">.</span><span class="n">target</span> <span class="n">hibernate</span><span class="p">.</span><span class="n">target</span> <span class="n">hybrid</span><span class="o">-</span><span class="n">sleep</span><span class="p">.</span><span class="n">target</span>
-</code></pre></div></div>
-
-<p>아래 명령어로 설정이 잘 되었는지 확인한다.</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">systemctl</span> <span class="n">status</span> <span class="n">sleep</span><span class="p">.</span><span class="n">target</span> <span class="n">suspend</span><span class="p">.</span><span class="n">target</span> <span class="n">hibernate</span><span class="p">.</span><span class="n">target</span> <span class="n">hybrid</span><span class="o">-</span><span class="n">sleep</span><span class="p">.</span><span class="n">target</span>
-</code></pre></div></div>
-<p><br /></p>
-
-<p>📍 <strong><code class="language-plaintext highlighter-rouge">기본 모드를 CLI 모드로 전환한다</code></strong> (<a href="https://booiljung.github.io/technical_articles/linux/switch_gui_and_cli.html">참고</a>)</p>
-
-<p>관련 설정 파일은 아래의 위치에 있다.</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sudo</span> <span class="n">vim</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">default</span><span class="o">/</span><span class="n">grub</span>
-</code></pre></div></div>
-
-<p>다음 3가지 사항에 대해 수정한다.</p>
-<ul>
-  <li><code class="language-plaintext highlighter-rouge">GRUB_CMDLINE_LINUX_DEFAULT=""</code>를 주석 처리</li>
-  <li><code class="language-plaintext highlighter-rouge">GRUB_CMDLINE_LINUX="text"</code>로 변경</li>
-  <li><code class="language-plaintext highlighter-rouge">GRUB_TERMINAL=console</code>의 주석 제거</li>
-</ul>
-
-<p>esc → :wq → enter 순으로 변경 사항을 저장한 뒤 아래 명령어로 적용한다.</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sudo</span> <span class="n">update</span><span class="o">-</span><span class="n">grub</span> <span class="c1"># 변경 사항 적용
-</span><span class="n">sudo</span> <span class="n">systemctl</span> <span class="nb">set</span><span class="o">-</span><span class="n">default</span> <span class="n">multi</span><span class="o">-</span><span class="n">user</span><span class="p">.</span><span class="n">target</span>
-<span class="n">sudo</span> <span class="n">reboot</span> <span class="c1"># 재부팅
-</span></code></pre></div></div>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Linux, Ubuntu, Nvidia" /><summary type="html"><![CDATA[대상 이 글은 Nvidia GPU가 설치된 우분투 서버에 ssh 접속을 하기 위해 세팅을 하시는 분들을 대상으로 합니다.]]></summary></entry></feed>
+<p>33번만에 성공했다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Jenkins, Docker, Harbor" /><summary type="html"><![CDATA[작업 환경 젠킨스를 통해 깃허브에서 도커 이미지를 빌드하여 이미지 저장소로 올리는 과정에서 발생하는 이슈들을 다룹니다. 이 글은 CI 파이프라인 구축을 설명하고 있지 않습니다. 환경 구축은 아래 출처를 참고해주세요.]]></summary></entry></feed>

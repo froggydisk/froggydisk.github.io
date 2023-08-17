@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "[React Native] 모서리가 둥근 삼각형 만들기",
+      "description" : "",
+      "tags"     : "React Native",
+      "url"      : "/30th-post/",
+      "date"     : "2023-08-17 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[React Native] &amp;&amp; 구문 사용 시 Text 에러",
       "description" : "",
       "tags"     : "React Native",
