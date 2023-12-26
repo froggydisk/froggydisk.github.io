@@ -1,4 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2023-08-17T21:26:58+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[React Native] 모서리가 둥근 삼각형 만들기</title><link href="http://localhost:4000/30th-post/" rel="alternate" type="text/html" title="[React Native] 모서리가 둥근 삼각형 만들기" /><published>2023-08-17T00:00:00+07:00</published><updated>2023-08-17T00:00:00+07:00</updated><id>http://localhost:4000/30th-post</id><content type="html" xml:base="http://localhost:4000/30th-post/"><![CDATA[<p>앱을 만들다가 도형을 그려야할 때가 오면 나도 모르게 한숨을 내쉬고 있다.        <br />
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2023-12-26T21:36:18+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[React Native] 스크롤에 상관없이 고정된 컴포넌트 만들기</title><link href="http://localhost:4000/fixed-position/" rel="alternate" type="text/html" title="[React Native] 스크롤에 상관없이 고정된 컴포넌트 만들기" /><published>2023-12-26T00:00:00+07:00</published><updated>2023-12-26T00:00:00+07:00</updated><id>http://localhost:4000/fixed-position</id><content type="html" xml:base="http://localhost:4000/fixed-position/"><![CDATA[<p>React와 React Native는 비슷하면서도 은근히 다른 부분이 많은 것 같다.</p>
+
+<p>두 프레임워크를 번갈아가며 사용하다보면 문법적인 부분에 대해서 헷갈릴 때가 자주 있다.</p>
+
+<p>앱에서 새로운 기능을 만들다보니 컴포넌트 하나를 스크롤에 영향받지 않으면서 화면에 고정시킬 필요가 있었는데 React에서
+자주 사용했던 문법을 썼더니 바로 에러가 났다.</p>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">position</span><span class="p">:</span> <span class="dl">'</span><span class="s1">fixed</span><span class="dl">'</span>
+</code></pre></div></div>
+
+<p>예를 들면 쇼핑 사이트에서 장바구니나 문의하기 버튼이 화면 측면에 계속해서 따라다니는 기능이다.</p>
+
+<p>순간적으로 이거를 어떻게 해야하나 생각이 나질 않아 당황했는데 사실 곰곰히 생각해보면 간단한 질문이었다.</p>
+
+<p>position이 <code class="language-plaintext highlighter-rouge">relative</code>일 리는 없을거고, <code class="language-plaintext highlighter-rouge">absolute</code>인 상태에서 스크롤을 무시할 수 있는 기능?</p>
+
+<p>아무 생각 없이 화면 위에 absolute 포지션 레이어를 하나 더 씌워버려서 스크롤이 되지 않는 상황까지 갔다가 문득 깨달았다.</p>
+
+<p><b>그냥 ScrollView나 FlatList의 내부가 아니라 같은 레벨(위치)에 삽입해주면 되는 것이었다.</b></p>
+
+<p>스크롤을 해야할 정도로 구성 컴포넌트들이 많다면 화면 높이는 <code class="language-plaintext highlighter-rouge">Dimensions</code>로 계산해서 top으로 내려주어야 한다.</p>
+
+<p>이 과정에서 아이폰의 경우 다이나믹 아일랜드에 대해 기존에 사용하던 유명 라이브러리들이 제대로 작동하지 않는 현상을 만났다.</p>
+
+<p>그래서 현재는 그냥 맘편히 <a href="https://github.com/th3rdwave/react-native-safe-area-context"><code class="language-plaintext highlighter-rouge">react-native-safe-area-context</code></a>를 사용하고 있다.</p>
+
+<p>다만 <code class="language-plaintext highlighter-rouge">SafeAreaView</code> 컴포넌트에 대해서는 다음과 같은 애니메이션 이슈가 존재하므로 주의하자.</p>
+
+<blockquote>
+  <p>While React Native exports a SafeAreaView component, this component only supports iOS 10+ with no support for older iOS versions or Android. In addition, it also has some issues, i.e. if a screen containing safe area is animating, it causes jumpy behavior. So we recommend to use the useSafeAreaInsets hook from the react-native-safe-area-context library to handle safe areas in a more reliable way. <a href="https://reactnavigation.org/docs/handling-safe-area/">출처 React Navigation</a></p>
+</blockquote>
+
+<p>이는 화면 전환을 할 때에도 가끔씩 발견되는 깜빡임 문제이다. 예민하지 않은 사람은 상관없을 수 있다.</p>
+
+<p>따라서 Safe Area 관련 기능은 전부 <code class="language-plaintext highlighter-rouge">useSafeAreaInsets</code>를 사용하여 해결하기로 하고 다른 라이브러리는 삭제해주었다. 예를 들면 
+<code class="language-plaintext highlighter-rouge">react-native-iphone-x-helper</code>와 같은 라이브러리다. 이게 제대로 작동하지 않는다는 것을 깨달을 때까지 시간이 꽤나 걸려서 묘한 배신감이 든다. 그리고 UI를 만들다보면 오히려 SafeAreaView를 사용하는 것이 더 귀찮음을 유발할 때가 많다. 특히 맨 처음 컴포넌트의 배경색을 지정할 때 그러하다.</p>
+
+<p>아무튼, 높이 관련 라이브러리를 하나로 통일해서 깔끔하다.</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">import</span> <span class="p">{</span> <span class="n">useSafeAreaInsets</span> <span class="p">}</span> <span class="n">from</span> <span class="s1">'react-native-safe-area-context'</span><span class="p">;</span>
+
+<span class="k">const</span> <span class="no">Demo</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">const</span> <span class="no">insets</span> <span class="o">=</span> <span class="nf">useSafeAreaInsets</span><span class="p">();</span>
+
+  <span class="k">return</span> <span class="p">(</span>
+    <span class="o">&lt;</span><span class="nc">View</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span> <span class="p">{</span> <span class="n">flex</span><span class="o">:</span> <span class="mi">1</span> <span class="p">}</span> <span class="p">}</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nc">ScrollView</span><span class="o">&gt;</span>
+        <span class="mf">...</span>
+      <span class="o">&lt;/</span><span class="nc">ScrollView</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="nc">View</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span> <span class="p">{</span>
+        <span class="n">position</span><span class="o">:</span> <span class="s1">'absolute'</span><span class="p">,</span>
+        <span class="n">top</span><span class="o">:</span> <span class="nc">Dimensions</span><span class="mf">.</span><span class="nf">get</span><span class="p">(</span><span class="s1">'window'</span><span class="p">)</span><span class="mf">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">insets</span><span class="mf">.</span><span class="n">bottom</span> <span class="o">-</span> <span class="p">[</span><span class="n">컴포넌트</span> <span class="n">높이</span><span class="p">]</span>
+      <span class="p">}</span> <span class="p">}</span><span class="o">/&gt;</span>
+    <span class="o">&lt;/</span><span class="nc">View</span><span class="o">&gt;</span>
+  <span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, SafeAreaView" /><summary type="html"><![CDATA[React와 React Native는 비슷하면서도 은근히 다른 부분이 많은 것 같다.]]></summary></entry><entry><title type="html">[React Native] 모서리가 둥근 삼각형 만들기</title><link href="http://localhost:4000/30th-post/" rel="alternate" type="text/html" title="[React Native] 모서리가 둥근 삼각형 만들기" /><published>2023-08-17T00:00:00+07:00</published><updated>2023-08-17T00:00:00+07:00</updated><id>http://localhost:4000/30th-post</id><content type="html" xml:base="http://localhost:4000/30th-post/"><![CDATA[<p>앱을 만들다가 도형을 그려야할 때가 오면 나도 모르게 한숨을 내쉬고 있다.        <br />
 디테일적인 부분까지 챙기려면 은근히 손이 많이 가는 작업이기 때문이다.</p>
 
 <p>오늘은 오전 내내 모서리가 둥근 삼각형을 그려야했기에 나중을 위해서 기록해둔다.</p>
@@ -540,136 +595,4 @@ python3 <span class="nt">-m</span> pip <span class="nb">install</span> <span cla
 <span class="p">...</span><span class="o">/&gt;</span>
 </code></pre></div></div>
 
-<p>누군가에게는 도움이 되었길 바란다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, react-native-calendars" /><summary type="html"><![CDATA[라이브러리 리액트 네이티브로 앱을 만들 때는 달력을 구현해야할 일이 생각보다 자주 생긴다. 어떤 앱이든 시간의 흐름에 따라 과거 정보를 조회하는 경우가 많기 때문인데, 그렇기에 직접 구현해두면 두고두고 쓸 일이 많을 것이다. 물론 훌륭한 라이브러리가 많기 때문에 시간이 충분하지 않은 사람은 다른 사람의 힘을 빌리는 것도 때론 중요하다. 필자 또한 다른 사람이 짜놓은 코드를 빌려다가 내부만 조금 고쳐쓰는 경우가 많다. 그런 의미에서 오늘은 유명한 라이브러리 중 하나인 react-native-calendars를 소개한다.]]></summary></entry><entry><title type="html">[Jenkins] 젠킨스에서 도커 이미지를 빌드할 때 발생하는 이슈들</title><link href="http://localhost:4000/21th-post/" rel="alternate" type="text/html" title="[Jenkins] 젠킨스에서 도커 이미지를 빌드할 때 발생하는 이슈들" /><published>2023-04-02T00:00:00+07:00</published><updated>2023-04-02T00:00:00+07:00</updated><id>http://localhost:4000/21th-post</id><content type="html" xml:base="http://localhost:4000/21th-post/"><![CDATA[<h1 id="작업-환경">작업 환경</h1>
-<hr />
-<p>젠킨스를 통해 깃허브에서 도커 이미지를 빌드하여 이미지 저장소로 올리는 과정에서 발생하는 이슈들을 다룹니다.<br />
-이 글은 CI 파이프라인 구축을 설명하고 있지 않습니다. 환경 구축은 아래 출처를 참고해주세요.</p>
-
-<p>● <a href="https://smoh.tistory.com/420">Jenkins로 Docker 이미지 빌드하기</a><br />
-● <a href="https://zunoxi.tistory.com/131">젠킨스 연동 및 push 하기</a></p>
-
-<h1 id="설정-파일">설정 파일</h1>
-<hr />
-
-<p>젠킨스가 깃허브에서 코드를 받아와서 도커 이미지를 빌드할 때 필요로 하는 파일이 두 가지 존재한다. 하나는 Jenkinsfile이고 나머지는 Dockerfile이다. 두 파일은 코드의 루트 경로에 위치하고 있어야 한다.<br />
-처음 작성할 때 막막했던 기억이 있어 누군가는 필요할 것 같아 첨부해 둔다.</p>
-
-<h3 id="-jenkinsfile">📌 Jenkinsfile</h3>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">app</span>
-<span class="n">node</span> <span class="p">{</span>        
-    <span class="n">stage</span><span class="p">(</span><span class="s">'Checkout'</span><span class="p">){</span>            
-        <span class="n">checkout</span> <span class="n">scm</span>            
-    <span class="p">}</span>
-    
-    <span class="n">stage</span><span class="p">(</span><span class="s">'Build image'</span><span class="p">){</span>                       
-        <span class="n">app</span> <span class="o">=</span> <span class="n">docker</span><span class="p">.</span><span class="n">build</span><span class="p">(</span><span class="s">"[저장소도메인]/[프로젝트명]/[이미지명]"</span><span class="p">)</span>
-        <span class="c1"># 예를 들면 "harbor.test.io/example-project/test-image"
-</span>        <span class="c1"># 하버의 경우 프로젝트는 사전에 생성해 놓아야하지만 이미지는 자동 생성된다.
-</span>    <span class="p">}</span>
-	
-    <span class="c1"># withRegistry 안에는 저장소 도메인과 젠킨스에 미리 등록해 놓은 Credential의 ID를 적어준다.
-</span>    <span class="c1"># 예를 들면 docker.withRegistry('https://harbor.test.io', 'Harbor')
-</span>    <span class="n">stage</span><span class="p">(</span><span class="s">'Push image'</span><span class="p">){</span> 
-        <span class="n">docker</span><span class="p">.</span><span class="n">withRegistry</span><span class="p">(</span><span class="s">'https://[저장소도메인]'</span><span class="p">,</span> <span class="s">'[CredID]'</span><span class="p">){</span>
-            <span class="n">app</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="s">"${env.BUILD_NUMBER}"</span><span class="p">)</span>
-            <span class="n">app</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="s">"latest"</span><span class="p">)</span>
-        <span class="p">}</span>                
-    <span class="p">}</span>		
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>모든 이미지에는 젠킨스 프로세스 번호가 붙고 가장 최근에 올라간 도커 이미지에만 latest 태그가 붙는다.</p>
-
-<h3 id="-dockerfile">📌 Dockerfile</h3>
-<p>Dockerfile은 구축하고자 하는 환경에 따라 이미지 파일이 다를 수 있다. 본인의 환경에 맞는 이미지를 가져오자.<br />
-아래는 python이 깔려있는 nodeJS 이미지를 이용하여 서버를 실행하는 예시이다.</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">FROM</span> <span class="n">nikolaik</span><span class="o">/</span><span class="n">python</span><span class="o">-</span><span class="n">nodejs</span><span class="p">:</span><span class="n">python3</span><span class="p">.</span><span class="mi">8</span><span class="o">-</span><span class="n">nodejs16</span> 
-
-<span class="n">WORKDIR</span> <span class="o">/</span><span class="n">app</span>
-
-<span class="n">COPY</span> <span class="p">.</span> <span class="o">/</span><span class="n">app</span>
-
-<span class="n">RUN</span> <span class="n">npm</span> <span class="n">install</span> <span class="o">&amp;&amp;</span> <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="p">.</span><span class="n">txt</span>
-
-<span class="n">EXPOSE</span> <span class="mi">8080</span>
-
-<span class="n">CMD</span> <span class="p">[</span> <span class="s">"node"</span><span class="p">,</span> <span class="s">"app.js"</span> <span class="p">]</span>
-</code></pre></div></div>
-<p>COPY를 할 때에는 COPY [복사해 올 곳] [복사해 갈 곳] 순으로 적는데 복사해 올 곳은 상대경로로, 복사해 갈 곳은 절대경로로 적는 것이 원칙이다. 꼭 지키지 않아도 동작에는 이상이 없긴 하다.</p>
-
-<h1 id="에러">에러</h1>
-<hr />
-
-<p>다음은 위의 구축 과정에서 발생하기 쉬운 에러와 그 해결 방안을 설명한다.</p>
-
-<h3 id="-에러-1">🔒 에러 1</h3>
-
-<p><strong><code class="language-plaintext highlighter-rouge">groovy.lang.missingpropertyexception: No such property: docker for class: groovy.lang.Binding</code></strong></p>
-
-<p>🔑 해결: Jenkins에서 Docker Pipeline 플러그인 설치 (<a href="https://may9noy.tistory.com/990">참고</a>)</p>
-
-<h3 id="-에러-2">🔒 에러 2</h3>
-
-<p><strong><code class="language-plaintext highlighter-rouge">/var/run/docker.sock: connect: permission denied</code></strong></p>
-
-<p>🔑 해결: 모든 노드에서 sudo chmod 666 /var/run/docker.sock로 접근 권한 허용(<a href="https://may9noy.tistory.com/990">참고</a>)</p>
-
-<h3 id="-에러-3">🔒 에러 3</h3>
-
-<p><strong><code class="language-plaintext highlighter-rouge">script.sh 1 docker not found</code></strong></p>
-
-<p>🔑 해결: jenkins deployment 파일에서 volume mount를 추가 (<a href="https://anfrhrl5555.tistory.com/137">참고</a>)</p>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">apiVersion</span><span class="p">:</span> <span class="n">apps</span><span class="o">/</span><span class="n">v1</span>
-<span class="n">kind</span><span class="p">:</span> <span class="n">Deployment</span>
-<span class="n">metadata</span><span class="p">:</span>
-  <span class="n">name</span><span class="p">:</span> <span class="n">jenkins</span>
-  <span class="n">namespace</span><span class="p">:</span> <span class="n">jenkins</span>
-<span class="n">spec</span><span class="p">:</span>
-  <span class="n">replicas</span><span class="p">:</span> <span class="mi">1</span>
-  <span class="n">selector</span><span class="p">:</span>
-    <span class="n">matchLabels</span><span class="p">:</span>
-      <span class="n">app</span><span class="p">:</span> <span class="n">jenkins</span>
-  <span class="n">template</span><span class="p">:</span>
-    <span class="n">metadata</span><span class="p">:</span>
-      <span class="n">labels</span><span class="p">:</span>
-        <span class="n">app</span><span class="p">:</span> <span class="n">jenkins</span>
-    <span class="n">spec</span><span class="p">:</span>
-      <span class="n">containers</span><span class="p">:</span>
-      <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">jenkins</span>
-        <span class="n">image</span><span class="p">:</span> <span class="n">jenkins</span><span class="o">/</span><span class="n">jenkins</span><span class="p">:</span><span class="n">lts</span>
-        <span class="n">ports</span><span class="p">:</span>
-          <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">httpe</span><span class="o">-</span><span class="n">port</span>
-            <span class="n">containerPort</span><span class="p">:</span> <span class="mi">8080</span>
-          <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">jnlp</span><span class="o">-</span><span class="n">port</span>
-            <span class="n">containerPort</span><span class="p">:</span> <span class="mi">50000</span>
-        <span class="n">volumeMounts</span><span class="p">:</span>
-          <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">jenkins</span><span class="o">-</span><span class="n">data</span>
-            <span class="n">mountPath</span><span class="p">:</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">jenkins_home</span>
-          <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">docker</span><span class="o">-</span><span class="n">socket</span>
-            <span class="n">mountPath</span><span class="p">:</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">docker</span><span class="p">.</span><span class="n">sock</span>
-          <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">docker</span><span class="o">-</span><span class="nb">bin</span>
-            <span class="n">mountPath</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">docker</span> 
-      <span class="n">volumes</span><span class="p">:</span>
-        <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">jenkins</span><span class="o">-</span><span class="n">data</span>
-          <span class="n">persistentVolumeClaim</span><span class="p">:</span>
-            <span class="n">claimName</span><span class="p">:</span> <span class="n">jenkins</span><span class="o">-</span><span class="n">pvc</span>
-        <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">docker</span><span class="o">-</span><span class="n">socket</span>
-          <span class="n">hostPath</span><span class="p">:</span>
-            <span class="n">path</span><span class="p">:</span> <span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">run</span><span class="o">/</span><span class="n">docker</span><span class="p">.</span><span class="n">sock</span>
-            <span class="nb">type</span><span class="p">:</span> <span class="n">Socket</span>
-        <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">docker</span><span class="o">-</span><span class="nb">bin</span>
-          <span class="n">hostPath</span><span class="p">:</span>
-            <span class="n">path</span><span class="p">:</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">docker</span>
-            <span class="nb">type</span><span class="p">:</span> <span class="n">File</span>
-</code></pre></div></div>
-
-<h3 id="-에러-4">🔒 에러 4</h3>
-
-<p><strong><code class="language-plaintext highlighter-rouge">stat /var/lib/docker/tmp: no such file or directory</code></strong></p>
-
-<p>🔑 해결: Jenkins 파드가 돌고 있는 노드에 도커가 제대로 실행되고 있지 않는 상태일 가능성이 높다. 해당 노드에서 sudo service docker restart를 한 뒤 /var/lib/docker 파일 안에 파일이 제대로 생성되어 있는지 확인한다. docker파일은 sudo chmod 755 docker로 접근 권한을 주어야 확인이 가능하다.</p>
-
-<h1 id="결과">결과</h1>
-
-<p>33번만에 성공했다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Jenkins, Docker, Harbor" /><summary type="html"><![CDATA[작업 환경 젠킨스를 통해 깃허브에서 도커 이미지를 빌드하여 이미지 저장소로 올리는 과정에서 발생하는 이슈들을 다룹니다. 이 글은 CI 파이프라인 구축을 설명하고 있지 않습니다. 환경 구축은 아래 출처를 참고해주세요.]]></summary></entry></feed>
+<p>누군가에게는 도움이 되었길 바란다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, react-native-calendars" /><summary type="html"><![CDATA[라이브러리 리액트 네이티브로 앱을 만들 때는 달력을 구현해야할 일이 생각보다 자주 생긴다. 어떤 앱이든 시간의 흐름에 따라 과거 정보를 조회하는 경우가 많기 때문인데, 그렇기에 직접 구현해두면 두고두고 쓸 일이 많을 것이다. 물론 훌륭한 라이브러리가 많기 때문에 시간이 충분하지 않은 사람은 다른 사람의 힘을 빌리는 것도 때론 중요하다. 필자 또한 다른 사람이 짜놓은 코드를 빌려다가 내부만 조금 고쳐쓰는 경우가 많다. 그런 의미에서 오늘은 유명한 라이브러리 중 하나인 react-native-calendars를 소개한다.]]></summary></entry></feed>

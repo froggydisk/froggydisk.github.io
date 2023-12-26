@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "[React Native] 스크롤에 상관없이 고정된 컴포넌트 만들기",
+      "description" : "",
+      "tags"     : "React Native, SafeAreaView",
+      "url"      : "/fixed-position/",
+      "date"     : "2023-12-26 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[React Native] 모서리가 둥근 삼각형 만들기",
       "description" : "",
       "tags"     : "React Native",
