@@ -59,7 +59,7 @@ const NavigatorExample = ({navigation, route}) => {
     return (
     <View style={ {height: Dimensions.get('window').height} }> // 이 부분이 중요
         <Stack.Navigator
-        screenOptions={{ headerShown: false }}>
+        screenOptions={ { headerShown: false } }>
         <Stack.Screen name="RootHome" component={RootHome} />
         <Stack.Screen name="NavigatorOne" component={NavigatorOne} />
         <Stack.Screen name="NavigatorTwo" component={NavigatorTwo} />
