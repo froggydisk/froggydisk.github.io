@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "[Next/React] 모바일↔︎PC에 따른 줄바꿈 태그의 선택 적용",
+      "description" : "",
+      "tags"     : "Next, React",
+      "url"      : "/next-br/",
+      "date"     : "2024-01-03 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[Next/React] z-index가 작동하지 않는 경우",
       "description" : "",
       "tags"     : "Next, React",
