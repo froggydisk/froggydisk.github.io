@@ -1,4 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-01-03T21:18:19+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[Next/React] 모바일↔︎PC에 따른 줄바꿈 태그의 선택 적용</title><link href="http://localhost:4000/next-br/" rel="alternate" type="text/html" title="[Next/React] 모바일↔︎PC에 따른 줄바꿈 태그의 선택 적용" /><published>2024-01-03T00:00:00+07:00</published><updated>2024-01-03T00:00:00+07:00</updated><id>http://localhost:4000/next-br</id><content type="html" xml:base="http://localhost:4000/next-br/"><![CDATA[<p>웹페이지를 만들다보면 줄바꿈 태그(<code class="language-plaintext highlighter-rouge">br</code>)를 디바이스가 모바일이냐 PC냐에 따라 다르게 적용하고 싶을 때가 있다.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-02-05T22:39:44+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[React/RN] map 함수 안에서의 return문 사용법</title><link href="http://localhost:4000/return-in-map/" rel="alternate" type="text/html" title="[React/RN] map 함수 안에서의 return문 사용법" /><published>2024-02-05T00:00:00+07:00</published><updated>2024-02-05T00:00:00+07:00</updated><id>http://localhost:4000/return-in-map</id><content type="html" xml:base="http://localhost:4000/return-in-map/"><![CDATA[<p>개발을 처음 배울 시절, 궁금했던 것들을 하나하나 메모하면서 나중에 블로그 글로 하나씩 적어야겠다고 생각했는데 벌써 어언 1년이 지나서 이제서야 글로 옮긴다.</p>
+
+<p>JS 문법에도 익숙지 않아서 map 함수를 보면 지레 겁을 먹었던 적도 있었는데 이제는 이런 함수의 존재가 너무나도 고맙다.</p>
+
+<p>항상 사용할 때마다 return문을 꼭 써야하는 것인지 궁금했었는데 오늘 그 이야기를 하고자한다.</p>
+
+<p>답을 먼저 말하면 <strong><code class="language-plaintext highlighter-rouge">그렇지 않다</code></strong>이다.</p>
+
+<p>map 함수 안에서 return 문의 유무를 결정하는 기준은 화살표(=&gt;) 뒤에 <strong>중괄호를 쓰냐 소괄호를 쓰냐에 따라</strong> 갈리게 되는데 일반적으로 소괄호를 쓰는 형태는 다음과 같다.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">data</span><span class="o">.</span><span class="na">map</span><span class="o">((</span><span class="n">value</span><span class="o">,</span> <span class="n">key</span><span class="o">)=&gt;(&lt;</span><span class="nc">View</span> <span class="n">key</span><span class="o">={</span><span class="n">key</span><span class="o">}&gt;[</span><span class="n">컴포넌트</span><span class="o">]&lt;/</span><span class="nc">View</span><span class="o">&gt;))</span>
+</code></pre></div></div>
+
+<p>더 나아가 소괄호가 생략되는 경우도 많고 이는 코드가 훨씬 깔끔해 보이는 장점을 가진다.</p>
+
+<p>반대로 중괄호를 쓰게 되면 아래와 같이 꼭 return문을 넣어주어야 한다.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">data</span><span class="o">.</span><span class="na">map</span><span class="o">((</span><span class="n">value</span><span class="o">,</span> <span class="n">key</span><span class="o">)=&gt;{</span>
+  <span class="kd">const</span> <span class="n">newValue</span> <span class="o">=</span> <span class="o">...</span> <span class="c1">// 새 변수 정의</span>
+  <span class="k">return</span><span class="o">(</span>
+    <span class="o">&lt;</span><span class="nc">View</span> <span class="n">key</span><span class="o">={</span><span class="n">key</span><span class="o">}&gt;</span>
+      <span class="o">&lt;</span><span class="nc">Text</span><span class="o">&gt;</span>
+        <span class="o">{</span><span class="n">newValue</span><span class="o">}</span>
+      <span class="o">&lt;/</span><span class="nc">Text</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="nc">View</span><span class="o">&gt;</span>
+  <span class="o">);</span>
+<span class="o">})</span>
+</code></pre></div></div>
+
+<p>return을 쓰면 필연적으로 코드가 길어지게 되므로 항상 소괄호를 쓰는게 나아보일 수 있는데, 단 중괄호를 썼을 때 생기는 중요한 이점이 하나 존재한다.</p>
+
+<p>바로 map 함수 내부에서 새로운 변수를 정의할 수 있다는 것이다. 이는 코드의 중복을 막아 가독성을 좋게 하는데 매우 중요할 수 있다.</p>
+
+<p>하지만 그 뿐이므로 <strong>새로운 변수를 정의하는 경우를 제외한다면 return문은 과감히 생략해주자.</strong></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React, React Native, Javascript" /><summary type="html"><![CDATA[개발을 처음 배울 시절, 궁금했던 것들을 하나하나 메모하면서 나중에 블로그 글로 하나씩 적어야겠다고 생각했는데 벌써 어언 1년이 지나서 이제서야 글로 옮긴다.]]></summary></entry><entry><title type="html">[Next/React] 모바일↔︎PC에 따른 줄바꿈 태그의 선택 적용</title><link href="http://localhost:4000/next-br/" rel="alternate" type="text/html" title="[Next/React] 모바일↔︎PC에 따른 줄바꿈 태그의 선택 적용" /><published>2024-01-03T00:00:00+07:00</published><updated>2024-01-03T00:00:00+07:00</updated><id>http://localhost:4000/next-br</id><content type="html" xml:base="http://localhost:4000/next-br/"><![CDATA[<p>웹페이지를 만들다보면 줄바꿈 태그(<code class="language-plaintext highlighter-rouge">br</code>)를 디바이스가 모바일이냐 PC냐에 따라 다르게 적용하고 싶을 때가 있다.</p>
 
 <p>예를 들면 모바일에서는 줄바꿈을 했으면 좋겠고 PC에서는 그대로 길게 냅두고 싶은 경우다.</p>
 
@@ -492,14 +525,4 @@ openssl x509 <span class="nt">-pubkey</span> <span class="nt">-in</span> /etc/ku
 마지막으로 마스터노드에 들어가서 <code class="language-plaintext highlighter-rouge">kubectl get node</code>를 해보자. 잘 인식이 된다면 성공이다.</p>
 
 <h1 id="참고">참고</h1>
-<p><a href="https://confluence.curvc.com/pages/releaseview.action?pageId=98048155">Ubuntu에서 쿠버네티스(k8s) 설치 가이드</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Kubernetes, On-premise" /><summary type="html"><![CDATA[마스터 노드의 설정이 이미 되어 있고 추가할 워커노드의 OS가 우분투 20.04 버전인 경우를 기준으로 설명하겠다.]]></summary></entry><entry><title type="html">[React Native] 안드로이드 스튜디오 Add configuration에서 No module만 선택 가능한 현상</title><link href="http://localhost:4000/24th-post/" rel="alternate" type="text/html" title="[React Native] 안드로이드 스튜디오 Add configuration에서 No module만 선택 가능한 현상" /><published>2023-07-03T00:00:00+07:00</published><updated>2023-07-03T00:00:00+07:00</updated><id>http://localhost:4000/24th-post</id><content type="html" xml:base="http://localhost:4000/24th-post/"><![CDATA[<h3 id="-에러">🔒 에러</h3>
-
-<p>React Native로 앱을 만들다보면 iOS 시뮬레이터가 너무 편해서 안드로이드를 소홀히 하게 되는 때가 있다.<br />
-안드로이드 apk 파일을 건네줄 필요가 있어서 오랜만에 안드로이드 스튜디오를 켰는데 이상하게 Run 아이콘이 있어야 할 자리에 <code class="language-plaintext highlighter-rouge">add configuration</code> 밖에 보이지 않았다.
-인터넷을 찾아보니 module을 추가해주면 된다는데 아무리 모듈을 추가하려고 해도 선택지에 <code class="language-plaintext highlighter-rouge">No module</code> 이외에 아무것도 뜨지 않는다.</p>
-
-<h3 id="-해결">🔑 해결</h3>
-
-<p>그렇다. 사람은 가끔 바보가 된다. VScode 켜듯이 아무 생각 없이 React Native 프로젝트 폴더를 열어버렸던 것이다.<br />
-<strong>안드로이드 스튜디오에서는 프로젝터 폴더 안의 android 폴더를 열어주어야한다.</strong><br />
-마치 Xcode에서 ios 폴더를 열어주는 것과 같다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, Android Studio" /><summary type="html"><![CDATA[🔒 에러]]></summary></entry></feed>
+<p><a href="https://confluence.curvc.com/pages/releaseview.action?pageId=98048155">Ubuntu에서 쿠버네티스(k8s) 설치 가이드</a></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Kubernetes, On-premise" /><summary type="html"><![CDATA[마스터 노드의 설정이 이미 되어 있고 추가할 워커노드의 OS가 우분투 20.04 버전인 경우를 기준으로 설명하겠다.]]></summary></entry></feed>
