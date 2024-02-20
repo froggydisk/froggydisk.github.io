@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "[React Native] onPress에서 화살표 표현식의 생략",
+      "description" : "",
+      "tags"     : "React Native",
+      "url"      : "/arrow-in-onpress/",
+      "date"     : "2024-02-20 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[React/RN] map 함수 안에서의 return문 사용법",
       "description" : "",
       "tags"     : "React, React Native, Javascript",
