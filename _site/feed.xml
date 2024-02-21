@@ -1,4 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-02-20T20:45:55+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[React Native] onPress에서 화살표 표현식의 생략</title><link href="http://localhost:4000/arrow-in-onpress/" rel="alternate" type="text/html" title="[React Native] onPress에서 화살표 표현식의 생략" /><published>2024-02-20T00:00:00+07:00</published><updated>2024-02-20T00:00:00+07:00</updated><id>http://localhost:4000/arrow-in-onpress</id><content type="html" xml:base="http://localhost:4000/arrow-in-onpress/"><![CDATA[<p>React Native에서 onPress를 사용할 때 무의식적으로 화살표 표현식 <code class="language-plaintext highlighter-rouge">()=&gt;</code>을 사용하고 있었는데 어느날 특정 경우에 생략이 가능하다는
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-02-21T21:43:31+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[React Native] 컴포넌트 속성을 통해 전달하는 문자열의 줄바꿈 방법</title><link href="http://localhost:4000/transmit-component/" rel="alternate" type="text/html" title="[React Native] 컴포넌트 속성을 통해 전달하는 문자열의 줄바꿈 방법" /><published>2024-02-21T00:00:00+07:00</published><updated>2024-02-21T00:00:00+07:00</updated><id>http://localhost:4000/transmit-component</id><content type="html" xml:base="http://localhost:4000/transmit-component/"><![CDATA[<p>특정 컴포넌트를 구현할 때 속성을 통해 문자열을 보내줄 때가 있다. 보통 config로 따로 저장해놓은 고정 문구를 넣어주는 경우에 많이 쓰인다.</p>
+
+<p>이 경우에 디자인 상의 이유로 줄바꿈을 자주 사용하게 되는데, 따옴표 안에 개행문자<code class="language-plaintext highlighter-rouge">\n</code>를 넣어도 아무 일도 일어나지 않아 종종 당황하곤 한다. 이는 개행 문자가 그대로 문자열로 인식되기 때문이다.</p>
+
+<p>줄바꿈이 제대로 이루어지게 하기 위해서는 <strong>중괄호</strong>를 사용해 주어야 한다. 이런식으로 말이다.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nc">OnBoardingPage</span>
+  <span class="n">subtitle</span><span class="o">={</span>
+    <span class="err">'</span><span class="n">집에서</span> <span class="n">얼마나</span> <span class="n">걷고</span><span class="o">,</span> <span class="n">뛰고</span><span class="o">,</span> <span class="n">쉬었는지</span> <span class="n">등의</span><span class="err">\</span><span class="n">n정보를</span> <span class="n">실시간으로</span> <span class="n">분석해드려요</span><span class="o">.</span><span class="err">'</span>
+  <span class="o">}</span>
+<span class="o">/&gt;</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>chatGPT는 그 이유에 대해 이렇게 말한다.<br />
+<strong>“중괄호를 사용하면 JavaScript 표현식을 평가하고 결과를 문자열로 변환하여 JSX에 삽입할 수 있습니다.”</strong></p>
+</blockquote>
+
+<p>비슷한 느낌으로 <code class="language-plaintext highlighter-rouge">React</code>나 <code class="language-plaintext highlighter-rouge">Next</code>에서는 아예 컴포넌트 형식으로 전달하는 것을 추천한다.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nc">CheckUpCard</span>
+  <span class="n">content</span><span class="o">={</span>
+    <span class="o">&lt;&gt;</span>
+      <span class="n">질환</span> <span class="n">등의</span> <span class="n">감별을</span> <span class="n">위한</span>
+      <span class="o">&lt;</span><span class="n">br</span> <span class="o">/&gt;</span>
+      <span class="n">정밀검사</span>
+    <span class="o">&lt;/&gt;</span>
+  <span class="o">}</span>
+<span class="o">/&gt;</span>
+</code></pre></div></div>
+
+<p>컴포넌트 형식으로 전달하는 방식은 <strong>반응형으로 페이지를 구현할 필요가 있을 때</strong> 사용하면 유용하다. 이 때 개행문자<code class="language-plaintext highlighter-rouge">\n</code> 대신 <code class="language-plaintext highlighter-rouge">&lt;br&gt;</code>태그를 사용하게 되는데 이렇게 되면 PC 버전이냐 모바일 버전이냐에 따라 줄바꿈을 다르게 적용할 수 있기 때문이다.</p>
+
+<p>빈 태그가 아닌 &lt;div&gt;태그 등을 사용하면 스타일도 부여할 수 있으니 자유도가 한층 높아지는 것은 말할 것도 없다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, React, Next" /><summary type="html"><![CDATA[특정 컴포넌트를 구현할 때 속성을 통해 문자열을 보내줄 때가 있다. 보통 config로 따로 저장해놓은 고정 문구를 넣어주는 경우에 많이 쓰인다.]]></summary></entry><entry><title type="html">[React Native] onPress에서 화살표 표현식의 생략</title><link href="http://localhost:4000/arrow-in-onpress/" rel="alternate" type="text/html" title="[React Native] onPress에서 화살표 표현식의 생략" /><published>2024-02-20T00:00:00+07:00</published><updated>2024-02-20T00:00:00+07:00</updated><id>http://localhost:4000/arrow-in-onpress</id><content type="html" xml:base="http://localhost:4000/arrow-in-onpress/"><![CDATA[<p>React Native에서 onPress를 사용할 때 무의식적으로 화살표 표현식 <code class="language-plaintext highlighter-rouge">()=&gt;</code>을 사용하고 있었는데 어느날 특정 경우에 생략이 가능하다는
 것을 알게 되었다.</p>
 
 <p>코드를 한 글자라도 줄일 수 있다는 생각에 과연 어떠한 조건에서 가능한지 궁금해서 찾아보았다. 다음의 두 가지 경우를 살펴보자.</p>
@@ -443,42 +476,4 @@ React Native에서는 <strong>텍스트의 기본 색상이 #000, 폰트크기�
 <p>위 코드는 안드로이드에서 앱의 다크모드를 강제로 막아준다.</p>
 
 <p>애초부터 다크모드를 막아줄 것이면 위의 폰트 색상은 왜 적용해주었는가 싶지만 처음 설정은 전역 폰트의 색상 설정이 가능한만큼 검정색이 아닌 다른 색으로의 설정도 가능하다는 점에서 의의가 있다.<br />
-보통 디자인에 따라 다르지만 순수 블랙을 사용하지 않고 <strong>#333</strong>등의 색상 코드를 사용하는 경우가 있기에 어찌되었든 알아두면 유용한 설정이다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native" /><summary type="html"><![CDATA[개발을 하다보면 다크모드를 고려하지 않고 개발을 하게 되는 경우가 있다. React Native에서는 텍스트의 기본 색상이 #000, 폰트크기는 14, fontWeight은 400이므로 태그에서 아무런 style 적용을 해주지 않더라도 기본 설정이 적용이 된다. 그렇기에 기본 설정을 사용하는 경우에는 아무런 신경을 써주지 않아도 된다.]]></summary></entry><entry><title type="html">[React Native] TextInput으로 받은 String을 Number 타입으로 바꿔주기</title><link href="http://localhost:4000/26th-post/" rel="alternate" type="text/html" title="[React Native] TextInput으로 받은 String을 Number 타입으로 바꿔주기" /><published>2023-07-20T00:00:00+07:00</published><updated>2023-07-20T00:00:00+07:00</updated><id>http://localhost:4000/26th-post</id><content type="html" xml:base="http://localhost:4000/26th-post/"><![CDATA[<p>TextInput 안에서 받은 <code class="language-plaintext highlighter-rouge">String</code> 타입 숫자값를 알아서 <code class="language-plaintext highlighter-rouge">Number</code> 타입으로 변경되게 하고 싶었는데 이렇게 해주니 에러가 났다.</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nc">TextInput</span>
-    <span class="n">value</span><span class="o">={</span><span class="n">data</span><span class="o">.</span><span class="na">year</span><span class="o">}</span>
-    <span class="n">onChangeText</span><span class="o">={</span><span class="n">text</span> <span class="o">=&gt;</span> <span class="n">setData</span><span class="o">({...</span><span class="na">data</span><span class="o">,</span> <span class="nl">year:</span> <span class="nc">Number</span><span class="o">(</span><span class="n">text</span><span class="o">)})}</span>
-<span class="o">/&gt;</span>
-</code></pre></div></div>
-
-<h3 id="에러-️">에러 ⚠️</h3>
-<p><strong>Warning: Failed prop type: Invalid prop value of type number supplied to ForwardRef(TextInput), expected string.</strong> <br />
-입력값이 <code class="language-plaintext highlighter-rouge">Number</code>로 바껴서 저장이 되므로 value값에 들어가는 데이터가 <code class="language-plaintext highlighter-rouge">Number</code> 타입이 되는데 value값은 <code class="language-plaintext highlighter-rouge">String</code> 값이어야 하기 때문에 에러가 발생한다.</p>
-
-<p>이를 해결하기 위해 아래를 시도해본다.</p>
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nc">TextInput</span>
-    <span class="n">value</span><span class="o">={</span><span class="n">data</span><span class="o">.</span><span class="na">year</span><span class="o">.</span><span class="na">toString</span><span class="o">()}</span>
-    <span class="n">onChangeText</span><span class="o">={</span><span class="n">text</span> <span class="o">=&gt;</span> <span class="n">setData</span><span class="o">({...</span><span class="na">data</span><span class="o">,</span> <span class="nl">year:</span> <span class="nc">Number</span><span class="o">(</span><span class="n">text</span><span class="o">)})}</span>
-<span class="o">/&gt;</span>
-</code></pre></div></div>
-<p>간단하고 좋다. 
-하지만 키보드를 <code class="language-plaintext highlighter-rouge">numeric</code>으로 해주지 않으면 키보드 입력에서 <code class="language-plaintext highlighter-rouge">String</code> 값을 잘못 넣는 순간 바로 <code class="language-plaintext highlighter-rouge">NaN</code>이 떠서 지워지지 않는 현상이 일어난다.<br />
-잘 되기는 하지만 무언가 찝찝하기는 하다.<br />
-좀 더 고민을 해보면, 입력을 끝낼 때 <code class="language-plaintext highlighter-rouge">Number</code>로 타입변환을 해주는 방법도 있다.</p>
-
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">TextInput</span>
-    <span class="nx">value</span><span class="o">=</span><span class="p">{</span><span class="nx">data</span><span class="p">.</span><span class="nx">year</span><span class="p">.</span><span class="nx">toString</span><span class="p">()}</span>    
-    <span class="nx">onChangeText</span><span class="o">=</span><span class="p">{</span><span class="nx">text</span> <span class="o">=&gt;</span> <span class="nx">setData</span><span class="p">({...</span><span class="nx">data</span><span class="p">,</span> <span class="na">year</span><span class="p">:</span> <span class="nx">text</span><span class="p">})}</span>
-    <span class="nx">onEndEditing</span><span class="o">=</span><span class="p">{()</span> <span class="o">=&gt;</span>
-      <span class="nx">setData</span><span class="p">({...</span><span class="nx">data</span><span class="p">,</span> <span class="na">year</span><span class="p">:</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">year</span><span class="p">)})</span>
-    <span class="p">}</span>    
-    <span class="p">...</span>
-<span class="o">/&gt;</span>
-</code></pre></div></div>
-
-<p>이 방법에서는 <code class="language-plaintext highlighter-rouge">String</code> 값을 입력하더라도 <code class="language-plaintext highlighter-rouge">NaN</code>이 나타나지 않는다. 하지만 <code class="language-plaintext highlighter-rouge">Number</code>로 형변환을 해야하는 경우는 보통 타입이 강제되는 경우가 많기 때문에 (API request 등) NaN이 안 나타난다고 해서 안심할 만한 상황은 아니다. 오히려 키보드를 <code class="language-plaintext highlighter-rouge">numeric</code>으로 하고 이중으로 타입 검사를 해주는 편이 안전하다.</p>
-
-<p>이러한 경우는 엣지 케이스가 많기 때문에 항상 이것저것 테스트 시나리오를 고려해야한다. 
-예를 들면 <code class="language-plaintext highlighter-rouge">numeric</code> 키보드에서 숫자만 받는다고 타입 검사를 안하다가 복사 붙여넣기를 하는 유저를 만나 오류를 직면할 수도 있는 것이다.</p>
-
-<p>이렇게 정형화되어 있는 패턴에서는 TDD가 필요한 이유를 절실히 느낀다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native" /><summary type="html"><![CDATA[TextInput 안에서 받은 String 타입 숫자값를 알아서 Number 타입으로 변경되게 하고 싶었는데 이렇게 해주니 에러가 났다.]]></summary></entry></feed>
+보통 디자인에 따라 다르지만 순수 블랙을 사용하지 않고 <strong>#333</strong>등의 색상 코드를 사용하는 경우가 있기에 어찌되었든 알아두면 유용한 설정이다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native" /><summary type="html"><![CDATA[개발을 하다보면 다크모드를 고려하지 않고 개발을 하게 되는 경우가 있다. React Native에서는 텍스트의 기본 색상이 #000, 폰트크기는 14, fontWeight은 400이므로 태그에서 아무런 style 적용을 해주지 않더라도 기본 설정이 적용이 된다. 그렇기에 기본 설정을 사용하는 경우에는 아무런 신경을 써주지 않아도 된다.]]></summary></entry></feed>
