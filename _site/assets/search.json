@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "[React Native] 화면 전체를 덮는 absolute 포지션의 컴포넌트 스타일링",
+      "description" : "",
+      "tags"     : "React Native",
+      "url"      : "/absolute-panel/",
+      "date"     : "2024-02-22 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[React Native] 컴포넌트 속성을 통해 전달하는 문자열의 줄바꿈 방법",
       "description" : "",
       "tags"     : "React Native, React, Next",
