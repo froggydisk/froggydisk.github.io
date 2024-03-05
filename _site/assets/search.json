@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "K8s Install Error",
+      "description" : "",
+      "tags"     : "",
+      "url"      : "/k8s-install-error/",
+      "date"     : "2024-03-05 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[React Native] 화면 전체를 덮는 absolute 포지션의 컴포넌트 스타일링",
       "description" : "",
       "tags"     : "React Native",

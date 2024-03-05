@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-02-22T21:56:02+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[React Native] 화면 전체를 덮는 absolute 포지션의 컴포넌트 스타일링</title><link href="http://localhost:4000/absolute-panel/" rel="alternate" type="text/html" title="[React Native] 화면 전체를 덮는 absolute 포지션의 컴포넌트 스타일링" /><published>2024-02-22T00:00:00+07:00</published><updated>2024-02-22T00:00:00+07:00</updated><id>http://localhost:4000/absolute-panel</id><content type="html" xml:base="http://localhost:4000/absolute-panel/"><![CDATA[<p>화면 전체를 덮는 absolute 포지션의 컴포넌트를 구현할 때 보통 이런식으로 스타일링을 한다.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-03-05T14:12:54+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">K8s Install Error</title><link href="http://localhost:4000/k8s-install-error/" rel="alternate" type="text/html" title="K8s Install Error" /><published>2024-03-05T00:00:00+07:00</published><updated>2024-03-05T00:00:00+07:00</updated><id>http://localhost:4000/k8s-install-error</id><content type="html" xml:base="http://localhost:4000/k8s-install-error/"><![CDATA[]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">[React Native] 화면 전체를 덮는 absolute 포지션의 컴포넌트 스타일링</title><link href="http://localhost:4000/absolute-panel/" rel="alternate" type="text/html" title="[React Native] 화면 전체를 덮는 absolute 포지션의 컴포넌트 스타일링" /><published>2024-02-22T00:00:00+07:00</published><updated>2024-02-22T00:00:00+07:00</updated><id>http://localhost:4000/absolute-panel</id><content type="html" xml:base="http://localhost:4000/absolute-panel/"><![CDATA[<p>화면 전체를 덮는 absolute 포지션의 컴포넌트를 구현할 때 보통 이런식으로 스타일링을 한다.</p>
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">container</span><span class="p">:</span> <span class="p">{</span>
     <span class="nl">position</span><span class="p">:</span> <span class="dl">'</span><span class="s1">absolute</span><span class="dl">'</span><span class="p">,</span>
     <span class="nx">top</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
@@ -393,70 +393,4 @@ React로 개발을 하다가 React Native로 넘어오게 되거나 멀티로 �
 <p>실험해본 결과 sample값이 <code class="language-plaintext highlighter-rouge">0</code>과 <code class="language-plaintext highlighter-rouge">-0</code>의 경우에는 모두 <code class="language-plaintext highlighter-rouge">Error: Text strings must be rendered within a &lt;Text&gt; component.</code>에러를 나타냈다.</p>
 
 <p>따라서 위와 같은 에러를 만난 경우 <code class="language-plaintext highlighter-rouge">&amp;&amp; 구문</code>을 잘 확인해보자.
-참고로, 삼항연산자의 경우에는 해당 에러가 발생하지 않았다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native" /><summary type="html"><![CDATA[개발 중에 예상치 못한 에러를 만나 기록해둔다. 뜬금없이 Error: Text strings must be rendered within a &lt;Text&gt; component.에러를 만나게 되었는데 이는 주로 태그가 아니라 안에 문자열을 사용하여 나타나는 에러다. React로 개발을 하다가 React Native로 넘어오게 되거나 멀티로 개발을 할 때 흔히 하는 실수이다.]]></summary></entry><entry><title type="html">[React Native] 처음 앱 진입시 로그인 상태에 따른 네비게이션 분기</title><link href="http://localhost:4000/28th-post/" rel="alternate" type="text/html" title="[React Native] 처음 앱 진입시 로그인 상태에 따른 네비게이션 분기" /><published>2023-07-24T00:00:00+07:00</published><updated>2023-07-24T00:00:00+07:00</updated><id>http://localhost:4000/28th-post</id><content type="html" xml:base="http://localhost:4000/28th-post/"><![CDATA[<p>보통 앱을 만들게 되면 현재 로그인한 상태에 따라 시작하는 <code class="language-plaintext highlighter-rouge">Screen</code>을 다르게 설정함으로써 UX를 개선한다.    <br />
-<code class="language-plaintext highlighter-rouge">NavigatorAuth, NavigatorMain</code>과 같이 로그인의 상태에 따라 진입하는 Navigator가 다른 경우에는 간단하다.       <br />
-아래의 코드처럼 로그인 상태값에 따라 삼항연산자를 활용하여 진입점을 바꾸어주면 된다.</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">function</span> <span class="nf">App</span><span class="o">()</span> <span class="o">{</span>
-  <span class="kd">const</span> <span class="o">[</span><span class="n">isLogin</span><span class="o">,</span> <span class="n">setIsLogin</span><span class="o">]</span> <span class="o">=</span> <span class="n">useState</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
-  <span class="o">...</span> <span class="o">(</span><span class="n">setIsLogin에</span> <span class="n">상태값을</span> <span class="n">넣어주는</span> <span class="n">로직</span><span class="o">)</span>
-
-  <span class="k">return</span> <span class="o">(</span>
-    <span class="o">&lt;</span><span class="nc">NavigationContainer</span><span class="o">&gt;</span>      
-      <span class="o">{</span><span class="n">isLogin</span> <span class="o">?</span> <span class="o">(</span>
-        <span class="o">&lt;</span><span class="nc">NavigatorMain</span> <span class="o">/&gt;</span> <span class="c1">// 로그인 되어있는 경우 홈 진입</span>
-      <span class="o">)</span> <span class="o">:</span> <span class="o">(</span>
-        <span class="o">&lt;</span><span class="nc">NavigatorAuth</span> <span class="o">/&gt;</span> <span class="c1">// 로그인이 안 되어있는 경우 로그인 페이지 진입</span>
-      <span class="o">)}</span>
-    <span class="o">&lt;/</span><span class="nc">NavigationContainer</span><span class="o">&gt;</span>
-  <span class="o">);</span>
-<span class="o">}</span>
-</code></pre></div></div>
-
-<p>하지만 굳이 두 개의 Navigator를 쓰지 않고 하나의 Navigator 안에서 진입점을 다르게 해주고 싶은 경우도 있을 것이다.                <br />
-그러한 경우에는 <strong>useNavigationContainerRef()를 활용해주면 된다.</strong> 아래 코드를 살펴보자.</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// app.js 파일</span>
-<span class="n">function</span> <span class="nf">App</span><span class="o">()</span> <span class="o">{</span>
-  <span class="kd">const</span> <span class="o">[</span><span class="n">isLogin</span><span class="o">,</span> <span class="n">setIsLogin</span><span class="o">]</span> <span class="o">=</span> <span class="n">useState</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
-  <span class="o">...</span> <span class="o">(</span><span class="n">setIsLogin에</span> <span class="n">상태값을</span> <span class="n">넣어주는</span> <span class="n">로직</span><span class="o">)</span>
-
-  <span class="c1">// 로그인이 안 되어있는 경우 로그인 페이지 진입</span>
-  <span class="kd">const</span> <span class="o">[</span><span class="n">route</span><span class="o">,</span> <span class="n">setRoute</span><span class="o">]</span> <span class="o">=</span> <span class="n">useState</span><span class="o">(</span><span class="err">'</span><span class="nc">LoginScreen</span><span class="err">'</span><span class="o">);</span> 
-  <span class="n">useEffect</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="o">{</span>
-    <span class="k">if</span> <span class="o">(</span><span class="n">isLogin</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">setRoute</span><span class="o">(</span><span class="err">'</span><span class="nc">MainScreen</span><span class="err">'</span><span class="o">);</span> <span class="c1">// 로그인이 되어있는 경우 홈 진입</span>
-    <span class="o">}</span>
-  <span class="o">},</span> <span class="o">[</span><span class="n">isLogin</span><span class="o">]);</span>
-
-  <span class="k">return</span> <span class="o">(</span>
-    <span class="o">&lt;</span><span class="nc">NavigationContainer</span><span class="o">&gt;</span>
-        <span class="o">&lt;</span><span class="nc">NavigatorMain</span> <span class="n">initialRouteName</span><span class="o">={</span><span class="n">route</span><span class="o">}</span> <span class="o">/&gt;</span>
-    <span class="o">&lt;/</span><span class="nc">NavigationContainer</span><span class="o">&gt;</span>
-  <span class="o">);</span>
-<span class="o">}</span>
-</code></pre></div></div>
-<p>우선 app.js에서 로그인 상태에 따른 분기를 처리해주고 이후 NavigatorMain에서 분기할 지점(initialRouteName)으로 화면을 전환하면 된다.</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// NavigatorMain.js 파일</span>
-<span class="kn">import</span> <span class="nn">React</span><span class="o">,</span> <span class="o">{</span><span class="n">useEffect</span><span class="o">,</span> <span class="n">useRef</span><span class="o">}</span> <span class="n">from</span> <span class="err">'</span><span class="n">react</span><span class="err">'</span><span class="o">;</span>
-<span class="kn">import</span> <span class="err">{</span>
-  <span class="nn">NavigationContainer</span><span class="o">,</span>
-  <span class="n">useNavigationContainerRef</span><span class="o">,</span>
-<span class="o">}</span> <span class="n">from</span> <span class="err">'</span><span class="nd">@react</span><span class="o">-</span><span class="n">navigation</span><span class="o">/</span><span class="kd">native</span><span class="err">'</span><span class="o">;</span>
-
-<span class="kd">const</span> <span class="nc">NavigatorMain</span> <span class="o">=</span> <span class="o">({</span><span class="n">initialRouteName</span><span class="o">})</span> <span class="o">=&gt;</span> <span class="o">{</span>  
-  <span class="kd">const</span> <span class="n">navigationRef</span> <span class="o">=</span> <span class="n">useNavigationContainerRef</span><span class="o">();</span>
-  <span class="n">useEffect</span><span class="o">(()</span> <span class="o">=&gt;</span> <span class="o">{</span>
-    <span class="c1">// navigate 기능을 이용해 app.js에서 바뀐 진입점으로 화면을 전환</span>
-    <span class="n">navigationRef</span><span class="o">.</span><span class="na">navigate</span><span class="o">(</span><span class="n">initialRouteName</span><span class="o">);</span> 
-  <span class="o">},</span> <span class="o">[</span><span class="n">initialRouteName</span><span class="o">]);</span>
-  <span class="k">return</span> <span class="o">(</span>    
-    <span class="o">&lt;</span><span class="nc">NavigationContainer</span> <span class="n">ref</span><span class="o">={</span><span class="n">navigationRef</span><span class="o">}&gt;</span>
-      <span class="o">...</span>
-    <span class="o">&lt;/</span><span class="nc">NavigationContainer</span><span class="o">&gt;</span>
-  <span class="o">);</span>
-<span class="o">};</span>
-</code></pre></div></div>
-
-<p>생각보다 간단하다. 이를 활용하면 두 곳으로의 분기 뿐만아니라 조건에 따라 여러 스크린으로의 분기도 가능하다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native" /><summary type="html"><![CDATA[보통 앱을 만들게 되면 현재 로그인한 상태에 따라 시작하는 Screen을 다르게 설정함으로써 UX를 개선한다. NavigatorAuth, NavigatorMain과 같이 로그인의 상태에 따라 진입하는 Navigator가 다른 경우에는 간단하다. 아래의 코드처럼 로그인 상태값에 따라 삼항연산자를 활용하여 진입점을 바꾸어주면 된다.]]></summary></entry></feed>
+참고로, 삼항연산자의 경우에는 해당 에러가 발생하지 않았다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native" /><summary type="html"><![CDATA[개발 중에 예상치 못한 에러를 만나 기록해둔다. 뜬금없이 Error: Text strings must be rendered within a &lt;Text&gt; component.에러를 만나게 되었는데 이는 주로 태그가 아니라 안에 문자열을 사용하여 나타나는 에러다. React로 개발을 하다가 React Native로 넘어오게 되거나 멀티로 개발을 할 때 흔히 하는 실수이다.]]></summary></entry></feed>
