@@ -17,13 +17,13 @@ IDC에 서버를 구축하면서 오랜만에 순정 서버에 쿠버네티스�
 error: The connection to the server 192.168.x.x:6443 was refused - did you specify the right host or port?
 ```
 
-`6443`은 쿠버네티스에서 주로 사용하는 포트이고 192.168.x.x는 localhost니깐 위의 에러는 자기 자신에 연결할 수가 없다는 이야기가 된다. 6443 포트를 통해서 자기 내부에서 돌고 있는 쿠버네티스 시스템과 통신을 하게 되는데 그게 불가능하다는 것은 쿠버네티스가 제대로 돌고 있지 않다는 이야기가 된다.
+`6443`은 쿠버네티스에서 주로 사용하는 포트이고 192.168.x.x는 localhost니깐 위의 에러는 자기 자신에 연결할 수 없다는 이야기가 된다. 6443 포트를 통해서 자기 내부에서 돌고 있는 쿠버네티스 시스템과 통신을 하게 되는데 그게 불가능하다는 것은 쿠버네티스가 제대로 돌고 있지 않다는 것이다.
 
 처음에는 UTM의 방화벽 정책 문제인가 싶었는데 조금 생각해보니 전혀 상관없는 문제였다.
 
 컨테이너 런타임으로 containerd를 사용할 때는 [공식문서](https://kubernetes.io/ko/docs/setup/production-environment/container-runtimes/)에서 말하길,
 
-> 리눅스 배포판의 init 시스템이 systemd인 경우, `systemd`를 kubelet과 컨테이너 런타임의 cgroup 드라이버로 사용해야한다.
+> 리눅스 배포판의 init 시스템이 systemd인 경우, systemd를 kubelet과 컨테이너 런타임의 cgroup 드라이버로 사용해야한다.
 
 라고 한다.
 

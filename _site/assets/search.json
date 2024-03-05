@@ -1,9 +1,9 @@
 [
   
     {
-      "title"    : "K8s Install Error",
+      "title"    : "[쿠버네티스] error: The connection to the server 192.168.x.x:6443 was refused - did you specify the right host or port?",
       "description" : "",
-      "tags"     : "",
+      "tags"     : "Kubernetes, systemd",
       "url"      : "/k8s-install-error/",
       "date"     : "2024-03-05 00:00:00 +0700"
     } ,

@@ -1,4 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-03-05T14:12:54+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">K8s Install Error</title><link href="http://localhost:4000/k8s-install-error/" rel="alternate" type="text/html" title="K8s Install Error" /><published>2024-03-05T00:00:00+07:00</published><updated>2024-03-05T00:00:00+07:00</updated><id>http://localhost:4000/k8s-install-error</id><content type="html" xml:base="http://localhost:4000/k8s-install-error/"><![CDATA[]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">[React Native] 화면 전체를 덮는 absolute 포지션의 컴포넌트 스타일링</title><link href="http://localhost:4000/absolute-panel/" rel="alternate" type="text/html" title="[React Native] 화면 전체를 덮는 absolute 포지션의 컴포넌트 스타일링" /><published>2024-02-22T00:00:00+07:00</published><updated>2024-02-22T00:00:00+07:00</updated><id>http://localhost:4000/absolute-panel</id><content type="html" xml:base="http://localhost:4000/absolute-panel/"><![CDATA[<p>화면 전체를 덮는 absolute 포지션의 컴포넌트를 구현할 때 보통 이런식으로 스타일링을 한다.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-03-05T15:02:51+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[쿠버네티스] error: The connection to the server 192.168.x.x:6443 was refused - did you specify the right host or port?</title><link href="http://localhost:4000/k8s-install-error/" rel="alternate" type="text/html" title="[쿠버네티스] error: The connection to the server 192.168.x.x:6443 was refused - did you specify the right host or port?" /><published>2024-03-05T00:00:00+07:00</published><updated>2024-03-05T00:00:00+07:00</updated><id>http://localhost:4000/k8s-install-error</id><content type="html" xml:base="http://localhost:4000/k8s-install-error/"><![CDATA[<p>IDC에 서버를 구축하면서 오랜만에 순정 서버에 쿠버네티스를 설치할 일이 생겼다. 우분투는 이전에도 수없이 지우고 깔고 해봤기에 수월하게 넘어갔지만 오랜만에 하는 쿠버네티스 클러스터 구축에서 에러를 만나버렸다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">kubeadm init</code> 이후에 <code class="language-plaintext highlighter-rouge">kubectl get node</code>를 했을 때 처음에는 결과가 잘 나타나다가 시간이 조금 지나면 아래와 같은 에러가 나타나기 시작한다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">error</span><span class="p">:</span> <span class="nx">The</span> <span class="nx">connection</span> <span class="nx">to</span> <span class="nx">the</span> <span class="nx">server</span> <span class="mf">192.168</span><span class="p">.</span><span class="nx">x</span><span class="p">.</span><span class="nx">x</span><span class="p">:</span><span class="mi">6443</span> <span class="nx">was</span> <span class="nx">refused</span> <span class="o">-</span> <span class="nx">did</span> <span class="nx">you</span> <span class="nx">specify</span> <span class="nx">the</span> <span class="nx">right</span> <span class="nx">host</span> <span class="nx">or</span> <span class="nx">port</span><span class="p">?</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">6443</code>은 쿠버네티스에서 주로 사용하는 포트이고 192.168.x.x는 localhost니깐 위의 에러는 자기 자신에 연결할 수 없다는 이야기가 된다. 6443 포트를 통해서 자기 내부에서 돌고 있는 쿠버네티스 시스템과 통신을 하게 되는데 그게 불가능하다는 것은 쿠버네티스가 제대로 돌고 있지 않다는 것이다.</p>
+
+<p>처음에는 UTM의 방화벽 정책 문제인가 싶었는데 조금 생각해보니 전혀 상관없는 문제였다.</p>
+
+<p>컨테이너 런타임으로 containerd를 사용할 때는 <a href="https://kubernetes.io/ko/docs/setup/production-environment/container-runtimes/">공식문서</a>에서 말하길,</p>
+
+<blockquote>
+  <p>리눅스 배포판의 init 시스템이 systemd인 경우, systemd를 kubelet과 컨테이너 런타임의 cgroup 드라이버로 사용해야한다.</p>
+</blockquote>
+
+<p>라고 한다.</p>
+
+<p>관련 설정 없이는 <code class="language-plaintext highlighter-rouge">systemd</code>와 <code class="language-plaintext highlighter-rouge">cgroupfs</code>가 cgroup driver로 혼용되기 때문에 이는 쿠버네티스 시스템에 큰 혼란을 초래하게 된다.</p>
+
+<p>실제로도 watch 명령어를 통해서 kubeadm init 뒤에 초기 시스템 파드들이 어떻게 실행되는지 보았더니 계속 죽었다 살아나기를 반복하고 있었다.</p>
+
+<p>해결 방법은 간단하다. 공식 문서에도 잘 나와있지만 아래를 참고해도 좋다. 컨테이너 런타임의 cgroup 드라이버를 설정해준다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>containerd config default | sudo tee /etc/containerd/config.toml
+sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
+sudo service containerd restart
+</code></pre></div></div>
+
+<p>공식 문서를 꼼꼼하게 읽자.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Kubernetes, systemd" /><summary type="html"><![CDATA[IDC에 서버를 구축하면서 오랜만에 순정 서버에 쿠버네티스를 설치할 일이 생겼다. 우분투는 이전에도 수없이 지우고 깔고 해봤기에 수월하게 넘어갔지만 오랜만에 하는 쿠버네티스 클러스터 구축에서 에러를 만나버렸다.]]></summary></entry><entry><title type="html">[React Native] 화면 전체를 덮는 absolute 포지션의 컴포넌트 스타일링</title><link href="http://localhost:4000/absolute-panel/" rel="alternate" type="text/html" title="[React Native] 화면 전체를 덮는 absolute 포지션의 컴포넌트 스타일링" /><published>2024-02-22T00:00:00+07:00</published><updated>2024-02-22T00:00:00+07:00</updated><id>http://localhost:4000/absolute-panel</id><content type="html" xml:base="http://localhost:4000/absolute-panel/"><![CDATA[<p>화면 전체를 덮는 absolute 포지션의 컴포넌트를 구현할 때 보통 이런식으로 스타일링을 한다.</p>
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">container</span><span class="p">:</span> <span class="p">{</span>
     <span class="nl">position</span><span class="p">:</span> <span class="dl">'</span><span class="s1">absolute</span><span class="dl">'</span><span class="p">,</span>
     <span class="nx">top</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
