@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "[H/W] Mac에서 시리얼 통신하기",
+      "description" : "",
+      "tags"     : "Serial Port",
+      "url"      : "/serial-port/",
+      "date"     : "2024-04-21 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[터미널] Warp + Powerlevel10k + lsd",
       "description" : "",
       "tags"     : "Mac, Terminal",

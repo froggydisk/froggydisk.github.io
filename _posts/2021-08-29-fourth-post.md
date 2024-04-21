@@ -4,7 +4,6 @@ excerpt: "머신러닝/딥러닝"
 
 comments: true
 categories:
-categories:
   - Blog
 tags:
   - Pytorch

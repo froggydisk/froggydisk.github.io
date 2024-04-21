@@ -3,7 +3,6 @@ title: "[React Native] Draggable Button과 ScrollView"
 
 comments: true
 categories:
-categories:
   - Blog
 tags:
   - React Native

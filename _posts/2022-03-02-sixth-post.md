@@ -3,7 +3,6 @@ title: "모바일에서 영역 터치 시 발생하는 하이라이트 제거"
 
 comments: true
 categories:
-categories:
   - Blog
 tags:
   - CSS

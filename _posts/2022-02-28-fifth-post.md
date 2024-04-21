@@ -3,7 +3,6 @@ title: "iOS 앱 심사상태를 디스코드로 공유하기 🍎"
 
 comments: true
 categories:
-categories:
   - Blog
 tags:
   - API, Discord

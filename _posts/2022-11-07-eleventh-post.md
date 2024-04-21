@@ -3,7 +3,6 @@ title: "[React Native] Android Gradle plugin 의존성 에러"
 
 comments: true
 categories:
-categories:
   - Blog
 tags:
   - React Native, Android

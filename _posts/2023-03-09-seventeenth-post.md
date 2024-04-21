@@ -3,7 +3,6 @@ title: "[k8s] 로컬에서 원격 하버 저장소로 도커 이미지 업로드
 
 comments: true
 categories:
-categories:
   - Blog
 tags:
   - Kubernetes, Harbor, Helm, Docker

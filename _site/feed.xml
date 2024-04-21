@@ -1,4 +1,56 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-04-10T14:35:04+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[터미널] Warp + Powerlevel10k + lsd</title><link href="http://localhost:4000/warp/" rel="alternate" type="text/html" title="[터미널] Warp + Powerlevel10k + lsd" /><published>2024-04-10T00:00:00+07:00</published><updated>2024-04-10T00:00:00+07:00</updated><id>http://localhost:4000/warp</id><content type="html" xml:base="http://localhost:4000/warp/"><![CDATA[<h1 id="소개">소개</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-04-21T21:30:08+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[H/W] Mac에서 시리얼 통신하기</title><link href="http://localhost:4000/serial-port/" rel="alternate" type="text/html" title="[H/W] Mac에서 시리얼 통신하기" /><published>2024-04-21T00:00:00+07:00</published><updated>2024-04-21T00:00:00+07:00</updated><id>http://localhost:4000/serial-port</id><content type="html" xml:base="http://localhost:4000/serial-port/"><![CDATA[<p><img src="/assets/img/serial-com.webp" alt="image" /></p>
+
+<p>의료 장비를 맥북과 연결해서 시리얼 통신으로 데이터를 주고 받을 일이 있었다.</p>
+
+<p>요즘은 평소에 시리얼 포트를 보는 것도 드문 일이거니와 과연 M1 칩 이후로는 연동이 잘 되는지도 알 수 없었다.</p>
+
+<p>일단 <code class="language-plaintext highlighter-rouge">RS232-RS232</code> 케이블로 의료 기기에 하나를 꽂아주고 반대편 포트는 맥북의 허브 포트에 꽂을 수 있게 <code class="language-plaintext highlighter-rouge">Serial to USB</code> 어댑터를 연결해준다.</p>
+
+<p>그대로 맥북에 연결하면 다음과 같이 <code class="language-plaintext highlighter-rouge">설정 &gt; 일반 &gt; 시스템 리포트</code> 상에 USB-Serial Controller가 나타난다. 즉, 하드웨어 상으로는 자동으로 연결을 인식해준다.</p>
+
+<p><img src="/assets/img/serial-port-setting.png" alt="image" /></p>
+
+<p>하지만 코드 상에서 시리얼 통신을 하기 위해서는 <code class="language-plaintext highlighter-rouge">/dev</code> 폴더 아래에 나타나는 장치 코드를 알아내야한다. 보통 <code class="language-plaintext highlighter-rouge">tty~</code>로 시작한다.</p>
+
+<p>터미널에서 검색해보면 아직은 아무것도 나타나지 않는다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">ls</span> /dev/tty<span class="k">*</span>
+<span class="c"># /dev/tty.Bluetooth-Incoming-Port</span>
+</code></pre></div></div>
+
+<p>아무래도 드라이버가 필요한 듯해서 찾아보았다.</p>
+
+<p>일단 시스템 리포트에 찍히는 <code class="language-plaintext highlighter-rouge">Prolific Technology</code>에서 만든 시리얼 포트를 인식하기 위해서는 드라이버를 다운로드해야 한다.</p>
+
+<p>중국에서 만들었는지 중국어로 된 사이트로 연결이 된다. 관련 macOS(구OSX) 전용 드라이버는 <a href="https://www.prolific.com.tw/US/ShowProduct.aspx?pcid=41&amp;showlevel=0041-0041">Prolific PL2303</a>이다.</p>
+
+<p>하지만 설치를 완료해도 여전히 <code class="language-plaintext highlighter-rouge">/dev</code>에는 아무것도 나타나지 않는다?!</p>
+
+<p>좀 더 검색을 해보니 <code class="language-plaintext highlighter-rouge">Serial to USB</code> 어댑터에도 드라이버가 필요한 듯하다…</p>
+
+<p>이번에는 <code class="language-plaintext highlighter-rouge">FTDI</code>라는 홈페이지에 가서 <code class="language-plaintext highlighter-rouge">Virtual COM port(VCP)</code> 드라이버를 다운받는다.</p>
+
+<blockquote>
+  <p><strong>FTDI(Future Technology Devices International)</strong><br />
+USB를 시리얼 포트로 변환하는 장치를 생산하는 회사. FTDI의 USB-시리얼 변환기는 컴퓨터의 USB 포트에 연결되어 있고, 시리얼 통신을 지원하는 장치와 통신할 수 있도록 시리얼 데이터를 USB 데이터로 변환한다. 이는 특히 시리얼 포트가 없는 현대의 컴퓨터나 장치와 통신하기 위해 사용된다.</p>
+</blockquote>
+
+<p>해당 드라이버는 컴퓨터가 USB 포트로 시리얼 통신을 할 수 있도록 도와주는 역할을 한다.</p>
+
+<p>ARM 전용 dmg 파일을 다운받아서 설치한다. <strong>단, 주의해야할 점은 /Applications 폴더 아래에 놓고 실행을 해야 설치가 된다는 것이다. 이후 <code class="language-plaintext highlighter-rouge">설정 &gt; 개인정보 보호 및 보안</code>에서 관련 권한을 허용해 주어야 한다.</strong></p>
+
+<p>관련 이슈를 <a href="https://www.reddit.com/r/MacOS/comments/17bnhvr/m2_mac_on_macos_sonoma_issues_with_prolific/?utm_source=embedv2&amp;utm_medium=post_embed&amp;utm_content=post_body&amp;embed_host_url=https://embed.notion.co/api/iframe">Reddit</a>에서도 잘 설명해주고 있다.</p>
+
+<p>이제 <code class="language-plaintext highlighter-rouge">/dev</code> 폴더를 살펴보자.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">ls</span> /dev/tty<span class="k">*</span>
+<span class="c"># /dev/tty.Bluetooth-Incoming-Port</span>
+<span class="c"># /dev/tty.PL2303G-USBtoUART2130</span>
+</code></pre></div></div>
+
+<p>짜잔! 연결된 포트가 나타난다. 이제 관련 라이브러리(예 <a href="https://serialport.io">Node.js</a>)를 이용해서 시리얼 통신을 진행하면 된다.</p>
+
+<p>맥에서 시리얼 통신을 할 때는 드라이버가 필수라는 사실만 알아두자.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Serial Port" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">[터미널] Warp + Powerlevel10k + lsd</title><link href="http://localhost:4000/warp/" rel="alternate" type="text/html" title="[터미널] Warp + Powerlevel10k + lsd" /><published>2024-04-10T00:00:00+07:00</published><updated>2024-04-10T00:00:00+07:00</updated><id>http://localhost:4000/warp</id><content type="html" xml:base="http://localhost:4000/warp/"><![CDATA[<h1 id="소개">소개</h1>
 
 <p>기존에는 개발 터미널로 <code class="language-plaintext highlighter-rouge">Iterm2</code>를 쓰고 있었는데 최근에 새로운 터미널을 알게되어 소개하고자 한다.</p>
 
@@ -468,118 +520,4 @@ React나 Next에서는 <code class="language-plaintext highlighter-rouge">static
     <span class="o">&lt;/</span><span class="nc">View</span><span class="o">&gt;</span>
   <span class="p">);</span>
 <span class="p">}</span>
-</code></pre></div></div>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, SafeAreaView" /><summary type="html"><![CDATA[React와 React Native는 비슷하면서도 은근히 다른 부분이 많은 것 같다.]]></summary></entry><entry><title type="html">[React Native] 모서리가 둥근 삼각형 만들기</title><link href="http://localhost:4000/30th-post/" rel="alternate" type="text/html" title="[React Native] 모서리가 둥근 삼각형 만들기" /><published>2023-08-17T00:00:00+07:00</published><updated>2023-08-17T00:00:00+07:00</updated><id>http://localhost:4000/30th-post</id><content type="html" xml:base="http://localhost:4000/30th-post/"><![CDATA[<p>앱을 만들다가 도형을 그려야할 때가 오면 나도 모르게 한숨을 내쉬고 있다.        <br />
-디테일적인 부분까지 챙기려면 은근히 손이 많이 가는 작업이기 때문이다.</p>
-
-<p>오늘은 오전 내내 모서리가 둥근 삼각형을 그려야했기에 나중을 위해서 기록해둔다.</p>
-
-<h1 id="설계도">설계도</h1>
-<p>삼각형을 그리기 위한 방법에는 여러가지가 있지만 우리가 익히 알고 있는 일반적인 삼각형을 그리는 일은 어렵지 않다. 
-구글 검색을 해도 쉽게 나올 것이다.</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">React</span> <span class="n">from</span> <span class="err">'</span><span class="n">react</span><span class="err">'</span><span class="o">;</span>
-<span class="kn">import</span> <span class="err">{</span> <span class="nn">View</span><span class="o">,</span> <span class="nc">StyleSheet</span> <span class="o">}</span> <span class="n">from</span> <span class="err">'</span><span class="n">react</span><span class="o">-</span><span class="kd">native</span><span class="err">'</span><span class="o">;</span>
-
-<span class="kd">const</span> <span class="nc">App</span> <span class="o">=</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="o">{</span>
-  <span class="k">return</span> <span class="o">(</span>
-    <span class="o">&lt;</span><span class="nc">View</span> <span class="n">style</span><span class="o">={</span><span class="n">styles</span><span class="o">.</span><span class="na">container</span><span class="o">}&gt;</span>
-      <span class="o">&lt;</span><span class="nc">View</span> <span class="n">style</span><span class="o">={</span><span class="n">styles</span><span class="o">.</span><span class="na">triangle</span><span class="o">}</span> <span class="o">/&gt;</span>
-    <span class="o">&lt;/</span><span class="nc">View</span><span class="o">&gt;</span>
-  <span class="o">);</span>
-<span class="o">};</span>
-
-<span class="kd">const</span> <span class="n">styles</span> <span class="o">=</span> <span class="nc">StyleSheet</span><span class="o">.</span><span class="na">create</span><span class="o">({</span>
-  <span class="nl">container:</span> <span class="o">{</span>
-    <span class="nl">flex:</span> <span class="mi">1</span><span class="o">,</span>
-    <span class="nl">justifyContent:</span> <span class="err">'</span><span class="n">center</span><span class="err">'</span><span class="o">,</span>
-    <span class="nl">alignItems:</span> <span class="err">'</span><span class="n">center</span><span class="err">'</span><span class="o">,</span>
-  <span class="o">},</span>
-  <span class="nl">triangle:</span> <span class="o">{</span>
-    <span class="nl">width:</span> <span class="mi">0</span><span class="o">,</span>
-    <span class="nl">height:</span> <span class="mi">0</span><span class="o">,</span>
-    <span class="nl">backgroundColor:</span> <span class="err">'</span><span class="n">transparent</span><span class="err">'</span><span class="o">,</span>
-    <span class="nl">borderStyle:</span> <span class="err">'</span><span class="n">solid</span><span class="err">'</span><span class="o">,</span>
-    <span class="nl">borderLeftWidth:</span> <span class="mi">50</span><span class="o">,</span>
-    <span class="nl">borderRightWidth:</span> <span class="mi">50</span><span class="o">,</span>
-    <span class="nl">borderBottomWidth:</span> <span class="mi">100</span><span class="o">,</span>
-    <span class="nl">borderLeftColor:</span> <span class="err">'</span><span class="n">transparent</span><span class="err">'</span><span class="o">,</span>
-    <span class="nl">borderRightColor:</span> <span class="err">'</span><span class="n">transparent</span><span class="err">'</span><span class="o">,</span>
-    <span class="nl">borderBottomColor:</span> <span class="err">'</span><span class="n">lime</span><span class="err">'</span><span class="o">,</span>
-  <span class="o">},</span>
-<span class="o">});</span>
-
-<span class="n">export</span> <span class="k">default</span> <span class="nc">App</span><span class="o">;</span>
-</code></pre></div></div>
-
-<p>위와 같은 코드로도 충분히 삼각형을 그릴 수 있다. 하지만 우리가 필요한 건 모서리가 “둥근” 삼각형이다.
-그렇다면 다른 접근 방식이 필요하다. 아래 그림을 보자.</p>
-<p align="center"><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/30th.png?raw=true" /></p>
-
-<p>필자는 세 개의 평행사변형(마름모)의 모서리를 borderRadius로 둥글게 만든 뒤 이를 합치는 방법을 사용했다. 굳이 이 방법을 사용하지 않더라도 <code class="language-plaintext highlighter-rouge">react-native-svg</code> 라이브러리를 이용하면 훨씬 좋은 방법이 있을 수 있으니 원치 않는 방법이라면 다른 방법을 찾아보기를 강력히 권한다.</p>
-
-<p>어쨌거나, 평행사변형 세 개를 잘 조작해야하는 것은 분명한데 그를 위해서는 transform을 잘 이용해야한다.
-transform으로도 할 수 있는 것은 여러가지 있지만 여기서는 rotate(돌리고), skewX(비틀고), scaleY(늘리기)를 사용할 것이다. 
-아래를 살펴보자.</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nc">Triangle</span> <span class="o">=</span> <span class="o">({</span><span class="n">color</span><span class="o">,</span> <span class="n">size</span><span class="o">,</span> <span class="n">children</span><span class="o">})</span> <span class="o">=&gt;</span> <span class="o">{</span>
-  <span class="k">return</span> <span class="o">(</span>
-    <span class="o">&lt;</span><span class="nc">View</span>
-      <span class="n">style</span><span class="o">={</span> <span class="o">{</span>
-        <span class="nl">alignSelf:</span> <span class="err">'</span><span class="n">center</span><span class="err">'</span><span class="o">,</span>
-        <span class="nl">width:</span> <span class="n">size</span><span class="o">,</span>
-        <span class="nl">height:</span> <span class="n">size</span><span class="o">,</span>
-      <span class="o">}</span> <span class="o">}&gt;</span>
-      <span class="o">{</span><span class="cm">/* Upper Triangle */</span><span class="o">}</span>
-      <span class="o">&lt;</span><span class="nc">View</span>
-        <span class="n">style</span><span class="o">={</span> <span class="o">{</span>
-          <span class="nl">position:</span> <span class="err">'</span><span class="n">absolute</span><span class="err">'</span><span class="o">,</span>
-          <span class="nl">width:</span> <span class="err">'</span><span class="mi">100</span><span class="o">%</span><span class="err">'</span><span class="o">,</span>
-          <span class="nl">height:</span> <span class="err">'</span><span class="mi">100</span><span class="o">%</span><span class="err">'</span><span class="o">,</span>
-          <span class="nl">borderTopRightRadius:</span> <span class="mi">30</span><span class="o">,</span>
-          <span class="nl">backgroundColor:</span> <span class="n">color</span><span class="o">,</span>
-          <span class="nl">transform:</span> <span class="o">[{</span><span class="nl">rotate:</span> <span class="err">'</span><span class="o">-</span><span class="mi">60</span><span class="n">deg</span><span class="err">'</span><span class="o">},</span> <span class="o">{</span><span class="nl">skewX:</span> <span class="err">'</span><span class="o">-</span><span class="mi">30</span><span class="n">deg</span><span class="err">'</span><span class="o">},</span> <span class="o">{</span><span class="nl">scaleY:</span> <span class="mf">0.866</span><span class="o">}],</span>
-        <span class="o">}</span> <span class="o">}</span>
-      <span class="o">/&gt;</span>
-      <span class="o">{</span><span class="cm">/* Lower Triangle */</span><span class="o">}</span>
-      <span class="o">&lt;</span><span class="nc">View</span>
-        <span class="n">style</span><span class="o">={</span> <span class="o">{</span>
-          <span class="nl">position:</span> <span class="err">'</span><span class="n">absolute</span><span class="err">'</span><span class="o">,</span>
-          <span class="nl">width:</span> <span class="err">'</span><span class="mi">100</span><span class="o">%</span><span class="err">'</span><span class="o">,</span>
-          <span class="nl">height:</span> <span class="err">'</span><span class="mi">100</span><span class="o">%</span><span class="err">'</span><span class="o">,</span>
-          <span class="nl">borderTopRightRadius:</span> <span class="mi">30</span><span class="o">,</span>
-          <span class="nl">backgroundColor:</span> <span class="n">color</span><span class="o">,</span>
-          <span class="nl">transform:</span> <span class="o">[</span>
-            <span class="o">{</span><span class="nl">rotate:</span> <span class="err">'</span><span class="o">-</span><span class="mi">180</span><span class="n">deg</span><span class="err">'</span><span class="o">},</span>
-            <span class="o">{</span><span class="nl">skewX:</span> <span class="err">'</span><span class="o">-</span><span class="mi">30</span><span class="n">deg</span><span class="err">'</span><span class="o">},</span>
-            <span class="o">{</span><span class="nl">scaleY:</span> <span class="mf">0.866</span><span class="o">},</span>
-            <span class="o">{</span><span class="nl">translateY:</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">size</span><span class="o">},</span>
-          <span class="o">],</span>
-        <span class="o">}</span> <span class="o">}</span>
-      <span class="o">/&gt;</span>
-      <span class="o">{</span><span class="cm">/* Bottom Right Triangle */</span><span class="o">}</span>
-      <span class="o">&lt;</span><span class="nc">View</span>
-        <span class="n">style</span><span class="o">={</span> <span class="o">{</span>
-          <span class="nl">position:</span> <span class="err">'</span><span class="n">absolute</span><span class="err">'</span><span class="o">,</span>
-          <span class="nl">width:</span> <span class="err">'</span><span class="mi">100</span><span class="o">%</span><span class="err">'</span><span class="o">,</span>
-          <span class="nl">height:</span> <span class="err">'</span><span class="mi">100</span><span class="o">%</span><span class="err">'</span><span class="o">,</span>
-          <span class="nl">borderTopLeftRadius:</span> <span class="mi">30</span><span class="o">,</span>
-          <span class="nl">backgroundColor:</span> <span class="n">color</span><span class="o">,</span>
-          <span class="nl">transform:</span> <span class="o">[</span>
-            <span class="o">{</span><span class="nl">rotate:</span> <span class="err">'</span><span class="mi">180</span><span class="n">deg</span><span class="err">'</span><span class="o">},</span>
-            <span class="o">{</span><span class="nl">skewX:</span> <span class="err">'</span><span class="mi">30</span><span class="n">deg</span><span class="err">'</span><span class="o">},</span>
-            <span class="o">{</span><span class="nl">scaleY:</span> <span class="mf">0.866</span><span class="o">},</span>
-            <span class="o">{</span><span class="nl">translateY:</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">size</span><span class="o">},</span>
-          <span class="o">],</span>
-        <span class="o">}</span> <span class="o">}</span>
-      <span class="o">/&gt;</span>
-      <span class="o">{</span><span class="n">children</span><span class="o">}</span>
-    <span class="o">&lt;/</span><span class="nc">View</span><span class="o">&gt;</span>
-  <span class="o">);</span>
-<span class="o">};</span>
-</code></pre></div></div>
-
-<p>모든 사이즈에 맞추어 삼각형을 만들 수 있게 끔 transform의 변수 조정을 해주었다. 코드만 보아도 쉽게 이해할 수 있을 것이다.</p>
-
-<p>보통 도형 그리기는 노하우나 경험이 많이 필요하기에 잘 모르겠다면 우선 css로 되어있는 코드를 찾아보기를 권한다. 그 후 React Native 코드로 변환하는 과정을 거칠텐데 css 코드를 보아도 잘 이해가 안된다면 chatGPT에게 바꾸어 달라고 하자.</p>
-
-<p>복사 붙여넣기가 코딩 실력 상승에는 도움이 안 될 수 있으나 처음에 방향성을 잡을 때는 훌륭한 방법이다. 막막할 때 아까운 시간을 흘려보내기 보다는 무엇이라도 빠르게 방법을 찾아서 시도해 보는 것이 더 중요하다고 생각한다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native" /><summary type="html"><![CDATA[앱을 만들다가 도형을 그려야할 때가 오면 나도 모르게 한숨을 내쉬고 있다. 디테일적인 부분까지 챙기려면 은근히 손이 많이 가는 작업이기 때문이다.]]></summary></entry></feed>
+</code></pre></div></div>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, SafeAreaView" /><summary type="html"><![CDATA[React와 React Native는 비슷하면서도 은근히 다른 부분이 많은 것 같다.]]></summary></entry></feed>

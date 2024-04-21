@@ -5,7 +5,6 @@ use_math: true
 
 comments: true
 categories:
-categories:
   - Blog
 tags:
   - Image Recognition

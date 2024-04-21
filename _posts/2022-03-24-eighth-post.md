@@ -3,7 +3,6 @@ title: "구글 서치 콘솔에서 리디렉션 오류로 색인 등록이 안�
 
 comments: true
 categories:
-categories:
   - Blog
 tags:
   - Google Search Console

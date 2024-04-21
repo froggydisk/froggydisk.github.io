@@ -3,7 +3,6 @@ title: "[React Native] iOS 푸쉬 알림을 위해 Firebase를 적용하면서 �
 
 comments: true
 categories:
-categories:
   - Blog
 tags:
   - React Native, Firebase

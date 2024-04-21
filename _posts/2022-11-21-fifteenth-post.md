@@ -3,7 +3,6 @@ title: "[React Native] BottomTabNavigator unmountOnBlur가 SafeAreaView에 미�
 
 comments: true
 categories:
-categories:
   - Blog
 tags:
   - React Native

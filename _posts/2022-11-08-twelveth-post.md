@@ -3,7 +3,6 @@ title: "[Multer] Error: ENOENT: no such file or directory"
 
 comments: true
 categories:
-categories:
   - Blog
 tags:
   - React Native, NodeJS, Multer

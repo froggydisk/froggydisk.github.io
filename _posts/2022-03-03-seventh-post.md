@@ -3,7 +3,6 @@ title: "Buy me a coffee 버튼 만들기 ☕️"
 
 comments: true
 categories:
-categories:
   - Blog
 tags:
   - HTML/CSS

@@ -3,7 +3,6 @@ title: "[React Native] Blank screen issue on iOS"
 
 comments: true
 categories:
-categories:
   - Blog
 tags:
   - React Native, JavaScript

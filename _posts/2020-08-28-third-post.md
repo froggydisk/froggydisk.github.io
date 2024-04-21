@@ -4,7 +4,6 @@ excerpt: "반응형 웹페이지 만들기"
 
 comments: true
 categories:
-categories:
   - Blog
 tags:
   - HTML/CSS

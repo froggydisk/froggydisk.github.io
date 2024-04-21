@@ -3,7 +3,6 @@ title: "[React Native] 서버에서 이미지를 fetch 해올 때 화면에 제�
 
 comments: true
 categories:
-categories:
   - Blog
 tags:
   - React Native, Multer
