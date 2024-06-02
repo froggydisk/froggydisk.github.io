@@ -1,5 +1,9 @@
+.gitignore
 _site
 .sass-cache
 .jekyll-cache
 .jekyll-metadata
+.jekyll-cache/Jekyll/Cache
+.DS_Store
+._config.yml.swp
 vendor

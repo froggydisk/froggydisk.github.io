@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "[Next] 서비스 배포 시 Mixed Content 오류",
+      "description" : "",
+      "tags"     : "Next",
+      "url"      : "/mixed-content/",
+      "date"     : "2024-06-02 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[H/W] Mac에서 시리얼 통신하기",
       "description" : "",
       "tags"     : "Serial Port",

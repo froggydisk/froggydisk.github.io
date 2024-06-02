@@ -1,4 +1,77 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-04-21T21:30:08+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[H/W] Mac에서 시리얼 통신하기</title><link href="http://localhost:4000/serial-port/" rel="alternate" type="text/html" title="[H/W] Mac에서 시리얼 통신하기" /><published>2024-04-21T00:00:00+07:00</published><updated>2024-04-21T00:00:00+07:00</updated><id>http://localhost:4000/serial-port</id><content type="html" xml:base="http://localhost:4000/serial-port/"><![CDATA[<p><img src="/assets/img/serial-com.webp" alt="image" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-06-02T22:36:57+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[Next] 서비스 배포 시 Mixed Content 오류</title><link href="http://localhost:4000/mixed-content/" rel="alternate" type="text/html" title="[Next] 서비스 배포 시 Mixed Content 오류" /><published>2024-06-02T00:00:00+07:00</published><updated>2024-06-02T00:00:00+07:00</updated><id>http://localhost:4000/mixed-content</id><content type="html" xml:base="http://localhost:4000/mixed-content/"><![CDATA[<p>Next.js(@14.2.3)를 활용하여 만든 EMR 데모 버전을 도커로 말아 쿠버네티스에 올렸는데 자꾸 <code class="language-plaintext highlighter-rouge">Mixed Content</code> 에러가 나고 있었다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">Mixed Content</code> 에러는 웹페이지는 <code class="language-plaintext highlighter-rouge">https</code>로 서비스되고 있는데 어떠한 리소스를 <code class="language-plaintext highlighter-rouge">http</code>로 로드하려고 할 때 발생한다.</p>
+
+<p>API URL은 <code class="language-plaintext highlighter-rouge">.env.*</code>에서 관리를 하고 있기 때문에 모든 API 콜에 있어서 동일하게 적용될 터이고 적용한 프로토콜은 분명 <code class="language-plaintext highlighter-rouge">https</code>였다.</p>
+
+<p>구글링 해보면 흔히 나오는 해결 방법은 두 가지이다.</p>
+
+<h3 id="1-헤더-안에-보안-정책-관련-메타-태그를-추가하기">1. 헤더 안에 보안 정책 관련 메타 태그를 추가하기</h3>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// layout.tsx</span>
+<span class="o">&lt;</span><span class="nx">Html</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nx">Head</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">meta</span>
+      <span class="nx">httpEquiv</span><span class="o">=</span><span class="dl">"</span><span class="s2">Content-Security-Policy</span><span class="dl">"</span>
+      <span class="nx">content</span><span class="o">=</span><span class="dl">"</span><span class="s2">upgrade-insecure-requests</span><span class="dl">"</span>
+    <span class="o">/&gt;</span> <span class="c1">// &lt;- add this</span>
+  <span class="o">&lt;</span><span class="sr">/Head</span><span class="err">&gt;
+</span>  <span class="o">&lt;</span><span class="nx">body</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="nx">Main</span> <span class="o">/&gt;</span>
+    <span class="o">&lt;</span><span class="nx">NextScript</span> <span class="o">/&gt;</span>
+  <span class="o">&lt;</span><span class="sr">/body</span><span class="err">&gt;
+</span><span class="o">&lt;</span><span class="sr">/Html</span><span class="err">&gt;
+</span></code></pre></div></div>
+
+<p>모든 리소스를 강제로 https로 바꿔서 로드하는 것이라 효과가 있을거라 생각했지만 에러가 해결되지는 않았다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">http</code>로 밖에 로드되지 않는 리소스도 분명 있을 것이기에 모든 문제를 해결해주는 만능키는 아니다.</p>
+
+<h3 id="2-next의-프록시-설정-변경">2. Next의 프록시 설정 변경</h3>
+
+<p>처음에는 API URL로 들어갈 때 서버의 <code class="language-plaintext highlighter-rouge">Nginx</code> 안쪽에서 발생하는 리디렉션이 문제일까 하고 여러 설정을 바꿔보았지만 아무런 문제가 없었다.</p>
+
+<p>그렇다면 매우 높은 확률로 클라이언트쪽 문제일 가능성이 높다.</p>
+
+<p>우선, Next는 특정 경로에 대해 프록시를 설정할 수 있는 기능을 제공한다.</p>
+
+<p>이 기능을 사용하는 이유는 여러가지 있을테지만 필자의 경우에는 보통 서버 코드를 변경할 수 없는 경우 <code class="language-plaintext highlighter-rouge">CORS</code> 문제를 해결하기 위해 사용한다.</p>
+
+<p>관련 설정은 <code class="language-plaintext highlighter-rouge">next.config.mjs</code> 파일 안에서 설정해주면 되고, 이번 프로젝트에서는 로컬 컴퓨터에서 PACS 서버에 접근할 때 활용하고 있었다.</p>
+
+<p>코드는 다음과 같다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="nx">rewrites</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="na">source</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/pacs-api/:path*</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">destination</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8042/:path*</span><span class="dl">"</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">];</span>
+  <span class="p">},</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">/pacs-api</code>로 시작하는 URL은 dev 환경에서만 사용하고 있었기에 전혀 의심하지 않고 있었는데 <code class="language-plaintext highlighter-rouge">Mixed Content</code> 에러를 판단함에 있어서 아무래도 source URL과는 상관없이 프로토콜을 우선적으로 적용하는 듯하다.</p>
+
+<p>즉, destination이 <code class="language-plaintext highlighter-rouge">http</code>이기에 해당 웹페이지에서 보내는 모든 리소스 요청은 source와 상관없이 <code class="language-plaintext highlighter-rouge">http</code>로 보내지고 있었다.</p>
+
+<h1 id="결론">결론</h1>
+
+<p>문제를 알았다면 해결은 어렵지 않다. <code class="language-plaintext highlighter-rouge">development</code> 환경에서만 해당 프록시가 동작하도록 바꿔주면 된다.</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="nx">rewrites</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">development</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="na">source</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/pacs-api/:path*</span><span class="dl">"</span><span class="p">,</span>
+        <span class="na">destination</span><span class="p">:</span> <span class="dl">"</span><span class="s2">http://localhost:8042/:path*</span><span class="dl">"</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">];</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">[];</span> <span class="c1">// 다른 환경에서는 리디렉션을 적용하지 않음</span>
+  <span class="p">}</span>
+<span class="p">},</span>
+</code></pre></div></div>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Next" /><summary type="html"><![CDATA[Next.js(@14.2.3)를 활용하여 만든 EMR 데모 버전을 도커로 말아 쿠버네티스에 올렸는데 자꾸 Mixed Content 에러가 나고 있었다.]]></summary></entry><entry><title type="html">[H/W] Mac에서 시리얼 통신하기</title><link href="http://localhost:4000/serial-port/" rel="alternate" type="text/html" title="[H/W] Mac에서 시리얼 통신하기" /><published>2024-04-21T00:00:00+07:00</published><updated>2024-04-21T00:00:00+07:00</updated><id>http://localhost:4000/serial-port</id><content type="html" xml:base="http://localhost:4000/serial-port/"><![CDATA[<p><img src="/assets/img/serial-com.webp" alt="image" /></p>
 
 <p>의료 장비를 맥북과 연결해서 시리얼 통신으로 데이터를 주고 받을 일이 있었다.</p>
 
@@ -465,59 +538,4 @@ React나 Next에서는 <code class="language-plaintext highlighter-rouge">static
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">position</span><span class="p">:</span> <span class="dl">'</span><span class="s1">relative</span><span class="dl">'</span><span class="p">,</span>
 <span class="nx">zIndex</span><span class="p">:</span> <span class="mi">10</span>
-</code></pre></div></div>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Next, React" /><summary type="html"><![CDATA[생각보다 많이 헤맸던 경우기도 한데 Next 혹은 React에서 z-index가 원하는대로 작동하지 않을 때가 있다.]]></summary></entry><entry><title type="html">[React Native] 스크롤에 상관없이 고정된 컴포넌트 만들기</title><link href="http://localhost:4000/fixed-position/" rel="alternate" type="text/html" title="[React Native] 스크롤에 상관없이 고정된 컴포넌트 만들기" /><published>2023-12-26T00:00:00+07:00</published><updated>2023-12-26T00:00:00+07:00</updated><id>http://localhost:4000/fixed-position</id><content type="html" xml:base="http://localhost:4000/fixed-position/"><![CDATA[<p>React와 React Native는 비슷하면서도 은근히 다른 부분이 많은 것 같다.</p>
-
-<p>두 프레임워크를 번갈아가며 사용하다보면 문법적인 부분에 대해서 헷갈릴 때가 자주 있다.</p>
-
-<p>앱에서 새로운 기능을 만들다보니 컴포넌트 하나를 스크롤에 영향받지 않으면서 화면에 고정시킬 필요가 있었는데 React에서
-자주 사용했던 문법을 썼더니 바로 에러가 났다.</p>
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">position</span><span class="p">:</span> <span class="dl">'</span><span class="s1">fixed</span><span class="dl">'</span>
-</code></pre></div></div>
-
-<p>예를 들면 쇼핑 사이트에서 장바구니나 문의하기 버튼이 화면 측면에 계속해서 따라다니는 기능이다.</p>
-
-<p>순간적으로 이거를 어떻게 해야하나 생각이 나질 않아 당황했는데 사실 곰곰히 생각해보면 간단한 질문이었다.</p>
-
-<p>position이 <code class="language-plaintext highlighter-rouge">relative</code>일 리는 없을거고, <code class="language-plaintext highlighter-rouge">absolute</code>인 상태에서 스크롤을 무시할 수 있는 기능?</p>
-
-<p>아무 생각 없이 화면 위에 absolute 포지션 레이어를 하나 더 씌워버려서 스크롤이 되지 않는 상황까지 갔다가 문득 깨달았다.</p>
-
-<p><b>그냥 ScrollView나 FlatList의 내부가 아니라 같은 레벨(위치)에 삽입해주면 되는 것이었다.</b></p>
-
-<p>스크롤을 해야할 정도로 구성 컴포넌트들이 많다면 화면 높이는 <code class="language-plaintext highlighter-rouge">Dimensions</code>로 계산해서 top으로 내려주어야 한다.</p>
-
-<p>이 과정에서 아이폰의 경우 다이나믹 아일랜드에 대해 기존에 사용하던 유명 라이브러리들이 제대로 작동하지 않는 현상을 만났다.</p>
-
-<p>그래서 현재는 그냥 맘편히 <a href="https://github.com/th3rdwave/react-native-safe-area-context"><code class="language-plaintext highlighter-rouge">react-native-safe-area-context</code></a>를 사용하고 있다.</p>
-
-<p>다만 <code class="language-plaintext highlighter-rouge">SafeAreaView</code> 컴포넌트에 대해서는 다음과 같은 애니메이션 이슈가 존재하므로 주의하자.</p>
-
-<blockquote>
-  <p>While React Native exports a SafeAreaView component, this component only supports iOS 10+ with no support for older iOS versions or Android. In addition, it also has some issues, i.e. if a screen containing safe area is animating, it causes jumpy behavior. So we recommend to use the useSafeAreaInsets hook from the react-native-safe-area-context library to handle safe areas in a more reliable way. <a href="https://reactnavigation.org/docs/handling-safe-area/">출처 React Navigation</a></p>
-</blockquote>
-
-<p>이는 화면 전환을 할 때에도 가끔씩 발견되는 깜빡임 문제이다. 예민하지 않은 사람은 상관없을 수 있다.</p>
-
-<p>따라서 Safe Area 관련 기능은 전부 <code class="language-plaintext highlighter-rouge">useSafeAreaInsets</code>를 사용하여 해결하기로 하고 다른 라이브러리는 삭제해주었다. 예를 들면 
-<code class="language-plaintext highlighter-rouge">react-native-iphone-x-helper</code>와 같은 라이브러리다. 이게 제대로 작동하지 않는다는 것을 깨달을 때까지 시간이 꽤나 걸려서 묘한 배신감이 든다. 그리고 UI를 만들다보면 오히려 SafeAreaView를 사용하는 것이 더 귀찮음을 유발할 때가 많다. 특히 맨 처음 컴포넌트의 배경색을 지정할 때 그러하다.</p>
-
-<p>아무튼, 높이 관련 라이브러리를 하나로 통일해서 깔끔하다.</p>
-
-<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">import</span> <span class="p">{</span> <span class="n">useSafeAreaInsets</span> <span class="p">}</span> <span class="n">from</span> <span class="s1">'react-native-safe-area-context'</span><span class="p">;</span>
-
-<span class="k">const</span> <span class="no">Demo</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="k">const</span> <span class="no">insets</span> <span class="o">=</span> <span class="nf">useSafeAreaInsets</span><span class="p">();</span>
-
-  <span class="k">return</span> <span class="p">(</span>
-    <span class="o">&lt;</span><span class="nc">View</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span> <span class="p">{</span> <span class="n">flex</span><span class="o">:</span> <span class="mi">1</span> <span class="p">}</span> <span class="p">}</span><span class="o">&gt;</span>
-      <span class="o">&lt;</span><span class="nc">ScrollView</span><span class="o">&gt;</span>
-        <span class="mf">...</span>
-      <span class="o">&lt;/</span><span class="nc">ScrollView</span><span class="o">&gt;</span>
-      <span class="o">&lt;</span><span class="nc">View</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span> <span class="p">{</span>
-        <span class="n">position</span><span class="o">:</span> <span class="s1">'absolute'</span><span class="p">,</span>
-        <span class="n">top</span><span class="o">:</span> <span class="nc">Dimensions</span><span class="mf">.</span><span class="nf">get</span><span class="p">(</span><span class="s1">'window'</span><span class="p">)</span><span class="mf">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">insets</span><span class="mf">.</span><span class="n">bottom</span> <span class="o">-</span> <span class="p">[</span><span class="n">컴포넌트</span> <span class="n">높이</span><span class="p">]</span>
-      <span class="p">}</span> <span class="p">}</span><span class="o">/&gt;</span>
-    <span class="o">&lt;/</span><span class="nc">View</span><span class="o">&gt;</span>
-  <span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div></div>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, SafeAreaView" /><summary type="html"><![CDATA[React와 React Native는 비슷하면서도 은근히 다른 부분이 많은 것 같다.]]></summary></entry></feed>
+</code></pre></div></div>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Next, React" /><summary type="html"><![CDATA[생각보다 많이 헤맸던 경우기도 한데 Next 혹은 React에서 z-index가 원하는대로 작동하지 않을 때가 있다.]]></summary></entry></feed>
