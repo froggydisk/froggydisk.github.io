@@ -33,7 +33,7 @@ error: The connection to the server 192.168.x.x:6443 was refused - did you speci
 
 해결 방법은 간단하다. 공식 문서에도 잘 나와있지만 아래를 참고해도 좋다. 컨테이너 런타임의 cgroup 드라이버를 설정해준다.
 
-```
+```javascript
 containerd config default | sudo tee /etc/containerd/config.toml
 sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
 sudo service containerd restart
