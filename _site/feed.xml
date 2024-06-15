@@ -1,4 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-06-02T22:36:57+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[Next] 서비스 배포 시 Mixed Content 오류</title><link href="http://localhost:4000/mixed-content/" rel="alternate" type="text/html" title="[Next] 서비스 배포 시 Mixed Content 오류" /><published>2024-06-02T00:00:00+07:00</published><updated>2024-06-02T00:00:00+07:00</updated><id>http://localhost:4000/mixed-content</id><content type="html" xml:base="http://localhost:4000/mixed-content/"><![CDATA[<p>Next.js(@14.2.3)를 활용하여 만든 EMR 데모 버전을 도커로 말아 쿠버네티스에 올렸는데 자꾸 <code class="language-plaintext highlighter-rouge">Mixed Content</code> 에러가 나고 있었다.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-06-15T16:36:12+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[FastAPI] API 요청 시 307 Temporary Redirect가 뜨는 이슈</title><link href="http://localhost:4000/fastapi-redirect/" rel="alternate" type="text/html" title="[FastAPI] API 요청 시 307 Temporary Redirect가 뜨는 이슈" /><published>2024-06-15T00:00:00+07:00</published><updated>2024-06-15T00:00:00+07:00</updated><id>http://localhost:4000/fastapi-redirect</id><content type="html" xml:base="http://localhost:4000/fastapi-redirect/"><![CDATA[<p>어느 순간부터 FastAPI 서버에 API 요청을 할 때 status code가 307가 뜨기 시작했다.</p>
+
+<p>분명 쿠버네티스에 띄워놓은 서비스는 잘 돌아가고 있는데 로컬에서만 안되는게 신기했다.</p>
+
+<p>저번에 건드린 <code class="language-plaintext highlighter-rouge">next.config.mjs</code> 파일이 문제가 되었나해서 <code class="language-plaintext highlighter-rouge">rewrite()</code> 함수를 요리조리 건드려 보았지만 여전히 응답은 같았다.</p>
+
+<p>그러던 중 스택오버플로에서 해답을 찾았다. (<a href="https://stackoverflow.com/questions/70351360/keep-getting-307-temporary-redirect-before-returning-status-200-hosted-on-fast">stackoverflow</a>)</p>
+
+<p>FastAPI로 서버를 구성하다보면 보통 API url 끝에 <code class="language-plaintext highlighter-rouge">/</code> 를 붙이는 경우가 많다.</p>
+
+<p>예를 들면 이런 경우다.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nd">@app</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">"/patients/"</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>보통은 API 요청을 할 때 끝부분에 <code class="language-plaintext highlighter-rouge">/</code>가 있든 없든 문제가 발생하지 않지만 로컬에서는 <code class="language-plaintext highlighter-rouge">/</code>를 빠트리게 되면 <code class="language-plaintext highlighter-rouge">307 Temporary Redirect</code> 이슈가 발생하는 듯하다.</p>
+
+<p>FastAPI는 docs를 제공하므로 백엔드 개발자가 실수할 일이 없으니 프론트 개발자가 API url을 작성할 때 주의하면 되겠다.</p>
+
+<p>결론은 <strong><code class="language-plaintext highlighter-rouge">/</code> 확인을 잘하자</strong>.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Python, FastAPI" /><summary type="html"><![CDATA[어느 순간부터 FastAPI 서버에 API 요청을 할 때 status code가 307가 뜨기 시작했다.]]></summary></entry><entry><title type="html">[Next] 서비스 배포 시 Mixed Content 오류</title><link href="http://localhost:4000/mixed-content/" rel="alternate" type="text/html" title="[Next] 서비스 배포 시 Mixed Content 오류" /><published>2024-06-02T00:00:00+07:00</published><updated>2024-06-02T00:00:00+07:00</updated><id>http://localhost:4000/mixed-content</id><content type="html" xml:base="http://localhost:4000/mixed-content/"><![CDATA[<p>Next.js(@14.2.3)를 활용하여 만든 EMR 데모 버전을 도커로 말아 쿠버네티스에 올렸는데 자꾸 <code class="language-plaintext highlighter-rouge">Mixed Content</code> 에러가 나고 있었다.</p>
 
 <p><code class="language-plaintext highlighter-rouge">Mixed Content</code> 에러는 웹페이지는 <code class="language-plaintext highlighter-rouge">https</code>로 서비스되고 있는데 어떠한 리소스를 <code class="language-plaintext highlighter-rouge">http</code>로 로드하려고 할 때 발생한다.</p>
 
@@ -506,36 +525,4 @@ sudo service containerd restart
 
 <p>코드도 한결 간단해졌고 PC용 컴포넌트, 모바일용 컴포넌트에 따라 가장 바깥을 위의 div 예시처럼 감싸주면 해결된다.</p>
 
-<p>코드 간결성, 가독성을 모두 잡을 수 있어서 좋았다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Next, React" /><summary type="html"><![CDATA[웹페이지를 만들다보면 줄바꿈 태그(br)를 디바이스가 모바일이냐 PC냐에 따라 다르게 적용하고 싶을 때가 있다.]]></summary></entry><entry><title type="html">[Next/React] z-index가 작동하지 않는 경우</title><link href="http://localhost:4000/z-index/" rel="alternate" type="text/html" title="[Next/React] z-index가 작동하지 않는 경우" /><published>2023-12-28T00:00:00+07:00</published><updated>2023-12-28T00:00:00+07:00</updated><id>http://localhost:4000/z-index</id><content type="html" xml:base="http://localhost:4000/z-index/"><![CDATA[<p>생각보다 많이 헤맸던 경우기도 한데 Next 혹은 React에서 z-index가 원하는대로 작동하지 않을 때가 있다.</p>
-
-<p>처음에는 그저 position이 absolute일 경우에만 z-index가 적용되는 줄 알고 absolute를 남발했던 때도 있었다.</p>
-
-<p>하지만 항상 absolute position만으로 컴포넌트들을 배치할 수는 없지 않은가.</p>
-
-<p>React Native로 앱 작업을 자주 하다보니 맨날 헷갈리는데 React Native에서는 default position이 <code class="language-plaintext highlighter-rouge">relative</code>인 반면
-React나 Next에서는 <code class="language-plaintext highlighter-rouge">static</code>이 초기값이다.</p>
-
-<table>
-  <thead>
-    <tr>
-      <th style="text-align: center"> </th>
-      <th style="text-align: center"><a href="https://cssreference.io/property/position/">React/Next</a></th>
-      <th style="text-align: center"><a href="https://reactnative.dev/docs/layout-props">React Native</a></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td style="text-align: center">position(default)</td>
-      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">static</code></td>
-      <td style="text-align: center"><code class="language-plaintext highlighter-rouge">relative</code></td>
-    </tr>
-  </tbody>
-</table>
-
-<p><strong>그러므로 React/Next로 작업을 할 때, position: ‘static’ (default)인 경우에는 z-index가 적용되지 않기에 이를 사용하고 싶은 경우에는 position을 relative나 absolute로 설정해주어야 한다.</strong></p>
-
-<p>하지만 재밌는 것은 React Native에서도 z-index를 적용해주고 싶으면 default가 relative여도 굳이 따로 선언해주어야 한다는 사실.</p>
-
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">position</span><span class="p">:</span> <span class="dl">'</span><span class="s1">relative</span><span class="dl">'</span><span class="p">,</span>
-<span class="nx">zIndex</span><span class="p">:</span> <span class="mi">10</span>
-</code></pre></div></div>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Next, React" /><summary type="html"><![CDATA[생각보다 많이 헤맸던 경우기도 한데 Next 혹은 React에서 z-index가 원하는대로 작동하지 않을 때가 있다.]]></summary></entry></feed>
+<p>코드 간결성, 가독성을 모두 잡을 수 있어서 좋았다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Next, React" /><summary type="html"><![CDATA[웹페이지를 만들다보면 줄바꿈 태그(br)를 디바이스가 모바일이냐 PC냐에 따라 다르게 적용하고 싶을 때가 있다.]]></summary></entry></feed>

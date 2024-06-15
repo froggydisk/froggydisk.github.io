@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "[FastAPI] API 요청 시 307 Temporary Redirect가 뜨는 이슈",
+      "description" : "",
+      "tags"     : "Python, FastAPI",
+      "url"      : "/fastapi-redirect/",
+      "date"     : "2024-06-15 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[Next] 서비스 배포 시 Mixed Content 오류",
       "description" : "",
       "tags"     : "Next",
