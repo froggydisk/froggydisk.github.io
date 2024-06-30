@@ -1,4 +1,56 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-06-15T16:36:12+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[FastAPI] API 요청 시 307 Temporary Redirect가 뜨는 이슈</title><link href="http://localhost:4000/fastapi-redirect/" rel="alternate" type="text/html" title="[FastAPI] API 요청 시 307 Temporary Redirect가 뜨는 이슈" /><published>2024-06-15T00:00:00+07:00</published><updated>2024-06-15T00:00:00+07:00</updated><id>http://localhost:4000/fastapi-redirect</id><content type="html" xml:base="http://localhost:4000/fastapi-redirect/"><![CDATA[<p>어느 순간부터 FastAPI 서버에 API 요청을 할 때 status code가 307가 뜨기 시작했다.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-06-30T22:32:51+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[RN/AI] Pytorch로 AI 모델을 학습시켜 모바일 앱에 적용하기 1</title><link href="http://localhost:4000/ai-on-app-intro/" rel="alternate" type="text/html" title="[RN/AI] Pytorch로 AI 모델을 학습시켜 모바일 앱에 적용하기 1" /><published>2024-06-30T00:00:00+07:00</published><updated>2024-06-30T00:00:00+07:00</updated><id>http://localhost:4000/ai-on-app-intro</id><content type="html" xml:base="http://localhost:4000/ai-on-app-intro/"><![CDATA[<p>앱을 만들다보면 자연스레 AI 기술에 관심을 가지게 된다.</p>
+
+<p>“요즘 chatGPT가 그렇게 핫하다는데 나도 AI 좀 접목시켜 볼까…?” 라는 상상을 하게 된다.</p>
+
+<p>그렇다면 어떻게 해야할까? 하나하나 차근차근 파헤쳐보자.</p>
+
+<h2 id="-프로세스">🍀 프로세스</h2>
+
+<p>전체적인 흐름은 다음과 같다.</p>
+
+<p><img src="/assets/img/ai-on-app-process.png" alt="이미지" /></p>
+
+<h3 id="1-미래의-석유-데이터">1. 미래의 석유! 데이터</h3>
+
+<p>보통 오픈소스로 떠돌고 있는 데이터를 활용해도 좋고, 혹은 이미 파인튜닝이 끝나있는 모델을 깃허브, 허깅페이스 같은 곳에서 받아와서 사용해도 좋다.</p>
+
+<p>여기서는 <code class="language-plaintext highlighter-rouge">labelImg</code>라는 라벨러를 사용하여 데이터를 직접 만들어볼 것이다.</p>
+
+<h3 id="2-데이터셋-전처리">2. 데이터셋 전처리</h3>
+
+<p>모델을 학습시키는 데이터의 형식에는 여러가지가 있지만 우리가 만들 모델은 csv를 필요로 하기에 xml 형태의 데이터를 csv로 변환할 것이다.</p>
+
+<p>원하는 모델의 형식에 맞게 데이터셋을 변형해보자.</p>
+
+<h3 id="3-모델-훈련">3. 모델 훈련</h3>
+
+<p>GPU가 있으면 더 좋고, CPU로도 나름 괜찮은 모델을 학습할 수 있다.</p>
+
+<p>우리는 도커를 통해 딥러닝용 가상환경 위에서 학습을 진행할 것이다.</p>
+
+<h3 id="4-모델-테스트">4. 모델 테스트</h3>
+
+<p>잘 학습이 진행되었는지, 정확도는 얼마인지, 실제로 잘 작동하는지 확인한다.</p>
+
+<p>더불어 라이브 테스트도 진행해보자.</p>
+
+<h3 id="5-모델-변형">5. 모델 변형</h3>
+
+<p>모델 파일 형식이 <code class="language-plaintext highlighter-rouge">.pth</code>로 되어있을텐데, 모바일 앱에서 사용하기 위해서는 <code class="language-plaintext highlighter-rouge">.ptl</code>파일로 변경해주어야 한다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">torch.jit</code>을 통한 모델 튜닝에 관한 이야기를 할 것이다.</p>
+
+<h3 id="6-모델-적용">6. 모델 적용</h3>
+
+<p><code class="language-plaintext highlighter-rouge">Snack</code>에서 확인해보고, 실제로 <code class="language-plaintext highlighter-rouge">React Native</code> 프로젝트에도 적용해보자.</p>
+
+<p>결과물을 보고 모델 최적화에 대해서도 고민해보자.</p>
+
+<h2 id="-계획">👩🏼‍🌾 계획</h2>
+
+<p>다음 포스트부터 위 프로세스에 맞추어 하나씩 순서대로 진행할 예정이다.</p>
+
+<p>천천히 따라오다보면 전체적인 개발 과정에 대해 이해할 수 있을 것으로 기대한다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Pytorch, React Native, labelImg" /><summary type="html"><![CDATA[앱을 만들다보면 자연스레 AI 기술에 관심을 가지게 된다.]]></summary></entry><entry><title type="html">[FastAPI] API 요청 시 307 Temporary Redirect가 뜨는 이슈</title><link href="http://localhost:4000/fastapi-redirect/" rel="alternate" type="text/html" title="[FastAPI] API 요청 시 307 Temporary Redirect가 뜨는 이슈" /><published>2024-06-15T00:00:00+07:00</published><updated>2024-06-15T00:00:00+07:00</updated><id>http://localhost:4000/fastapi-redirect</id><content type="html" xml:base="http://localhost:4000/fastapi-redirect/"><![CDATA[<p>어느 순간부터 FastAPI 서버에 API 요청을 할 때 status code가 307가 뜨기 시작했다.</p>
 
 <p>분명 쿠버네티스에 띄워놓은 서비스는 잘 돌아가고 있는데 로컬에서만 안되는게 신기했다.</p>
 
@@ -356,9 +408,9 @@ set statusline=</span><span class="se">\ </span><span class="s2">%&lt;%l:%v</spa
 
 <p>해결 방법은 간단하다. 공식 문서에도 잘 나와있지만 아래를 참고해도 좋다. 컨테이너 런타임의 cgroup 드라이버를 설정해준다.</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>containerd config default | sudo tee /etc/containerd/config.toml
-sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/g' /etc/containerd/config.toml
-sudo service containerd restart
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">containerd</span> <span class="nx">config</span> <span class="k">default</span> <span class="o">|</span> <span class="nx">sudo</span> <span class="nx">tee</span> <span class="o">/</span><span class="nx">etc</span><span class="o">/</span><span class="nx">containerd</span><span class="o">/</span><span class="nx">config</span><span class="p">.</span><span class="nx">toml</span>
+<span class="nx">sudo</span> <span class="nx">sed</span> <span class="o">-</span><span class="nx">i</span> <span class="dl">'</span><span class="s1">s/SystemdCgroup = false/SystemdCgroup = true/g</span><span class="dl">'</span> <span class="o">/</span><span class="nx">etc</span><span class="o">/</span><span class="nx">containerd</span><span class="o">/</span><span class="nx">config</span><span class="p">.</span><span class="nx">toml</span>
+<span class="nx">sudo</span> <span class="nx">service</span> <span class="nx">containerd</span> <span class="nx">restart</span>
 </code></pre></div></div>
 
 <p>공식 문서를 꼼꼼하게 읽자.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Kubernetes, systemd" /><summary type="html"><![CDATA[IDC에 서버를 구축하면서 오랜만에 순정 서버에 쿠버네티스를 설치할 일이 생겼다. 우분투는 이전에도 수없이 지우고 깔고 해봤기에 수월하게 넘어갔지만 오랜만에 하는 쿠버네티스 클러스터 구축에서 에러를 만나버렸다.]]></summary></entry><entry><title type="html">[React Native] 화면 전체를 덮는 absolute 포지션의 컴포넌트 스타일링</title><link href="http://localhost:4000/absolute-panel/" rel="alternate" type="text/html" title="[React Native] 화면 전체를 덮는 absolute 포지션의 컴포넌트 스타일링" /><published>2024-02-22T00:00:00+07:00</published><updated>2024-02-22T00:00:00+07:00</updated><id>http://localhost:4000/absolute-panel</id><content type="html" xml:base="http://localhost:4000/absolute-panel/"><![CDATA[<p>화면 전체를 덮는 absolute 포지션의 컴포넌트를 구현할 때 보통 이런식으로 스타일링을 한다.</p>
@@ -418,11 +470,15 @@ sudo service containerd restart
 것을 알게 되었다.</p>
 
 <p>코드를 한 글자라도 줄일 수 있다는 생각에 과연 어떠한 조건에서 가능한지 궁금해서 찾아보았다. 다음의 두 가지 경우를 살펴보자.</p>
+
 <h3 id="1">1</h3>
+
 <div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">onPress</span><span class="o">={()=&gt;</span><span class="n">handlePressFirst</span><span class="o">(</span><span class="n">value</span><span class="o">)}</span>
 </code></pre></div></div>
+
 <h3 id="2">2</h3>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>onPress={handlePressSecond}
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">onPress</span><span class="o">={</span><span class="n">handlePressSecond</span><span class="o">}</span>
 </code></pre></div></div>
 
 <p>둘 다 정상적으로 실행되는 예시이다. 차이를 알겠는가?</p>
@@ -431,7 +487,7 @@ sudo service containerd restart
 
 <p>만약 이렇게 하면 어떻게 될까?</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>onPress={handlePressFirst(value)}
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">onPress</span><span class="o">={</span><span class="n">handlePressFirst</span><span class="o">(</span><span class="n">value</span><span class="o">)}</span>
 </code></pre></div></div>
 
 <p>이렇게 되면 해당 페이지가 렌더링 될 때 클릭 이벤트가 없어도 handlePressFirst 함수가 자동으로 실행될 것이다. 이는 예상치 못한 버그를 발생시킬 수 있으므로 좋지 않다. 주의하자.</p>
@@ -478,51 +534,4 @@ sudo service containerd restart
 
 <p>바로 map 함수 내부에서 새로운 변수를 정의할 수 있다는 것이다. 이는 코드의 중복을 막아 가독성을 좋게 하는데 매우 중요할 수 있다.</p>
 
-<p>하지만 그 뿐이므로 <strong>새로운 변수를 정의하는 경우를 제외한다면 return문은 과감히 생략해주자.</strong></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React, React Native, Javascript" /><summary type="html"><![CDATA[개발을 처음 배울 시절, 궁금했던 것들을 하나하나 메모하면서 나중에 블로그 글로 하나씩 적어야겠다고 생각했는데 벌써 어언 1년이 지나서 이제서야 글로 옮긴다.]]></summary></entry><entry><title type="html">[Next/React] 모바일↔︎PC에 따른 줄바꿈 태그의 선택 적용</title><link href="http://localhost:4000/next-br/" rel="alternate" type="text/html" title="[Next/React] 모바일↔︎PC에 따른 줄바꿈 태그의 선택 적용" /><published>2024-01-03T00:00:00+07:00</published><updated>2024-01-03T00:00:00+07:00</updated><id>http://localhost:4000/next-br</id><content type="html" xml:base="http://localhost:4000/next-br/"><![CDATA[<p>웹페이지를 만들다보면 줄바꿈 태그(<code class="language-plaintext highlighter-rouge">br</code>)를 디바이스가 모바일이냐 PC냐에 따라 다르게 적용하고 싶을 때가 있다.</p>
-
-<p>예를 들면 모바일에서는 줄바꿈을 했으면 좋겠고 PC에서는 그대로 길게 냅두고 싶은 경우다.</p>
-
-<p>전통적인 방법으로는 css를 활용하는 방법이 있겠다.</p>
-
-<p>빠르게 인터넷을 검색해보니 다음과 같은 코드가 나왔다.</p>
-
-<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">/* 767px 기준 */</span>
-<span class="k">@media</span> <span class="n">only</span> <span class="n">screen</span> <span class="n">and</span> <span class="p">(</span><span class="n">max-width</span><span class="p">:</span> <span class="m">767px</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nt">br</span><span class="nc">.ignore</span> <span class="p">{</span>
-    <span class="nl">display</span><span class="p">:</span> <span class="n">inline-block</span><span class="p">;</span>
-    <span class="nl">content</span><span class="p">:</span> <span class="s1">" "</span><span class="p">;</span>
-    <span class="nl">padding</span><span class="p">:</span> <span class="m">0</span> <span class="m">2px</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div></div>
-<p>global.css 파일 안에 이렇게 정의해준 뒤에 <strong><code class="language-plaintext highlighter-rouge">&lt;br className="ignore" /&gt;</code></strong>와 같이 사용해주면 모바일 버전에서만 br 태그를 무시할 수 있다.</p>
-
-<p>처음에는 아하 그렇구나 싶었다.</p>
-
-<p>하지만 사용하다보니 무조건 p 태그 안에 위치해야 한다거나, 반대로 PC에서만 br 태그를 무시하고 싶을 때 스타일을 새로 적용해 주어야 하는 등 딱 봐도 여러 한계점이 존재했다.</p>
-
-<p>결국 이러한 불편함에서 벗어나기 위해서 여러 방법들을 찾아보기 시작했다.</p>
-
-<h2 id="usemediaquery">useMediaQuery</h2>
-
-<p>그 중 하나는 <code class="language-plaintext highlighter-rouge">useMediaQuery</code>를 활용하여 <code class="language-plaintext highlighter-rouge">isMobile</code> 변수를 만들어서 컴포넌트에 조건을 걸어 사용하는 것이다.</p>
-
-<p>나름 깔끔하게 코드를 정리할 수 있고 <code class="language-plaintext highlighter-rouge">isMobile</code> 변수를 필두로 삼항연산자를 사용하여 모바일용 컴포넌트, PC용 컴포넌트를 나누어 렌더링하는 것이 가능했다. 코드 가독성도 나름 올라갔다.</p>
-
-<p>하지만 이러한 방법은 매번 페이지마다 <code class="language-plaintext highlighter-rouge">isMobile</code> 변수를 정의해 주어야 한다는 귀찮음이 있었다. 그 외에도 새로고침을 할 때마다 PC화면일지언정 모바일용 컴포넌트가 먼저 렌더링된 후에 PC용으로 전환되는 등의 깜빡임 현상이 존재했다. 이거는 내게 꽤나 큰 스트레스로 다가왔다.</p>
-
-<h2 id="tailwind">tailwind</h2>
-
-<p>결국 돌고 돌아서 tailwind로 돌아왔다.</p>
-
-<p>다행히도 근본 원인이었던 디바이스에 따른 br 태그의 선택 적용 문제도 tailwind를 사용하면서 깔끔하게 해결되었다.</p>
-
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="dl">"</span><span class="s2">sm:block hidden</span><span class="dl">"</span><span class="o">&gt;&lt;</span><span class="sr">/div&gt; /</span><span class="o">/</span> <span class="nx">pc</span>
-<span class="o">&lt;</span><span class="nx">div</span> <span class="nx">className</span><span class="o">=</span><span class="dl">"</span><span class="s2">sm:hidden</span><span class="dl">"</span><span class="o">&gt;&lt;</span><span class="sr">/div&gt; /</span><span class="o">/</span> <span class="nx">mobile</span>
-</code></pre></div></div>
-
-<p>div 태그를 예시로 들었지만 br 태그도 똑같이 적용하면 된다.</p>
-
-<p>코드도 한결 간단해졌고 PC용 컴포넌트, 모바일용 컴포넌트에 따라 가장 바깥을 위의 div 예시처럼 감싸주면 해결된다.</p>
-
-<p>코드 간결성, 가독성을 모두 잡을 수 있어서 좋았다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Next, React" /><summary type="html"><![CDATA[웹페이지를 만들다보면 줄바꿈 태그(br)를 디바이스가 모바일이냐 PC냐에 따라 다르게 적용하고 싶을 때가 있다.]]></summary></entry></feed>
+<p>하지만 그 뿐이므로 <strong>새로운 변수를 정의하는 경우를 제외한다면 return문은 과감히 생략해주자.</strong></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React, React Native, Javascript" /><summary type="html"><![CDATA[개발을 처음 배울 시절, 궁금했던 것들을 하나하나 메모하면서 나중에 블로그 글로 하나씩 적어야겠다고 생각했는데 벌써 어언 1년이 지나서 이제서야 글로 옮긴다.]]></summary></entry></feed>
