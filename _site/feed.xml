@@ -1,6 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-06-30T22:32:51+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[RN/AI] Pytorch로 AI 모델을 학습시켜 모바일 앱에 적용하기 1</title><link href="http://localhost:4000/ai-on-app-intro/" rel="alternate" type="text/html" title="[RN/AI] Pytorch로 AI 모델을 학습시켜 모바일 앱에 적용하기 1" /><published>2024-06-30T00:00:00+07:00</published><updated>2024-06-30T00:00:00+07:00</updated><id>http://localhost:4000/ai-on-app-intro</id><content type="html" xml:base="http://localhost:4000/ai-on-app-intro/"><![CDATA[<p>앱을 만들다보면 자연스레 AI 기술에 관심을 가지게 된다.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-07-01T22:38:17+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[RN/AI] Pytorch로 AI 모델을 학습시켜 모바일 앱에 적용하기</title><link href="http://localhost:4000/ai-on-app-intro/" rel="alternate" type="text/html" title="[RN/AI] Pytorch로 AI 모델을 학습시켜 모바일 앱에 적용하기" /><published>2024-06-30T00:00:00+07:00</published><updated>2024-06-30T00:00:00+07:00</updated><id>http://localhost:4000/ai-on-app-intro</id><content type="html" xml:base="http://localhost:4000/ai-on-app-intro/"><![CDATA[<h1 id="현재-작성중인-글입니다">[현재 작성중인 글입니다.]</h1>
 
-<p>“요즘 chatGPT가 그렇게 핫하다는데 나도 AI 좀 접목시켜 볼까…?” 라는 상상을 하게 된다.</p>
+<p>앱을 만들다보면 자연스레 AI 기술에 관심을 가지게 된다.</p>
+
+<p>“요즘 chatGPT가 그렇게 핫하다는데 나도 AI 좀 접목시켜 볼까…?” 라는 상상을 하게 된다</p>
 
 <p>그렇다면 어떻게 해야할까? 하나하나 차근차근 파헤쳐보자.</p>
 
@@ -12,45 +14,75 @@
 
 <h3 id="1-미래의-석유-데이터">1. 미래의 석유! 데이터</h3>
 
-<p>보통 오픈소스로 떠돌고 있는 데이터를 활용해도 좋고, 혹은 이미 파인튜닝이 끝나있는 모델을 깃허브, 허깅페이스 같은 곳에서 받아와서 사용해도 좋다.</p>
+<p>AI 모델을 훈련시키기 위해서는 그에 적합한 데이터가 필요하다.</p>
+
+<p>오픈소스 데이터를 활용하는 것이 가장 좋지만, 원하는 데이터가 없다면 직접 만들 수밖에 없다.</p>
 
 <p>여기서는 <code class="language-plaintext highlighter-rouge">labelImg</code>라는 라벨러를 사용하여 데이터를 직접 만들어볼 것이다.</p>
 
-<h3 id="2-데이터셋-전처리">2. 데이터셋 전처리</h3>
+<p>(이 과정이 정 귀찮다면 파인튜닝된 모델을 깃허브, 허깅페이스 같은 곳에서 받아와서 사용해도 좋다.)</p>
+
+<h3 id="2-데이터-전처리">2. 데이터 전처리</h3>
 
 <p>모델을 학습시키는 데이터의 형식에는 여러가지가 있지만 우리가 만들 모델은 csv를 필요로 하기에 xml 형태의 데이터를 csv로 변환할 것이다.</p>
 
-<p>원하는 모델의 형식에 맞게 데이터셋을 변형해보자.</p>
+<p>실전에서는 원하는 모델의 형식에 맞게 데이터셋을 변형해보자.</p>
 
 <h3 id="3-모델-훈련">3. 모델 훈련</h3>
 
-<p>GPU가 있으면 더 좋고, CPU로도 나름 괜찮은 모델을 학습할 수 있다.</p>
+<p>만들어 놓은 데이터셋으로 모델을 학습시켜본다.</p>
+
+<p>GPU가 있으면 더 빠르고 좋지만, CPU로도 나름 괜찮은 모델을 학습할 수 있다.</p>
 
 <p>우리는 도커를 통해 딥러닝용 가상환경 위에서 학습을 진행할 것이다.</p>
 
 <h3 id="4-모델-테스트">4. 모델 테스트</h3>
 
-<p>잘 학습이 진행되었는지, 정확도는 얼마인지, 실제로 잘 작동하는지 확인한다.</p>
+<p>의도한대로 잘 학습이 진행되었는지, 정확도는 얼마인지, 실제로 잘 작동하는지 확인한다.</p>
 
 <p>더불어 라이브 테스트도 진행해보자.</p>
 
 <h3 id="5-모델-변형">5. 모델 변형</h3>
 
-<p>모델 파일 형식이 <code class="language-plaintext highlighter-rouge">.pth</code>로 되어있을텐데, 모바일 앱에서 사용하기 위해서는 <code class="language-plaintext highlighter-rouge">.ptl</code>파일로 변경해주어야 한다.</p>
+<p>우리가 훈련시킨 모델을 모바일 앱에서 사용하기 위해서는 특정 형식이 필요하다.</p>
 
-<p><code class="language-plaintext highlighter-rouge">torch.jit</code>을 통한 모델 튜닝에 관한 이야기를 할 것이다.</p>
+<p>모델 파일 형식이 <code class="language-plaintext highlighter-rouge">.pth</code>로 되어있을텐데, 이를 <code class="language-plaintext highlighter-rouge">.ptl</code>파일로 변경해주어야 한다.</p>
+
+<p>이 과정에서 <code class="language-plaintext highlighter-rouge">torch.jit</code>을 통한 모델 튜닝에 관한 이야기를 할 것이다.</p>
 
 <h3 id="6-모델-적용">6. 모델 적용</h3>
 
-<p><code class="language-plaintext highlighter-rouge">Snack</code>에서 확인해보고, 실제로 <code class="language-plaintext highlighter-rouge">React Native</code> 프로젝트에도 적용해보자.</p>
+<p>해당 모델을 <code class="language-plaintext highlighter-rouge">Snack</code>에서 확인해보고, 실제로 <code class="language-plaintext highlighter-rouge">React Native</code> 프로젝트에도 적용해보자.</p>
 
 <p>결과물을 보고 모델 최적화에 대해서도 고민해보자.</p>
 
-<h2 id="-계획">👩🏼‍🌾 계획</h2>
+<p><br /></p>
 
-<p>다음 포스트부터 위 프로세스에 맞추어 하나씩 순서대로 진행할 예정이다.</p>
+<hr />
 
-<p>천천히 따라오다보면 전체적인 개발 과정에 대해 이해할 수 있을 것으로 기대한다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Pytorch, React Native, labelImg" /><summary type="html"><![CDATA[앱을 만들다보면 자연스레 AI 기술에 관심을 가지게 된다.]]></summary></entry><entry><title type="html">[FastAPI] API 요청 시 307 Temporary Redirect가 뜨는 이슈</title><link href="http://localhost:4000/fastapi-redirect/" rel="alternate" type="text/html" title="[FastAPI] API 요청 시 307 Temporary Redirect가 뜨는 이슈" /><published>2024-06-15T00:00:00+07:00</published><updated>2024-06-15T00:00:00+07:00</updated><id>http://localhost:4000/fastapi-redirect</id><content type="html" xml:base="http://localhost:4000/fastapi-redirect/"><![CDATA[<p>어느 순간부터 FastAPI 서버에 API 요청을 할 때 status code가 307가 뜨기 시작했다.</p>
+<h1 id="️-데이터-라벨링-data-labeling">🏷️ 데이터 라벨링 (Data Labeling)</h1>
+
+<p>모델 학습에 필요한 데이터를 만들기 위해서는 원본(raw) 데이터와 라벨링 툴이 필요하다.</p>
+
+<p>여기서는 <a href="https://github.com/HumanSignal/labelImg">labelImg</a>라는 툴을 소개하고자 한다. 간단히 설명하자면 다음과 같다.</p>
+
+<blockquote>
+  <p>Object Detection 모델 학습에 필요한 주석(Annotation) 처리된 이미지를 생성할 수 있게 도와주는 도구이다.</p>
+</blockquote>
+
+<p>깃허브 페이지에 들어가보면 설치 및 사용 방법에 대해 상세히 설명하고 있다.</p>
+
+<p>단, 필자는 <code class="language-plaintext highlighter-rouge">M3 MacBook Air 13</code>를 사용하고 있는데 설치 가이드에 부족한 내용이 있어 관련 내용을 추가한다.</p>
+
+<p><strong>⚠️ pyrcc5: No such file or directory</strong> 혹 이러한 에러를 만난다면 아래 코드대로 설치한다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew <span class="nb">install </span>qt qt5
+brew <span class="nb">install </span>libxml2
+brew <span class="nb">install </span>pyqt5
+pip3 <span class="nb">install </span>pyqt5 lxml
+make qt5py3
+python3 labelImg.py
+</code></pre></div></div>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Pytorch, React Native, labelImg" /><summary type="html"><![CDATA[[현재 작성중인 글입니다.]]]></summary></entry><entry><title type="html">[FastAPI] API 요청 시 307 Temporary Redirect가 뜨는 이슈</title><link href="http://localhost:4000/fastapi-redirect/" rel="alternate" type="text/html" title="[FastAPI] API 요청 시 307 Temporary Redirect가 뜨는 이슈" /><published>2024-06-15T00:00:00+07:00</published><updated>2024-06-15T00:00:00+07:00</updated><id>http://localhost:4000/fastapi-redirect</id><content type="html" xml:base="http://localhost:4000/fastapi-redirect/"><![CDATA[<p>어느 순간부터 FastAPI 서버에 API 요청을 할 때 status code가 307가 뜨기 시작했다.</p>
 
 <p>분명 쿠버네티스에 띄워놓은 서비스는 잘 돌아가고 있는데 로컬에서만 안되는게 신기했다.</p>
 

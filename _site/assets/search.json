@@ -1,7 +1,7 @@
 [
   
     {
-      "title"    : "[RN/AI] Pytorch로 AI 모델을 학습시켜 모바일 앱에 적용하기 1",
+      "title"    : "[RN/AI] Pytorch로 AI 모델을 학습시켜 모바일 앱에 적용하기",
       "description" : "",
       "tags"     : "Pytorch, React Native, labelImg",
       "url"      : "/ai-on-app-intro/",
