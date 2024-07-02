@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.1.1">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-07-01T22:38:17+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[RN/AI] Pytorch로 AI 모델을 학습시켜 모바일 앱에 적용하기</title><link href="http://localhost:4000/ai-on-app-intro/" rel="alternate" type="text/html" title="[RN/AI] Pytorch로 AI 모델을 학습시켜 모바일 앱에 적용하기" /><published>2024-06-30T00:00:00+07:00</published><updated>2024-06-30T00:00:00+07:00</updated><id>http://localhost:4000/ai-on-app-intro</id><content type="html" xml:base="http://localhost:4000/ai-on-app-intro/"><![CDATA[<h1 id="현재-작성중인-글입니다">[현재 작성중인 글입니다.]</h1>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-07-02T16:43:14+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[RN/AI] Pytorch로 AI 모델을 학습시켜 모바일 앱에 적용하기</title><link href="http://localhost:4000/ai-on-app-intro/" rel="alternate" type="text/html" title="[RN/AI] Pytorch로 AI 모델을 학습시켜 모바일 앱에 적용하기" /><published>2024-06-30T00:00:00+07:00</published><updated>2024-06-30T00:00:00+07:00</updated><id>http://localhost:4000/ai-on-app-intro</id><content type="html" xml:base="http://localhost:4000/ai-on-app-intro/"><![CDATA[<h2 id="현재-작성중인-글입니다">[현재 작성중인 글입니다.]</h2>
 
 <p>앱을 만들다보면 자연스레 AI 기술에 관심을 가지게 된다.</p>
 
@@ -12,7 +12,7 @@
 
 <p><img src="/assets/img/ai-on-app-process.png" alt="이미지" /></p>
 
-<h3 id="1-미래의-석유-데이터">1. 미래의 석유! 데이터</h3>
+<h3 id="1-데이터-라벨링">1. 데이터 라벨링</h3>
 
 <p>AI 모델을 훈련시키기 위해서는 그에 적합한 데이터가 필요하다.</p>
 
@@ -60,11 +60,20 @@
 
 <hr />
 
-<h1 id="️-데이터-라벨링-data-labeling">🏷️ 데이터 라벨링 (Data Labeling)</h1>
+<h2 id="️-데이터-라벨링-data-labeling">🏷️ 데이터 라벨링 (Data Labeling)</h2>
 
-<p>모델 학습에 필요한 데이터를 만들기 위해서는 원본(raw) 데이터와 라벨링 툴이 필요하다.</p>
+<p>모델 학습에 필요한 데이터를 만들기 위해서는 원본(raw) 데이터와 라벨링 툴이 필요하다.
+(*Object Detection에 필요한 데이터는 원본 이미지와 바운딩 박스에 관한 좌표 정보이다.)</p>
 
-<p>여기서는 <a href="https://github.com/HumanSignal/labelImg">labelImg</a>라는 툴을 소개하고자 한다. 간단히 설명하자면 다음과 같다.</p>
+<p>먼저 원본 데이터부터 준비하자.</p>
+
+<p>원본 데이터는 <a href="http://vision.stanford.edu/aditya86/ImageNetDogs/">Stanford Dogs Dataset</a>을 사용할 것이다. 120종의 강아지 사진 총 20,580장이 모여있는 데이터셋이다.</p>
+
+<p>모든 이미지를 사용할 필요는 없고, 원하는만큼 이미지를 특정 폴더로 옮겨준다. (모델 성능이 잘 안나올 경우 나중에 더 많은 데이터를 가져오면 되므로 일단은 조금만 옮겨보자. 물론 층화 샘플링(Stratified Sampling)을 해주면 가장 좋다.)</p>
+
+<p>해당 폴더는 이제 새로운 데이터셋 폴더로 사용될 것이다.</p>
+
+<p>기본 데이터가 준비되었다면 이제 <a href="https://github.com/HumanSignal/labelImg">labelImg</a>라는 툴을 소개하고자 한다. 간단히 설명하자면 다음과 같다.</p>
 
 <blockquote>
   <p>Object Detection 모델 학습에 필요한 주석(Annotation) 처리된 이미지를 생성할 수 있게 도와주는 도구이다.</p>
@@ -76,13 +85,111 @@
 
 <p><strong>⚠️ pyrcc5: No such file or directory</strong> 혹 이러한 에러를 만난다면 아래 코드대로 설치한다.</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew <span class="nb">install </span>qt qt5
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew <span class="nb">install </span>qt qt@5
 brew <span class="nb">install </span>libxml2
-brew <span class="nb">install </span>pyqt5
+brew <span class="nb">install </span>pyqt@5
 pip3 <span class="nb">install </span>pyqt5 lxml
+git clone https://github.com/HumanSignal/labelImg.git
+<span class="nb">cd </span>labelImg
 make qt5py3
 python3 labelImg.py
-</code></pre></div></div>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Pytorch, React Native, labelImg" /><summary type="html"><![CDATA[[현재 작성중인 글입니다.]]]></summary></entry><entry><title type="html">[FastAPI] API 요청 시 307 Temporary Redirect가 뜨는 이슈</title><link href="http://localhost:4000/fastapi-redirect/" rel="alternate" type="text/html" title="[FastAPI] API 요청 시 307 Temporary Redirect가 뜨는 이슈" /><published>2024-06-15T00:00:00+07:00</published><updated>2024-06-15T00:00:00+07:00</updated><id>http://localhost:4000/fastapi-redirect</id><content type="html" xml:base="http://localhost:4000/fastapi-redirect/"><![CDATA[<p>어느 순간부터 FastAPI 서버에 API 요청을 할 때 status code가 307가 뜨기 시작했다.</p>
+</code></pre></div></div>
+
+<p>실행 화면은 아래와 같다.</p>
+
+<p><img src="/assets/img/labelImg.png" alt="labelImg" /></p>
+
+<p><code class="language-plaintext highlighter-rouge">labelImg/data</code> 폴더 안에 <code class="language-plaintext highlighter-rouge">predefined_classes.txt</code>라는 파일이 있는데 이 안에는 분류하고 싶은 클래스명을 적어주면 된다.</p>
+
+<p>조작 순서는 <code class="language-plaintext highlighter-rouge">이미지 불러오기 -&gt; 바운딩 박스 생성 -&gt; 저장하기</code> 순이다. 사용법이 직관적이므로 매우 쉽다.</p>
+
+<p>단축키는 주로 이렇게 세 가지를 사용하면 된다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">키</th>
+      <th style="text-align: center">설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">w</td>
+      <td style="text-align: center">박스 생성</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">d</td>
+      <td style="text-align: center">다음 이미지</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">a</td>
+      <td style="text-align: center">이전 이미지</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>사진 위에 바운딩 박스를 만들고 저장을 누르면 해당 정보가 xml 파일로 저장되는 것을 볼 수 있는데, 우선 한 폴더에 이미지 파일과 메타데이터 파일(xml)을 모아놓자.</p>
+
+<h2 id="-데이터-전처리">🔖 데이터 전처리</h2>
+
+<p>우리가 사용할 모델은 <code class="language-plaintext highlighter-rouge">Object Detection</code>에서 유명한 SSD이다. SSD 모델 구현에 있어서는 <a href="https://github.com/qfgaohao/pytorch-ssd">여기</a>를 참고하였다.</p>
+
+<p>해당 모델을 사용하기 위해서는 위에서 라벨링한 데이터를 모델에 맞게 변형할 필요가 있다.</p>
+
+<p>필수적인 두 가지는 이미지 폴더와 그와 관련한 바운딩 박스 정보를 담고 있는 csv 파일이다.</p>
+
+<p>위에서 만든 데이터셋 폴더에 <code class="language-plaintext highlighter-rouge">xml_to_csv.py</code>(url 첨부) 파일을 넣고 실행시켜준다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 xml_to_csv.py
+</code></pre></div></div>
+
+<p>다음과 같은 결과가 나온다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🗂️ label
+sub-test-annotations-bbox.csv
+sub-train-annotations-bbox.csv
+sub-validation-annotations-bbox.csv
+🗂️ <span class="nb">test</span>
+🗂️ train
+🗂️ validation
+</code></pre></div></div>
+
+<h2 id="모델-훈련">모델 훈련</h2>
+
+<p>우리가 만든 데이터셋의 이름을 <code class="language-plaintext highlighter-rouge">dognose_dataset</code>이라고 하자.</p>
+
+<p>먼저 pytorch-ssd를 받아오자.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/qfgaohao/pytorch-ssd.git
+<span class="nb">cd </span>pytorch-ssd
+</code></pre></div></div>
+
+<p>해당 모델이 우리의 데이터를 사용할 수 있도록 <code class="language-plaintext highlighter-rouge">data</code> 폴더를 만들어서 그 안에 <code class="language-plaintext highlighter-rouge">dognose_dataset</code>을 넣어준다.</p>
+
+<p>환경 구성: 도커 <a href="https://github.com/ufoym/deepo">deepo</a></p>
+
+<p>현재 위치가 컨테이너 안에 마운트되도록 설정한다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull ufoym/deepo:cpu
+docker run <span class="nt">-it</span> <span class="nt">--shm-size</span> 8G <span class="nt">-v</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span><span class="s2">"</span>:/mount ufoym/deepo:cpu bash
+nvidia-docker run <span class="nt">-it</span> <span class="nt">--gpus</span> all <span class="nt">--shm-size</span> 8G <span class="nt">-v</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span><span class="s2">"</span>:/mount ufoym/deepo bash
+pip <span class="nb">install </span>opencv-python
+apt-get update
+apt-get <span class="nb">install </span>libgl1-mesa-glx
+</code></pre></div></div>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python train_ssd.py <span class="nt">--dataset_type</span> open_images <span class="nt">--datasets</span> /mount/data/DND <span class="nt">--net</span> mb2-ssd-lite <span class="nt">--pretrained_ssd</span> models/mb2-ssd-lite-mp-0_686.pth <span class="nt">--scheduler</span> cosine <span class="nt">--lr</span> 0.01 <span class="nt">--t_max</span> 100 <span class="nt">--validation_epochs</span> 10 <span class="nt">--num_epochs</span> 100 <span class="nt">--base_net_lr</span> 0.001 <span class="nt">--batch_size</span> 8 <span class="nt">--debug_steps</span> 10
+
+AttributeError: <span class="s1">'NoneType'</span> object has no attribute <span class="s1">'shape'</span>
+<span class="c"># image_file = self.root / self.dataset_type / f"{image_id}.jpg"</span>
+image_file <span class="o">=</span> self.root / self.dataset_type / f<span class="s2">"{image_id}"</span>
+raise ValueError<span class="o">(</span><span class="s2">"Expected more than 1 value per channel when training, got input size {}"</span>.format<span class="o">(</span>size<span class="o">))</span>
+<span class="nv">drop</span><span class="o">=</span><span class="nb">true</span>
+</code></pre></div></div>
+
+<p>M3 MacBook Air 기준, cpu로 학습시 1 epoch 당 대략 3분 정도 소요되었다.</p>
+
+<p>10 epoch마다 모델의 check point를 저장해주므로 적당한 loss가 나왔을 때 중지시켜도 된다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Pytorch, React Native, labelImg" /><summary type="html"><![CDATA[[현재 작성중인 글입니다.]]]></summary></entry><entry><title type="html">[FastAPI] API 요청 시 307 Temporary Redirect가 뜨는 이슈</title><link href="http://localhost:4000/fastapi-redirect/" rel="alternate" type="text/html" title="[FastAPI] API 요청 시 307 Temporary Redirect가 뜨는 이슈" /><published>2024-06-15T00:00:00+07:00</published><updated>2024-06-15T00:00:00+07:00</updated><id>http://localhost:4000/fastapi-redirect</id><content type="html" xml:base="http://localhost:4000/fastapi-redirect/"><![CDATA[<p>어느 순간부터 FastAPI 서버에 API 요청을 할 때 status code가 307가 뜨기 시작했다.</p>
 
 <p>분명 쿠버네티스에 띄워놓은 서비스는 잘 돌아가고 있는데 로컬에서만 안되는게 신기했다.</p>
 
@@ -144,7 +251,7 @@ python3 labelImg.py
 
 <p>코드는 다음과 같다.</p>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="nx">rewrites</span><span class="p">()</span> <span class="p">{</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="nf">rewrites</span><span class="p">()</span> <span class="p">{</span>
     <span class="k">return</span> <span class="p">[</span>
       <span class="p">{</span>
         <span class="na">source</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/pacs-api/:path*</span><span class="dl">"</span><span class="p">,</span>
@@ -162,8 +269,8 @@ python3 labelImg.py
 
 <p>문제를 알았다면 해결은 어렵지 않다. <code class="language-plaintext highlighter-rouge">development</code> 환경에서만 해당 프록시가 동작하도록 바꿔주면 된다.</p>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="nx">rewrites</span><span class="p">()</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">development</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">async</span> <span class="nf">rewrites</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">if </span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">development</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="p">[</span>
       <span class="p">{</span>
         <span class="na">source</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/pacs-api/:path*</span><span class="dl">"</span><span class="p">,</span>

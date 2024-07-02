@@ -1,4 +1,4 @@
-I"�<p align="center"><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/18th.png?raw=true" /></p>
+I"H<p align="center"><img src="https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/18th.png?raw=true" /></p>
 
 <h1 id="-credential을-등록하려해도-등록이-안-될-때">📌 Credential을 등록하려해도 등록이 안 될 때</h1>
 
@@ -54,7 +54,7 @@
 
 <p>혹여나 Delete로 되어 있다면 patch 명령어를 통해 설정을 바꾸어준다. (<a href="https://kubernetes.io/ko/docs/tasks/administer-cluster/change-pv-reclaim-policy/">참고</a>)</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">kubectl</span> <span class="n">patch</span> <span class="n">pv</span> <span class="o">&lt;</span><span class="n">your</span><span class="o">-</span><span class="n">pv</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">p</span> <span class="s">'{"spec":{"persistentVolumeReclaimPolicy":"Retain"}}'</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">kubectl</span> <span class="n">patch</span> <span class="n">pv</span> <span class="o">&lt;</span><span class="n">your</span><span class="o">-</span><span class="n">pv</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">p</span> <span class="sh">'</span><span class="s">{</span><span class="sh">"</span><span class="s">spec</span><span class="sh">"</span><span class="s">:{</span><span class="sh">"</span><span class="s">persistentVolumeReclaimPolicy</span><span class="sh">"</span><span class="s">:</span><span class="sh">"</span><span class="s">Retain</span><span class="sh">"</span><span class="s">}}</span><span class="sh">'</span>
 </code></pre></div></div>
 
 <p>이후 pv와 pvc는 삭제한 뒤 다시 만들어준다. 추가로 <code class="language-plaintext highlighter-rouge">kubectl logs</code> 명령어로 Jenkins 파드에서 에러 메시지를 보내고 있지 않나 확인한다.</p>

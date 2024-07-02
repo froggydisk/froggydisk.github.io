@@ -22,10 +22,10 @@
 좀 더 고민을 해보면, 입력을 끝낼 때 <code class="language-plaintext highlighter-rouge">Number</code>로 타입변환을 해주는 방법도 있다.</p>
 
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">TextInput</span>
-    <span class="nx">value</span><span class="o">=</span><span class="p">{</span><span class="nx">data</span><span class="p">.</span><span class="nx">year</span><span class="p">.</span><span class="nx">toString</span><span class="p">()}</span>    
-    <span class="nx">onChangeText</span><span class="o">=</span><span class="p">{</span><span class="nx">text</span> <span class="o">=&gt;</span> <span class="nx">setData</span><span class="p">({...</span><span class="nx">data</span><span class="p">,</span> <span class="na">year</span><span class="p">:</span> <span class="nx">text</span><span class="p">})}</span>
+    <span class="nx">value</span><span class="o">=</span><span class="p">{</span><span class="nx">data</span><span class="p">.</span><span class="nx">year</span><span class="p">.</span><span class="nf">toString</span><span class="p">()}</span>    
+    <span class="nx">onChangeText</span><span class="o">=</span><span class="p">{</span><span class="nx">text</span> <span class="o">=&gt;</span> <span class="nf">setData</span><span class="p">({...</span><span class="nx">data</span><span class="p">,</span> <span class="na">year</span><span class="p">:</span> <span class="nx">text</span><span class="p">})}</span>
     <span class="nx">onEndEditing</span><span class="o">=</span><span class="p">{()</span> <span class="o">=&gt;</span>
-      <span class="nx">setData</span><span class="p">({...</span><span class="nx">data</span><span class="p">,</span> <span class="na">year</span><span class="p">:</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">year</span><span class="p">)})</span>
+      <span class="nf">setData</span><span class="p">({...</span><span class="nx">data</span><span class="p">,</span> <span class="na">year</span><span class="p">:</span> <span class="nc">Number</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">year</span><span class="p">)})</span>
     <span class="p">}</span>    
     <span class="p">...</span>
 <span class="o">/&gt;</span>

@@ -1,4 +1,4 @@
-I"�<h1 id="-도커-원격-로그인">📌 도커 원격 로그인</h1>
+I"�<h1 id="-도커-원격-로그인">📌 도커 원격 로그인</h1>
 
 <p>쿠버네티스 상에 하버 서비스를 띄우는데 성공했다면 로컬에서 도커 이미지를 보낼 준비가 된 것이다.</p>
 
@@ -51,9 +51,9 @@
 <h3 id="-해결-1">🔑 해결</h3>
 <p>헬름을 통해 다운받았다면 하버의 deployment yaml 파일이 존재할 것이다. 파일 내용의 한 부분만 수정해주면 된다. (<a href="https://www.claudiokuenzler.com/blog/958/running-harbor-registry-behind-reverse-proxy-solve-docker-push-errors">참고</a>)</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">...</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="bp">...</span>
 <span class="n">registry</span><span class="p">:</span>
-	<span class="p">...</span>
+	<span class="bp">...</span>
 	<span class="n">relativeurls</span><span class="p">:</span> <span class="n">true</span> <span class="c1"># false에서 true로 변경
 </span></code></pre></div></div>
 

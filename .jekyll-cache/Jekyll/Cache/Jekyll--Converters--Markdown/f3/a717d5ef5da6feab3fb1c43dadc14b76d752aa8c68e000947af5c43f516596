@@ -1,4 +1,4 @@
-I"[<<p>여러 블로그를 돌아다니다보니 포스트 아래쪽에 달려있는 예쁜 버튼들에 눈길이 갔다. <code class="language-plaintext highlighter-rouge">Buy me a coffee</code>로도 유명한 후원 버튼이었는데 애드 포스트가 덕지덕지 붙어있는 것보다 훨씬 깔끔해 보여서 한 번 만들어보기로 하였다. 후원보다는 디자인적인 욕심이 큰 것 같다.</p>
+I"�><p>여러 블로그를 돌아다니다보니 포스트 아래쪽에 달려있는 예쁜 버튼들에 눈길이 갔다. <code class="language-plaintext highlighter-rouge">Buy me a coffee</code>로도 유명한 후원 버튼이었는데 애드 포스트가 덕지덕지 붙어있는 것보다 훨씬 깔끔해 보여서 한 번 만들어보기로 하였다. 후원보다는 디자인적인 욕심이 큰 것 같다.</p>
 
 <h1 id="순서">순서</h1>
 <ol>
@@ -12,25 +12,25 @@
 <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="err">!</span><span class="n">DOCTYPE</span> <span class="n">html</span><span class="o">&gt;</span>
 <span class="o">&lt;</span><span class="n">html</span><span class="o">&gt;</span>
   <span class="o">&lt;</span><span class="n">head</span><span class="o">&gt;</span>
-    <span class="o">&lt;</span><span class="n">script</span> <span class="n">src</span><span class="o">=</span><span class="s">"[fontawesome사이트에서 발급되는 url]"</span> <span class="n">crossorigin</span><span class="o">=</span><span class="s">"anonymous"</span><span class="o">&gt;&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">script</span> <span class="n">src</span><span class="o">=</span><span class="sh">"</span><span class="s">[fontawesome사이트에서 발급되는 url]</span><span class="sh">"</span> <span class="n">crossorigin</span><span class="o">=</span><span class="sh">"</span><span class="s">anonymous</span><span class="sh">"</span><span class="o">&gt;&lt;/</span><span class="n">script</span><span class="o">&gt;</span>
   <span class="o">&lt;/</span><span class="n">head</span><span class="o">&gt;</span>
   <span class="o">&lt;</span><span class="n">body</span><span class="o">&gt;</span>
-    <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s">"support-link-btn"</span><span class="o">&gt;</span>
-      <span class="o">&lt;</span><span class="n">button</span> <span class="n">class</span><span class="o">=</span><span class="s">"w-btn w-btn-yellow"</span> <span class="n">onclick</span><span class="o">=</span><span class="s">"location.href='[카카오페이 송금 url]'"</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="sh">"</span><span class="s">support-link-btn</span><span class="sh">"</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">button</span> <span class="n">class</span><span class="o">=</span><span class="sh">"</span><span class="s">w-btn w-btn-yellow</span><span class="sh">"</span> <span class="n">onclick</span><span class="o">=</span><span class="sh">"</span><span class="s">location.href=</span><span class="sh">'</span><span class="s">[카카오페이 송금 url]</span><span class="sh">'"</span><span class="o">&gt;</span>
         <span class="o">&lt;</span><span class="n">span</span><span class="o">&gt;</span><span class="n">Give</span> <span class="n">me</span> <span class="n">a</span> <span class="n">kakao</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span>
-        <span class="o">&lt;</span><span class="n">i</span> <span class="n">class</span><span class="o">=</span><span class="s">"fa-solid fa-heart fa-beat"</span> <span class="n">style</span><span class="o">=</span><span class="s">"--fa-animation-duration: 1s;"</span><span class="o">&gt;&lt;/</span><span class="n">i</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">i</span> <span class="n">class</span><span class="o">=</span><span class="sh">"</span><span class="s">fa-solid fa-heart fa-beat</span><span class="sh">"</span> <span class="n">style</span><span class="o">=</span><span class="sh">"</span><span class="s">--fa-animation-duration: 1s;</span><span class="sh">"</span><span class="o">&gt;&lt;/</span><span class="n">i</span><span class="o">&gt;</span>
       <span class="o">&lt;/</span><span class="n">button</span><span class="o">&gt;</span>
-      <span class="o">&lt;</span><span class="n">button</span> <span class="n">class</span><span class="o">=</span><span class="s">"w-btn w-btn-gra1 w-btn-gra-anim"</span> <span class="n">onclick</span><span class="o">=</span><span class="s">"location.href='[buy me a coffee 후원페이지 url]'"</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">button</span> <span class="n">class</span><span class="o">=</span><span class="sh">"</span><span class="s">w-btn w-btn-gra1 w-btn-gra-anim</span><span class="sh">"</span> <span class="n">onclick</span><span class="o">=</span><span class="sh">"</span><span class="s">location.href=</span><span class="sh">'</span><span class="s">[buy me a coffee 후원페이지 url]</span><span class="sh">'"</span><span class="o">&gt;</span>
         <span class="o">&lt;</span><span class="n">span</span><span class="o">&gt;</span><span class="n">Buy</span> <span class="n">me</span> <span class="n">a</span> <span class="n">coffee</span><span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span>
-        <span class="o">&lt;</span><span class="n">i</span> <span class="n">class</span><span class="o">=</span><span class="s">"fa-solid fa-mug-hot"</span><span class="o">&gt;&lt;/</span><span class="n">i</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">i</span> <span class="n">class</span><span class="o">=</span><span class="sh">"</span><span class="s">fa-solid fa-mug-hot</span><span class="sh">"</span><span class="o">&gt;&lt;/</span><span class="n">i</span><span class="o">&gt;</span>
       <span class="o">&lt;/</span><span class="n">button</span><span class="o">&gt;</span>
     <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
   <span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
 <span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
 
 
-<span class="o">&lt;</span><span class="n">style</span> <span class="nb">type</span><span class="o">=</span><span class="s">"text/css"</span><span class="o">&gt;</span>
-<span class="o">@</span><span class="kn">import</span> <span class="nn">url</span><span class="p">(</span><span class="s">"https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&amp;display=swap"</span><span class="p">);</span>
+<span class="o">&lt;</span><span class="n">style</span> <span class="nb">type</span><span class="o">=</span><span class="sh">"</span><span class="s">text/css</span><span class="sh">"</span><span class="o">&gt;</span>
+<span class="nd">@import</span> <span class="nf">url</span><span class="p">(</span><span class="sh">"</span><span class="s">https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&amp;display=swap</span><span class="sh">"</span><span class="p">);</span>
 
 <span class="c1"># 버튼 위치 조정
 </span><span class="p">.</span><span class="n">support</span><span class="o">-</span><span class="n">link</span><span class="o">-</span><span class="n">btn</span> <span class="p">{</span>
@@ -46,24 +46,24 @@
     <span class="n">display</span><span class="p">:</span> <span class="n">inline</span><span class="o">-</span><span class="n">block</span><span class="p">;</span>
     <span class="n">padding</span><span class="p">:</span> <span class="mi">15</span><span class="n">px</span> <span class="mi">30</span><span class="n">px</span><span class="p">;</span>
     <span class="n">border</span><span class="o">-</span><span class="n">radius</span><span class="p">:</span> <span class="mi">15</span><span class="n">px</span><span class="p">;</span>
-    <span class="n">font</span><span class="o">-</span><span class="n">family</span><span class="p">:</span> <span class="s">"paybooc-Light"</span><span class="p">,</span> <span class="n">sans</span><span class="o">-</span><span class="n">serif</span><span class="p">;</span>
-    <span class="n">box</span><span class="o">-</span><span class="n">shadow</span><span class="p">:</span> <span class="mi">0</span> <span class="mi">15</span><span class="n">px</span> <span class="mi">35</span><span class="n">px</span> <span class="n">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">);</span>
+    <span class="n">font</span><span class="o">-</span><span class="n">family</span><span class="p">:</span> <span class="sh">"</span><span class="s">paybooc-Light</span><span class="sh">"</span><span class="p">,</span> <span class="n">sans</span><span class="o">-</span><span class="n">serif</span><span class="p">;</span>
+    <span class="n">box</span><span class="o">-</span><span class="n">shadow</span><span class="p">:</span> <span class="mi">0</span> <span class="mi">15</span><span class="n">px</span> <span class="mi">35</span><span class="n">px</span> <span class="nf">rgba</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">);</span>
     <span class="n">text</span><span class="o">-</span><span class="n">decoration</span><span class="p">:</span> <span class="n">none</span><span class="p">;</span>
     <span class="n">font</span><span class="o">-</span><span class="n">weight</span><span class="p">:</span> <span class="mi">600</span><span class="p">;</span>
     <span class="n">transition</span><span class="p">:</span> <span class="mf">0.25</span><span class="n">s</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="p">.</span><span class="n">w</span><span class="o">-</span><span class="n">btn</span><span class="p">:</span><span class="n">hover</span> <span class="p">{</span>
-    <span class="n">transform</span><span class="p">:</span> <span class="n">scale</span><span class="p">(</span><span class="mf">1.1</span><span class="p">);</span>
+    <span class="n">transform</span><span class="p">:</span> <span class="nf">scale</span><span class="p">(</span><span class="mf">1.1</span><span class="p">);</span>
     <span class="n">cursor</span><span class="p">:</span> <span class="n">pointer</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="p">.</span><span class="n">w</span><span class="o">-</span><span class="n">btn</span><span class="p">:</span><span class="n">active</span> <span class="p">{</span>
-    <span class="n">transform</span><span class="p">:</span> <span class="n">scale</span><span class="p">(</span><span class="mf">1.1</span><span class="p">);</span>
+    <span class="n">transform</span><span class="p">:</span> <span class="nf">scale</span><span class="p">(</span><span class="mf">1.1</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="c1"># hover 시 물결 효과
-</span><span class="o">@</span><span class="n">keyframes</span> <span class="n">ring</span> <span class="p">{</span>
+</span><span class="nd">@keyframes</span> <span class="n">ring</span> <span class="p">{</span>
     <span class="mi">0</span><span class="o">%</span> <span class="p">{</span>
         <span class="n">width</span><span class="p">:</span> <span class="mi">30</span><span class="n">px</span><span class="p">;</span>
         <span class="n">height</span><span class="p">:</span> <span class="mi">30</span><span class="n">px</span><span class="p">;</span>
@@ -76,14 +76,14 @@
 <span class="p">}</span>
 
 <span class="p">.</span><span class="n">w</span><span class="o">-</span><span class="n">btn</span><span class="p">:</span><span class="n">hover</span><span class="p">::</span><span class="n">after</span> <span class="p">{</span>
-    <span class="n">content</span><span class="p">:</span> <span class="s">""</span><span class="p">;</span>
+    <span class="n">content</span><span class="p">:</span> <span class="sh">""</span><span class="p">;</span>
     <span class="n">border</span><span class="o">-</span><span class="n">radius</span><span class="p">:</span> <span class="mi">100</span><span class="o">%</span><span class="p">;</span>
     <span class="n">border</span><span class="p">:</span> <span class="mi">6</span><span class="n">px</span> <span class="n">solid</span> <span class="c1">#9dc8c8;
 </span>    <span class="n">position</span><span class="p">:</span> <span class="n">absolute</span><span class="p">;</span>
     <span class="n">z</span><span class="o">-</span><span class="n">index</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
     <span class="n">top</span><span class="p">:</span> <span class="mi">50</span><span class="o">%</span><span class="p">;</span>
     <span class="n">left</span><span class="p">:</span> <span class="mi">50</span><span class="o">%</span><span class="p">;</span>
-    <span class="n">transform</span><span class="p">:</span> <span class="n">translate</span><span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="o">%</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="o">%</span><span class="p">);</span>
+    <span class="n">transform</span><span class="p">:</span> <span class="nf">translate</span><span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="o">%</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="o">%</span><span class="p">);</span>
     <span class="n">animation</span><span class="p">:</span> <span class="n">ring</span> <span class="mf">1.5</span><span class="n">s</span> <span class="n">infinite</span><span class="p">;</span>
 <span class="p">}</span>
 
@@ -95,7 +95,7 @@
 
 <span class="c1"># buy me a coffee 버튼
 </span><span class="p">.</span><span class="n">w</span><span class="o">-</span><span class="n">btn</span><span class="o">-</span><span class="n">gra1</span> <span class="p">{</span>
-    <span class="n">background</span><span class="p">:</span> <span class="n">linear</span><span class="o">-</span><span class="n">gradient</span><span class="p">(</span><span class="o">-</span><span class="mi">45</span><span class="n">deg</span><span class="p">,</span> <span class="c1">#ee7752, #e73c7e, #23a6d5, #23d5ab);
+    <span class="n">background</span><span class="p">:</span> <span class="n">linear</span><span class="o">-</span><span class="nf">gradient</span><span class="p">(</span><span class="o">-</span><span class="mi">45</span><span class="n">deg</span><span class="p">,</span> <span class="c1">#ee7752, #e73c7e, #23a6d5, #23d5ab);
 </span>    <span class="n">color</span><span class="p">:</span> <span class="n">white</span><span class="p">;</span>
 <span class="p">}</span>
 
@@ -104,7 +104,7 @@
     <span class="n">animation</span><span class="p">:</span> <span class="n">gradient</span> <span class="mi">7</span><span class="n">s</span> <span class="n">ease</span> <span class="n">infinite</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="o">@</span><span class="n">keyframes</span> <span class="n">gradient</span> <span class="p">{</span>
+<span class="nd">@keyframes</span> <span class="n">gradient</span> <span class="p">{</span>
     <span class="mi">0</span><span class="o">%</span> <span class="p">{</span>
         <span class="n">background</span><span class="o">-</span><span class="n">position</span><span class="p">:</span> <span class="mi">0</span><span class="o">%</span> <span class="mi">50</span><span class="o">%</span><span class="p">;</span>
     <span class="p">}</span>

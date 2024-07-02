@@ -1,25 +1,25 @@
 I"K+<p>● 서버 코드</p>
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">multer</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">multer</span><span class="dl">"</span><span class="p">);</span>
-<span class="kd">const</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">fs</span><span class="dl">"</span><span class="p">);</span>
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">multer</span> <span class="o">=</span> <span class="nf">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">multer</span><span class="dl">"</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nf">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">fs</span><span class="dl">"</span><span class="p">);</span>
 
-<span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">multer</span><span class="p">.</span><span class="nx">diskStorage</span><span class="p">({</span>
-  <span class="na">destination</span><span class="p">:</span> <span class="k">async</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">userId</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">)).</span><span class="nx">userId</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">storage</span> <span class="o">=</span> <span class="nx">multer</span><span class="p">.</span><span class="nf">diskStorage</span><span class="p">({</span>
+  <span class="na">destination</span><span class="p">:</span> <span class="k">async </span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">userId</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nf">parse</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nf">stringify</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">body</span><span class="p">)).</span><span class="nx">userId</span><span class="p">;</span>
     <span class="kd">const</span> <span class="nx">dir</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">./upload/</span><span class="dl">"</span> <span class="o">+</span> <span class="nx">userId</span><span class="p">;</span> <span class="c1">// See here!</span>
     <span class="k">try</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">fs</span><span class="p">.</span><span class="nx">existsSync</span><span class="p">(</span><span class="nx">dir</span><span class="p">))</span> <span class="p">{</span> <span class="c1">// 해당 유저의 디렉토리가 있는지 확인</span>
-        <span class="nx">fs</span><span class="p">.</span><span class="nx">mkdirSync</span><span class="p">(</span><span class="nx">dir</span><span class="p">,</span> <span class="p">{</span> <span class="na">recursive</span><span class="p">:</span> <span class="kc">true</span> <span class="p">});</span> <span class="c1">// 없다면 디렉토리를 생성</span>
+      <span class="k">if </span><span class="p">(</span><span class="o">!</span><span class="nx">fs</span><span class="p">.</span><span class="nf">existsSync</span><span class="p">(</span><span class="nx">dir</span><span class="p">))</span> <span class="p">{</span> <span class="c1">// 해당 유저의 디렉토리가 있는지 확인</span>
+        <span class="nx">fs</span><span class="p">.</span><span class="nf">mkdirSync</span><span class="p">(</span><span class="nx">dir</span><span class="p">,</span> <span class="p">{</span> <span class="na">recursive</span><span class="p">:</span> <span class="kc">true</span> <span class="p">});</span> <span class="c1">// 없다면 디렉토리를 생성</span>
       <span class="p">}</span>
-    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">catch </span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nf">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
     <span class="p">}</span>
-    <span class="k">return</span> <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">dir</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nf">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">dir</span><span class="p">);</span>
   <span class="p">},</span>
   <span class="na">filename</span><span class="p">:</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">callback</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="s2">`</span><span class="p">${</span><span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">()}</span><span class="s2">_</span><span class="p">${</span><span class="nx">file</span><span class="p">.</span><span class="nx">originalname</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span> 
+    <span class="nf">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="s2">`</span><span class="p">${</span><span class="nb">Date</span><span class="p">.</span><span class="nf">now</span><span class="p">()}</span><span class="s2">_</span><span class="p">${</span><span class="nx">file</span><span class="p">.</span><span class="nx">originalname</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span> 
   <span class="p">},</span>
 <span class="p">});</span>
-<span class="kd">var</span> <span class="nx">save</span> <span class="o">=</span> <span class="nx">multer</span><span class="p">({</span> <span class="na">storage</span><span class="p">:</span> <span class="nx">storage</span> <span class="p">}).</span><span class="nx">array</span><span class="p">(</span><span class="dl">"</span><span class="s2">profileImage</span><span class="dl">"</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">save</span> <span class="o">=</span> <span class="nf">multer</span><span class="p">({</span> <span class="na">storage</span><span class="p">:</span> <span class="nx">storage</span> <span class="p">}).</span><span class="nf">array</span><span class="p">(</span><span class="dl">"</span><span class="s2">profileImage</span><span class="dl">"</span><span class="p">);</span>
 <span class="c1">// 한 장만 보낼 때는 .single("profileImage");를 써도 된다.</span>
 </code></pre></div></div>
 <p>Multer를 사용하여 이미지를 업로드할 때 유저별로 폴더를 만들어서 따로 저장하려고 하는데 자꾸 에러가 났다. 
@@ -36,11 +36,11 @@
 
 <p>● 클라이언트 코드</p>
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">createFormData</span> <span class="o">=</span> <span class="p">(</span><span class="nx">image</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">data</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FormData</span><span class="p">();</span>
-    <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">body</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(</span><span class="nx">key</span> <span class="o">=&gt;</span> <span class="p">{</span>
-      <span class="nx">data</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">body</span><span class="p">[</span><span class="nx">key</span><span class="p">]);</span>
+    <span class="kd">const</span> <span class="nx">data</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">FormData</span><span class="p">();</span>
+    <span class="nb">Object</span><span class="p">.</span><span class="nf">keys</span><span class="p">(</span><span class="nx">body</span><span class="p">).</span><span class="nf">forEach</span><span class="p">(</span><span class="nx">key</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="nx">data</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">body</span><span class="p">[</span><span class="nx">key</span><span class="p">]);</span>
     <span class="p">});</span>
-    <span class="nx">data</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="dl">'</span><span class="s1">profileImage</span><span class="dl">'</span><span class="p">,</span> <span class="p">{</span> <span class="c1">// 필드명으로서, 서버에서 정의된 것과 동일해야한다.</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="dl">'</span><span class="s1">profileImage</span><span class="dl">'</span><span class="p">,</span> <span class="p">{</span> <span class="c1">// 필드명으로서, 서버에서 정의된 것과 동일해야한다.</span>
       <span class="na">name</span><span class="p">:</span> <span class="nx">image</span><span class="p">.</span><span class="nx">name</span>
       <span class="na">type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">multipart/form-data</span><span class="dl">'</span><span class="p">,</span>
       <span class="na">uri</span><span class="p">:</span> <span class="nx">image</span><span class="p">.</span><span class="nx">uri</span><span class="p">,</span>
@@ -48,27 +48,27 @@
     <span class="k">return</span> <span class="nx">data</span><span class="p">;</span>
   <span class="p">};</span>
 
-<span class="kd">const</span> <span class="nx">photoUpload</span> <span class="o">=</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="nx">photoUpload</span> <span class="o">=</span> <span class="k">async </span><span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">{</span>
-      <span class="nx">fetch</span><span class="p">(</span><span class="dl">'</span><span class="s1">http://localhost:8080/user/upload</span><span class="dl">'</span><span class="p">,</span> <span class="p">{</span>
+      <span class="nf">fetch</span><span class="p">(</span><span class="dl">'</span><span class="s1">http://localhost:8080/user/upload</span><span class="dl">'</span><span class="p">,</span> <span class="p">{</span>
         <span class="na">method</span><span class="p">:</span> <span class="dl">'</span><span class="s1">POST</span><span class="dl">'</span><span class="p">,</span>
         <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
           <span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">multipart/form-data</span><span class="dl">'</span><span class="p">,</span>
         <span class="p">},</span>
-        <span class="na">body</span><span class="p">:</span> <span class="nx">createFormData</span><span class="p">(</span><span class="nx">image</span><span class="p">,</span> <span class="p">{</span>
+        <span class="na">body</span><span class="p">:</span> <span class="nf">createFormData</span><span class="p">(</span><span class="nx">image</span><span class="p">,</span> <span class="p">{</span>
           <span class="na">userId</span><span class="p">:</span> <span class="dl">"</span><span class="s2">tester</span><span class="dl">"</span><span class="p">,</span>
         <span class="p">}),</span>
       <span class="p">})</span>
-        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">response</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">())</span>
-        <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">response</span> <span class="o">=&gt;</span> <span class="p">{</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">upload success</span><span class="dl">'</span><span class="p">,</span> <span class="nx">response</span><span class="p">);</span>
+        <span class="p">.</span><span class="nf">then</span><span class="p">(</span><span class="nx">response</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nf">text</span><span class="p">())</span>
+        <span class="p">.</span><span class="nf">then</span><span class="p">(</span><span class="nx">response</span> <span class="o">=&gt;</span> <span class="p">{</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">upload success</span><span class="dl">'</span><span class="p">,</span> <span class="nx">response</span><span class="p">);</span>
         <span class="p">})</span>
         <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="o">=&gt;</span> <span class="p">{</span>
-          <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">upload error</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+          <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">upload error</span><span class="dl">'</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
         <span class="p">});</span>
     <span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
       <span class="nx">error</span> <span class="o">=&gt;</span> <span class="p">{</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nf">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
       <span class="p">};</span>
     <span class="p">}</span>
   <span class="p">};</span>

@@ -35,11 +35,11 @@
   <span class="p">];</span>
 
 <span class="c1">// 클릭한 날짜를 담는 변수</span>
-  <span class="kd">const</span> <span class="p">[</span><span class="nx">date</span><span class="p">,</span> <span class="nx">setDate</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">();</span>
-  <span class="kd">const</span> <span class="p">[</span><span class="nx">selectedDate</span><span class="p">,</span> <span class="nx">setSelectedDate</span><span class="p">]</span> <span class="o">=</span> <span class="nx">useState</span><span class="p">();</span>
+  <span class="kd">const</span> <span class="p">[</span><span class="nx">date</span><span class="p">,</span> <span class="nx">setDate</span><span class="p">]</span> <span class="o">=</span> <span class="nf">useState</span><span class="p">();</span>
+  <span class="kd">const</span> <span class="p">[</span><span class="nx">selectedDate</span><span class="p">,</span> <span class="nx">setSelectedDate</span><span class="p">]</span> <span class="o">=</span> <span class="nf">useState</span><span class="p">();</span>
 
 <span class="c1">// posts 안에 들어있는 모든 일정을 달력에 표시하기 위한 변수</span>
-  <span class="kd">const</span> <span class="nx">markedDates</span> <span class="o">=</span> <span class="nx">posts</span><span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">acc</span><span class="p">,</span> <span class="nx">current</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">markedDates</span> <span class="o">=</span> <span class="nx">posts</span><span class="p">.</span><span class="nf">reduce</span><span class="p">((</span><span class="nx">acc</span><span class="p">,</span> <span class="nx">current</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="nx">acc</span><span class="p">[</span><span class="nx">current</span><span class="p">.</span><span class="nx">date</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="na">marked</span><span class="p">:</span> <span class="kc">true</span><span class="p">};</span>
     <span class="k">return</span> <span class="nx">acc</span><span class="p">;</span>
   <span class="p">},</span> <span class="p">{});</span>
@@ -53,15 +53,15 @@
     <span class="p">},</span>
   <span class="p">};</span>
 
-  <span class="k">return</span> <span class="p">(</span>
+  <span class="k">return </span><span class="p">(</span>
     <span class="o">&lt;</span><span class="nx">SafeAreaView</span> <span class="nx">style</span><span class="o">=</span><span class="p">{</span> <span class="p">{</span><span class="na">height</span><span class="p">:</span> <span class="dl">'</span><span class="s1">100%</span><span class="dl">'</span><span class="p">}}</span><span class="o">&gt;</span>
       <span class="o">&lt;</span><span class="nx">CalendarList</span>
         <span class="nx">horizontal</span><span class="o">=</span><span class="p">{</span><span class="kc">true</span><span class="p">}</span>
         <span class="nx">pagingEnabled</span><span class="o">=</span><span class="p">{</span><span class="kc">true</span><span class="p">}</span>
         <span class="nx">markedDates</span><span class="o">=</span><span class="p">{</span><span class="nx">markedSelectedDates</span><span class="p">}</span>
         <span class="nx">onDayPress</span><span class="o">=</span><span class="p">{</span><span class="nx">day</span> <span class="o">=&gt;</span> <span class="p">{</span>
-          <span class="nx">setDate</span><span class="p">(</span><span class="nx">day</span><span class="p">);</span>
-          <span class="nx">setSelectedDate</span><span class="p">(</span><span class="nx">day</span><span class="p">.</span><span class="nx">dateString</span><span class="p">);</span>
+          <span class="nf">setDate</span><span class="p">(</span><span class="nx">day</span><span class="p">);</span>
+          <span class="nf">setSelectedDate</span><span class="p">(</span><span class="nx">day</span><span class="p">.</span><span class="nx">dateString</span><span class="p">);</span>
         <span class="p">}}</span>
         <span class="nx">theme</span><span class="o">=</span><span class="p">{</span> <span class="p">{</span>
           <span class="na">selectedDayBackgroundColor</span><span class="p">:</span> <span class="dl">'</span><span class="s1">#959CA7</span><span class="dl">'</span><span class="p">,</span>
@@ -114,7 +114,7 @@
 <p>node_modules 폴더 안을 고치는 것은 관리 이슈가 커지기 때문에 아래와 같이 내 코드에서 직접 설정해주는 방식을 택하였다.</p>
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">CalendarProvider</span>
   <span class="nx">date</span><span class="o">=</span><span class="p">{</span><span class="nx">date</span><span class="p">}</span>
-  <span class="nx">onDateChanged</span><span class="o">=</span><span class="p">{</span><span class="nx">d</span> <span class="o">=&gt;</span> <span class="nx">setDate</span><span class="p">(</span><span class="nx">d</span><span class="p">)}</span>
+  <span class="nx">onDateChanged</span><span class="o">=</span><span class="p">{</span><span class="nx">d</span> <span class="o">=&gt;</span> <span class="nf">setDate</span><span class="p">(</span><span class="nx">d</span><span class="p">)}</span>
   <span class="nx">style</span><span class="o">=</span><span class="p">{</span> <span class="p">{</span><span class="na">flex</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span> <span class="p">}</span><span class="o">&gt;</span>
   <span class="o">&lt;</span><span class="nx">WeekCalendar</span>
     <span class="nx">displayLoadingIndicator</span>
