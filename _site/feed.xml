@@ -1,10 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-07-02T16:43:14+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[RN/AI] Pytorch로 AI 모델을 학습시켜 모바일 앱에 적용하기</title><link href="http://localhost:4000/ai-on-app-intro/" rel="alternate" type="text/html" title="[RN/AI] Pytorch로 AI 모델을 학습시켜 모바일 앱에 적용하기" /><published>2024-06-30T00:00:00+07:00</published><updated>2024-06-30T00:00:00+07:00</updated><id>http://localhost:4000/ai-on-app-intro</id><content type="html" xml:base="http://localhost:4000/ai-on-app-intro/"><![CDATA[<h2 id="현재-작성중인-글입니다">[현재 작성중인 글입니다.]</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-07-03T16:36:43+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[RN/AI] Pytorch로 AI 모델을 학습시켜 모바일 앱에 적용하기</title><link href="http://localhost:4000/ai-on-app-intro/" rel="alternate" type="text/html" title="[RN/AI] Pytorch로 AI 모델을 학습시켜 모바일 앱에 적용하기" /><published>2024-06-30T00:00:00+07:00</published><updated>2024-06-30T00:00:00+07:00</updated><id>http://localhost:4000/ai-on-app-intro</id><content type="html" xml:base="http://localhost:4000/ai-on-app-intro/"><![CDATA[<h2 id="현재-작성중인-글입니다">[현재 작성중인 글입니다.]</h2>
 
 <p>앱을 만들다보면 자연스레 AI 기술에 관심을 가지게 된다.</p>
 
 <p>“요즘 chatGPT가 그렇게 핫하다는데 나도 AI 좀 접목시켜 볼까…?” 라는 상상을 하게 된다</p>
 
 <p>그렇다면 어떻게 해야할까? 하나하나 차근차근 파헤쳐보자.</p>
+
+<p>(예시 영상)</p>
+
+<p>(Object Detection 설명)</p>
+
+<p>(필요 스펙)</p>
 
 <h2 id="-프로세스">🍀 프로세스</h2>
 
@@ -81,7 +87,7 @@
 
 <p>깃허브 페이지에 들어가보면 설치 및 사용 방법에 대해 상세히 설명하고 있다.</p>
 
-<p>단, 필자는 <code class="language-plaintext highlighter-rouge">M3 MacBook Air 13</code>를 사용하고 있는데 설치 가이드에 부족한 내용이 있어 관련 내용을 추가한다.</p>
+<p>단, 필자는 <code class="language-plaintext highlighter-rouge">M1 Pro chip MacBook Pro 14</code>를 사용하고 있는데 설치 가이드에 부족한 내용이 있어 관련 내용을 추가한다.</p>
 
 <p><strong>⚠️ pyrcc5: No such file or directory</strong> 혹 이러한 에러를 만난다면 아래 코드대로 설치한다.</p>
 
@@ -136,14 +142,14 @@ python3 labelImg.py
 
 <p>해당 모델을 사용하기 위해서는 위에서 라벨링한 데이터를 모델에 맞게 변형할 필요가 있다.</p>
 
-<p>필수적인 두 가지는 이미지 폴더와 그와 관련한 바운딩 박스 정보를 담고 있는 csv 파일이다.</p>
+<p>필수 요소는 이미지 폴더와 그와 관련한 바운딩 박스 정보를 담고 있는 csv 파일이다.</p>
 
-<p>위에서 만든 데이터셋 폴더에 <code class="language-plaintext highlighter-rouge">xml_to_csv.py</code>(url 첨부) 파일을 넣고 실행시켜준다.</p>
+<p>위에서 만든 데이터셋 폴더(이미지+메타데이터)에 <code class="language-plaintext highlighter-rouge">xml_to_csv.py</code>(url 첨부) 파일을 넣고 실행시켜준다.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 xml_to_csv.py
 </code></pre></div></div>
 
-<p>다음과 같은 결과가 나온다.</p>
+<p>다음과 같이 정리될 것이다.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>🗂️ label
 sub-test-annotations-bbox.csv
@@ -154,42 +160,168 @@ sub-validation-annotations-bbox.csv
 🗂️ validation
 </code></pre></div></div>
 
-<h2 id="모델-훈련">모델 훈련</h2>
+<p>이제 모델에 넣을 데이터가 준비되었다.</p>
 
-<p>우리가 만든 데이터셋의 이름을 <code class="language-plaintext highlighter-rouge">dognose_dataset</code>이라고 하자.</p>
+<p>앞으로 이 데이터셋을 <code class="language-plaintext highlighter-rouge">dognose_dataset</code>이라고 부를 것이다.</p>
 
-<p>먼저 pytorch-ssd를 받아오자.</p>
+<h2 id="-모델-훈련">🧭 모델 훈련</h2>
+
+<p>드디어 모델을 학습시켜볼 차례이다. 모델 학습에는 다음 네 가지가 필요하다.</p>
+
+<p>1️⃣ 사전 학습 모델<br />
+2️⃣ 코드<br />
+3️⃣ 데이터<br />
+4️⃣ 개발 환경</p>
+
+<p>이제 이것들을 하나씩 모아볼 것이다.</p>
+
+<p>먼저 우리가 사용할 모델(코드) <code class="language-plaintext highlighter-rouge">pytorch-ssd</code>를 받아오자.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/qfgaohao/pytorch-ssd.git
 <span class="nb">cd </span>pytorch-ssd
 </code></pre></div></div>
 
-<p>해당 모델이 우리의 데이터를 사용할 수 있도록 <code class="language-plaintext highlighter-rouge">data</code> 폴더를 만들어서 그 안에 <code class="language-plaintext highlighter-rouge">dognose_dataset</code>을 넣어준다.</p>
+<p>해당 코드에서 우리의 데이터를 사용할 수 있도록 <code class="language-plaintext highlighter-rouge">data</code> 폴더를 만들어서 그 안에 <code class="language-plaintext highlighter-rouge">dognose_dataset</code>을 넣어준다.</p>
 
-<p>환경 구성: 도커 <a href="https://github.com/ufoym/deepo">deepo</a></p>
+<p>딥러닝에서 중요한 개념 중 하나가 <code class="language-plaintext highlighter-rouge">전이 학습</code>인데, 기존에 잘 학습된 모델이 있다면 그 모델을 가져와서 추가 학습을 시키는 것이 학습 속도를 크게 단축시키는 하나의 방법으로 알려져있다.</p>
 
-<p>현재 위치가 컨테이너 안에 마운트되도록 설정한다.</p>
+<p><code class="language-plaintext highlighter-rouge">pytorch-ssd</code>에서 <code class="language-plaintext highlighter-rouge">PASCAL VOC</code> 데이터셋에 대해 미리 학습시켜놓은 모델을 제공하고 있으므로 이를 활용할 것이다.</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull ufoym/deepo:cpu
+<p>깃허브 페이지에 다운로드 URL이 있으므로 원하는 모델을 다운로드 하면 된다. 필자의 경우 <a href="https://drive.google.com/drive/folders/1pKn-RifvJGWiOx0ZCRLtCXM5GT5lAluu?usp=sharing">mb2-ssd-lite-mp-0_686.pth</a>를 다운로드 하였다. 다운로드를 하였다면 <code class="language-plaintext highlighter-rouge">models</code> 폴더 안에 넣어주면 된다.</p>
+
+<p>사실 사전 학습 모델을 직접 만들어도 좋고, 그냥 베이스 모델을 가지고 우리의 데이터셋을 학습시키는 것도 좋다. 모든 방법을 시도해서(시간이 오래걸리지 않는다면) 가장 좋은 모델을 만들어내는 것이 우리의 목표이기 때문이다.</p>
+
+<p>코드, 사전학습 모델, 데이터. 재료는 다 모은 것 같으므로 이제는 코드를 돌릴 일만 남았다. 하지만 코드를 돌리려면 해당 코드에서 필요로 하는 패키지들을 전부 다운받아야 한다. 문제는 딥러닝을 사용하기 위해서는 정말 많은 라이브러리가 필요하다는 것이다.</p>
+
+<p>많은 개발자들이 <code class="language-plaintext highlighter-rouge">anaconda</code>와 같은 파이썬 배포판을 사용하여 개발 환경을 구축하고 있지만 각종 패키지 간의 호환성을 유지하는 것은 여간 수고가 많이 드는 일이 아니다. 만약 딥러닝 개발환경이 미리 구축되어 있는 환경이 있다면 어떨까?</p>
+
+<p>고맙게도 도커를 사용한다면 이미 많은 사람들이 구축해놓은 개발 환경을 이용할 수 있다. 즉, 복잡한 환경 설정에 신경 쓸 필요없이 모델 학습에만 집중할 수 있다는 얘기다. (물론 개인만의 개발환경을 구축하고 싶다면 직접 구축하는 것이 훨씬 좋다.)</p>
+
+<p>자, 그러면 <a href="https://github.com/ufoym/deepo">deepo</a>라는 유명한 도커 이미지를 사용하여 개발 환경을 구축해보자.</p>
+
+<blockquote>
+  <p>Deepo is an open framework to assemble specialized docker images for deep learning research without pain.</p>
+</blockquote>
+
+<p>이번 장에서는 CPU를 통한 학습을 기준으로 한다. 로컬에 있는 코드와 사전 학습 모델, 데이터를 전부 활용해야 하므로 현재 위치가 컨테이너 안에 마운트되도록 설정한다. (pytorch-ssd 폴더 안에서 실행해야 한다는 이야기)</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull ufoym/deepo:cpu <span class="c"># CPU 전용 이미지 다운로드</span>
 docker run <span class="nt">-it</span> <span class="nt">--shm-size</span> 8G <span class="nt">-v</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span><span class="s2">"</span>:/mount ufoym/deepo:cpu bash
-nvidia-docker run <span class="nt">-it</span> <span class="nt">--gpus</span> all <span class="nt">--shm-size</span> 8G <span class="nt">-v</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span><span class="s2">"</span>:/mount ufoym/deepo bash
+</code></pre></div></div>
+
+<p>여기서 –shm-size 8G 옵션을 넣어주지 않으면 다음과 같은 에러를 만나게 되므로 주의하자.</p>
+
+<blockquote>
+  <p>RuntimeError: DataLoader worker (pid 938) is killed by signal: Bus error. It is possible that dataloader’s workers are out of shared memory. Please try to raise your shared memory limit.</p>
+</blockquote>
+
+<p>데이터로더에 너무 많은 데이터 용량이 올라갔기 때문이다. 메모리 제한을 올려주면 해결된다.</p>
+
+<p>만약 GPU를 사용하고 싶다면 GPU 전용 도커 이미지와 nvidia-docker2를 활용하면 된다. 아래는 그 예시이다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># nvidia-docker2 설치 전제</span>
+docker pull ufoym/deepo <span class="c"># GPU 전용 이미지 다운로드</span>
+docker run <span class="nt">-it</span> <span class="nt">--gpus</span> all <span class="nt">--shm-size</span> 8G <span class="nt">-v</span> <span class="s2">"</span><span class="si">$(</span><span class="nb">pwd</span><span class="si">)</span><span class="s2">"</span>:/mount ufoym/deepo bash
+</code></pre></div></div>
+
+<p>nvidia GPU가 있다면 무조건 활용하는 것이 좋다. CPU와 엄청난 연산 속도 차이를 보이기 때문이다.</p>
+
+<p><code class="language-plaintext highlighter-rouge">pytorch-ssd</code>를 돌릴 때 추가로 설치해 주어야하는 패키지가 있어서 도커 환경에 접속했다면 아래 패키지를 설치해준다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># ModuleNotFoundError: No module named 'cv2’</span>
 pip <span class="nb">install </span>opencv-python
+<span class="c"># ImportError: libGL.so.1: cannot open shared object file: No such file or directory</span>
 apt-get update
 apt-get <span class="nb">install </span>libgl1-mesa-glx
 </code></pre></div></div>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python train_ssd.py <span class="nt">--dataset_type</span> open_images <span class="nt">--datasets</span> /mount/data/DND <span class="nt">--net</span> mb2-ssd-lite <span class="nt">--pretrained_ssd</span> models/mb2-ssd-lite-mp-0_686.pth <span class="nt">--scheduler</span> cosine <span class="nt">--lr</span> 0.01 <span class="nt">--t_max</span> 100 <span class="nt">--validation_epochs</span> 10 <span class="nt">--num_epochs</span> 100 <span class="nt">--base_net_lr</span> 0.001 <span class="nt">--batch_size</span> 8 <span class="nt">--debug_steps</span> 10
+<p>혹여나 exit으로 컨테이너를 빠져나온 뒤에 재접속 하고 싶다면 이렇게 하면 된다.</p>
 
-AttributeError: <span class="s1">'NoneType'</span> object has no attribute <span class="s1">'shape'</span>
-<span class="c"># image_file = self.root / self.dataset_type / f"{image_id}.jpg"</span>
-image_file <span class="o">=</span> self.root / self.dataset_type / f<span class="s2">"{image_id}"</span>
-raise ValueError<span class="o">(</span><span class="s2">"Expected more than 1 value per channel when training, got input size {}"</span>.format<span class="o">(</span>size<span class="o">))</span>
-<span class="nv">drop</span><span class="o">=</span><span class="nb">true</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>docker start 컨테이너ID
+<span class="nb">sudo </span>docker attach 컨테이너ID
 </code></pre></div></div>
 
-<p>M3 MacBook Air 기준, cpu로 학습시 1 epoch 당 대략 3분 정도 소요되었다.</p>
+<p>이제 정말 모든 준비를 마쳤다. <code class="language-plaintext highlighter-rouge">pytorch-ssd</code> 페이지를 참고해서 모델 학습을 시작해보자. mount 폴더로 이동하여 아래 명령어를 입력한다.</p>
 
-<p>10 epoch마다 모델의 check point를 저장해주므로 적당한 loss가 나왔을 때 중지시켜도 된다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Pytorch, React Native, labelImg" /><summary type="html"><![CDATA[[현재 작성중인 글입니다.]]]></summary></entry><entry><title type="html">[FastAPI] API 요청 시 307 Temporary Redirect가 뜨는 이슈</title><link href="http://localhost:4000/fastapi-redirect/" rel="alternate" type="text/html" title="[FastAPI] API 요청 시 307 Temporary Redirect가 뜨는 이슈" /><published>2024-06-15T00:00:00+07:00</published><updated>2024-06-15T00:00:00+07:00</updated><id>http://localhost:4000/fastapi-redirect</id><content type="html" xml:base="http://localhost:4000/fastapi-redirect/"><![CDATA[<p>어느 순간부터 FastAPI 서버에 API 요청을 할 때 status code가 307가 뜨기 시작했다.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python train_ssd.py <span class="nt">--dataset_type</span> open_images <span class="nt">--datasets</span> /mount/data/dognose_dataset <span class="nt">--net</span> mb2-ssd-lite <span class="nt">--pretrained_ssd</span> models/mb2-ssd-lite-mp-0_686.pth <span class="nt">--scheduler</span> cosine <span class="nt">--lr</span> 0.01 <span class="nt">--t_max</span> 100 <span class="nt">--validation_epochs</span> 10 <span class="nt">--num_epochs</span> 100 <span class="nt">--base_net_lr</span> 0.001 <span class="nt">--batch_size</span> 8 <span class="nt">--debug_steps</span> 10
+</code></pre></div></div>
+
+<p>딥러닝을 접한지 얼마 안 된 분들이라면 뒤에 붙은 수많은 옵션에 놀라셨을지 모른다. 이는 딥러닝에서 꽤나 중요하게 작용하는 <code class="language-plaintext highlighter-rouge">하이퍼 파라미터</code>의 집합이며, 개발자는 이러한 값을 바꿔가며 가능한 모든 시나리오의 조합을 확인한 뒤 가장 좋은 모델을 만드는 하이퍼 파라미터를 찾아낸다. 그렇기에 한번에 최상의 모델이 뚝딱 탄생하는 것은 아니며, 본인이 선택한 파라미터에 따라 모델의 성능은 뒤바뀔 수 있다는 사실을 염두에 두어야한다.</p>
+
+<p>※ 아마 위의 명령어는 원본 코드에서 에러를 발생시킬 것인데, 이것은 모델에 들어가는 데이터의 양식을 필자가 살짝 건드렸기 때문이다. 모든 이미지가 <code class="language-plaintext highlighter-rouge">jpg</code>형식으로 주어지지는 않을 것이므로 이미지 압축 형식에 영향을 받지 않도록 하였다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>⚠️ AttributeError: <span class="s1">'NoneType'</span> object has no attribute <span class="s1">'shape'</span>
+<span class="c"># /vision/datasets/open_images.py 의 _read_image 함수 수정</span>
+🔑 image_file <span class="o">=</span> self.root / self.dataset_type / f<span class="s2">"{image_id}"</span> <span class="c"># &lt;- .jpg 삭제</span>
+</code></pre></div></div>
+
+<p>※ 만약 훈련 데이터셋의 길이가 배치 사이즈로 딱 나누어 떨어지지 않는다면 다음과 같은 에러가 발생한다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>⚠️ raise ValueError<span class="o">(</span><span class="s2">"Expected more than 1 value per channel when training, got input size {}"</span>.format<span class="o">(</span>size<span class="o">))</span>
+🔑 train_ssd.py 에서 DataLoader 안에 <span class="nv">drop_last</span><span class="o">=</span>True 조건을 추가해준다.
+</code></pre></div></div>
+
+<p>정상적으로 훈련이 진행된다면, 데이터셋에 대한 정보가 먼저 나열된 뒤 다음과 같이 Epoch 0부터 모델이 학습을 시작한다.</p>
+
+<p><img src="/assets/img/on-train.png" alt="terminal" /></p>
+
+<p>MacBook Pro 2021년 모델 기준, CPU로 학습시 1 epoch 당 대략 3분 30초 정도 소요되었다. 100 epoch를 전부 학습하는데는 약 9시간 정도가 소요되었다. 물론 GPU로 학습시에는 속도가 비약적으로 빨라질 것으로 예상된다.</p>
+
+<p>너무 오래걸린다 생각이 되면 10 epoch마다 모델의 check point를 저장해주므로 적당한 loss가 나왔을 때 중지시켜도 된다.</p>
+
+<p>학습이 끝난 뒤 <code class="language-plaintext highlighter-rouge">models</code> 폴더를 보면 mb2-ssd-lite-Epoch-?-Loss-?.pth 형태의 파일이 저장되는데 이것이 우리가 사용할 모델이다.</p>
+
+<h2 id="️-모델-테스트">☑️ 모델 테스트</h2>
+
+<p>모델이 제대로 학습되었는지, 제대로 예측을 하고 있는지 테스트를 해 볼 시간이다.</p>
+
+<p>우선 한 장의 이미지(dog.jpg)를 넣어서 강아지의 코를 잘 찾는지 보자. (pytorch-ssd 폴더 안에 이미지를 위치한다.)</p>
+
+<p>당연한 이야기지만 도커 환경 위에서 실행해야 한다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 run_ssd_example.py mb2-ssd-lite models/mb2-ssd-lite-Epoch-99-Loss-2.2699455499649046.pth models/open-images-model-labels.txt dog.jpg
+</code></pre></div></div>
+
+<p>open-images-model-labels.txt는 자동 생성되는 파일이지만 <code class="language-plaintext highlighter-rouge">DogNose</code>라벨을 포함하는지 확인하자.</p>
+
+<p>예측이 끝나면 <code class="language-plaintext highlighter-rouge">run_ssd_example_output.jpg</code>라는 이름의 결과 이미지 파일이 생성될 것이다. 아래를 보니 잘 예측하는 듯 하다.</p>
+
+<figure style="width: 50%; margin: auto; text-align: center;">
+    <img src="/assets/img/dog-nose.jpg" alt="dog" />
+    <figcaption>모델 테스트 결과 (사진 출처: unsplash)</figcaption>
+</figure>
+
+<p>간혹 run_ssd_example.py 파일에서 에러가 나는 경우가 있다. 아래와 같이 해결하자.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>⚠️ cv2.error: OpenCV<span class="o">(</span>4.10.0<span class="o">)</span> :-1: error: <span class="o">(</span><span class="nt">-5</span>:Bad argument<span class="o">)</span> <span class="k">in function</span> <span class="s1">'rectangle'</span>
+🔑 <span class="nb">type </span>에러이므로 box[?] 요소를 전부 정수 변환 해준다 -&gt; int<span class="o">(</span>box[?]<span class="o">)</span>
+</code></pre></div></div>
+
+<p>또한, 우리가 만든 테스트 데이터셋에 대해서 정확도를 측정하는 것도 가능하다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python eval_ssd.py <span class="nt">--dataset_type</span> open_images <span class="nt">--net</span> mb2-ssd-lite <span class="nt">--dataset</span> /mount/data/dognose_dataset <span class="nt">--trained_model</span> models/mb2-ssd-lite-Epoch-99-Loss-2.2699455499649046.pth <span class="nt">--label_file</span> models/open-images-model-labels.txt
+</code></pre></div></div>
+
+<p>위 명령어를 실행하면 모델이 각 이미지를 돌면서 예측을 진행하고 마지막에 전체 정확도를 계산해준다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Average Precision Per-class:
+DogNose: 0.8976893924291722
+Average Precision Across All Classes:0.8976893924291722
+</code></pre></div></div>
+
+<p>약 90%의 정확도가 나왔다. 이정도면 나쁘지 않다.</p>
+
+<p>그렇다면 Live로도 잘 판단해줄까? 아래 명령어로 직접 확인해보자.</p>
+
+<p>카메라 권한이 필요하기에 도커보다는 로컬에서 진행하기를 추천한다. <code class="language-plaintext highlighter-rouge">torch</code>, <code class="language-plaintext highlighter-rouge">torchvision</code>, <code class="language-plaintext highlighter-rouge">opencv-python</code> 만 다운로드하면 문제없이 코드를 돌릴 수 있다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip3 <span class="nb">install </span>torch torchvision opencv-python
+python3 run_ssd_live_demo.py mb2-ssd-lite models/mb2-ssd-lite-Epoch-99-Loss-2.2699455499649046.pth models/open-images-model-labels.txt
+</code></pre></div></div>
+
+<p>여기까지 잘 따라왔다면 이젠 PC에서 딥러닝을 돌릴 수 있는 능력을 얻은 것이다. 축하한다.</p>
+
+<h2 id="️-모델-변환">♻️ 모델 변환</h2>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Pytorch, React Native, labelImg" /><summary type="html"><![CDATA[[현재 작성중인 글입니다.]]]></summary></entry><entry><title type="html">[FastAPI] API 요청 시 307 Temporary Redirect가 뜨는 이슈</title><link href="http://localhost:4000/fastapi-redirect/" rel="alternate" type="text/html" title="[FastAPI] API 요청 시 307 Temporary Redirect가 뜨는 이슈" /><published>2024-06-15T00:00:00+07:00</published><updated>2024-06-15T00:00:00+07:00</updated><id>http://localhost:4000/fastapi-redirect</id><content type="html" xml:base="http://localhost:4000/fastapi-redirect/"><![CDATA[<p>어느 순간부터 FastAPI 서버에 API 요청을 할 때 status code가 307가 뜨기 시작했다.</p>
 
 <p>분명 쿠버네티스에 띄워놓은 서비스는 잘 돌아가고 있는데 로컬에서만 안되는게 신기했다.</p>
 
