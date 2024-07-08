@@ -20,7 +20,7 @@ last_modified_at: 2024-06-30T
 
 (Object Detection 설명)
 
-(필요 스펙)
+(필요 스펙 테이블)
 
 ## 🍀 프로세스
 
@@ -154,9 +154,7 @@ sub-validation-annotations-bbox.csv
 🗂️ validation
 ```
 
-이제 모델에 넣을 데이터가 준비되었다.
-
-앞으로 이 데이터셋을 `dognose_dataset`이라고 부를 것이다.
+이제 모델에 넣을 데이터가 준비되었다. 앞으로 이 데이터셋을 `dognose_dataset`이라고 부를 것이다.
 
 ## 🧭 모델 훈련
 
@@ -203,21 +201,21 @@ docker pull ufoym/deepo:cpu # CPU 전용 이미지 다운로드
 docker run -it --shm-size 8G -v "$(pwd)":/mount ufoym/deepo:cpu bash
 ```
 
-여기서 --shm-size 8G 옵션을 넣어주지 않으면 다음과 같은 에러를 만나게 되므로 주의하자.
+여기서 --shm-size 8G 옵션을 넣어주지 않으면 학습시 다음과 같은 에러를 만나게 되므로 주의하자.
 
 > RuntimeError: DataLoader worker (pid 938) is killed by signal: Bus error. It is possible that dataloader's workers are out of shared memory. Please try to raise your shared memory limit.
 
-데이터로더에 너무 많은 데이터 용량이 올라갔기 때문이다. 메모리 제한을 올려주면 해결된다.
+이는 데이터로더에 너무 많은 데이터 용량이 올라갔기 때문이다. 메모리 제한을 올려주면 간단히 해결된다.
 
-만약 GPU를 사용하고 싶다면 GPU 전용 도커 이미지와 nvidia-docker2를 활용하면 된다. 아래는 그 예시이다.
+만약 GPU를 사용하고 싶다면 GPU 전용 도커 이미지와 `nvidia-docker2`를 활용하면 된다. 아래는 그 예시이다.
 
 ```bash
-# nvidia-docker2 설치 전제
+# nvidia-docker2가 설치되었다고 가정
 docker pull ufoym/deepo # GPU 전용 이미지 다운로드
 docker run -it --gpus all --shm-size 8G -v "$(pwd)":/mount ufoym/deepo bash
 ```
 
-nvidia GPU가 있다면 무조건 활용하는 것이 좋다. CPU와 엄청난 연산 속도 차이를 보이기 때문이다.
+Nvidia GPU가 있다면 무조건 활용하는 것이 좋다. CPU와 엄청난 연산 속도 차이를 보이기 때문이다.
 
 `pytorch-ssd`를 돌릴 때 추가로 설치해 주어야하는 패키지가 있어서 도커 환경에 접속했다면 아래 패키지를 설치해준다.
 
@@ -229,7 +227,7 @@ apt-get update
 apt-get install libgl1-mesa-glx
 ```
 
-혹여나 exit으로 컨테이너를 빠져나온 뒤에 재접속 하고 싶다면 이렇게 하면 된다.
+혹여나 `exit`으로 컨테이너를 빠져나온 뒤에 재접속 하고 싶다면 이렇게 하면 된다.
 
 ```bash
 sudo docker start 컨테이너ID
@@ -242,9 +240,9 @@ sudo docker attach 컨테이너ID
 python train_ssd.py --dataset_type open_images --datasets /mount/data/dognose_dataset --net mb2-ssd-lite --pretrained_ssd models/mb2-ssd-lite-mp-0_686.pth --scheduler cosine --lr 0.01 --t_max 100 --validation_epochs 10 --num_epochs 100 --base_net_lr 0.001 --batch_size 8 --debug_steps 10
 ```
 
-딥러닝을 접한지 얼마 안 된 분들이라면 뒤에 붙은 수많은 옵션에 놀라셨을지 모른다. 이는 딥러닝에서 꽤나 중요하게 작용하는 `하이퍼 파라미터`의 집합이며, 개발자는 이러한 값을 바꿔가며 가능한 모든 시나리오의 조합을 확인한 뒤 가장 좋은 모델을 만드는 하이퍼 파라미터를 찾아낸다. 그렇기에 한번에 최상의 모델이 뚝딱 탄생하는 것은 아니며, 본인이 선택한 파라미터에 따라 모델의 성능은 뒤바뀔 수 있다는 사실을 염두에 두어야한다.
+딥러닝을 접한지 얼마 안 된 분들이라면 뒤에 붙은 수많은 옵션에 놀라셨을지 모른다. 이는 딥러닝에서 꽤나 중요하게 작용하는 `하이퍼파라미터`의 집합이며, 개발자는 이러한 값을 바꿔가며 가능한 모든 시나리오의 조합을 확인한 뒤 가장 좋은 모델을 생성하는 하이퍼파라미터를 찾아낸다. 그렇기에 한번에 최상의 모델이 뚝딱 탄생하는 것은 아니며, 본인이 선택한 파라미터에 따라 모델의 성능은 뒤바뀔 수 있다는 사실을 염두에 두어야한다.
 
-※ 아마 위의 명령어는 원본 코드에서 에러를 발생시킬 것인데, 이것은 모델에 들어가는 데이터의 양식을 필자가 살짝 건드렸기 때문이다. 모든 이미지가 `jpg`형식으로 주어지지는 않을 것이므로 이미지 압축 형식에 영향을 받지 않도록 하였다.
+※ 아마 위의 명령어는 원본 코드에서 에러를 발생시킬 것인데, 이것은 모델에 들어가는 데이터의 양식을 필자가 살짝 건드렸기 때문이다. 모든 이미지가 `jpg`형식으로 주어지지는 않을 것이라 생각하여 이미지 압축 형식에 영향을 받지 않도록 하였다.
 
 ```bash
 ⚠️ AttributeError: 'NoneType' object has no attribute 'shape'
@@ -263,32 +261,36 @@ python train_ssd.py --dataset_type open_images --datasets /mount/data/dognose_da
 
 ![terminal](/assets/img/on-train.png)
 
-MacBook Pro 2021년 모델 기준, CPU로 학습시 1 epoch 당 대략 3분 30초 정도 소요되었다. 100 epoch를 전부 학습하는데는 약 9시간 정도가 소요되었다. 물론 GPU로 학습시에는 속도가 비약적으로 빨라질 것으로 예상된다.
+MacBook Pro 2021년 모델 기준, CPU로 학습시 1 epoch 당 대략 3분 30초 정도 소요되었다. 100 epoch를 전부 학습하는데는 약 9시간 정도가 소요되었다. 물론 GPU로 학습시에는 속도가 비약적으로 빨라질 것으로 예상된다. (훈련 데이터셋은 약 700장이다)
 
 너무 오래걸린다 생각이 되면 10 epoch마다 모델의 check point를 저장해주므로 적당한 loss가 나왔을 때 중지시켜도 된다.
 
-학습이 끝난 뒤 `models` 폴더를 보면 mb2-ssd-lite-Epoch-?-Loss-?.pth 형태의 파일이 저장되는데 이것이 우리가 사용할 모델이다.
+학습이 끝난 뒤 `models` 폴더를 보면 mb2-ssd-lite-Epoch-?-Loss-?.pth 형태의 파일이 저장되는데 이것이 바로 우리가 사용할 모델이다.
 
 ## ☑️ 모델 테스트
 
 모델이 제대로 학습되었는지, 제대로 예측을 하고 있는지 테스트를 해 볼 시간이다.
 
-우선 한 장의 이미지(dog.jpg)를 넣어서 강아지의 코를 잘 찾는지 보자. (pytorch-ssd 폴더 안에 이미지를 위치한다.)
+우선 한 장의 이미지(dog.jpg)를 넣어서 강아지의 코를 잘 찾는지 보자. (pytorch-ssd 폴더 안에 원하는 이미지를 넣는다)
 
 당연한 이야기지만 도커 환경 위에서 실행해야 한다.
 
 ```bash
-python3 run_ssd_example.py mb2-ssd-lite models/mb2-ssd-lite-Epoch-99-Loss-2.2699455499649046.pth models/open-images-model-labels.txt dog.jpg
+python3 run_ssd_example.py mb2-ssd-lite models/mb2-ssd-lite-Epoch-?-Loss-?.pth models/open-images-model-labels.txt dog.jpg
 ```
 
 open-images-model-labels.txt는 자동 생성되는 파일이지만 `DogNose`라벨을 포함하는지 확인하자.
 
-예측이 끝나면 `run_ssd_example_output.jpg`라는 이름의 결과 이미지 파일이 생성될 것이다. 아래를 보니 잘 예측하는 듯 하다.
+예측이 끝나면 `run_ssd_example_output.jpg`라는 이름의 결과 이미지 파일이 생성될 것이다.
+
+아래는 테스트 결과이다.
 
 <figure style="width: 50%; margin: auto; text-align: center;">
     <img src="/assets/img/dog-nose.jpg" alt="dog">
     <figcaption>모델 테스트 결과 (사진 출처: unsplash)</figcaption>
 </figure>
+
+98%의 확률로 강아지 코를 예측하고 있는 것을 알 수 있다. 나쁘지 않다.
 
 간혹 run_ssd_example.py 파일에서 에러가 나는 경우가 있다. 아래와 같이 해결하자.
 
@@ -300,10 +302,10 @@ open-images-model-labels.txt는 자동 생성되는 파일이지만 `DogNose`라
 또한, 우리가 만든 테스트 데이터셋에 대해서 정확도를 측정하는 것도 가능하다.
 
 ```bash
-python eval_ssd.py --dataset_type open_images --net mb2-ssd-lite --dataset /mount/data/dognose_dataset --trained_model models/mb2-ssd-lite-Epoch-99-Loss-2.2699455499649046.pth --label_file models/open-images-model-labels.txt
+python eval_ssd.py --dataset_type open_images --net mb2-ssd-lite --dataset /mount/data/dognose_dataset --trained_model models/mb2-ssd-lite-Epoch-?-Loss-?.pth --label_file models/open-images-model-labels.txt
 ```
 
-위 명령어를 실행하면 모델이 각 이미지를 돌면서 예측을 진행하고 마지막에 전체 정확도를 계산해준다.
+위 명령어를 실행하면 모델이 테스트 데이터셋을 돌면서 예측을 진행하고 마지막에 전체 정확도를 계산해준다.
 
 ```bash
 Average Precision Per-class:
@@ -319,9 +321,45 @@ Average Precision Across All Classes:0.8976893924291722
 
 ```bash
 pip3 install torch torchvision opencv-python
-python3 run_ssd_live_demo.py mb2-ssd-lite models/mb2-ssd-lite-Epoch-99-Loss-2.2699455499649046.pth models/open-images-model-labels.txt
+python3 run_ssd_live_demo.py mb2-ssd-lite models/mb2-ssd-lite-Epoch-?-Loss-?.pth models/open-images-model-labels.txt
 ```
 
-여기까지 잘 따라왔다면 이젠 PC에서 딥러닝을 돌릴 수 있는 능력을 얻은 것이다. 축하한다.
+카메라가 실행되면 실제 강아지나 사진을 비춰서 모델이 코를 제대로 인식하나 살펴보자.
 
-## ♻️ 모델 변환
+여기까지 잘 따라왔다면 이젠 PC에서 딥러닝을 돌릴 줄 아는 것이다. 축하한다.
+
+## 🛤️ 모델 변환
+
+우리가 앞에서 얻은 모델을 앱에 내장하기 위해서는 `.pth`로 되어있는 파일 형식을 `.ptl`로 바꿔주어야 한다.
+
+[PlayTorch](https://playtorch.dev/docs/tutorials/prepare-custom-model/) 공식문서에 나와있는 코드를 조금 수정하여 모델 변환 코드를 작성하였다.
+
+```python
+import torch
+from torch.utils.mobile_optimizer import optimize_for_mobile
+from vision.ssd.mobilenet_v2_ssd_lite import create_mobilenetv2_ssd_lite, create_mobilenetv2_ssd_lite_predictor
+
+model = create_mobilenetv2_ssd_lite(2, is_test=True)
+model_path = 'models/mb2-ssd-lite-Epoch-?-Loss-?.pth'
+model.load(model_path)
+
+model.eval()
+
+scripted_model = torch.jit.script(model)
+optimized_model = optimize_for_mobile(scripted_model)
+optimized_model._save_for_lite_interpreter("models/mb2-ssd-lite-Epoch-?-Loss-?.ptl")
+
+print("model successfully exported")
+```
+
+`.ptl` 파일을 얻기 위해서는 먼저 `torch.jit`을 사용하여 모델을 `Eager mode`에서 `Script mode`로 변환해주어야 한다. 변환 방법에는 **torch.jit.trace**와 **torch.jit.script** 이렇게 두 가지 방식이 있는데 여기서는 `script`를 사용하였다.
+
+`trace` 방식은 모델 변환시 성공률은 높지만 제대로된 변환을 보장해주지는 않는다. 반면 `script` 방식은 모델 구조에 꽤나 엄격하기에 제대로 된 형태가 아닐 경우 에러를 내뿜을 가능성이 높다. 가능하다면 둘 다 시도하여 모델 성능을 비교해보자.
+
+아래는 `script`방식에서 자주 마주치는 에러이다. 동적 인덱싱을 사용할 수 없기 때문에 `enumerate` 함수로 iterator를 사용하여 해결하거나 integer를 직접 넣어 인덱싱 하는 수밖에 없다.
+
+> ⚠️ ModuleList/Sequential indexing is only supported with integer literals.
+
+변환을 위해 `/vision/ssd/ssd.py`의 `forward` 함수를 수정해주었다. 가독성을 조금 해치지만 enumerate를 사용하기 애매한 부분은 for 문을 풀어서 작성하였다.
+
+## 🍿 모델 적용
