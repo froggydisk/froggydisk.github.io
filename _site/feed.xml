@@ -1,4 +1,34 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-07-08T15:01:00+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[RN/AI] Pytorch로 AI 모델을 학습시켜 모바일 앱에 적용하기</title><link href="http://localhost:4000/ai-on-app-intro/" rel="alternate" type="text/html" title="[RN/AI] Pytorch로 AI 모델을 학습시켜 모바일 앱에 적용하기" /><published>2024-06-30T00:00:00+07:00</published><updated>2024-06-30T00:00:00+07:00</updated><id>http://localhost:4000/ai-on-app-intro</id><content type="html" xml:base="http://localhost:4000/ai-on-app-intro/"><![CDATA[<h2 id="현재-작성중인-글입니다">[현재 작성중인 글입니다.]</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-07-08T15:43:56+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[React Native] 갑자기 Hot Reload가 안될 때 대처법</title><link href="http://localhost:4000/hot-reload/" rel="alternate" type="text/html" title="[React Native] 갑자기 Hot Reload가 안될 때 대처법" /><published>2024-07-08T00:00:00+07:00</published><updated>2024-07-08T00:00:00+07:00</updated><id>http://localhost:4000/hot-reload</id><content type="html" xml:base="http://localhost:4000/hot-reload/"><![CDATA[<p>VSCode에서 앱 작업을 하며 코드 저장을 할 때마다 변경 사항이 자동으로 시뮬레이터나 디바이스에 반영이 되는 편리함에 취해있던 어느날.</p>
+
+<p>갑자기 <code class="language-plaintext highlighter-rouge">Hot Reload</code>가 먹통이 되었다.</p>
+
+<p>따로 설정을 해준 적도 없었기에 어떻게 살려낼 수 있을지 막막했다.</p>
+
+<p>여러 원인을 감각적으로는 알고 있었는데 정리해놓은 적이 없어서 후회가 몰려왔다.</p>
+
+<p>그래서 이번 기회에 정리하기로 마음먹었다.</p>
+
+<p>이미 <a href="https://github.com/facebook/react-native/issues/33102">React Native 깃 페이지</a>에서 이슈로 다뤄진 내용이라 레퍼런스 찾는 것은 어렵지 않았다.</p>
+
+<p>정리하자면 다음과 같다.</p>
+
+<h2 id="1">1</h2>
+
+<p>iOS 기준으로 <code class="language-plaintext highlighter-rouge">cmd + D</code>를 누르거나 디바이스를 좌우로 흔들어 개발자 창을 연다. 이후 <code class="language-plaintext highlighter-rouge">enable fast refresh</code>를 시킨다.<br />
+➡ 필자는 해당 버튼을 찾을 수가 없어서 실패하였다.</p>
+
+<h2 id="2">2</h2>
+
+<p>디바이스와 컴퓨터가 완전히 동일한 와이파이 네트워크상에 존재하는지 확인한다. (이름이 같아도 2.4G/5G는 다른 네트워크다!) 물론 시뮬레이터로 작업할 때는 관련이 없다.</p>
+
+<h2 id="3">3</h2>
+
+<p>프로젝트의 루트 경로로 가서 다음과 같은 명령어를 입력한다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">rm</span> <span class="nt">-rf</span> .git/index.lock
+</code></pre></div></div>
+
+<p>의외로 이 방법으로 해결한 사람들이 많은 듯하다. 필자도 <code class="language-plaintext highlighter-rouge">index.lock</code> 파일을 지워주었더니 거짓말처럼 문제가 해결되었다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Hot Reload, Fast Refresh" /><summary type="html"><![CDATA[VSCode에서 앱 작업을 하며 코드 저장을 할 때마다 변경 사항이 자동으로 시뮬레이터나 디바이스에 반영이 되는 편리함에 취해있던 어느날.]]></summary></entry><entry><title type="html">[RN/AI] Pytorch로 AI 모델을 학습시켜 모바일 앱에 적용하기</title><link href="http://localhost:4000/ai-on-app-intro/" rel="alternate" type="text/html" title="[RN/AI] Pytorch로 AI 모델을 학습시켜 모바일 앱에 적용하기" /><published>2024-06-30T00:00:00+07:00</published><updated>2024-06-30T00:00:00+07:00</updated><id>http://localhost:4000/ai-on-app-intro</id><content type="html" xml:base="http://localhost:4000/ai-on-app-intro/"><![CDATA[<h2 id="현재-작성중인-글입니다">[현재 작성중인 글입니다.]</h2>
 
 <p>앱을 만들다보면 자연스레 AI 기술에 관심을 가지게 된다.</p>
 
@@ -811,37 +841,4 @@ set statusline=</span><span class="se">\ </span><span class="s2">%&lt;%l:%v</spa
 
 <p>잘 써먹을 만한 팁이지만 괜히 헷갈린다면 무조건 onPress 안에 <code class="language-plaintext highlighter-rouge">()=&gt;</code>를 넣자.</p>
 
-<p>참고로 이는 React의 onClick에서도 동일하다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native" /><summary type="html"><![CDATA[React Native에서 onPress를 사용할 때 무의식적으로 화살표 표현식 ()=&gt;을 사용하고 있었는데 어느날 특정 경우에 생략이 가능하다는 것을 알게 되었다.]]></summary></entry><entry><title type="html">[React/RN] map 함수 안에서의 return문 사용법</title><link href="http://localhost:4000/return-in-map/" rel="alternate" type="text/html" title="[React/RN] map 함수 안에서의 return문 사용법" /><published>2024-02-05T00:00:00+07:00</published><updated>2024-02-05T00:00:00+07:00</updated><id>http://localhost:4000/return-in-map</id><content type="html" xml:base="http://localhost:4000/return-in-map/"><![CDATA[<p>개발을 처음 배울 시절, 궁금했던 것들을 하나하나 메모하면서 나중에 블로그 글로 하나씩 적어야겠다고 생각했는데 벌써 어언 1년이 지나서 이제서야 글로 옮긴다.</p>
-
-<p>JS 문법에도 익숙지 않아서 map 함수를 보면 지레 겁을 먹었던 적도 있었는데 이제는 이런 함수의 존재가 너무나도 고맙다.</p>
-
-<p>항상 사용할 때마다 return문을 꼭 써야하는 것인지 궁금했었는데 오늘 그 이야기를 하고자한다.</p>
-
-<p>답을 먼저 말하면 <strong><code class="language-plaintext highlighter-rouge">그렇지 않다</code></strong>이다.</p>
-
-<p>map 함수 안에서 return 문의 유무를 결정하는 기준은 화살표(=&gt;) 뒤에 <strong>중괄호를 쓰냐 소괄호를 쓰냐에 따라</strong> 갈리게 되는데 일반적으로 소괄호를 쓰는 형태는 다음과 같다.</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">data</span><span class="o">.</span><span class="na">map</span><span class="o">((</span><span class="n">value</span><span class="o">,</span> <span class="n">key</span><span class="o">)=&gt;(&lt;</span><span class="nc">View</span> <span class="n">key</span><span class="o">={</span><span class="n">key</span><span class="o">}&gt;[</span><span class="n">컴포넌트</span><span class="o">]&lt;/</span><span class="nc">View</span><span class="o">&gt;))</span>
-</code></pre></div></div>
-
-<p>더 나아가 소괄호가 생략되는 경우도 많고 이는 코드가 훨씬 깔끔해 보이는 장점을 가진다.</p>
-
-<p>반대로 중괄호를 쓰게 되면 아래와 같이 꼭 return문을 넣어주어야 한다.</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">data</span><span class="o">.</span><span class="na">map</span><span class="o">((</span><span class="n">value</span><span class="o">,</span> <span class="n">key</span><span class="o">)=&gt;{</span>
-  <span class="kd">const</span> <span class="n">newValue</span> <span class="o">=</span> <span class="o">...</span> <span class="c1">// 새 변수 정의</span>
-  <span class="k">return</span><span class="o">(</span>
-    <span class="o">&lt;</span><span class="nc">View</span> <span class="n">key</span><span class="o">={</span><span class="n">key</span><span class="o">}&gt;</span>
-      <span class="o">&lt;</span><span class="nc">Text</span><span class="o">&gt;</span>
-        <span class="o">{</span><span class="n">newValue</span><span class="o">}</span>
-      <span class="o">&lt;/</span><span class="nc">Text</span><span class="o">&gt;</span>
-    <span class="o">&lt;/</span><span class="nc">View</span><span class="o">&gt;</span>
-  <span class="o">);</span>
-<span class="o">})</span>
-</code></pre></div></div>
-
-<p>return을 쓰면 필연적으로 코드가 길어지게 되므로 항상 소괄호를 쓰는게 나아보일 수 있는데, 단 중괄호를 썼을 때 생기는 중요한 이점이 하나 존재한다.</p>
-
-<p>바로 map 함수 내부에서 새로운 변수를 정의할 수 있다는 것이다. 이는 코드의 중복을 막아 가독성을 좋게 하는데 매우 중요할 수 있다.</p>
-
-<p>하지만 그 뿐이므로 <strong>새로운 변수를 정의하는 경우를 제외한다면 return문은 과감히 생략해주자.</strong></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React, React Native, Javascript" /><summary type="html"><![CDATA[개발을 처음 배울 시절, 궁금했던 것들을 하나하나 메모하면서 나중에 블로그 글로 하나씩 적어야겠다고 생각했는데 벌써 어언 1년이 지나서 이제서야 글로 옮긴다.]]></summary></entry></feed>
+<p>참고로 이는 React의 onClick에서도 동일하다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native" /><summary type="html"><![CDATA[React Native에서 onPress를 사용할 때 무의식적으로 화살표 표현식 ()=&gt;을 사용하고 있었는데 어느날 특정 경우에 생략이 가능하다는 것을 알게 되었다.]]></summary></entry></feed>
