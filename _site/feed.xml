@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-07-09T12:01:14+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[React Native] 갑자기 Hot Reload가 안될 때 대처법</title><link href="http://localhost:4000/hot-reload/" rel="alternate" type="text/html" title="[React Native] 갑자기 Hot Reload가 안될 때 대처법" /><published>2024-07-08T00:00:00+07:00</published><updated>2024-07-08T00:00:00+07:00</updated><id>http://localhost:4000/hot-reload</id><content type="html" xml:base="http://localhost:4000/hot-reload/"><![CDATA[<p>VSCode에서 앱 작업을 하며 코드 저장을 할 때마다 변경 사항이 자동으로 시뮬레이터나 디바이스에 반영이 되는 편리함에 취해있던 어느날.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2024-07-09T13:01:46+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[React Native] 갑자기 Hot Reload가 안될 때 대처법</title><link href="http://localhost:4000/hot-reload/" rel="alternate" type="text/html" title="[React Native] 갑자기 Hot Reload가 안될 때 대처법" /><published>2024-07-08T00:00:00+07:00</published><updated>2024-07-08T00:00:00+07:00</updated><id>http://localhost:4000/hot-reload</id><content type="html" xml:base="http://localhost:4000/hot-reload/"><![CDATA[<p>VSCode에서 앱 작업을 하며 코드 저장을 할 때마다 변경 사항이 자동으로 시뮬레이터나 디바이스에 반영이 되는 편리함에 취해있던 어느날.</p>
 
 <p>갑자기 <code class="language-plaintext highlighter-rouge">Hot Reload</code>가 먹통이 되었다.</p>
 
@@ -372,7 +372,8 @@ python3 run_ssd_live_demo.py mb2-ssd-lite models/mb2-ssd-lite-Epoch-?-Loss-?.pth
 
 <p><a href="https://playtorch.dev/docs/tutorials/prepare-custom-model/">PlayTorch</a> 공식문서에 나와있는 코드를 조금 수정하여 모델 변환 코드를 작성하였다.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">torch</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># export_model.py
+</span><span class="kn">import</span> <span class="n">torch</span>
 <span class="kn">from</span> <span class="n">torch.utils.mobile_optimizer</span> <span class="kn">import</span> <span class="n">optimize_for_mobile</span>
 <span class="kn">from</span> <span class="n">vision.ssd.mobilenet_v2_ssd_lite</span> <span class="kn">import</span> <span class="n">create_mobilenetv2_ssd_lite</span><span class="p">,</span> <span class="n">create_mobilenetv2_ssd_lite_predictor</span>
 
@@ -400,6 +401,11 @@ python3 run_ssd_live_demo.py mb2-ssd-lite models/mb2-ssd-lite-Epoch-?-Loss-?.pth
 </blockquote>
 
 <p>변환을 위해 <code class="language-plaintext highlighter-rouge">/vision/ssd/ssd.py</code>의 <code class="language-plaintext highlighter-rouge">forward</code> 함수를 수정해주었다. 가독성을 조금 해치지만 enumerate를 사용하기 애매한 부분은 for 문을 풀어서 작성하였다.</p>
+
+<p>아래 명령어로 변환을 하였을 때 <code class="language-plaintext highlighter-rouge">model successfully exported</code>라는 말이 나온다면 성공이다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 export_model.py
+</code></pre></div></div>
 
 <h2 id="-모델-적용">🍿 모델 적용</h2>
 
