@@ -12,13 +12,13 @@ mode: dark # default theme "dark" | "light"
 author:
   name: ./workspace # author name
   bio: >- # tell to the world
-    Intro = "간단한_작업공간"
+    intro = "froggy_disk"
   username: Dr.Frog # general username
   github: froggydisk # github username
   twitter: twitter_username # twitter username
   facebook: facebook_username # facebook username
   email: sewoomkim93@gmail.com # email adress
-  avatar: /assets/img/profile.jpg # change with your own avatar
+  avatar: /assets/img/profile.png # change with your own avatar
 
 # URL settings
 url: "https://froggydisk.github.io" #
