@@ -1,6 +1,26 @@
 <footer class="footer">
-  <a class="footer_item" href="/resume/">resume</a>
-  <span class="footer_item">&copy; {{ site.time | date: "%Y" }}</span>
+  <div style="display: flex; align-items: center; justify-content: center">
+    <a class="letter-image" href="/resume/">
+      <div class="animated-mail">
+        <div class="back-fold"></div>
+        <div class="letter">
+          <div class="letter-border"></div>
+          <div class="letter-title"></div>
+          <div class="letter-context"></div>
+          <div class="letter-stamp">
+            <div class="letter-stamp-inner"></div>
+          </div>
+        </div>
+        <div class="top-fold"></div>
+        <div class="body"></div>
+        <div class="left-fold"></div>
+      </div>
+      <div class="shadow"></div>
+      <span style="margin-left: 25px">resume</span>
+    </a>
+    <!-- <a class="footer_item" href="/resume/">resume</a> -->
+    <span class="footer_item">&copy; {{ site.time | date: "%Y" }}</span>
+  </div>
   <small class="footer_copyright">
     <!-- Klisé Theme: https://github.com/piharpi/jekyll-klise -->
     <a
@@ -18,19 +38,18 @@
 <script src="/assets/js/main.js" defer="defer"></script>
 
 {%- if page.google_analytics -%}
-  <script src="/assets/js/galite.js"></script>
-  <script>
-    var galite = galite || {};
-    galite.UA = "{{ site.google_analytics }}";
-  </script>
-{%- endif -%}
-{%- if page.url == '/archive/' -%}
-  <script src="/assets/js/search.min.js"></script>
-  <script>
-    var sjs = SimpleJekyllSearch({
-      searchInput: document.getElementById('search-input'),
-      resultsContainer: document.getElementById('search-results'),
-      json: '/assets/search.json',
-    });
-  </script>
+<script src="/assets/js/galite.js"></script>
+<script>
+  var galite = galite || {};
+  galite.UA = "{{ site.google_analytics }}";
+</script>
+{%- endif -%} {%- if page.url == '/archive/' -%}
+<script src="/assets/js/search.min.js"></script>
+<script>
+  var sjs = SimpleJekyllSearch({
+    searchInput: document.getElementById("search-input"),
+    resultsContainer: document.getElementById("search-results"),
+    json: "/assets/search.json",
+  });
+</script>
 {%- endif -%}
