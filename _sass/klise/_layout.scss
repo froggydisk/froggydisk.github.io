@@ -301,6 +301,7 @@
 
   // resume
   .letter-image {
+    position: relative;
     width: 85px;
     height: 20px;
     cursor: pointer;
@@ -414,27 +415,6 @@
         opacity: 0.3;
       }
     }
-  }
-
-  .shadow {
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    width: 40px;
-    height: 3px;
-    transition: 0.4s;
-    transform: translateX(-50%);
-    -webkit-transition: 0.4s;
-    -webkit-transform: translateX(-50%);
-    -moz-transition: 0.4s;
-    -moz-transform: translateX(-50%);
-
-    border-radius: 100%;
-    background: radial-gradient(
-      rgba(0, 0, 0, 0.5),
-      rgba(0, 0, 0, 0),
-      rgba(0, 0, 0, 0)
-    );
   }
 
   .letter-image:hover {
