@@ -7,6 +7,9 @@ layout: compress
 
 <body data-theme="{{ site.mode }}" class="notransition">
 
+  <canvas id="canvas" class="background"></canvas>  
+  <script type="module" src="assets/js/script.js"></script>
+
   <script>
     const body = document.body;
     const data = body.getAttribute("data-theme");
@@ -35,6 +38,7 @@ layout: compress
     {% include footer.html %}
   </div>
 </body>
+
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4715878791193779"
   crossorigin="anonymous"></script>
 
