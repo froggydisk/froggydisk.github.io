@@ -11,6 +11,11 @@
   @extend %clearfix;
 }
 
+// Background
+.background {
+  display: none;
+}
+
 // Navigation
 .menu {
   user-select: none;
