@@ -4,7 +4,7 @@ description: >- # site description
   This is for frogs in the world.
 lang: en-US # default lang
 timezone: Asia/Jakarta # set your timezone
-image: https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/profile.jpg?raw=true # This image used for Open Graph more info https://ogp.me/
+image: https://github.com/froggydisk/froggydisk.github.io/blob/master/assets/img/profile.png?raw=true # This image used for Open Graph more info https://ogp.me/
 repo: https://github.com/froggydisk # site repo [optional]
 mode: dark # default theme "dark" | "light"
 
