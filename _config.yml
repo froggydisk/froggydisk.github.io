@@ -12,7 +12,7 @@ mode: dark # default theme "dark" | "light"
 author:
   name: ./workspace # author name
   bio: >- # tell to the world
-    intro = "froggy_disk"
+    froggy_disk
   username: Dr.Frog # general username
   github: froggydisk # github username
   twitter: twitter_username # twitter username
