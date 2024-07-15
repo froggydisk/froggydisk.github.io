@@ -14,15 +14,15 @@ last_modified_at: 2024-04-21T
 
 요즘은 평소에 시리얼 포트를 보는 것도 드문 일이거니와 과연 M1 칩 이후로는 연동이 잘 되는지도 알 수 없었다.
 
-일단 `RS232-RS232` 케이블로 의료 기기에 하나를 꽂아주고 반대편 포트는 맥북의 허브 포트에 꽂을 수 있게 `Serial to USB` 어댑터를 연결해준다. 
+일단 `RS232-RS232` 케이블로 의료 기기에 하나를 꽂아주고 반대편 포트는 맥북의 허브 포트에 꽂을 수 있게 `Serial to USB` 어댑터를 연결해준다.
 
 그대로 맥북에 연결하면 다음과 같이 `설정 > 일반 > 시스템 리포트` 상에 USB-Serial Controller가 나타난다. 즉, 하드웨어 상으로는 자동으로 연결을 인식해준다.
 
-![image](/assets/img/serial-port-setting.png)
+![image](/assets/img/serial-setting.png)
 
 하지만 코드 상에서 시리얼 통신을 하기 위해서는 `/dev` 폴더 아래에 나타나는 장치 코드를 알아내야한다. 보통 `tty~`로 시작한다.
 
-터미널에서 검색해보면 아직은 아무것도 나타나지 않는다. 
+터미널에서 검색해보면 아직은 아무것도 나타나지 않는다.
 
 ```bash
 $ ls /dev/tty*
@@ -33,7 +33,7 @@ $ ls /dev/tty*
 
 일단 시스템 리포트에 찍히는 `Prolific Technology`에서 만든 시리얼 포트를 인식하기 위해서는 드라이버를 다운로드해야 한다.
 
-중국에서 만들었는지 중국어로 된 사이트로 연결이 된다. 관련 macOS(구OSX) 전용 드라이버는 [Prolific PL2303](https://www.prolific.com.tw/US/ShowProduct.aspx?pcid=41&showlevel=0041-0041)이다. 
+중국에서 만들었는지 중국어로 된 사이트로 연결이 된다. 관련 macOS(구OSX) 전용 드라이버는 [Prolific PL2303](https://www.prolific.com.tw/US/ShowProduct.aspx?pcid=41&showlevel=0041-0041)이다.
 
 하지만 설치를 완료해도 여전히 `/dev`에는 아무것도 나타나지 않는다?!
 
