@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2025-02-18T15:20:43+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[ML/DL] RTX 4090 2-way 딥러닝 서버 견적</title><link href="http://localhost:4000/deep-server/" rel="alternate" type="text/html" title="[ML/DL] RTX 4090 2-way 딥러닝 서버 견적" /><published>2025-02-18T00:00:00+07:00</published><updated>2025-02-18T00:00:00+07:00</updated><id>http://localhost:4000/deep-server</id><content type="html" xml:base="http://localhost:4000/deep-server/"><![CDATA[<p>간단한 LLM 모델을 돌려보기 위한 딥러닝 서버를 구축해야할 일이 있었다.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2025-02-18T15:39:23+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[ML/DL] RTX 4090 2-way 딥러닝 서버 견적</title><link href="http://localhost:4000/server-build/" rel="alternate" type="text/html" title="[ML/DL] RTX 4090 2-way 딥러닝 서버 견적" /><published>2025-02-18T00:00:00+07:00</published><updated>2025-02-18T00:00:00+07:00</updated><id>http://localhost:4000/server-build</id><content type="html" xml:base="http://localhost:4000/server-build/"><![CDATA[<p>간단한 LLM 모델을 돌려보기 위한 딥러닝 서버를 구축해야할 일이 있었다.</p>
 
 <p>우선 예산이 한정되어 있었기에 비용 절감을 위해 최대한 커스텀을 피하고자 하였다. 다만 RTX 4090 한 대 만으로는 VRAM이 부족하기에 두 장까지 장착하는 것을 고려하여 견적을 짰다.</p>
 
@@ -769,7 +769,7 @@ USB를 시리얼 포트로 변환하는 장치를 생산하는 회사. FTDI의 U
 
 <p>짜잔! 연결된 포트가 나타난다. 이제 관련 라이브러리(예 <a href="https://serialport.io">Node.js</a>)를 이용해서 시리얼 통신을 진행하면 된다.</p>
 
-<p>맥에서 시리얼 통신을 할 때는 드라이버가 필수라는 사실만 알아두자.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Serial Port" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">[터미널] Warp + Powerlevel10k + lsd</title><link href="http://localhost:4000/warp/" rel="alternate" type="text/html" title="[터미널] Warp + Powerlevel10k + lsd" /><published>2024-04-10T00:00:00+07:00</published><updated>2024-04-10T00:00:00+07:00</updated><id>http://localhost:4000/warp</id><content type="html" xml:base="http://localhost:4000/warp/"><![CDATA[<h1 id="소개">소개</h1>
+<p>맥에서 시리얼 통신을 할 때는 드라이버가 필수라는 사실만 알아두자.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Serial Port" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">[터미널] Warp + Powerlevel10k + lsd</title><link href="http://localhost:4000/warp/" rel="alternate" type="text/html" title="[터미널] Warp + Powerlevel10k + lsd" /><published>2024-04-10T00:00:00+07:00</published><updated>2024-04-10T00:00:00+07:00</updated><id>http://localhost:4000/warp</id><content type="html" xml:base="http://localhost:4000/warp/"><![CDATA[<h2 id="소개">소개</h2>
 
 <p>기존에는 개발 터미널로 <code class="language-plaintext highlighter-rouge">Iterm2</code>를 쓰고 있었는데 최근에 새로운 터미널을 알게되어 소개하고자 한다.</p>
 
@@ -788,14 +788,7 @@ USB를 시리얼 포트로 변환하는 장치를 생산하는 회사. FTDI의 U
 
 <p>이는 Warp에서 제공하는 벤치마크이므로 100% 신뢰할 수는 없지만 직접 사용해보니 체감상으로도 빠른 것 같다. 이외에도 편리한 기능이 많다.</p>
 
-<p>다만, 아직 범용적으로 사용되기 어려운 단점도 있다.</p>
-
-<ol>
-  <li>zsh를 기본 쉘로 사용하는데 맨 처음 탭을 열 때 zsh 로딩이 조금 느리다.</li>
-  <li>아직 한국어 지원이 완벽하지 않다. (한국어 파일명이 자음으로만 나온다)</li>
-</ol>
-
-<p>이와 같은 이유로 개발자 이외에는 쓰기 어려울 것 같다. 애초에 개발자가 아니면 터미널에 관심을 가지지 않겠지만…</p>
+<p>단점이라면 zsh를 기본 쉘로 사용하는데 맨 처음 탭을 열 때 zsh 로딩이 조금 느린 정도?</p>
 
 <p>위에 서술한 내용과는 별개로 사실 Warp로 넘어오게 된 이유는 간단하다.</p>
 
@@ -805,7 +798,7 @@ USB를 시리얼 포트로 변환하는 장치를 생산하는 회사. FTDI의 U
 
 <hr />
 
-<h1 id="설치">설치</h1>
+<h2 id="설치">설치</h2>
 
 <h3 id="-warp">● Warp</h3>
 
@@ -846,7 +839,7 @@ USB를 시리얼 포트로 변환하는 장치를 생산하는 회사. FTDI의 U
 <p>이제 p10k를 설치해보자.</p>
 
 <div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone <span class="nt">--depth</span><span class="o">=</span>1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
-<span class="nb">echo</span> <span class="s1">'source ~/powerlevel10k/powerlevel10k.zsh-theme'</span> <span class="o">&gt;&gt;</span>~/.zshrc 
+<span class="nb">echo</span> <span class="s1">'source ~/powerlevel10k/powerlevel10k.zsh-theme'</span> <span class="o">&gt;&gt;</span>~/.zshrc
 </code></pre></div></div>
 
 <p>설치가 완료되었다면 <code class="language-plaintext highlighter-rouge">exec zsh</code> 명령어로 테마 설정 마법사를 시작한다. 만일 설정창이 뜨지 않는다면 <code class="language-plaintext highlighter-rouge">p10k configure</code> 명령어를 활용한다.</p>
@@ -916,6 +909,7 @@ USB를 시리얼 포트로 변환하는 장치를 생산하는 회사. FTDI의 U
 </code></pre></div></div>
 
 <p>이제 적용해주면 된다.</p>
+
 <div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">source</span> ~/.zshrc
 </code></pre></div></div>
 
