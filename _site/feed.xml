@@ -1,4 +1,129 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2025-01-21T13:29:01+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[쿠버네티스] Harbor Core가 실행되지 않을 때</title><link href="http://localhost:4000/harbor-core-error/" rel="alternate" type="text/html" title="[쿠버네티스] Harbor Core가 실행되지 않을 때" /><published>2025-01-21T00:00:00+07:00</published><updated>2025-01-21T00:00:00+07:00</updated><id>http://localhost:4000/harbor-core-error</id><content type="html" xml:base="http://localhost:4000/harbor-core-error/"><![CDATA[<p>오랜만에 Helm을 이용해서 Harbor를 새로 띄우는 작업을 했다.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2025-02-18T15:20:43+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[ML/DL] RTX 4090 2-way 딥러닝 서버 견적</title><link href="http://localhost:4000/deep-server/" rel="alternate" type="text/html" title="[ML/DL] RTX 4090 2-way 딥러닝 서버 견적" /><published>2025-02-18T00:00:00+07:00</published><updated>2025-02-18T00:00:00+07:00</updated><id>http://localhost:4000/deep-server</id><content type="html" xml:base="http://localhost:4000/deep-server/"><![CDATA[<p>간단한 LLM 모델을 돌려보기 위한 딥러닝 서버를 구축해야할 일이 있었다.</p>
+
+<p>우선 예산이 한정되어 있었기에 비용 절감을 위해 최대한 커스텀을 피하고자 하였다. 다만 RTX 4090 한 대 만으로는 VRAM이 부족하기에 두 장까지 장착하는 것을 고려하여 견적을 짰다.</p>
+
+<p>2024년 막바지에 들어서서는 50번대 엔비디아 GPU의 등장으로 인해 시장에서 4090 신품을 구하기가 하늘에 별따기 수준이었다. 더군다나 2-way로 장착해야 하는 상황에서는 최대한 얇은 모델을 구해야했기에 상황은 더욱 어려웠다.</p>
+
+<h2 id="-견적">🧾 견적</h2>
+
+<p>우선 각 부품별로 고려했던 제품 리스트를 나열하자면 다음과 같다.
+볼드체로 표시된 항목은 최종적으로 선택한 것들이다.</p>
+
+<h3 id="cpu">CPU</h3>
+
+<ul>
+  <li><strong>AMD 라이젠9-5세대 7950X3D (라파엘) (멀티팩(정품))</strong> ✨</li>
+  <li>AMD 라이젠9-6세대 9950X (그래니트 릿지) (정품)</li>
+  <li>AMD 라이젠9-5세대 7950X (라파엘) (멀티팩(정품))</li>
+</ul>
+
+<h3 id="메인보드">메인보드</h3>
+
+<ul>
+  <li><strong>ASUS ProArt X870E-CREATOR WIFI 대원씨티에스</strong> ✨</li>
+  <li>ASUS TUF Gaming X670E-PLUS WIFI 대원씨티에스</li>
+  <li>ASRock X670E Taichi 대원씨티에스</li>
+</ul>
+
+<h3 id="메모리">메모리</h3>
+
+<ul>
+  <li><strong>G.SKILL DDR5-5200 CL40 FLARE X5 J 패키지 (96GB(48Gx2))</strong> ✨</li>
+  <li>ESSENCORE KLEVV DDR5-5600 CL46 파인인포 (32GB)</li>
+  <li>ADATA DDR5-5600 CL46-45-45 (32GB)</li>
+  <li>PATRIOT DDR5-5600 CL46 EVO (32GB)</li>
+  <li>마이크론 Crucial DDR5-5600 CL46 PRO 패키지 대원씨티에스 (96GB(48Gx2))</li>
+</ul>
+
+<h3 id="그래픽카드-gpu">그래픽카드 (GPU)</h3>
+
+<ul>
+  <li><strong>RTX 4090 블로워 팬</strong> ✨</li>
+  <li>GIGABYTE 지포스 RTX 4090 Gaming OC D6X 24GB 피씨디렉트</li>
+  <li>MSI 지포스 RTX 4090 게이밍 X 슬림 D6X 24GB 트라이프로져3</li>
+  <li>GIGABYTE 지포스 RTX 4090 WINDFORCE V2 D6X 24GB 피씨디렉트</li>
+</ul>
+
+<h3 id="ssd">SSD</h3>
+
+<ul>
+  <li><strong>마이크론 Crucial T500 M.2 NVMe 아스크텍 (2TB)</strong> ✨</li>
+  <li>마이크론 Crucial T705 M.2 NVMe 아스크텍 (1TB)</li>
+  <li>Western Digital WD BLACK SN850X M.2 NVMe (2TB)</li>
+</ul>
+
+<h3 id="케이스">케이스</h3>
+
+<ul>
+  <li><strong>리안리 PC-011D EVO RGB Black (미들타워)</strong> ✨</li>
+  <li>마이크로닉스 ML-420 BTF 화이트 (빅타워)</li>
+  <li>Antec PERFORMANCE 1 MESH SILENT (빅타워)</li>
+  <li>Fractal Design Meshify 2 XL Dark 강화유리</li>
+</ul>
+
+<h3 id="파워서플라이">파워서플라이</h3>
+
+<ul>
+  <li><strong>마이크로닉스 ASTRO II GD 1650W 80PLUS GOLD 풀모듈러 ATX 3.0 (PCIE5)</strong> ✨</li>
+  <li>HYDRO PTM PRO 1650W Platinum ATX3.0 (12V-2x6)</li>
+  <li>(SuperFlower) SF-2000F14HP LEADEX PLATINUM /파워</li>
+  <li>SilverStone HELA 2050R Platinum 마이크로닉스</li>
+</ul>
+
+<h3 id="cpu-쿨러">CPU 쿨러</h3>
+
+<ul>
+  <li><strong>NZXT KRAKEN Elite 360 RGB (black)</strong> ✨</li>
+  <li>발키리 C420 ARGB (BLACK)</li>
+  <li>ARCTIC Liquid Freezer III 420 서린</li>
+  <li>3RSYS Socoool RC1900N 솔더링 (BLACK)</li>
+  <li>DARKFLASH NEBULA DN-360 ARGB (블랙)</li>
+  <li>PentaWave S06D LE ARGB</li>
+  <li>Thermalright Peerless Assassin 120 SE 서린</li>
+</ul>
+
+<h3 id="시스템-쿨러">시스템 쿨러</h3>
+
+<ul>
+  <li><strong>ARCTIC P12 PWM PST ARGB Value Pack</strong> ✨</li>
+</ul>
+
+<p>하드웨어에 대해서 잘 아는 편이 아니기에 커뮤니티 글을 많이 찾아보면서 선택하였고 호환성 문제가 일어나지 않도록 최대한 신경을 썼다.</p>
+
+<h2 id="-선택-이유">🔖 선택 이유</h2>
+
+<p>각 부품에 대해서 선택 이유를 간단히 이야기하자면 아래와 같다.</p>
+
+<ul>
+  <li>CPU (AMD 라이젠 9-5세대 7950X3D 라파엘)<br />
+기존에 쓰던 CPU를 재활용. 3D 모델이라 게임에 좀 더 적합해보인다.</li>
+  <li>메인보드 (ASUS ProArt X870E-CREATOR WIFI STCOM)<br />
+보통 ASRock도 많이 선택하는 것 같은데 개인적 경험에서는 ASUS가 더 튼튼한 느낌이다.</li>
+  <li>메모리 (G.SKILL DDR5-5200 CL40 FLARE X5 J 패키지)<br />
+32, 64, 128 단위가 24, 48, 96 보다는 안정성이 좋다는 말이 있어서 32기가를 4개 꽂을까 하다가 풀뱅크보다는 48 두 개가 낫지 않을까하여 선택하였다. 하지만 LLM을 고려한다면 결국 48로 풀뱅크를 해야할 수도 있지 않을까 생각한다.</li>
+  <li>그래픽카드 (RTX 4090 블로워 팬)<br />
+윈드포스 모델이 제일 얇아서 그걸로 찾고 있었지만 40번대 단종 문제로 아무것도 구할 수가 없어서 용산에 쭉 연락을 돌리다가 블로워 모델 재고가 있어서 울며 겨자 먹기로 주문하였다. 블로워 모델은 게임용이 아니기에 RPM이 일반 모델보다 높게 올라가므로(대략 5,200) 온도 관리는 수월하지만 엄청난 소음 문제가 존재한다. 하지만 실제로 성능 100%를 사용하는 게임 및 AI 훈련을 돌렸보았지만 생각보다는 큰 소리가 아니어서 한시름 놓았다. 물론 가정용이라면 극구 반대한다.</li>
+  <li>SSD (마이크론 Crucial T500 M.2 NVMe 대원씨티에스 2TB)<br />
+이건 취향 문제라 별 생각없이 구매</li>
+  <li>케이스 (리안리 PC-O11D EVO RGB Black 미들타워)<br />
+온도 관리가 제일 중요한 이슈여서 빅타워로 해야하나 했지만 리안리 미들타워도 꽤나 커서 이걸로 사길 잘했다고 생각한다. 미들 타워에서는 꽤 유명하다. 어항 감성이 있어서 좋다.</li>
+  <li>파워서플라이 (마이크로닉스 ASTRO II GD 1650W 80PLUS GOLD 풀모듈러 ATX 3.0)<br />
+보통 1650W 또는 2000W로 갈리는데, 4090이 워낙 전력 적게 먹기로 소문난 놈이라 아마 괜찮겠지하고 싼 걸로 골랐다.</li>
+  <li>CPU 쿨러 (NZXT KRAKEN Elite 360 RGB black)<br />
+돈을 아끼려면 아낄 수 있었지만 화면 나오는 쿨러가 가지고 싶어서 구매하였다. 물론 크라켄 수냉 쿨러는 유명하다.</li>
+  <li>시스템 쿨러 (ARCTIC P12 PWM PST ARGB Value Pack 서린 black)<br />
+GPU가 2장이라 온도 관리가 중요하므로 팬을 추가로 구매하였다.</li>
+</ul>
+
+<h2 id="-후기">🐌 후기</h2>
+
+<p>기존에 있던 CPU를 써야했고 GPU는 따로 구매하였기에, 조립 서비스를 이용하였으나 반절은 다시 직접 작업해야 하였다. 그렇지만 이용할 수 있으면 무조건 조립 해달라고 하는 것이 편하다.</p>
+
+<p>리스트에는 없지만 GPU 한 장은 수직 장착을 하기에 라이저 킷과 브라켓도 구매해 주었다 (<a href="https://lian-li.com/product/o11d-evo-rgb/">참고</a>). 시간적 여유만 된다면 알리에서 싸게 구할 수 있다. 리안리 PC-O11D EVO RGB(미들타워)의 경우 보통 업라이트 킷만 사고 브라켓을 구매하지 않아서 조립할 때 헤매는 듯 싶다 (<a href="https://lian-li.com/product/o11d-evo-upright-gpu-bracket-for-40-series-gpu/">브라켓</a>).</p>
+
+<p>2025년 초 기준, CPU와 GPU를 제외한 비용은 250만원 정도선이고, 여기에 GPU를 합친 비용(CPU 불포함)은 1,000만원 언더라고 볼 수 있다. 만약, 커스텀이나 완성품을 사게 된다면 비용은 훨씬 올라갈 것이므로 되도록이면 드래곤볼을 하자.</p>
+
+<p>이후 조립기나 사용기도 간간이 올릴 생각이다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Deep Learning, Server, GPU" /><summary type="html"><![CDATA[간단한 LLM 모델을 돌려보기 위한 딥러닝 서버를 구축해야할 일이 있었다.]]></summary></entry><entry><title type="html">[쿠버네티스] Harbor Core가 실행되지 않을 때</title><link href="http://localhost:4000/harbor-core-error/" rel="alternate" type="text/html" title="[쿠버네티스] Harbor Core가 실행되지 않을 때" /><published>2025-01-21T00:00:00+07:00</published><updated>2025-01-21T00:00:00+07:00</updated><id>http://localhost:4000/harbor-core-error</id><content type="html" xml:base="http://localhost:4000/harbor-core-error/"><![CDATA[<p>오랜만에 Helm을 이용해서 Harbor를 새로 띄우는 작업을 했다.</p>
 
 <p>웬걸, <code class="language-plaintext highlighter-rouge">harbor-core</code>와 <code class="language-plaintext highlighter-rouge">harbor-registry</code>가 <code class="language-plaintext highlighter-rouge">Running</code>으로 바뀌질 않는다.</p>
 
@@ -883,37 +1008,4 @@ set statusline=</span><span class="se">\ </span><span class="s2">%&lt;%l:%v</spa
 </code></pre></div></div>
 <p><a href="https://reactnative.dev/docs/stylesheet">공식문서 - StyleSheet</a></p>
 
-<p>공식문서를 잘 읽어보는 것에 대한 중요성을 다시금 느낀다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native" /><summary type="html"><![CDATA[화면 전체를 덮는 absolute 포지션의 컴포넌트를 구현할 때 보통 이런식으로 스타일링을 한다. container: { position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }]]></summary></entry><entry><title type="html">[React Native] 컴포넌트 속성을 통해 전달하는 문자열의 줄바꿈 방법</title><link href="http://localhost:4000/transmit-component/" rel="alternate" type="text/html" title="[React Native] 컴포넌트 속성을 통해 전달하는 문자열의 줄바꿈 방법" /><published>2024-02-21T00:00:00+07:00</published><updated>2024-02-21T00:00:00+07:00</updated><id>http://localhost:4000/transmit-component</id><content type="html" xml:base="http://localhost:4000/transmit-component/"><![CDATA[<p>특정 컴포넌트를 구현할 때 속성을 통해 문자열을 보내줄 때가 있다. 보통 config로 따로 저장해놓은 고정 문구를 넣어주는 경우에 많이 쓰인다.</p>
-
-<p>이 경우에 디자인 상의 이유로 줄바꿈을 자주 사용하게 되는데, 따옴표 안에 개행문자<code class="language-plaintext highlighter-rouge">\n</code>를 넣어도 아무 일도 일어나지 않아 종종 당황하곤 한다. 이는 개행 문자가 그대로 문자열로 인식되기 때문이다.</p>
-
-<p>줄바꿈이 제대로 이루어지게 하기 위해서는 <strong>중괄호</strong>를 사용해 주어야 한다. 이런식으로 말이다.</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nc">OnBoardingPage</span>
-  <span class="n">subtitle</span><span class="o">={</span>
-    <span class="err">'</span><span class="n">집에서</span> <span class="n">얼마나</span> <span class="n">걷고</span><span class="o">,</span> <span class="n">뛰고</span><span class="o">,</span> <span class="n">쉬었는지</span> <span class="n">등의</span><span class="err">\</span><span class="n">n정보를</span> <span class="n">실시간으로</span> <span class="n">분석해드려요</span><span class="o">.</span><span class="err">'</span>
-  <span class="o">}</span>
-<span class="o">/&gt;</span>
-</code></pre></div></div>
-
-<blockquote>
-  <p>chatGPT는 그 이유에 대해 이렇게 말한다.<br />
-<strong>“중괄호를 사용하면 JavaScript 표현식을 평가하고 결과를 문자열로 변환하여 JSX에 삽입할 수 있습니다.”</strong></p>
-</blockquote>
-
-<p>비슷한 느낌으로 <code class="language-plaintext highlighter-rouge">React</code>나 <code class="language-plaintext highlighter-rouge">Next</code>에서는 아예 컴포넌트 형식으로 전달하는 것을 추천한다.</p>
-
-<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nc">CheckUpCard</span>
-  <span class="n">content</span><span class="o">={</span>
-    <span class="o">&lt;&gt;</span>
-      <span class="n">질환</span> <span class="n">등의</span> <span class="n">감별을</span> <span class="n">위한</span>
-      <span class="o">&lt;</span><span class="n">br</span> <span class="o">/&gt;</span>
-      <span class="n">정밀검사</span>
-    <span class="o">&lt;/&gt;</span>
-  <span class="o">}</span>
-<span class="o">/&gt;</span>
-</code></pre></div></div>
-
-<p>컴포넌트 형식으로 전달하는 방식은 <strong>반응형으로 페이지를 구현할 필요가 있을 때</strong> 사용하면 유용하다. 이 때 개행문자<code class="language-plaintext highlighter-rouge">\n</code> 대신 <code class="language-plaintext highlighter-rouge">&lt;br&gt;</code>태그를 사용하게 되는데 이렇게 되면 PC 버전이냐 모바일 버전이냐에 따라 줄바꿈을 다르게 적용할 수 있기 때문이다.</p>
-
-<p>빈 태그가 아닌 &lt;div&gt;태그 등을 사용하면 스타일도 부여할 수 있으니 자유도가 한층 높아지는 것은 말할 것도 없다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native, React, Next" /><summary type="html"><![CDATA[특정 컴포넌트를 구현할 때 속성을 통해 문자열을 보내줄 때가 있다. 보통 config로 따로 저장해놓은 고정 문구를 넣어주는 경우에 많이 쓰인다.]]></summary></entry></feed>
+<p>공식문서를 잘 읽어보는 것에 대한 중요성을 다시금 느낀다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native" /><summary type="html"><![CDATA[화면 전체를 덮는 absolute 포지션의 컴포넌트를 구현할 때 보통 이런식으로 스타일링을 한다. container: { position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }]]></summary></entry></feed>
