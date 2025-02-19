@@ -1,4 +1,65 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2025-02-19T11:12:26+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[ML/DL] RTX 4090 2-way 딥러닝 서버 견적</title><link href="http://localhost:4000/server-build/" rel="alternate" type="text/html" title="[ML/DL] RTX 4090 2-way 딥러닝 서버 견적" /><published>2025-02-18T00:00:00+07:00</published><updated>2025-02-18T00:00:00+07:00</updated><id>http://localhost:4000/server-build</id><content type="html" xml:base="http://localhost:4000/server-build/"><![CDATA[<p>간단한 LLM 모델을 돌려보기 위한 딥러닝 서버를 구축해야할 일이 있었다.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2025-02-19T14:30:27+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[Git] clone 시 Repository not found 에러</title><link href="http://localhost:4000/git-clone-error/" rel="alternate" type="text/html" title="[Git] clone 시 Repository not found 에러" /><published>2025-02-19T00:00:00+07:00</published><updated>2025-02-19T00:00:00+07:00</updated><id>http://localhost:4000/git-clone-error</id><content type="html" xml:base="http://localhost:4000/git-clone-error/"><![CDATA[<h2 id="️-에러">⚠️ 에러</h2>
+
+<blockquote>
+  <p>remote: Repository not found<br />
+fatal: repository [저장소 주소] not found</p>
+</blockquote>
+
+<p>어느날부터 <code class="language-plaintext highlighter-rouge">git clone</code>을 할 때마다 이런 에러가 뜨기 시작했다.</p>
+
+<p>인증 관련 에러이겠거니 하고 그때그때 구글링해서 해결했었는데 이제는 메모를 해놓으려고 한다.</p>
+
+<p>우선 원인 분석을 위해 다음을 테스트 해보았다.</p>
+
+<hr />
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">git config --global</code> 설정</li>
+  <li>키체인에서 github 관련 암호 삭제</li>
+  <li><strong>git clone <code class="language-plaintext highlighter-rouge">https://[사용자명]@github.com/~</code></strong> ✨</li>
+  <li>git remote [저장소 주소]</li>
+  <li><strong>git remote set-url origin <code class="language-plaintext highlighter-rouge">https://[사용자명]@github.com/~</code></strong> ✨</li>
+</ol>
+
+<hr />
+
+<p>이 중 효과가 있었던 항목은 볼드체로 표시해 두었다. (사실 중요하진 않음)</p>
+
+<p>처음에는 git config가 문제인 줄 알고 이리저리 수정해 보았지만 사실 config 정보는 <code class="language-plaintext highlighter-rouge">clone</code>이나 <code class="language-plaintext highlighter-rouge">push</code>시에는 사용되지 않는다. 이는 커밋할 때 Git 로그에 기록되는 이름과 이메일을 설정하는 용도이다. 따라서, 사실 그리 중요하지 않은 정보이다.</p>
+
+<p>3번과 5번은 대표적인 성공 사례인데, 잘 보면 둘 다 <code class="language-plaintext highlighter-rouge">github.com</code> 앞에 <strong>사용자명과 @</strong>를 추가해준 것을 볼 수 있다. 매번 저렇게 하는 것은 귀찮을테니 우리는 근본적인 해결책을 찾아야한다.</p>
+
+<p><strong>재미있는 점은 사실 @ 앞에 랜덤한 문자열을 붙여도 그대로 정상 동작이 된다는 것이다!</strong></p>
+
+<p>이를 이해하려면 Git의 자격 증명에 대해서 자세히 알 필요가 있다.</p>
+
+<h2 id="-원인-git-자격-증명-캐시가-남아있음">📍 원인: Git 자격 증명 캐시가 남아있음</h2>
+
+<p>GitHub가 Personal Access Token (PAT) 방식으로 인증 방식을 변경한 것은 다들 알고 있을테고, Git은 <code class="language-plaintext highlighter-rouge">credential.helper</code>를 통해 이러한 자격 증명을 캐싱하는데 (특히 store 방식), 여기서 <strong>만료된 토큰이나 다른 계정의 자격 증명이 캐싱되어 있을 확률이 높다.</strong></p>
+
+<p>더군다나, Git은 <code class="language-plaintext highlighter-rouge">@</code> 앞의 문자열을 단순한 “사용자명”으로 해석하고, 실제 인증은 다른 방식으로 진행하기 때문에 사실상 기존에 캐싱된 정보와 완전히 동일한 <code class="language-plaintext highlighter-rouge">사용자명</code>이 아니기만 하면 이전에 캐싱되어 있던 자격 증명을 쓰지 않고 새로운 증명을 요구하게 된다. (물론 아무것도 입력하지 않은 것도 사용자명으로 간주한다.)</p>
+
+<h2 id="-해결">💡 해결</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">echo</span> <span class="s2">"url=https://github.com"</span> | git credential reject
+</code></pre></div></div>
+
+<p>이렇게 하면 Git이 저장된 자격 증명을 삭제하고 새로운 토큰을 요구하게 된다.</p>
+
+<p>아래의 명령어로 현재 저장된 자격 증명을 볼 수 있다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">cat</span> ~/.git-credentials
+</code></pre></div></div>
+
+<h2 id="️-정리">⛱️ 정리</h2>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">Repositoy Not Found</code> 에러는 Git에 잘못된 토큰 정보가 캐시되어 있어서 나타난다.</li>
+  <li>github.com 앞에 <code class="language-plaintext highlighter-rouge">사용자명 + @</code>를 붙이는 것은 일시적인 해결책이 될 수 있지만 근본적인 해결책은 아니다.</li>
+  <li>사용자명은 인증 시에 중요하게 사용되지 않는다. 새로운 캐시를 만들 뿐…</li>
+</ul>
+
+<p>캐시를 삭제해준 뒤에 다시 <code class="language-plaintext highlighter-rouge">git clone</code>을 사용하게 되면 새로운 토큰을 요구할 것이고 정상적으로 인증된다면 해당 정보가 새롭게 캐시되어 이후 git 명령어 사용시에 자동으로 활용된다는 것이다. <strong>사용자가 지정되지 않은 바닐라 github.com 주소 관련 캐시에 유효한 토큰이 저장되어 있는지가 중요하다.</strong></p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Git, config" /><summary type="html"><![CDATA[⚠️ 에러]]></summary></entry><entry><title type="html">[ML/DL] RTX 4090 2-way 딥러닝 서버 견적</title><link href="http://localhost:4000/server-build/" rel="alternate" type="text/html" title="[ML/DL] RTX 4090 2-way 딥러닝 서버 견적" /><published>2025-02-18T00:00:00+07:00</published><updated>2025-02-18T00:00:00+07:00</updated><id>http://localhost:4000/server-build</id><content type="html" xml:base="http://localhost:4000/server-build/"><![CDATA[<p>간단한 LLM 모델을 돌려보기 위한 딥러닝 서버를 구축해야할 일이 있었다.</p>
 
 <p>우선 예산이 한정되어 있었기에 비용 절감을 위해 최대한 커스텀을 피하고자 하였다. 다만 RTX 4090 한 대 만으로는 VRAM이 부족하기에 두 장까지 장착하는 것을 고려하여 견적을 짰다.</p>
 
@@ -982,24 +1043,4 @@ set statusline=</span><span class="se">\ </span><span class="s2">%&lt;%l:%v</spa
 <span class="nx">sudo</span> <span class="nx">service</span> <span class="nx">containerd</span> <span class="nx">restart</span>
 </code></pre></div></div>
 
-<p>공식 문서를 꼼꼼하게 읽자.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Kubernetes, systemd" /><summary type="html"><![CDATA[IDC에 서버를 구축하면서 오랜만에 순정 서버에 쿠버네티스를 설치할 일이 생겼다. 우분투는 이전에도 수없이 지우고 깔고 해봤기에 수월하게 넘어갔지만 오랜만에 하는 쿠버네티스 클러스터 구축에서 에러를 만나버렸다.]]></summary></entry><entry><title type="html">[React Native] 화면 전체를 덮는 absolute 포지션의 컴포넌트 스타일링</title><link href="http://localhost:4000/absolute-panel/" rel="alternate" type="text/html" title="[React Native] 화면 전체를 덮는 absolute 포지션의 컴포넌트 스타일링" /><published>2024-02-22T00:00:00+07:00</published><updated>2024-02-22T00:00:00+07:00</updated><id>http://localhost:4000/absolute-panel</id><content type="html" xml:base="http://localhost:4000/absolute-panel/"><![CDATA[<p>화면 전체를 덮는 absolute 포지션의 컴포넌트를 구현할 때 보통 이런식으로 스타일링을 한다.</p>
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">container</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nl">position</span><span class="p">:</span> <span class="dl">'</span><span class="s1">absolute</span><span class="dl">'</span><span class="p">,</span>
-    <span class="nx">top</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="nx">bottom</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="nx">left</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="nx">right</span><span class="p">:</span> <span class="mi">0</span>
-<span class="p">}</span>
-</code></pre></div></div>
-
-<p>모달을 띄우거나 할 때 뒷 배경을 옅은 회색으로 한다던가 opacity를 주기 위해서 주로 쓰게 되는데 쓸 때마다 코드가 너무 길어져 신경이 쓰였다.</p>
-
-<p>아무 생각 없이 쓰던거라 더 좋은 방법을 찾을 생각조차 안하고 있었는데 우연히 공식문서에서 관련 내용을 발견했다.</p>
-
-<p>React Native에서는 다음과 같이 <strong>한 줄</strong>로 구현이 가능하다.</p>
-
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">container</span><span class="p">:</span> <span class="p">{...</span><span class="nx">StyleSheet</span><span class="p">.</span><span class="nx">absoluteFillObject</span><span class="p">}</span>
-</code></pre></div></div>
-<p><a href="https://reactnative.dev/docs/stylesheet">공식문서 - StyleSheet</a></p>
-
-<p>공식문서를 잘 읽어보는 것에 대한 중요성을 다시금 느낀다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="React Native" /><summary type="html"><![CDATA[화면 전체를 덮는 absolute 포지션의 컴포넌트를 구현할 때 보통 이런식으로 스타일링을 한다. container: { position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }]]></summary></entry></feed>
+<p>공식 문서를 꼼꼼하게 읽자.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Kubernetes, systemd" /><summary type="html"><![CDATA[IDC에 서버를 구축하면서 오랜만에 순정 서버에 쿠버네티스를 설치할 일이 생겼다. 우분투는 이전에도 수없이 지우고 깔고 해봤기에 수월하게 넘어갔지만 오랜만에 하는 쿠버네티스 클러스터 구축에서 에러를 만나버렸다.]]></summary></entry></feed>

@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "[Git] clone 시 Repository not found 에러",
+      "description" : "",
+      "tags"     : "Git, config",
+      "url"      : "/git-clone-error/",
+      "date"     : "2025-02-19 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[ML/DL] RTX 4090 2-way 딥러닝 서버 견적",
       "description" : "",
       "tags"     : "Deep Learning, Server, GPU",
