@@ -1,16 +1,23 @@
 ---
-title: Colophon
+title: Dr.frog
 permalink: /resume/
 layout: page
-excerpt: Hello peeps, I'm student of computer science from Banyuwangi, living in Jogjakarta. This blog for documentation about my programming journey, running on jekyll, hosting on netlify and using my own simple theme.
+excerpt: Frontend, DevOps, and AI Engineer with a passion for innovation and problem-solving.
 comments: false
 ---
 
-He's a student from Banyuwangi, living in Jogjakarta. the blog for documentation about his programming 🎒 journey, running on jekyll, hosting on [now.sh](http://now.sh) and using his own theme, he name it <a href="https://github.com/piharpi/jekyll-klise" target="_blank" rel="noopener">klisé</a>, he also loves to learning web technology; but he often forgot, that a reason why him doing the writing.
+I have experience participating in IT product development at multiple start-ups as a software engineer. My diverse background, including QA, server infrastructure setup, and AI model development, has given me a comprehensive understanding of the development process. With a commitment to continuous learning and a creative problem-solving mindset, I strive to enhance innovative and user-friendly applications through collaboration across various platforms.
 
-If you have a question about him or else, just send a letter to him.
+**Current Field 🔬**
 
-You can [report](http://github.com/piharpi/jekyll-klise/issues/new) if there is an broken link(s) or somethings else.
+- Frontend (Web, App)
+- DevOps (Kubernetes & real-time streaming services)
+- ML/DL
+
+**My Interests 💡**
+
+- Generalist Medical AI
+- javascript 3D
 
 **may u needs ✨**
 
