@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "[Airflow] docker compose 시 gcc permission denied 에러",
+      "description" : "",
+      "tags"     : "Docker, Airflow",
+      "url"      : "/airflow-docker-error/",
+      "date"     : "2025-02-23 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[Git] clone 시 Repository not found 에러",
       "description" : "",
       "tags"     : "Git, config",
