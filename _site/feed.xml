@@ -1,4 +1,76 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2025-02-23T11:55:28+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[Airflow] docker compose 시 gcc permission denied 에러</title><link href="http://localhost:4000/airflow-docker-error/" rel="alternate" type="text/html" title="[Airflow] docker compose 시 gcc permission denied 에러" /><published>2025-02-23T00:00:00+07:00</published><updated>2025-02-23T00:00:00+07:00</updated><id>http://localhost:4000/airflow-docker-error</id><content type="html" xml:base="http://localhost:4000/airflow-docker-error/"><![CDATA[<h2 id="️-에러">⚠️ 에러</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US"><generator uri="https://jekyllrb.com/" version="4.3.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" hreflang="en-US" /><updated>2025-02-24T22:00:52+07:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">froggydisk</title><subtitle>This is for frogs in the world.</subtitle><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><entry><title type="html">[ML/DL] RTX 4090 2-way 딥러닝 서버 벤치마크</title><link href="http://localhost:4000/server-benchmark/" rel="alternate" type="text/html" title="[ML/DL] RTX 4090 2-way 딥러닝 서버 벤치마크" /><published>2025-02-24T00:00:00+07:00</published><updated>2025-02-24T00:00:00+07:00</updated><id>http://localhost:4000/server-benchmark</id><content type="html" xml:base="http://localhost:4000/server-benchmark/"><![CDATA[<p>이전 <a href="https://froggydisk.github.io/server-build/">서버 견적 포스트</a>에서 주문한 부품들이 도착하여 마저 조립을 해주었다.</p>
+
+<p>부품 리스트는 다음과 같다.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>● AMD 라이젠9-5세대 7950X3D <span class="o">(</span>라파엘<span class="o">)</span> <span class="o">(</span>멀티팩<span class="o">(</span>정품<span class="o">))</span> <span class="c"># CPU</span>
+● ASUS ProArt X870E-CREATOR WIFI 대원씨티에스 <span class="c"># 메인보드</span>
+● G.SKILL DDR5-5200 CL40 FLARE X5 J 패키지 <span class="o">(</span>96GB<span class="o">(</span>48Gx2<span class="o">))</span> <span class="c"># 메모리</span>
+● RTX 4090 블로워 팬 <span class="c"># GPU</span>
+● 마이크론 Crucial T500 M.2 NVMe 아스크텍 <span class="o">(</span>2TB<span class="o">)</span> <span class="c"># SSD</span>
+● 리안리 PC-011D EVO RGB Black <span class="o">(</span>미들타워<span class="o">)</span> <span class="c"># 케이스</span>
+● 마이크로닉스 ASTRO II GD 1650W 80PLUS GOLD 풀모듈러 ATX 3.0 <span class="o">(</span>PCIE5<span class="o">)</span> <span class="c"># 파워서플라이</span>
+● NZXT KRAKEN Elite 360 RGB <span class="o">(</span>black<span class="o">)</span> <span class="c"># CPU 쿨러</span>
+● ARCTIC P12 PWM PST ARGB Value Pack <span class="c"># 시스템 쿨러</span>
+</code></pre></div></div>
+
+<p>정상적으로 전원이 들어오는 것을 보니, 호환성 이슈는 없는 듯하다.</p>
+
+<p>짧은 감상평을 말하자면, RTX 4090 블로워 모델은 진짜 얇다. 윈드포스 모델보다도 얇다. 팬도 하나뿐이라 나름 고급스러운 느낌이 난다. 외관만 보면 만족스럽다.</p>
+
+<p>조금 더 가성비 견적을 짜면 1,000만원 언더로도 떨어질 수 있을 듯하다. 물론 4090 두 장만 해도 700-800 사이이니 최저는 900 정도는 되지 않을까 생각한다.</p>
+
+<p>2-way 딥러닝 서버 설계에 있어서는 <a href="https://www.youtube.com/watch?v=pw-C21bXQb4">유튜브</a>를 참고하였다. 라이저 킷을 활용한 2-way 온도 최적화 설계이다.</p>
+
+<p>노파심에 언급하지만, <strong>라이저 킷으로 GPU를 장착하는 경우 브라켓을 같이 구매해주어야 한다.</strong> 헤매는 사람을 여럿 보았다.</p>
+
+<h2 id="서버-전면부">서버 전면부</h2>
+
+<p><img src="/assets/img/server-facade.png" alt="server" /></p>
+
+<p>사진을 보면 가로로 하나, 세로로 하나 총 두 장의 GPU가 달려있는 것을 확인할 수 있다. 공기 흐름은 아래만 흡기로 하고 나머지는 배기로 하였다. 측면에는 남는 팬을 몇 개 더 달아주었다.</p>
+
+<h2 id="소음-테스트">소음 테스트</h2>
+
+<p>영상이라 소음의 정도를 가늠하기는 힘들지만 생각만큼 엄청나지는 않다. 조용한 사무실에서는 쓰기 힘들고 따로 서버실이 있으면 좋을 듯하다.</p>
+
+<video width="100%" controls="">
+<source src="/assets/img/server-noise.mp4" type="video/mp4" />
+브라우저가 비디오 태그를 지원하지 않습니다.
+</video>
+
+<h2 id="성능-테스트">성능 테스트</h2>
+
+<p>벤치마크는 RTX 4090 GPU 한 장을 기준으로 한다.</p>
+
+<h3 id="-steel-nomad-score">• Steel Nomad Score</h3>
+
+<p><img src="/assets/img/steel_nomad_score.png" alt="score" /></p>
+
+<h3 id="-time-spy-score">• Time Spy Score</h3>
+
+<p><img src="/assets/img/time_spy_score.png" alt="score" /></p>
+
+<h3 id="-fire-strike-score">• Fire Strike Score</h3>
+
+<p><img src="/assets/img/fire_strike_score.png" alt="score" /></p>
+
+<h3 id="-night-raid-score">• Night Raid Score</h3>
+
+<p><img src="/assets/img/night_raid_score.png" alt="score" /></p>
+
+<h2 id="결론">결론</h2>
+
+<p>벤치마크 시에는 <strong>GPU 사용률이 90-100% 정도이고, 온도는 대략 70-80도 정도에 위치한다.</strong> 블로워 타입이라고 해서 일반 모델과 비교해 게임 성능의 엄청난 차이를 보이는 것 같지는 않다.</p>
+
+<p>아직 겨울철이라 그나마 온도 관리가 수월한 셈인데, 여름에는 어떨지 궁금하기는 하다.</p>
+
+<p>게임 이외에 <code class="language-plaintext highlighter-rouge">DeepSeek-R1 Dynamic 1.58-bit</code>와 같은 LLM 모델을 돌렸을 때, 추론 시에는 VRAM만 잔뜩 먹고 GPU 점유율은 10% 미만이라 매우 쾌적하다. 단, DeepSeek가 워낙 큰 모델이다보니 토큰 생성 속도는 매우 느리다. (2 tokens/sec)</p>
+
+<p>물론 모델 훈련 시에는 위의 벤치마크를 돌렸을 때와 비슷한 점유율을 보여주므로 서버 구축의 목적이 LLM 서비스인지, 모델 개발인지에 따라 설계 방식, 구축 방안, 설치 환경의 선택지가 크게 달라지므로 참고하자.</p>
+
+<p>GPU 2장을 동시에 풀로 사용해도 온도는 둘 다 80도 이상 크게 높아지지는 않는다. 아무래도 서로의 간섭이 적어서 발열 관리에 도움이 되는 듯하다.</p>
+
+<p>우선 사용하는데 크게 문제는 없는 듯하니, 예상치 못한 문제가 발생하면 포스팅하도록 하겠다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Deep Learning, Server, GPU" /><summary type="html"><![CDATA[이전 서버 견적 포스트에서 주문한 부품들이 도착하여 마저 조립을 해주었다.]]></summary></entry><entry><title type="html">[Airflow] docker compose 시 gcc permission denied 에러</title><link href="http://localhost:4000/airflow-docker-error/" rel="alternate" type="text/html" title="[Airflow] docker compose 시 gcc permission denied 에러" /><published>2025-02-23T00:00:00+07:00</published><updated>2025-02-23T00:00:00+07:00</updated><id>http://localhost:4000/airflow-docker-error</id><content type="html" xml:base="http://localhost:4000/airflow-docker-error/"><![CDATA[<h2 id="️-에러">⚠️ 에러</h2>
 
 <p><code class="language-plaintext highlighter-rouge">docker compose</code>로 Airflow를 로컬 테스트하던 중에 <code class="language-plaintext highlighter-rouge">gcc permission denied</code> 에러가 발생했다.</p>
 
@@ -876,187 +948,4 @@ USB를 시리얼 포트로 변환하는 장치를 생산하는 회사. FTDI의 U
 
 <p>짜잔! 연결된 포트가 나타난다. 이제 관련 라이브러리(예 <a href="https://serialport.io">Node.js</a>)를 이용해서 시리얼 통신을 진행하면 된다.</p>
 
-<p>맥에서 시리얼 통신을 할 때는 드라이버가 필수라는 사실만 알아두자.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Serial Port" /><summary type="html"><![CDATA[]]></summary></entry><entry><title type="html">[터미널] Warp + Powerlevel10k + lsd</title><link href="http://localhost:4000/warp/" rel="alternate" type="text/html" title="[터미널] Warp + Powerlevel10k + lsd" /><published>2024-04-10T00:00:00+07:00</published><updated>2024-04-10T00:00:00+07:00</updated><id>http://localhost:4000/warp</id><content type="html" xml:base="http://localhost:4000/warp/"><![CDATA[<h2 id="소개">소개</h2>
-
-<p>기존에는 개발 터미널로 <code class="language-plaintext highlighter-rouge">Iterm2</code>를 쓰고 있었는데 최근에 새로운 터미널을 알게되어 소개하고자 한다.</p>
-
-<p><a href="https://www.warp.dev/a">Warp</a>라는 터미널인데 예전부터 눈여겨보고 있었던 녀석이기는 하다. 슬슬 이쪽으로 트렌드가 넘어오는 느낌도 든다.</p>
-
-<p>추천하는 이유는 다음과 같다.</p>
-
-<ol>
-  <li>명령어 자동 완성 기능이 달려있다.</li>
-  <li>AI 기능이 내장되어 있다.</li>
-  <li>자주 쓰는 워크플로우를 <code class="language-plaintext highlighter-rouge">Warp Drive</code>에 저장해 놓을 수 있다.</li>
-  <li>실행 블록별로 찾기, 복사 등 작업이 가능하다.</li>
-</ol>
-
-<p>속도는 Terminal.app 보다는 느리지만 Iterm보다는 확실히 빠르다. <a href="https://docs.warp.dev/how-does-warp-compare/performance">벤치마크</a>를 확인해보자.</p>
-
-<p>이는 Warp에서 제공하는 벤치마크이므로 100% 신뢰할 수는 없지만 직접 사용해보니 체감상으로도 빠른 것 같다. 이외에도 편리한 기능이 많다.</p>
-
-<p>단점이라면 zsh를 기본 쉘로 사용하는데 맨 처음 탭을 열 때 zsh 로딩이 조금 느린 정도?</p>
-
-<p>위에 서술한 내용과는 별개로 사실 Warp로 넘어오게 된 이유는 간단하다.</p>
-
-<p>🚀 <strong><code class="language-plaintext highlighter-rouge">터미널이 매우 깔끔하고 멋지다</code></strong></p>
-
-<p><img src="/assets/img/warp.png" alt="image" /></p>
-
-<hr />
-
-<h2 id="설치">설치</h2>
-
-<h3 id="-warp">● Warp</h3>
-
-<p>우선 <a href="https://www.warp.dev/a">Warp 사이트</a>로 이동하여 다운받는다. 혹은 <code class="language-plaintext highlighter-rouge">brew install</code>도 가능하다.</p>
-
-<p>설치 후 실행하면 바로 사용할 수 있다. 기존 테마도 멋있지만 커스텀 테마를 적용하는 것도 가능하다.</p>
-
-<p>커스텀 테마는 <a href="https://terminal-themes.com/">관련 사이트</a>에서 다운받거나 yaml 파일을 직접 작성하여 적용할 수 있다.</p>
-
-<p>필자는 <code class="language-plaintext highlighter-rouge">Seashell.yaml</code>을 다운 받아서 적용하였다. 테마 관련 폴더를 생성해서 그 안에 다운로드 받은 yaml 파일을 옮겨주면 된다.</p>
-
-<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> <span class="nt">-p</span> ~/.warp/themes/
-<span class="nb">cp</span> ~/Downloads/.yaml ~/.warp/themes/
-</code></pre></div></div>
-
-<p>이제 Warp 테마 설정에서 해당 테마 선택이 가능하다.</p>
-
-<p><a href="https://docs.warp.dev/appearance/custom-themes">공식문서</a>에서도 커스텀 테마 적용 방법에 대해 상세히 설명하고 있으므로 한번 살펴보자.</p>
-
-<h3 id="-powerlevel10k">● Powerlevel10k</h3>
-
-<p>Iterm2를 사용할 때 zsh 프롬프트를 꾸며주기 위해 <code class="language-plaintext highlighter-rouge">powerlevel10k</code>를 적용했었는데 Warp도 zsh를 사용하므로 동일하게 적용이 가능하다.</p>
-
-<p>기존에 Iterm2를 사용하시던 분이라면 자동으로 적용이 될 것이다.</p>
-
-<p>Warp에서도 친절하게 <a href="https://www.warp.dev/blog/how-to-set-up-powerlevel10k-on-warp#setup">powerlevel10k를 적용하는 방법</a>에 대해서 설명해주고 있다.</p>
-
-<p>p10k를 설치하기에 앞서 터미널 상에서 아이콘들이 제대로 나타나기 위해서 폰트를 적용해주어야 한다.</p>
-
-<p>절차는 다음과 같다.</p>
-
-<ol>
-  <li><a href="https://github.com/romkatv/powerlevel10k?tab=readme-ov-file#manual">Powerlevel10k 공식 깃허브 페이지</a>에서 MesloLGS NF 폰트를 다운로드한다. Regular, Bold, Italic, Bold Italic.ttf 파일을 모두 다운받아서 설치해준다.</li>
-  <li>Warp의 설정에서 <code class="language-plaintext highlighter-rouge">Appearance &gt; Text</code> 로 이동한 뒤 <code class="language-plaintext highlighter-rouge">View all available system fonts</code> 박스를 체크해주고 드롭다운 메뉴에서 <code class="language-plaintext highlighter-rouge">MesloLGS NF</code> 폰트를 선택한다.</li>
-  <li><code class="language-plaintext highlighter-rouge">Appearance &gt; Prompt</code> 에서 <code class="language-plaintext highlighter-rouge">Sheell prompt (PS1)</code>을 골라준다.</li>
-</ol>
-
-<p>이제 p10k를 설치해보자.</p>
-
-<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone <span class="nt">--depth</span><span class="o">=</span>1 https://github.com/romkatv/powerlevel10k.git ~/powerlevel10k
-<span class="nb">echo</span> <span class="s1">'source ~/powerlevel10k/powerlevel10k.zsh-theme'</span> <span class="o">&gt;&gt;</span>~/.zshrc
-</code></pre></div></div>
-
-<p>설치가 완료되었다면 <code class="language-plaintext highlighter-rouge">exec zsh</code> 명령어로 테마 설정 마법사를 시작한다. 만일 설정창이 뜨지 않는다면 <code class="language-plaintext highlighter-rouge">p10k configure</code> 명령어를 활용한다.</p>
-
-<p>이제 설정 마법사가 안내해 주는대로 개인의 취향에 맞게 설정해주면 된다.</p>
-
-<h3 id="-lsd">● lsd</h3>
-
-<p>아이콘 얘기가 나왔으니 <code class="language-plaintext highlighter-rouge">ls</code> 명령어를 입력했을 때 나오는 결과값에도 아이콘을 입혀보자.</p>
-
-<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 설치</span>
-<span class="nv">$ </span>brew <span class="nb">install </span>lsd
-
-<span class="c"># alias 설정</span>
-<span class="nv">$ </span>vi ~/.zshrc
-
-<span class="nb">alias ls</span><span class="o">=</span><span class="s1">'lsd'</span>
-<span class="nb">alias </span><span class="nv">ll</span><span class="o">=</span><span class="s1">'ls -alhF'</span>
-<span class="nb">alias </span><span class="nv">lt</span><span class="o">=</span><span class="s1">'ls --tree'</span>
-
-<span class="nv">$ </span><span class="nb">source</span> ~/.zshrc
-</code></pre></div></div>
-
-<p>이제 ls 명령을 입력하면 파일과 디렉토리의 차이가 한눈에 들어온다. 각 파일의 형태에 따라 아이콘이 다르게 표시되는 것도 볼 수 있다.</p>
-
-<p><img src="/assets/img/lsd.png" alt="image" /></p>
-
-<h3 id="-탭-이름-설정하기">● 탭 이름 설정하기</h3>
-
-<p>Warp에서 탭을 열었을 때는 현재 경로가 탭 이름으로 표시되게 된다. 경로가 길 때는 잘 보이지 않으니 그냥 랜덤한 이모티콘으로 바꿔주자.</p>
-
-<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vim ~/.zshrc
-</code></pre></div></div>
-
-<p>참고하고 싶은 분을 위해 .zshrc의 내용을 그대로 가져왔다.</p>
-
-<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.</span>
-<span class="c"># Initialization code that may require console input (password prompts, [y/n]</span>
-<span class="c"># confirmations, etc.) must go above this block; everything else may go below.</span>
-<span class="k">if</span> <span class="o">[[</span> <span class="nt">-r</span> <span class="s2">"</span><span class="k">${</span><span class="nv">XDG_CACHE_HOME</span><span class="k">:-</span><span class="nv">$HOME</span><span class="p">/.cache</span><span class="k">}</span><span class="s2">/p10k-instant-prompt-</span><span class="k">${</span><span class="p">(%)</span><span class="k">:-</span><span class="p">%n</span><span class="k">}</span><span class="s2">.zsh"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
-  </span><span class="nb">source</span> <span class="s2">"</span><span class="k">${</span><span class="nv">XDG_CACHE_HOME</span><span class="k">:-</span><span class="nv">$HOME</span><span class="p">/.cache</span><span class="k">}</span><span class="s2">/p10k-instant-prompt-</span><span class="k">${</span><span class="p">(%)</span><span class="k">:-</span><span class="p">%n</span><span class="k">}</span><span class="s2">.zsh"</span>
-<span class="k">fi</span>
-
-<span class="c"># ================================================= 이 부분 추가</span>
-<span class="c"># set tab name randomly when a new tab is open</span>
-<span class="k">function </span>set_name <span class="o">()</span> <span class="o">{</span>
-  <span class="nv">emojis</span><span class="o">=(</span><span class="s2">"⚡️"</span> <span class="s2">"🔥"</span> <span class="s2">"👑"</span> <span class="s2">"🍻"</span> <span class="s2">"🚀"</span> <span class="s2">"💡"</span> <span class="s2">"🎉"</span> <span class="s2">"🌙"</span><span class="o">)</span>
-  <span class="nv">RAND_EMOJI_N</span><span class="o">=</span><span class="k">$((</span> <span class="nv">$RANDOM</span> <span class="o">%</span> <span class="k">${#</span><span class="nv">emojis</span><span class="p">[@]</span><span class="k">}</span> <span class="o">+</span> <span class="m">1</span><span class="k">))</span>
-  <span class="nb">echo</span> <span class="nt">-ne</span> <span class="s2">"</span><span class="se">\0</span><span class="s2">33]0;</span><span class="k">${</span><span class="nv">emojis</span><span class="p">[RAND_EMOJI_N]</span><span class="k">}</span><span class="se">\0</span><span class="s2">07"</span>
-<span class="o">}</span>
-<span class="c"># if the terminal is Zsh, then run set_name</span>
-<span class="k">if</span> <span class="o">[</span> <span class="nt">-n</span> <span class="s2">"</span><span class="nv">$ZSH_VERSION</span><span class="s2">"</span> <span class="o">]</span><span class="p">;</span> <span class="k">then
-  </span>precmd_functions+<span class="o">=(</span>set_name<span class="o">)</span>
-<span class="k">fi</span>
-<span class="c"># =================================================</span>
-
-<span class="c"># set aliases for lsd package</span>
-<span class="nb">alias ls</span><span class="o">=</span><span class="s1">'lsd'</span>
-<span class="nb">alias </span><span class="nv">ll</span><span class="o">=</span><span class="s1">'ls -alhF'</span>
-<span class="nb">alias </span><span class="nv">lt</span><span class="o">=</span><span class="s1">'ls --tree'</span>
-
-<span class="nb">eval</span> <span class="si">$(</span>/opt/homebrew/bin/brew shellenv<span class="si">)</span>
-<span class="nb">source</span> ~/powerlevel10k/powerlevel10k.zsh-theme
-
-<span class="c"># To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.</span>
-<span class="o">[[</span> <span class="o">!</span> <span class="nt">-f</span> ~/.p10k.zsh <span class="o">]]</span> <span class="o">||</span> <span class="nb">source</span> ~/.p10k.zsh
-</code></pre></div></div>
-
-<p>이제 적용해주면 된다.</p>
-
-<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">source</span> ~/.zshrc
-</code></pre></div></div>
-
-<h3 id="-vim-커스텀-테마">● Vim 커스텀 테마</h3>
-
-<p>이제 웬만한 부분은 완성되었다.</p>
-
-<p>Mac을 사용하다보면 <code class="language-plaintext highlighter-rouge">Vim</code>을 텍스트 편집기로 사용하게 되는데 좀 더 완벽을 기한다면 Vim 커스텀 테마까지 적용해보자. 문서 읽기가 매우 편해진다.</p>
-
-<p>Warp 커스텀 테마 때와 마찬가지로 <a href="https://vimcolorschemes.com/top/">사이트</a>에서 원하는 테마를 다운받는다.</p>
-
-<p>테마 관련 폴더를 생성해서 다운로드받은 파일을 옮겨준다.</p>
-
-<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">mkdir</span> ~/.vim/colors
-<span class="nb">cp</span> ~/Downloads/.yaml ~/.vim/colors/
-vim ~/.vimrc
-</code></pre></div></div>
-
-<p>아래와 같이 설정해준다. 비어있다면 복사-붙여넣기를 한다.</p>
-
-<div class="language-zsh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">" Syntax Highlighting
-if has("</span>syntax<span class="s2">")
-    syntax on
-endif
-
-set ts=4
-set autoindent
-
-colo  // &lt;- colors 안에 들어있는 .vim 파일명
-
-set laststatus=2
-set statusline=</span><span class="se">\ </span><span class="s2">%&lt;%l:%v</span><span class="se">\ </span><span class="s2">[%P]%=%a</span><span class="se">\ </span><span class="s2">%h%m%r</span><span class="se">\ </span><span class="s2">%F</span><span class="se">\</span><span class="s2">
-</span></code></pre></div></div>
-
-<p>vim을 재실행하면 테마가 적용된다.</p>
-
-<p><img src="/assets/img/vim.png" alt="image" /></p>
-
-<h2 id="결론">결론</h2>
-
-<p>이제 VScode만 깔아준다면 개발 준비는 끝난 것이다.</p>
-
-<p>다른거는 몰라도 <code class="language-plaintext highlighter-rouge">Warp + Powerlevel10k</code> 조합은 꼭 적용해보자. 할 일이 없어도 터미널을 켜고 있는 자신을 발견할 것이다.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Mac, Terminal" /><summary type="html"><![CDATA[소개]]></summary></entry></feed>
+<p>맥에서 시리얼 통신을 할 때는 드라이버가 필수라는 사실만 알아두자.</p>]]></content><author><name>./workspace</name><email>sewoomkim93@gmail.com</email></author><category term="Blog" /><category term="Serial Port" /><summary type="html"><![CDATA[]]></summary></entry></feed>
