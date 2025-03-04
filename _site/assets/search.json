@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "[H/W] Kraken ELITE RGB를 위한 Liquidctl 사용법",
+      "description" : "",
+      "tags"     : "Server, Cooler",
+      "url"      : "/liquidctl/",
+      "date"     : "2025-03-04 00:00:00 +0700"
+    } ,
+  
+    {
       "title"    : "[ML/DL] RTX 4090 2-way 딥러닝 서버 벤치마크",
       "description" : "",
       "tags"     : "Deep Learning, Server, GPU",
