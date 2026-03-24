@@ -260,3 +260,80 @@
 .post-updated-at {
   font-family: "Ubuntu mono", "monospace";
 }
+
+// TOC Sidebar
+.toc-sidebar {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  right: calc((100vw - #{$narrow-size}) / 2 - 220px);
+  width: 200px;
+  max-height: 70vh;
+  overflow-y: auto;
+  z-index: 10;
+
+  // Hide scrollbar but keep scrollable
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media screen and (max-width: 1200px) {
+    display: none;
+  }
+}
+
+.toc-nav {
+  .toc-title {
+    font-size: $small-font-size - 1;
+    font-weight: $bold-weight;
+    color: $gray;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid $light;
+  }
+
+  .toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    .toc-item {
+      margin: 0;
+      padding: 0;
+
+      &::before {
+        content: none;
+      }
+
+      a {
+        display: block;
+        padding: 4px 0 4px 12px;
+        font-size: $small-font-size - 1;
+        color: $gray;
+        text-decoration: none;
+        border-left: 2px solid transparent;
+        line-height: 1.4;
+        transition: color 0.2s, border-color 0.2s;
+
+        &:hover {
+          color: $black;
+        }
+
+        &.active {
+          color: $text-link-blue;
+          border-left-color: $text-link-blue;
+          font-weight: 600;
+        }
+      }
+
+      &.toc-h3 a {
+        padding-left: 24px;
+        font-size: $small-font-size - 2;
+      }
+    }
+  }
+}

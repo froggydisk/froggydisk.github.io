@@ -1,0 +1,149 @@
+<div class="vpn-diagram-ex">
+<svg width="100%" viewBox="0 0 720 640" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="arr-ex" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M1 1L9 5L1 9" fill="none" stroke="context-stroke" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+
+<style>
+  @keyframes ex-flow { to { stroke-dashoffset: -20; } }
+  @keyframes ex-blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+  .ex-flow { animation: ex-flow 1.4s linear infinite; }
+  .ex-blink { animation: ex-blink 2s ease-in-out infinite; }
+</style>
+
+<!-- VPN mesh area (hand-drawn style) -->
+<rect x="30" y="168" width="660" height="260" rx="12" fill="var(--ex-mesh)" stroke="var(--ex-border)" stroke-width="1.5" stroke-dasharray="8 6"/>
+<text x="360" y="192" text-anchor="middle" font-family="'Pretendard', -apple-system, 'Segoe UI', sans-serif" font-size="12" fill="var(--ex-dim)" font-style="italic">WireGuard VPN mesh · 10.0.0.0/24</text>
+
+<!-- Title -->
+<text x="360" y="38" text-anchor="middle" font-family="'Pretendard', -apple-system, 'Segoe UI', sans-serif" font-size="16" font-weight="400" fill="var(--ex-text)">VPN 기반 멀티 디바이스 원격 개발 아키텍처</text>
+
+<!-- === CSP === -->
+<rect x="220" y="62" width="280" height="80" rx="10" fill="var(--ex-blue-bg)" stroke="var(--ex-blue)" stroke-width="1.5"/>
+<text x="360" y="90" text-anchor="middle" font-family="'Pretendard', -apple-system, 'Segoe UI', sans-serif" font-size="14" fill="var(--ex-blue-text)">CSP (클라우드)</text>
+<text x="360" y="112" text-anchor="middle" font-family="'Pretendard', -apple-system, 'Segoe UI', sans-serif" font-size="11" fill="var(--ex-blue-sub)">VPN 관리 서버 + 통합 대시보드</text>
+
+<!-- CSP → Devices -->
+<line x1="290" y1="142" x2="175" y2="210" stroke="var(--ex-border)" stroke-width="1.5" stroke-dasharray="6 4" class="ex-flow"/>
+<line x1="430" y1="142" x2="545" y2="210" stroke="var(--ex-border)" stroke-width="1.5" stroke-dasharray="6 4" class="ex-flow"/>
+
+<!-- === Device 1 === -->
+<rect x="48" y="210" width="254" height="148" rx="10" fill="var(--ex-green-bg)" stroke="var(--ex-green)" stroke-width="1.5"/>
+<circle cx="66" cy="224" r="4.5" fill="var(--ex-green)" class="ex-blink"/>
+<text x="175" y="238" text-anchor="middle" font-family="'Pretendard', -apple-system, 'Segoe UI', sans-serif" font-size="14" fill="var(--ex-green-text)">디바이스 1</text>
+<text x="175" y="258" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="11" fill="var(--ex-green-sub)">10.0.0.1</text>
+
+<rect x="66" y="270" width="218" height="72" rx="8" fill="var(--ex-bg)" stroke="var(--ex-border)" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="175" y="294" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="10" fill="var(--ex-dim)">tmux · session-a</text>
+<text x="175" y="326" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="11" fill="var(--ex-green)">$ claude --session A</text>
+
+<!-- === Device 2 === -->
+<rect x="418" y="210" width="254" height="148" rx="10" fill="var(--ex-orange-bg)" stroke="var(--ex-orange)" stroke-width="1.5"/>
+<circle cx="436" cy="224" r="4.5" fill="var(--ex-orange)" class="ex-blink"/>
+<text x="545" y="238" text-anchor="middle" font-family="'Pretendard', -apple-system, 'Segoe UI', sans-serif" font-size="14" fill="var(--ex-orange-text)">디바이스 2</text>
+<text x="545" y="258" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="11" fill="var(--ex-orange-sub)">10.0.0.2</text>
+
+<rect x="436" y="270" width="218" height="72" rx="8" fill="var(--ex-bg)" stroke="var(--ex-border)" stroke-width="1" stroke-dasharray="4 3"/>
+<text x="545" y="294" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="10" fill="var(--ex-dim)">tmux · session-b</text>
+<text x="545" y="326" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="11" fill="var(--ex-orange)">$ claude --session B</text>
+
+<!-- P2P -->
+<line x1="302" y1="290" x2="418" y2="290" stroke="var(--ex-border)" stroke-width="1.5" stroke-dasharray="4 4" class="ex-flow" marker-start="url(#arr-ex)" marker-end="url(#arr-ex)"/>
+<text x="360" y="280" text-anchor="middle" font-family="'Pretendard', -apple-system, 'Segoe UI', sans-serif" font-size="10" fill="var(--ex-dim)" font-style="italic">P2P</text>
+
+<!-- Local resources -->
+<text x="545" y="382" text-anchor="middle" font-family="'Pretendard', -apple-system, 'Segoe UI', sans-serif" font-size="10" fill="var(--ex-dim)" font-style="italic">로컬 리소스</text>
+<line x1="545" y1="388" x2="545" y2="400" stroke="var(--ex-border)" stroke-width="1" stroke-dasharray="3 3"/>
+<rect x="476" y="400" width="138" height="28" rx="8" fill="none" stroke="var(--ex-border)" stroke-width="1" stroke-dasharray="5 4"/>
+<text x="545" y="418" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="10" fill="var(--ex-dim)">DB, API, 내부 서비스</text>
+
+<!-- === Mobile === -->
+<rect x="225" y="478" width="270" height="92" rx="14" fill="var(--ex-purple-bg)" stroke="var(--ex-purple)" stroke-width="1.5"/>
+<text x="360" y="508" text-anchor="middle" font-family="'Pretendard', -apple-system, 'Segoe UI', sans-serif" font-size="14" fill="var(--ex-purple-text)">모바일 (VPN 클라이언트)</text>
+<text x="360" y="530" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="11" fill="var(--ex-purple-sub)">브라우저 → 대시보드</text>
+<text x="360" y="550" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="11" fill="var(--ex-purple-sub)">+ 메신저 알림 (선택)</text>
+
+<!-- Mobile lines -->
+<line x1="360" y1="478" x2="360" y2="142" stroke="var(--ex-purple)" stroke-width="1.2" stroke-dasharray="6 4" class="ex-flow" opacity="0.6"/>
+<text x="400" y="452" text-anchor="middle" font-family="'Pretendard', -apple-system, 'Segoe UI', sans-serif" font-size="10" fill="var(--ex-dim)" font-style="italic">대시보드</text>
+<line x1="272" y1="478" x2="175" y2="358" stroke="var(--ex-purple)" stroke-width="1" stroke-dasharray="6 4" class="ex-flow" opacity="0.4"/>
+<text x="190" y="442" text-anchor="middle" font-family="'Pretendard', -apple-system, 'Segoe UI', sans-serif" font-size="10" fill="var(--ex-dim)" font-style="italic">세션 A</text>
+<line x1="448" y1="478" x2="545" y2="358" stroke="var(--ex-purple)" stroke-width="1" stroke-dasharray="6 4" class="ex-flow" opacity="0.4"/>
+<text x="536" y="452" text-anchor="middle" font-family="'Pretendard', -apple-system, 'Segoe UI', sans-serif" font-size="10" fill="var(--ex-dim)" font-style="italic">세션 B</text>
+
+<!-- Legend -->
+<line x1="70" y1="604" x2="90" y2="604" stroke="var(--ex-border)" stroke-width="1.5" stroke-dasharray="6 4" class="ex-flow"/>
+<text x="98" y="608" font-family="'Pretendard', -apple-system, 'Segoe UI', sans-serif" font-size="10" fill="var(--ex-dim)">VPN 터널</text>
+<line x1="200" y1="604" x2="220" y2="604" stroke="var(--ex-purple)" stroke-width="1.5" stroke-dasharray="6 4" class="ex-flow"/>
+<text x="228" y="608" font-family="'Pretendard', -apple-system, 'Segoe UI', sans-serif" font-size="10" fill="var(--ex-dim)">모바일 접근</text>
+<circle cx="350" cy="604" r="4.5" fill="var(--ex-green)" class="ex-blink"/>
+<text x="362" y="608" font-family="'Pretendard', -apple-system, 'Segoe UI', sans-serif" font-size="10" fill="var(--ex-dim)">온라인</text>
+<rect x="430" y="596" width="36" height="16" rx="6" fill="none" stroke="var(--ex-border)" stroke-width="1" stroke-dasharray="5 4"/>
+<text x="476" y="608" font-family="'Pretendard', -apple-system, 'Segoe UI', sans-serif" font-size="10" fill="var(--ex-dim)">로컬 전용</text>
+<line x1="560" y1="604" x2="580" y2="604" stroke="var(--ex-border)" stroke-width="1" stroke-dasharray="4 4" marker-start="url(#arr-ex)" marker-end="url(#arr-ex)"/>
+<text x="590" y="608" font-family="'Pretendard', -apple-system, 'Segoe UI', sans-serif" font-size="10" fill="var(--ex-dim)">P2P</text>
+
+</svg>
+</div>
+
+<style>
+/* Excalidraw style — dark */
+.vpn-diagram-ex {
+  --ex-bg: #1e1e2e;
+  --ex-mesh: rgba(100, 100, 140, 0.06);
+  --ex-text: #e0def4;
+  --ex-dim: #908caa;
+  --ex-border: #575279;
+
+  --ex-blue-bg: rgba(125, 165, 230, 0.08);
+  --ex-blue: #7da5e6;
+  --ex-blue-text: #c4d6f2;
+  --ex-blue-sub: #8eadd4;
+
+  --ex-green-bg: rgba(109, 208, 160, 0.08);
+  --ex-green: #6dd0a0;
+  --ex-green-text: #c0ead5;
+  --ex-green-sub: #82bfa0;
+
+  --ex-orange-bg: rgba(230, 170, 100, 0.08);
+  --ex-orange: #e6aa64;
+  --ex-orange-text: #f0d4a8;
+  --ex-orange-sub: #c4a070;
+
+  --ex-purple-bg: rgba(180, 140, 220, 0.08);
+  --ex-purple: #b48cdc;
+  --ex-purple-text: #d8c4f0;
+  --ex-purple-sub: #a088b8;
+}
+
+/* Excalidraw style — light */
+body:not([data-theme="dark"]) .vpn-diagram-ex {
+  --ex-bg: #ffffff;
+  --ex-mesh: rgba(100, 100, 140, 0.04);
+  --ex-text: #1e1e2e;
+  --ex-dim: #6e6a86;
+  --ex-border: #9893a5;
+
+  --ex-blue-bg: rgba(66, 120, 200, 0.07);
+  --ex-blue: #4278c8;
+  --ex-blue-text: #2a5090;
+  --ex-blue-sub: #5a8ac0;
+
+  --ex-green-bg: rgba(40, 160, 100, 0.07);
+  --ex-green: #28a064;
+  --ex-green-text: #1a6e44;
+  --ex-green-sub: #3a9060;
+
+  --ex-orange-bg: rgba(200, 130, 40, 0.07);
+  --ex-orange: #c88228;
+  --ex-orange-text: #8a5a1a;
+  --ex-orange-sub: #a07030;
+
+  --ex-purple-bg: rgba(130, 80, 180, 0.07);
+  --ex-purple: #8250b4;
+  --ex-purple-text: #5a3080;
+  --ex-purple-sub: #7a60a0;
+}
+</style>

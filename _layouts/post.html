@@ -67,12 +67,22 @@ layout: compress
         <div class="page-content" itemprop="articleBody">
           {% include anchor_headings.html html=content anchorClass="anchor-head" beforeHeading=true h_min=1 h_max=4 %}
           {% if page.tweet %}
-          <p>Comments this article on 
+          <p>Comments this article on
             <a href="https://twitter.com/{{site.twitter}}/status/{{page.tweet}}">Twitter</a>.
           </p>
           {% endif %}
         </div>
       </article>
+
+      {% unless page.toc == false %}
+      <aside class="toc-sidebar" id="toc-sidebar">
+        <nav class="toc-nav">
+          <p class="toc-title">목차</p>
+          <ul class="toc-list" id="toc-list"></ul>
+        </nav>
+      </aside>
+      <script src="/assets/js/toc.js" defer="defer"></script>
+      {% endunless %}
       
       {% if page.comments %}
         {% include comments.html %}
