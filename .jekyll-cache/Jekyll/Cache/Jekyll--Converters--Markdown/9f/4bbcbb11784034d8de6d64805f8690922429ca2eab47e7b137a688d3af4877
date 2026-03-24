@@ -1,2 +1,0 @@
-I"<p>TextInput 안에서 받은 <code class="language-plaintext highlighter-rouge">String</code> 타입 숫자값를 알아서 <code class="language-plaintext highlighter-rouge">Number</code> 타입으로 변경되게 하고 싶었는데 이렇게 해주니 에러가 났다.</p>
-:ET

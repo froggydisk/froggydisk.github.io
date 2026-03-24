@@ -1,5 +1,0 @@
-I"W<h1 id="라이브러리">라이브러리</h1>
-<hr />
-<p>리액트 네이티브로 앱을 만들 때는 달력을 구현해야할 일이 생각보다 자주 생긴다. 어떤 앱이든 시간의 흐름에 따라 과거 정보를 조회하는 경우가 많기 때문인데, 그렇기에 직접 구현해두면 두고두고 쓸 일이 많을 것이다. 물론 훌륭한 라이브러리가 많기 때문에 시간이 충분하지 않은 사람은 다른 사람의 힘을 빌리는 것도 때론 중요하다. 필자 또한 다른 사람이 짜놓은 코드를 빌려다가 내부만 조금 고쳐쓰는 경우가 많다.<br />
-그런 의미에서 오늘은 유명한 라이브러리 중 하나인 <a href="https://github.com/wix/react-native-calendars"><code class="language-plaintext highlighter-rouge">react-native-calendars</code></a>를 소개한다.</p>
-:ET

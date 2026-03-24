@@ -1,4 +1,0 @@
-I"�<p>개발 중에 예상치 못한 에러를 만나 기록해둔다.     <br />
-뜬금없이 <code class="language-plaintext highlighter-rouge">Error: Text strings must be rendered within a &lt;Text&gt; component.</code>에러를 만나게 되었는데 이는 주로 <Text>태그가 아니라 <View>안에 문자열을 사용하여 나타나는 에러다. 
-React로 개발을 하다가 React Native로 넘어오게 되거나 멀티로 개발을 할 때 흔히 하는 실수이다.</View></Text></p>
-:ET

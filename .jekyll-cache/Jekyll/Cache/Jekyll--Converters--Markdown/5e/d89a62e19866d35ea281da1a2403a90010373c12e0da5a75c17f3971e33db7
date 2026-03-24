@@ -1,4 +1,0 @@
-I"<p>보통 앱을 만들게 되면 현재 로그인한 상태에 따라 시작하는 <code class="language-plaintext highlighter-rouge">Screen</code>을 다르게 설정함으로써 UX를 개선한다.    <br />
-<code class="language-plaintext highlighter-rouge">NavigatorAuth, NavigatorMain</code>과 같이 로그인의 상태에 따라 진입하는 Navigator가 다른 경우에는 간단하다.       <br />
-아래의 코드처럼 로그인 상태값에 따라 삼항연산자를 활용하여 진입점을 바꾸어주면 된다.</p>
-:ET

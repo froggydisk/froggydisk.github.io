@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://froggydisk.github.io/sitemap.xml

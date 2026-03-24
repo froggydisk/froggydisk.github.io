@@ -1,6 +1,0 @@
-I"�<p>React Native로 개발을 하고는 있지만 주로 iOS 시뮬레이터만 보고 하다보니 오랜만에 안드로이드 빌드를 하게 되었다. 
-<br />
-안드로이드 스튜디오에 들어가서 아무 생각 없이 Gradle upgrade를 했더니 빌드가 안되기 시작했다. 
-<br />
-react-native run-android를 하였을 때 what went wrong에 뜨는 에러는 다음과 같다.</p>
-:ET

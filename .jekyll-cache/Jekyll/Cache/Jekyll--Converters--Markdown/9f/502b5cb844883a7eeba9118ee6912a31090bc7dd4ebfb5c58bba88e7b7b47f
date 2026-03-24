@@ -1,9 +1,0 @@
-I"�<p>React Native를 이용하여 앱을 만들게 되면 <a href="https://reactnavigation.org/docs/bottom-tab-navigator/">@react-navigation/bottom-tab</a> 라이브러리의 네비게이터를 자주 이용하게 된다. 
-<br /> 
-네비게이터를 하나만 사용할 때는 문제가 없는데 여러개의 네비게이터들이 차곡차곡 쌓이면서부터 문제가 발생하기 시작한다.
-<br /> 
-특정 스크린으로 이동할 때에는 하단 메뉴바를 안보이게 해야 할 때가 많은데 주로 아래와 같이 해결할 것이다.
-```javascript
-    import {getFocusedRouteNameFromRoute} from ‘@react-navigation/native’;
-    import {createNativeStackNavigator} from ‘@react-navigation/native-stack’;</p>
-:ET

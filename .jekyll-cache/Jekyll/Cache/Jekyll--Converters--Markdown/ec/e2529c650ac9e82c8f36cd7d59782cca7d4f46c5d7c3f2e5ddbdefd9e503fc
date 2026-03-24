@@ -1,6 +1,0 @@
-I"�<p>리액트 네이티브를 이용하여 앱을 만들 때 이리저리 끌고 다닐 수 있는 버튼을 만들고 싶을 때가 있다. 
-<br />
-만들어놓고 화면에서 요리조리 움직이다보면 나름 재미가 있다. 
-<br />
-바퀴를 다시 발명하지 말라고 누군가 그랬던가. 구현을 위해 필자가 사용한 것은 <code class="language-plaintext highlighter-rouge">react-native-draggable</code>이라는 이미 잘 만들어진 라이브러리이다.</p>
-:ET

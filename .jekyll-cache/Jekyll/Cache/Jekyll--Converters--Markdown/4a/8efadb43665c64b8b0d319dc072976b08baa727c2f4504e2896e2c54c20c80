@@ -1,7 +1,0 @@
-I"�<h1 id="-에러">🔒 에러</h1>
-<p>쿠버네티스에서 yaml 파일을 작성할 때 도커 이미지를 사용하는 파드를 생성하려고 했으나 제대로 생성이 되지 않고 계속해서 <code class="language-plaintext highlighter-rouge">ImagePullBackOff</code> 상태가 되었다. Kubernetes Dashboard를 통해서 보니 다음과 같은 <strong>401 Unauthorized</strong> 에러 메시지가 떠있었다.</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Failed to pull image: rpc error: code = Unknown desc = failed to pull and unpack image: 
-failed to resolve reference: pulling from host failed with status code [manifests latest]: 
-401 Unauthorized
-</code></pre></div></div>
-:ET
