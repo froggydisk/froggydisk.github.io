@@ -1,0 +1,115 @@
+<div class="harness-pillars">
+<svg width="100%" viewBox="0 0 720 480" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="pill-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+    <path d="M2 2L8 5L2 8" fill="none" stroke="context-stroke" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+<style>
+  @keyframes pill-flow { to { stroke-dashoffset: -16; } }
+  .pill-anim { animation: pill-flow 1.4s linear infinite; }
+</style>
+
+<!-- Harness outer box -->
+<rect x="20" y="16" width="680" height="400" rx="14" fill="var(--hp-bg)" stroke="var(--hp-border)" stroke-width="1.5"/>
+<text x="360" y="48" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="15" font-weight="600" fill="var(--hp-title)">Harness</text>
+<text x="360" y="68" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" fill="var(--hp-dim)" font-style="italic">The system around the agent</text>
+
+<!-- Pillar 1: Context Engineering -->
+<rect x="44" y="90" width="210" height="200" rx="10" fill="var(--hp-green-bg)" stroke="var(--hp-green)" stroke-width="1.5"/>
+<text x="149" y="118" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="600" fill="var(--hp-green-text)">Context engineering</text>
+<text x="149" y="136" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" fill="var(--hp-green-sub)" font-style="italic">에이전트가 볼 수 있는 것</text>
+
+<rect x="60" y="152" width="88" height="32" rx="6" fill="var(--hp-inner)" stroke="var(--hp-green)" stroke-width="0.8" opacity="0.7"/>
+<text x="104" y="172" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--hp-green-text)">System prompt</text>
+
+<rect x="158" y="152" width="80" height="32" rx="6" fill="var(--hp-inner)" stroke="var(--hp-green)" stroke-width="0.8" opacity="0.7"/>
+<text x="198" y="172" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--hp-green-text)">Tool 정의</text>
+
+<rect x="60" y="196" width="88" height="32" rx="6" fill="var(--hp-inner)" stroke="var(--hp-green)" stroke-width="0.8" opacity="0.7"/>
+<text x="104" y="216" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--hp-green-text)">RAG / docs</text>
+
+<rect x="158" y="196" width="80" height="32" rx="6" fill="var(--hp-inner)" stroke="var(--hp-green)" stroke-width="0.8" opacity="0.7"/>
+<text x="198" y="216" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--hp-green-text)">세션 상태</text>
+
+<!-- Pillar 2: Architectural Constraints -->
+<rect x="270" y="90" width="210" height="200" rx="10" fill="var(--hp-purple-bg)" stroke="var(--hp-purple)" stroke-width="1.5"/>
+<text x="375" y="118" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="600" fill="var(--hp-purple-text)">Architectural constraints</text>
+<text x="375" y="136" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" fill="var(--hp-purple-sub)" font-style="italic">에이전트가 지켜야 하는 것</text>
+
+<rect x="286" y="152" width="88" height="32" rx="6" fill="var(--hp-inner)" stroke="var(--hp-purple)" stroke-width="0.8" opacity="0.7"/>
+<text x="330" y="172" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--hp-purple-text)">커스텀 린터</text>
+
+<rect x="384" y="152" width="80" height="32" rx="6" fill="var(--hp-inner)" stroke="var(--hp-purple)" stroke-width="0.8" opacity="0.7"/>
+<text x="424" y="172" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--hp-purple-text)">타입 시스템</text>
+
+<rect x="286" y="196" width="88" height="32" rx="6" fill="var(--hp-inner)" stroke="var(--hp-purple)" stroke-width="0.8" opacity="0.7"/>
+<text x="330" y="216" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--hp-purple-text)">스키마 규칙</text>
+
+<rect x="384" y="196" width="80" height="32" rx="6" fill="var(--hp-inner)" stroke="var(--hp-purple)" stroke-width="0.8" opacity="0.7"/>
+<text x="424" y="216" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--hp-purple-text)">CI checks</text>
+
+<!-- Pillar 3: Garbage Collection -->
+<rect x="44" y="308" width="436" height="92" rx="10" fill="var(--hp-brown-bg)" stroke="var(--hp-brown)" stroke-width="1.5"/>
+<text x="262" y="334" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="600" fill="var(--hp-brown-text)">Garbage collection</text>
+<text x="262" y="350" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" fill="var(--hp-brown-sub)" font-style="italic">엔트로피를 지속적으로 정리</text>
+
+<rect x="60" y="364" width="120" height="26" rx="6" fill="var(--hp-inner)" stroke="var(--hp-brown)" stroke-width="0.8" opacity="0.7"/>
+<text x="120" y="381" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--hp-brown-text)">주기적 스캔</text>
+
+<rect x="196" y="364" width="130" height="26" rx="6" fill="var(--hp-inner)" stroke="var(--hp-brown)" stroke-width="0.8" opacity="0.7"/>
+<text x="261" y="381" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--hp-brown-text)">E2E 리그레션</text>
+
+<rect x="342" y="364" width="124" height="26" rx="6" fill="var(--hp-inner)" stroke="var(--hp-brown)" stroke-width="0.8" opacity="0.7"/>
+<text x="404" y="381" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--hp-brown-text)">문서 드리프트 감지</text>
+
+<!-- Feedback loop annotation (full height) -->
+<rect x="500" y="90" width="186" height="310" rx="10" fill="none" stroke="var(--hp-border)" stroke-width="1.2" stroke-dasharray="6 4" class="pill-anim"/>
+<text x="593" y="240" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" font-weight="500" fill="var(--hp-dim)">Feedback loop</text>
+<text x="593" y="258" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" fill="var(--hp-dim)" font-style="italic">실패 → 하네스 개선</text>
+<text x="593" y="274" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" fill="var(--hp-dim)" font-style="italic">→ 재시도</text>
+
+
+</svg>
+</div>
+
+<style>
+.harness-pillars {
+  --hp-bg: rgba(50, 50, 60, 0.3);
+  --hp-border: #3e3e44;
+  --hp-title: #ededef;
+  --hp-dim: #908caa;
+  --hp-inner: rgba(255,255,255,0.03);
+  --hp-green-bg: rgba(109, 208, 160, 0.08);
+  --hp-green: #6dd0a0;
+  --hp-green-text: #c0ead5;
+  --hp-green-sub: #82bfa0;
+  --hp-purple-bg: rgba(180, 140, 220, 0.08);
+  --hp-purple: #b48cdc;
+  --hp-purple-text: #d8c4f0;
+  --hp-purple-sub: #a088b8;
+  --hp-brown-bg: rgba(200, 140, 80, 0.08);
+  --hp-brown: #c88c50;
+  --hp-brown-text: #e0c4a0;
+  --hp-brown-sub: #b0904a;
+}
+body:not([data-theme="dark"]) .harness-pillars {
+  --hp-bg: rgba(200, 200, 210, 0.15);
+  --hp-border: #c8c8d0;
+  --hp-title: #1c1c22;
+  --hp-dim: #6e6a86;
+  --hp-inner: rgba(0,0,0,0.03);
+  --hp-green-bg: rgba(40, 160, 100, 0.07);
+  --hp-green: #28a064;
+  --hp-green-text: #1a6e44;
+  --hp-green-sub: #3a9060;
+  --hp-purple-bg: rgba(130, 80, 180, 0.08);
+  --hp-purple: #8250b4;
+  --hp-purple-text: #5a3080;
+  --hp-purple-sub: #7a60a0;
+  --hp-brown-bg: rgba(180, 110, 40, 0.08);
+  --hp-brown: #b46e28;
+  --hp-brown-text: #8a5a1a;
+  --hp-brown-sub: #a07030;
+}
+</style>

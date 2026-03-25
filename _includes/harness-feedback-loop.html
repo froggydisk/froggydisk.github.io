@@ -1,0 +1,99 @@
+<div class="harness-loop">
+<svg width="100%" viewBox="0 0 640 480" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="loop-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+    <path d="M2 2L8 5L2 8" fill="none" stroke="context-stroke" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+
+<style>
+  @keyframes loop-flow { to { stroke-dashoffset: -20; } }
+  .loop-anim { animation: loop-flow 1.4s linear infinite; }
+</style>
+
+<!-- Step 1: Agent executes -->
+<rect x="180" y="20" width="280" height="64" rx="10" fill="var(--lp-gray-bg)" stroke="var(--lp-gray)" stroke-width="1.5"/>
+<text x="320" y="48" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="600" fill="var(--lp-title)">에이전트가 작업 실행</text>
+<text x="320" y="68" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="10" fill="var(--lp-dim)">코드, 문서, 쿼리</text>
+
+<!-- Arrow down -->
+<line x1="320" y1="84" x2="320" y2="116" stroke="var(--lp-gray)" stroke-width="1.2" marker-end="url(#loop-arr)"/>
+
+<!-- Step 2: Constraint check -->
+<rect x="180" y="116" width="280" height="64" rx="10" fill="var(--lp-purple-bg)" stroke="var(--lp-purple)" stroke-width="1.5"/>
+<text x="320" y="144" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="600" fill="var(--lp-purple-text)">제약 조건 확인</text>
+<text x="320" y="164" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="10" fill="var(--lp-purple-sub)">린터, 타입, CI, 테스트</text>
+
+<!-- Pass arrow (right) -->
+<line x1="460" y1="148" x2="520" y2="148" stroke="var(--lp-gray)" stroke-width="1.2" marker-end="url(#loop-arr)"/>
+<text x="490" y="140" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" fill="var(--lp-dim)" font-style="italic">pass</text>
+
+<!-- Ship it -->
+<rect x="524" y="124" width="90" height="48" rx="8" fill="var(--lp-green-bg)" stroke="var(--lp-green)" stroke-width="1.5"/>
+<text x="569" y="153" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="600" fill="var(--lp-green-text)">Ship it</text>
+
+<!-- Fail arrow (down) -->
+<line x1="320" y1="180" x2="320" y2="220" stroke="var(--lp-gray)" stroke-width="1.2" marker-end="url(#loop-arr)"/>
+<text x="340" y="204" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" fill="var(--lp-dim)" font-style="italic">fail</text>
+
+<!-- Step 3: Diagnose -->
+<rect x="180" y="220" width="280" height="64" rx="10" fill="var(--lp-brown-bg)" stroke="var(--lp-brown)" stroke-width="1.5"/>
+<text x="320" y="248" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="600" fill="var(--lp-brown-text)">실패 진단</text>
+<text x="320" y="268" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="10" fill="var(--lp-brown-sub)">어떤 역량이 부족한가?</text>
+
+<!-- Arrow down -->
+<line x1="320" y1="284" x2="320" y2="320" stroke="var(--lp-gray)" stroke-width="1.2" marker-end="url(#loop-arr)"/>
+
+<!-- Step 4: Improve harness -->
+<rect x="180" y="320" width="280" height="64" rx="10" fill="var(--lp-green-bg)" stroke="var(--lp-green)" stroke-width="1.5"/>
+<text x="320" y="348" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="600" fill="var(--lp-green-text)">하네스 개선</text>
+<text x="320" y="368" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="10" fill="var(--lp-green-sub)">문서, 도구, 린터, 테스트 추가</text>
+
+<!-- Retry loop arrow (left side going back up) -->
+<path d="M180 352 L60 352 L60 52 L180 52" fill="none" stroke="var(--lp-green)" stroke-width="1.2" stroke-dasharray="6 4" class="loop-anim" marker-end="url(#loop-arr)"/>
+<text x="44" y="210" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" fill="var(--lp-green-text)" font-style="italic" writing-mode="tb">r e t r y</text>
+
+<!-- Caption -->
+<text x="320" y="440" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" fill="var(--lp-dim)" font-style="italic">"더 열심히 시도하라"가 아니라, 하네스를 고쳐라</text>
+
+</svg>
+</div>
+
+<style>
+.harness-loop {
+  --lp-gray-bg: rgba(100, 100, 110, 0.15);
+  --lp-gray: #6f6f78;
+  --lp-title: #ededef;
+  --lp-dim: #908caa;
+  --lp-green-bg: rgba(109, 208, 160, 0.08);
+  --lp-green: #6dd0a0;
+  --lp-green-text: #c0ead5;
+  --lp-green-sub: #82bfa0;
+  --lp-purple-bg: rgba(180, 140, 220, 0.1);
+  --lp-purple: #b48cdc;
+  --lp-purple-text: #d8c4f0;
+  --lp-purple-sub: #a088b8;
+  --lp-brown-bg: rgba(200, 140, 80, 0.1);
+  --lp-brown: #c88c50;
+  --lp-brown-text: #e0c4a0;
+  --lp-brown-sub: #b0904a;
+}
+body:not([data-theme="dark"]) .harness-loop {
+  --lp-gray-bg: rgba(100, 100, 110, 0.08);
+  --lp-gray: #8b8b8e;
+  --lp-title: #1c1c22;
+  --lp-dim: #6e6a86;
+  --lp-green-bg: rgba(40, 160, 100, 0.07);
+  --lp-green: #28a064;
+  --lp-green-text: #1a6e44;
+  --lp-green-sub: #3a9060;
+  --lp-purple-bg: rgba(130, 80, 180, 0.08);
+  --lp-purple: #8250b4;
+  --lp-purple-text: #5a3080;
+  --lp-purple-sub: #7a60a0;
+  --lp-brown-bg: rgba(180, 110, 40, 0.08);
+  --lp-brown: #b46e28;
+  --lp-brown-text: #8a5a1a;
+  --lp-brown-sub: #a07030;
+}
+</style>
