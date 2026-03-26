@@ -25,7 +25,7 @@ const formattedDate = date.toLocaleDateString('en-US', {
 });
 ---
 
-<BaseLayout title={title} isPost={true}>
+<BaseLayout title={title} isPost={true} showStars={false}>
   <article itemscope itemtype="https://schema.org/BlogPosting">
     <header class="header">
       {tags.length > 0 && (

@@ -9,9 +9,10 @@ interface Props {
   description?: string;
   image?: string;
   isPost?: boolean;
+  showStars?: boolean;
 }
 
-const { title, description = 'Frontend, DevOps, ML/DL 관련 기술 블로그. 개발 과정에서의 문제 해결과 새로운 기술을 기록합니다.', image = '/img/profile.png', isPost = false } = Astro.props;
+const { title, description = 'Frontend, DevOps, ML/DL 관련 기술 블로그. 개발 과정에서의 문제 해결과 새로운 기술을 기록합니다.', image = '/img/profile.png', isPost = false, showStars = true } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -57,7 +58,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 </head>
 
 <body class="notransition">
-  <StarBackground />
+  {showStars && <StarBackground />}
   <script is:inline>
     const theme = localStorage.getItem('theme');
     if (theme === 'dark' || (!theme)) {
