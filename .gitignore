@@ -1,11 +1,19 @@
-.gitignore
-_site
-.sass-cache
-.jekyll-cache
+# Astro
+dist/
+node_modules/
+.astro/
+
+# Jekyll (legacy)
+_site/
+.sass-cache/
+.jekyll-cache/
 .jekyll-metadata
-.jekyll-cache/Jekyll/Cache
+
+# OS
 .DS_Store
+
+# Editor
 ._config.yml.swp
-vendor
-.DS_Store
+
+# Project
 CLAUDE.md

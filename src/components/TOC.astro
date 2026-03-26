@@ -1,0 +1,45 @@
+<aside class="toc-sidebar" id="toc-sidebar">
+  <nav class="toc-nav">
+    <p class="toc-title">목차</p>
+    <ul class="toc-list" id="toc-list"></ul>
+  </nav>
+</aside>
+
+<script>
+  const article = document.querySelector('.post-body');
+  const tocList = document.getElementById('toc-list');
+  if (article && tocList) {
+    const headings = article.querySelectorAll('h2, h3');
+    if (headings.length < 2) {
+      document.getElementById('toc-sidebar')!.style.display = 'none';
+    } else {
+      headings.forEach((h) => {
+        const li = document.createElement('li');
+        li.className = `toc-item toc-${h.tagName.toLowerCase()}`;
+        const a = document.createElement('a');
+        a.href = `#${h.id}`;
+        a.textContent = h.textContent?.replace(/^#\s*/, '') || '';
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          h.scrollIntoView({ behavior: 'smooth' });
+          history.pushState(null, '', `#${h.id}`);
+        });
+        li.appendChild(a);
+        tocList.appendChild(li);
+      });
+
+      const tocLinks = tocList.querySelectorAll('a');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            tocLinks.forEach((link) => link.classList.remove('active'));
+            const active = tocList.querySelector(`a[href="#${entry.target.id}"]`);
+            if (active) active.classList.add('active');
+          }
+        });
+      }, { rootMargin: '0px 0px -70% 0px', threshold: 0 });
+
+      headings.forEach((h) => observer.observe(h));
+    }
+  }
+</script>

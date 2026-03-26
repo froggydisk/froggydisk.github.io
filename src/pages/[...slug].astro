@@ -1,0 +1,50 @@
+---
+import { getCollection, render } from 'astro:content';
+import PostLayout from '../layouts/PostLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('blog'))
+    .sort((a, b) => {
+      const dateA = a.id.slice(0, 10);
+      const dateB = b.id.slice(0, 10);
+      return dateA.localeCompare(dateB);
+    });
+
+  return posts.map((post, i) => {
+    const slug = post.id.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+    const prevPost = i > 0 ? posts[i - 1] : null;
+    const nextPost = i < posts.length - 1 ? posts[i + 1] : null;
+
+    return {
+      params: { slug },
+      props: {
+        post,
+        prev: prevPost ? { title: prevPost.data.title, slug: prevPost.id.replace(/^\d{4}-\d{2}-\d{2}-/, '') } : null,
+        next: nextPost ? { title: nextPost.data.title, slug: nextPost.id.replace(/^\d{4}-\d{2}-\d{2}-/, '') } : null,
+      },
+    };
+  });
+}
+
+const { post, prev, next } = Astro.props;
+const { Content } = await render(post);
+
+const dateStr = post.id.slice(0, 10);
+const date = new Date(dateStr + 'T00:00:00');
+
+const rawTags = post.data.tags || [];
+const tags = rawTags.flatMap((t: string) => t.split(',').map((s: string) => s.trim())).filter(Boolean);
+---
+
+<PostLayout
+  title={post.data.title}
+  date={date}
+  tags={tags}
+  comments={post.data.comments}
+  toc={post.data.toc}
+  use_math={post.data.use_math}
+  prev={prev}
+  next={next}
+>
+  <Content />
+</PostLayout>

@@ -1,0 +1,25 @@
+{
+  "name": "froggydisk-blog",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && npx pagefind --site dist",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^5.0.2",
+    "@astrojs/rss": "^4.0.17",
+    "@astrojs/sitemap": "^3.7.1",
+    "@iconify-json/lucide": "^1.2.99",
+    "@iconify-json/ph": "^1.2.2",
+    "astro": "^6.0.8",
+    "astro-icon": "^1.1.5",
+    "pagefind": "^1.4.0",
+    "rehype-autolink-headings": "^7.1.0",
+    "rehype-slug": "^6.0.0"
+  },
+  "devDependencies": {
+    "sass": "^1.98.0"
+  }
+}

@@ -1,0 +1,93 @@
+<div class="tdd-core">
+<svg width="100%" viewBox="0 0 680 490" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="tc-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+    <path d="M2 2L8 5L2 8" fill="none" stroke="context-stroke" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+<style>
+  @keyframes tc-flow { to { stroke-dashoffset: -16; } }
+  .tc-anim { animation: tc-flow 1.4s linear infinite; }
+</style>
+
+<!-- Title -->
+<text x="340" y="24" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="600" fill="var(--tc-title)">서브 에이전트의 실체: 대부분이 검증이다</text>
+
+<!-- Left column: Maintenance agents -->
+<rect x="30" y="48" width="200" height="96" rx="12" fill="var(--tc-gray-bg)" stroke="var(--tc-gray)" stroke-width="1.2"/>
+<text x="130" y="74" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" font-weight="600" fill="var(--tc-dim)">Maintenance</text>
+<text x="130" y="90" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="9" fill="var(--tc-dim)" font-style="italic">"정리하는" 에이전트</text>
+
+<rect x="50" y="106" width="160" height="26" rx="6" fill="var(--tc-inner)" stroke="var(--tc-gray)" stroke-width="0.8"/>
+<text x="130" y="123" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--tc-gray-text)">Context GC</text>
+
+<!-- Right column: Verification agents (highlighted) -->
+<rect x="280" y="48" width="230" height="340" rx="12" fill="var(--tc-accent-bg)" stroke="var(--tc-accent)" stroke-width="1.5"/>
+<text x="395" y="74" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" font-weight="700" fill="var(--tc-accent-text)">Verification</text>
+<text x="395" y="90" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="9" fill="var(--tc-accent-sub)" font-style="italic">"검증하는" 에이전트 — TDD / QA</text>
+
+<rect x="300" y="106" width="190" height="26" rx="6" fill="var(--tc-inner)" stroke="var(--tc-accent)" stroke-width="1"/>
+<text x="395" y="123" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" font-weight="600" fill="var(--tc-accent-text)">Code health</text>
+
+<rect x="300" y="140" width="190" height="26" rx="6" fill="var(--tc-inner)" stroke="var(--tc-accent)" stroke-width="1"/>
+<text x="395" y="157" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" font-weight="600" fill="var(--tc-accent-text)">API contract</text>
+
+<rect x="300" y="174" width="190" height="26" rx="6" fill="var(--tc-inner)" stroke="var(--tc-accent)" stroke-width="1"/>
+<text x="395" y="191" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" font-weight="600" fill="var(--tc-accent-text)">Test gen</text>
+
+<rect x="300" y="208" width="190" height="26" rx="6" fill="var(--tc-inner)" stroke="var(--tc-accent)" stroke-width="1"/>
+<text x="395" y="225" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" font-weight="600" fill="var(--tc-accent-text)">E2E test</text>
+
+<rect x="300" y="242" width="190" height="26" rx="6" fill="var(--tc-inner)" stroke="var(--tc-accent)" stroke-width="1"/>
+<text x="395" y="259" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" font-weight="600" fill="var(--tc-accent-text)">Security audit</text>
+
+<rect x="300" y="276" width="190" height="26" rx="6" fill="var(--tc-inner)" stroke="var(--tc-accent)" stroke-width="1"/>
+<text x="395" y="293" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" font-weight="600" fill="var(--tc-accent-text)">Doc sync</text>
+
+<rect x="300" y="310" width="190" height="26" rx="6" fill="var(--tc-inner)" stroke="var(--tc-accent)" stroke-width="1"/>
+<text x="395" y="327" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" font-weight="600" fill="var(--tc-accent-text)">Schema guard</text>
+
+<rect x="300" y="344" width="190" height="26" rx="6" fill="var(--tc-inner)" stroke="var(--tc-accent)" stroke-width="1"/>
+<text x="395" y="361" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" font-weight="600" fill="var(--tc-accent-text)">Bundle watch</text>
+
+
+<!-- Vs connector -->
+<text x="255" y="185" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" fill="var(--tc-dim)">vs</text>
+
+<!-- Bottom: Feedback loop explanation -->
+<rect x="30" y="420" width="620" height="50" rx="10" fill="var(--tc-accent-bg)" stroke="var(--tc-accent)" stroke-width="1" stroke-dasharray="6 4" class="tc-anim"/>
+<text x="340" y="442" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="600" fill="var(--tc-accent-text)">검증 에이전트가 피드백 루프를 돌리는 엔진이다</text>
+<text x="340" y="460" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" fill="var(--tc-dim)" font-style="italic">생성 → 검증 → 실패 → 재생성 → 재검증 → ... → 통과</text>
+
+<!-- Arrow from right column to bottom -->
+<line x1="395" y1="388" x2="395" y2="420" stroke="var(--tc-accent)" stroke-width="1.2" marker-end="url(#tc-arr)"/>
+
+</svg>
+</div>
+
+<style>
+.tdd-core {
+  --tc-gray-bg: rgba(100, 100, 110, 0.1);
+  --tc-gray: #6f6f78;
+  --tc-gray-text: #a0a0a8;
+  --tc-accent-bg: rgba(248, 180, 100, 0.08);
+  --tc-accent: #f8b464;
+  --tc-accent-text: #f8d4a0;
+  --tc-accent-sub: #c8a060;
+  --tc-inner: rgba(255,255,255,0.03);
+  --tc-title: #ededef;
+  --tc-dim: #908caa;
+}
+:global(body:not([data-theme="dark"])) .tdd-core {
+  --tc-gray-bg: rgba(100, 100, 110, 0.06);
+  --tc-gray: #8b8b8e;
+  --tc-gray-text: #6a6a70;
+  --tc-accent-bg: rgba(220, 140, 30, 0.08);
+  --tc-accent: #d08a1e;
+  --tc-accent-text: #8a5e10;
+  --tc-accent-sub: #a07030;
+  --tc-inner: rgba(0,0,0,0.03);
+  --tc-title: #1c1c22;
+  --tc-dim: #6e6a86;
+}
+</style>

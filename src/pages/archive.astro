@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => {
+    const dateA = a.id.slice(0, 10);
+    const dateB = b.id.slice(0, 10);
+    return dateB.localeCompare(dateA);
+  });
+---
+
+<BaseLayout title="Archive">
+  <header class="header" style="margin-bottom: 2em;">
+    <h1 class="header-title">Archive</h1>
+  </header>
+
+  <div class="search-article">
+    <div id="search">
+      <label for="search-fallback">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute; left:12px; top:12px; opacity:0.5;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </label>
+      <input type="search" id="search-fallback" placeholder="Search posts..." />
+    </div>
+  </div>
+
+  {posts.map((post) => {
+    const slug = post.id.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+    const dateStr = post.id.slice(0, 10);
+    const date = new Date(dateStr + 'T00:00:00');
+    return (
+      <div class="post-item">
+        <span class="post-item-date">{date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+        <h4 class="post-item-title">
+          <a href={`/${slug}/`}>{post.data.title}</a>
+        </h4>
+      </div>
+    );
+  })}
+</BaseLayout>
+
+<script is:inline>
+  async function initSearch() {
+    var el = document.getElementById('search');
+    if (!el) return;
+    try {
+      await import('/pagefind/pagefind-ui.js');
+      el.innerHTML = '';
+      new PagefindUI({ element: '#search', showSubResults: true, showImages: false });
+    } catch (e) {
+      // Dev mode: fallback to simple filter
+      var fallback = document.getElementById('search-fallback');
+      if (fallback) {
+        fallback.addEventListener('input', function() {
+          var query = this.value.toLowerCase();
+          document.querySelectorAll('.post-item').forEach(function(item) {
+            var title = item.querySelector('.post-item-title').textContent.toLowerCase();
+            item.style.display = title.includes(query) ? '' : 'none';
+          });
+        });
+      }
+    }
+  }
+  initSearch();
+</script>
+
+<link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+
+<style>
+  :global(.pagefind-ui) {
+    --pagefind-ui-scale: 0.9;
+    --pagefind-ui-primary: #6b7886;
+    --pagefind-ui-text: #434648;
+    --pagefind-ui-background: #fff;
+    --pagefind-ui-border: #ececec;
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 5px;
+    --pagefind-ui-font: 'Pretendard Variable', Pretendard, Roboto, sans-serif;
+  }
+
+  :global(body[data-theme="dark"] .pagefind-ui) {
+    --pagefind-ui-primary: #767f87;
+    --pagefind-ui-text: #c7bebe;
+    --pagefind-ui-background: #131418;
+    --pagefind-ui-border: #1b1d25;
+  }
+</style>

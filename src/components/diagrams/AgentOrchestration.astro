@@ -1,0 +1,181 @@
+<div class="agent-orch">
+<svg width="100%" viewBox="0 0 720 620" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="ao-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+    <path d="M2 2L8 5L2 8" fill="none" stroke="context-stroke" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+<style>
+  @keyframes ao-flow { to { stroke-dashoffset: -16; } }
+  .ao-anim { animation: ao-flow 1.4s linear infinite; }
+</style>
+
+<!-- External Tools row -->
+<text x="360" y="20" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" font-weight="600" fill="var(--ao-dim)" letter-spacing="0.08em">EXTERNAL TOOLS (MCP)</text>
+
+<rect x="60" y="32" width="110" height="32" rx="6" fill="var(--ao-inner)" stroke="var(--ao-purple)" stroke-width="1" opacity="0.8"/>
+<text x="115" y="52" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ao-purple-text)">Issue Tracker</text>
+
+<rect x="185" y="32" width="80" height="32" rx="6" fill="var(--ao-inner)" stroke="var(--ao-purple)" stroke-width="1" opacity="0.8"/>
+<text x="225" y="52" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ao-purple-text)">VCS</text>
+
+<rect x="280" y="32" width="100" height="32" rx="6" fill="var(--ao-inner)" stroke="var(--ao-purple)" stroke-width="1" opacity="0.8"/>
+<text x="330" y="52" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ao-purple-text)">Messenger</text>
+
+<rect x="395" y="32" width="110" height="32" rx="6" fill="var(--ao-inner)" stroke="var(--ao-purple)" stroke-width="1" opacity="0.8"/>
+<text x="450" y="52" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ao-purple-text)">Design Tool</text>
+
+<rect x="520" y="32" width="100" height="32" rx="6" fill="var(--ao-inner)" stroke="var(--ao-purple)" stroke-width="1" opacity="0.8"/>
+<text x="570" y="52" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ao-purple-text)">Wiki / Docs</text>
+
+<!-- Dashed lines down to bridge -->
+<line x1="115" y1="64" x2="300" y2="100" stroke="var(--ao-purple)" stroke-width="0.8" stroke-dasharray="4 3" opacity="0.4"/>
+<line x1="225" y1="64" x2="320" y2="100" stroke="var(--ao-purple)" stroke-width="0.8" stroke-dasharray="4 3" opacity="0.4"/>
+<line x1="330" y1="64" x2="360" y2="100" stroke="var(--ao-purple)" stroke-width="0.8" stroke-dasharray="4 3" opacity="0.4"/>
+<line x1="450" y1="64" x2="400" y2="100" stroke="var(--ao-purple)" stroke-width="0.8" stroke-dasharray="4 3" opacity="0.4"/>
+<line x1="570" y1="64" x2="420" y2="100" stroke="var(--ao-purple)" stroke-width="0.8" stroke-dasharray="4 3" opacity="0.4"/>
+
+<!-- Representative Agent (Bridge) -->
+<rect x="120" y="100" width="400" height="150" rx="14" fill="var(--ao-blue-bg)" stroke="var(--ao-blue)" stroke-width="1.5"/>
+<text x="140" y="126" font-family="'Pretendard', -apple-system, sans-serif" font-size="14" font-weight="700" fill="var(--ao-title)">Representative Agent</text>
+<text x="140" y="144" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" fill="var(--ao-dim)" font-style="italic">LLM API + 세션 상태 관리 + Context engineering</text>
+
+<!-- Context components inside bridge -->
+<rect x="140" y="160" width="100" height="30" rx="6" fill="var(--ao-inner)" stroke="var(--ao-blue)" stroke-width="0.8" opacity="0.7"/>
+<text x="190" y="179" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ao-blue-text)">System prompt</text>
+
+<rect x="250" y="160" width="100" height="30" rx="6" fill="var(--ao-inner)" stroke="var(--ao-blue)" stroke-width="0.8" opacity="0.7"/>
+<text x="300" y="179" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ao-blue-text)">Session state</text>
+
+<rect x="360" y="160" width="145" height="30" rx="6" fill="var(--ao-inner)" stroke="var(--ao-blue)" stroke-width="0.8" opacity="0.7"/>
+<text x="432" y="179" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ao-blue-text)">Sliding window</text>
+
+<rect x="140" y="200" width="100" height="30" rx="6" fill="var(--ao-inner)" stroke="var(--ao-blue)" stroke-width="0.8" opacity="0.7"/>
+<text x="190" y="219" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ao-blue-text)">State store</text>
+
+<rect x="250" y="200" width="100" height="30" rx="6" fill="var(--ao-inner)" stroke="var(--ao-blue)" stroke-width="0.8" opacity="0.7"/>
+<text x="300" y="219" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ao-blue-text)">Skill / Tool</text>
+
+<rect x="360" y="200" width="145" height="30" rx="6" fill="var(--ao-inner)" stroke="var(--ao-blue)" stroke-width="0.8" opacity="0.7"/>
+<text x="432" y="219" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ao-blue-text)">Guardrails</text>
+
+<!-- RAG / Vector DB (right side) -->
+<rect x="560" y="120" width="130" height="110" rx="10" fill="var(--ao-brown-bg)" stroke="var(--ao-brown)" stroke-width="1.2"/>
+<text x="625" y="146" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" font-weight="600" fill="var(--ao-brown-text)">RAG</text>
+
+<rect x="574" y="156" width="102" height="26" rx="5" fill="var(--ao-inner)" stroke="var(--ao-brown)" stroke-width="0.8" opacity="0.7"/>
+<text x="625" y="173" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ao-brown-text)">Vector DB</text>
+
+<rect x="574" y="190" width="102" height="26" rx="5" fill="var(--ao-inner)" stroke="var(--ao-brown)" stroke-width="0.8" opacity="0.7"/>
+<text x="625" y="207" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ao-brown-text)">Legacy docs</text>
+
+<!-- RAG connection -->
+<line x1="520" y1="175" x2="560" y2="175" stroke="var(--ao-brown)" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#ao-arr)"/>
+
+<!-- Flow arrow down -->
+<line x1="320" y1="250" x2="320" y2="290" stroke="var(--ao-gray)" stroke-width="1.2" marker-end="url(#ao-arr)"/>
+<text x="340" y="272" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" fill="var(--ao-dim)" font-style="italic">컨텍스트 분배 + 결과 종합</text>
+
+<!-- Sub-agent Pool -->
+<rect x="40" y="290" width="640" height="190" rx="14" fill="var(--ao-green-bg)" stroke="var(--ao-green)" stroke-width="1.5"/>
+<text x="360" y="316" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="600" fill="var(--ao-green-text)">Sub-agent Pool</text>
+
+<!-- Sub-agent badges - row 1 (verification, highlighted) -->
+<rect x="62" y="330" width="110" height="28" rx="14" fill="var(--ao-accent-bg)" stroke="var(--ao-accent)" stroke-width="1.2"/>
+<text x="117" y="348" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" font-weight="600" fill="var(--ao-accent-text)">Code health</text>
+
+<rect x="182" y="330" width="110" height="28" rx="14" fill="var(--ao-accent-bg)" stroke="var(--ao-accent)" stroke-width="1.2"/>
+<text x="237" y="348" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" font-weight="600" fill="var(--ao-accent-text)">API contract</text>
+
+<rect x="302" y="330" width="96" height="28" rx="14" fill="var(--ao-accent-bg)" stroke="var(--ao-accent)" stroke-width="1.2"/>
+<text x="350" y="348" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" font-weight="600" fill="var(--ao-accent-text)">Test gen</text>
+
+<rect x="408" y="330" width="90" height="28" rx="14" fill="var(--ao-accent-bg)" stroke="var(--ao-accent)" stroke-width="1.2"/>
+<text x="453" y="348" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" font-weight="600" fill="var(--ao-accent-text)">E2E test</text>
+
+<rect x="508" y="330" width="120" height="28" rx="14" fill="var(--ao-accent-bg)" stroke="var(--ao-accent)" stroke-width="1.2"/>
+<text x="568" y="348" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" font-weight="600" fill="var(--ao-accent-text)">Security audit</text>
+
+<!-- Sub-agent badges - row 2 (verification continued + maintenance) -->
+<rect x="62" y="368" width="96" height="28" rx="14" fill="var(--ao-accent-bg)" stroke="var(--ao-accent)" stroke-width="1.2"/>
+<text x="110" y="386" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" font-weight="600" fill="var(--ao-accent-text)">Doc sync</text>
+
+<rect x="168" y="368" width="120" height="28" rx="14" fill="var(--ao-accent-bg)" stroke="var(--ao-accent)" stroke-width="1.2"/>
+<text x="228" y="386" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" font-weight="600" fill="var(--ao-accent-text)">Schema guard</text>
+
+<rect x="298" y="368" width="120" height="28" rx="14" fill="var(--ao-accent-bg)" stroke="var(--ao-accent)" stroke-width="1.2"/>
+<text x="358" y="386" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" font-weight="600" fill="var(--ao-accent-text)">Bundle watch</text>
+
+<rect x="428" y="368" width="110" height="28" rx="14" fill="var(--ao-inner)" stroke="var(--ao-green)" stroke-width="0.8" opacity="0.8"/>
+<text x="483" y="386" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ao-green-text)">Context GC</text>
+
+<!-- Sub-agent badges - row 3 (ellipsis) -->
+<rect x="62" y="406" width="60" height="28" rx="14" fill="var(--ao-inner)" stroke="var(--ao-green)" stroke-width="0.8" opacity="0.5" stroke-dasharray="4 3"/>
+<text x="92" y="424" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ao-dim)">...</text>
+
+<!-- Legend -->
+<rect x="420" y="410" width="8" height="8" rx="2" fill="var(--ao-accent)" opacity="0.6"/>
+<text x="434" y="418" font-family="'Pretendard', -apple-system, sans-serif" font-size="9" fill="var(--ao-dim)">= 검증 (Verification)</text>
+<rect x="550" y="410" width="8" height="8" rx="2" fill="var(--ao-green)" opacity="0.6"/>
+<text x="564" y="418" font-family="'Pretendard', -apple-system, sans-serif" font-size="9" fill="var(--ao-dim)">= 운영 (Maintenance)</text>
+
+<!-- Feedback arrow (left side loop back) -->
+<path d="M40 385 L20 385 L20 175 L120 175" fill="none" stroke="var(--ao-green)" stroke-width="1.2" stroke-dasharray="6 4" class="ao-anim" marker-end="url(#ao-arr)"/>
+<text x="10" y="288" font-family="'Pretendard', -apple-system, sans-serif" font-size="9" fill="var(--ao-green-text)" font-style="italic" writing-mode="tb">feedback</text>
+
+<!-- Flow arrow up from hooks to sub-agents -->
+<line x1="320" y1="510" x2="320" y2="480" stroke="var(--ao-gray)" stroke-width="1.2" marker-end="url(#ao-arr)"/>
+<text x="340" y="500" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" fill="var(--ao-dim)" font-style="italic">Hook 트리거</text>
+
+<!-- Hook triggers (single box) -->
+<rect x="80" y="510" width="448" height="40" rx="8" fill="var(--ao-inner)" stroke="var(--ao-gray)" stroke-width="1" opacity="0.7"/>
+<text x="304" y="534" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ao-dim)">CI event · Scheduler · VCS action · Webhook</text>
+
+<!-- Caption -->
+<text x="360" y="580" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" fill="var(--ao-dim)" font-style="italic">대표 에이전트가 전체 컨텍스트를 보유하고, 서브 에이전트에 작업을 분배한다</text>
+
+</svg>
+</div>
+
+<style>
+.agent-orch {
+  --ao-blue-bg: rgba(129, 140, 248, 0.1);
+  --ao-blue: #818cf8;
+  --ao-blue-text: #b8c0f8;
+  --ao-green-bg: rgba(109, 208, 160, 0.08);
+  --ao-green: #6dd0a0;
+  --ao-green-text: #c0ead5;
+  --ao-brown-bg: rgba(200, 140, 80, 0.1);
+  --ao-brown: #c88c50;
+  --ao-brown-text: #e0c4a0;
+  --ao-purple: #b48cdc;
+  --ao-purple-text: #d8c4f0;
+  --ao-accent-bg: rgba(248, 180, 100, 0.1);
+  --ao-accent: #f8b464;
+  --ao-accent-text: #f8d4a0;
+  --ao-gray: #6f6f78;
+  --ao-inner: rgba(255,255,255,0.03);
+  --ao-title: #ededef;
+  --ao-dim: #908caa;
+}
+:global(body:not([data-theme="dark"])) .agent-orch {
+  --ao-blue-bg: rgba(60, 80, 200, 0.07);
+  --ao-blue: #4a5ac8;
+  --ao-blue-text: #3a4a90;
+  --ao-green-bg: rgba(40, 160, 100, 0.07);
+  --ao-green: #28a064;
+  --ao-green-text: #1a6e44;
+  --ao-brown-bg: rgba(180, 110, 40, 0.08);
+  --ao-brown: #b46e28;
+  --ao-brown-text: #8a5a1a;
+  --ao-purple: #8250b4;
+  --ao-purple-text: #5a3080;
+  --ao-accent-bg: rgba(220, 140, 30, 0.1);
+  --ao-accent: #d08a1e;
+  --ao-accent-text: #8a5e10;
+  --ao-gray: #8b8b8e;
+  --ao-inner: rgba(0,0,0,0.03);
+  --ao-title: #1c1c22;
+  --ao-dim: #6e6a86;
+}
+</style>

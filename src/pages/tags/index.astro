@@ -1,0 +1,58 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+
+const tagMap = new Map<string, typeof posts>();
+posts.forEach((post) => {
+  const rawTags = post.data.tags || [];
+  const tags = rawTags.flatMap((t: string) => t.split(',').map((s: string) => s.trim())).filter(Boolean);
+  tags.forEach((tag) => {
+    if (!tagMap.has(tag)) tagMap.set(tag, []);
+    tagMap.get(tag)!.push(post);
+  });
+});
+
+const sortedTags = [...tagMap.entries()].sort((a, b) => b[1].length - a[1].length);
+
+function toSlug(tag: string) {
+  return tag.toLowerCase().replace(/\s+/g, '-');
+}
+
+function postSlug(id: string) {
+  return id.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+}
+---
+
+<BaseLayout title="Tags">
+  <header class="header" style="margin-bottom: 2em;">
+    <h1 class="header-title">Tags</h1>
+  </header>
+
+  <div class="archive-tags">
+    {sortedTags.map(([tag, tagPosts]) => (
+      <span class="tag-item" id={toSlug(tag)}>
+        {tag} ({tagPosts.length})
+      </span>
+    ))}
+  </div>
+
+  {sortedTags.map(([tag, tagPosts]) => (
+    <div style="margin-top: 2em;">
+      <h3 id={toSlug(tag)}>{tag}</h3>
+      {tagPosts
+        .sort((a, b) => b.id.slice(0,10).localeCompare(a.id.slice(0,10)))
+        .map((post) => {
+          const slug = postSlug(post.id);
+          return (
+            <div class="post-item">
+              <h4 class="post-item-title">
+                <a href={`/${slug}/`}>{post.data.title}</a>
+              </h4>
+            </div>
+          );
+        })}
+    </div>
+  ))}
+</BaseLayout>

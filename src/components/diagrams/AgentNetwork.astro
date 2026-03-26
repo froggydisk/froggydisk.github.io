@@ -1,0 +1,111 @@
+<div class="agent-network">
+<svg width="100%" viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg">
+
+<!-- Title -->
+<text x="340" y="20" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" font-weight="600" fill="var(--an-dim)" letter-spacing="0.08em">AGENT NETWORK — 전체 조감도</text>
+
+<!-- Team A -->
+<g>
+  <rect x="30" y="50" width="140" height="48" rx="10" fill="var(--an-inner)" stroke="var(--an-border)" stroke-width="1.2"/>
+  <text x="100" y="72" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="600" fill="var(--an-node-dim)">Team A</text>
+  <text x="100" y="88" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--an-dim)">2 projects</text>
+
+  <!-- Leaves -->
+  <rect x="30" y="110" width="64" height="22" rx="5" fill="var(--an-inner)" stroke="var(--an-border)" stroke-width="0.8"/>
+  <text x="62" y="124" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="8" fill="var(--an-dim)">Proj A-1</text>
+
+  <rect x="106" y="110" width="64" height="22" rx="5" fill="var(--an-inner)" stroke="var(--an-border)" stroke-width="0.8"/>
+  <text x="138" y="124" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="8" fill="var(--an-dim)">Proj A-2</text>
+
+  <!-- Connector -->
+  <line x1="100" y1="98" x2="100" y2="110" stroke="var(--an-border)" stroke-width="0.8"/>
+</g>
+
+<!-- Team B (highlighted / active) -->
+<g>
+  <rect x="230" y="50" width="220" height="48" rx="10" fill="var(--an-active-bg)" stroke="var(--an-active)" stroke-width="1.5"/>
+  <text x="340" y="72" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="700" fill="var(--an-active-text)">Team B</text>
+  <text x="340" y="88" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--an-active-sub)">3 projects</text>
+
+  <!-- Leaves -->
+  <rect x="234" y="110" width="64" height="22" rx="5" fill="var(--an-active-bg)" stroke="var(--an-active)" stroke-width="1.2"/>
+  <text x="266" y="124" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="8" font-weight="600" fill="var(--an-active-text)">Project X</text>
+
+  <rect x="308" y="110" width="64" height="22" rx="5" fill="var(--an-inner)" stroke="var(--an-border)" stroke-width="0.8"/>
+  <text x="340" y="124" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="8" fill="var(--an-dim)">Proj B-1</text>
+
+  <rect x="382" y="110" width="64" height="22" rx="5" fill="var(--an-inner)" stroke="var(--an-border)" stroke-width="0.8"/>
+  <text x="414" y="124" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="8" fill="var(--an-dim)">Proj B-2</text>
+
+  <!-- Connector -->
+  <line x1="340" y1="98" x2="340" y2="110" stroke="var(--an-active)" stroke-width="1"/>
+</g>
+
+<!-- Team C -->
+<g>
+  <rect x="510" y="50" width="140" height="48" rx="10" fill="var(--an-inner)" stroke="var(--an-border)" stroke-width="1.2"/>
+  <text x="580" y="72" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="600" fill="var(--an-node-dim)">Team C</text>
+  <text x="580" y="88" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--an-dim)">3 projects</text>
+
+  <!-- Leaves -->
+  <rect x="510" y="110" width="40" height="22" rx="5" fill="var(--an-inner)" stroke="var(--an-border)" stroke-width="0.8"/>
+  <text x="530" y="124" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="8" fill="var(--an-dim)">C-1</text>
+
+  <rect x="560" y="110" width="40" height="22" rx="5" fill="var(--an-inner)" stroke="var(--an-border)" stroke-width="0.8"/>
+  <text x="580" y="124" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="8" fill="var(--an-dim)">C-2</text>
+
+  <rect x="610" y="110" width="40" height="22" rx="5" fill="var(--an-inner)" stroke="var(--an-border)" stroke-width="0.8"/>
+  <text x="630" y="124" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="8" fill="var(--an-dim)">C-3</text>
+
+  <!-- Connector -->
+  <line x1="580" y1="98" x2="580" y2="110" stroke="var(--an-border)" stroke-width="0.8"/>
+</g>
+
+<!-- Horizontal connection lines between teams -->
+<line x1="170" y1="74" x2="230" y2="74" stroke="var(--an-active)" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.4"/>
+<circle cx="170" r="2.5" cy="74" fill="var(--an-active)" opacity="0.4"/>
+<circle cx="230" r="2.5" cy="74" fill="var(--an-active)" opacity="0.4"/>
+
+<line x1="450" y1="74" x2="510" y2="74" stroke="var(--an-active)" stroke-width="1.2" stroke-dasharray="5 3" opacity="0.4"/>
+<circle cx="450" r="2.5" cy="74" fill="var(--an-active)" opacity="0.4"/>
+<circle cx="510" r="2.5" cy="74" fill="var(--an-active)" opacity="0.4"/>
+
+<!-- Zoom indicator from Project X down -->
+<line x1="266" y1="132" x2="266" y2="160" stroke="var(--an-active)" stroke-width="1.5" stroke-dasharray="4 3"/>
+<polygon points="266,168 261,158 271,158" fill="var(--an-active)"/>
+
+<!-- Zoom label -->
+<rect x="150" y="170" width="232" height="34" rx="6" fill="var(--an-active-bg)" stroke="var(--an-active)" stroke-width="1"/>
+<text x="266" y="191" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" font-weight="600" fill="var(--an-active-text)">Project X 상세 (아래 아키텍처)</text>
+
+<!-- Caption -->
+<text x="340" y="240" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" fill="var(--an-dim)" font-style="italic">각 프로젝트는 독립된 대표 에이전트를 가지며, 조직 전체가 에이전트 네트워크를 이룬다</text>
+
+<!-- Per-project agent note -->
+<text x="340" y="260" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--an-dim)">1 project = 1 representative agent + N sub-agents</text>
+
+</svg>
+</div>
+
+<style>
+.agent-network {
+  --an-inner: rgba(255,255,255,0.03);
+  --an-border: #3a3d5a;
+  --an-dim: #908caa;
+  --an-node-dim: #8a8a9a;
+  --an-active-bg: rgba(129, 140, 248, 0.1);
+  --an-active: #818cf8;
+  --an-active-text: #b8c0f8;
+  --an-active-sub: #7a82c8;
+}
+:global(body:not([data-theme="dark"])) .agent-network {
+  --an-inner: rgba(0,0,0,0.03);
+  --an-border: #c8c8d0;
+  --an-dim: #6e6a86;
+  --an-node-dim: #6a6a78;
+  --an-active-bg: rgba(60, 80, 200, 0.07);
+  --an-active: #4a5ac8;
+  --an-active-text: #3a4a90;
+  --an-active-sub: #5a60a0;
+}
+</style>

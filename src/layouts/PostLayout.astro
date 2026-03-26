@@ -1,0 +1,59 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import TOC from '../components/TOC.astro';
+import Comments from '../components/Comments.astro';
+import Support from '../components/Support.astro';
+import PostNav from '../components/PostNav.astro';
+
+interface Props {
+  title: string;
+  date: Date;
+  tags?: string[];
+  comments?: boolean;
+  toc?: boolean;
+  use_math?: boolean;
+  prev?: { title: string; slug: string } | null;
+  next?: { title: string; slug: string } | null;
+}
+
+const { title, date, tags = [], comments = false, toc = true, use_math = false, prev = null, next = null } = Astro.props;
+
+const formattedDate = date.toLocaleDateString('en-US', {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+});
+---
+
+<BaseLayout title={title} isPost={true}>
+  <article itemscope itemtype="https://schema.org/BlogPosting">
+    <header class="header">
+      {tags.length > 0 && (
+        <div class="tags">
+          {tags.map((tag, i) => (
+            <>
+              <a class="tag" href={`/tags/#${tag.toLowerCase().replace(/\s+/g, '-')}`}>{tag.toUpperCase()}</a>{i < tags.length - 1 && ', '}
+            </>
+          ))}
+        </div>
+      )}
+      <h1 class="header-title" itemprop="headline">{title}</h1>
+      <div class="post-meta">
+        <time datetime={date.toISOString()} itemprop="datePublished">{formattedDate}</time>
+        <span itemprop="author">./workspace</span>
+      </div>
+    </header>
+
+    <div class="page-content post-body" itemprop="articleBody">
+      <slot />
+    </div>
+  </article>
+
+  {use_math && (
+    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.6/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+  )}
+  {toc && <TOC />}
+  {comments && <Comments />}
+  <PostNav prev={prev} next={next} />
+  <Support />
+</BaseLayout>

@@ -1,0 +1,27 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div style="display: flex; align-items: center; justify-content: center">
+    <a class="letter-image" href="/resume/">
+      <div class="animated-mail">
+        <div class="back-fold"></div>
+        <div class="letter">
+          <div class="letter-title"></div>
+          <div class="letter-context"></div>
+          <div class="letter-stamp"><div class="letter-stamp-inner"></div></div>
+        </div>
+        <div class="top-fold"></div>
+        <div class="body"></div>
+        <div class="left-fold"></div>
+      </div>
+      <span style="margin-left: 25px">resume</span>
+    </a>
+    <span class="footer_item">&copy; {year}</span>
+  </div>
+  <small class="footer_copyright">
+    <a href="/privacy-policy/">개인정보처리방침</a> &middot;
+    Powered by <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>
+  </small>
+</footer>

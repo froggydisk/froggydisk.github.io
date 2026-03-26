@@ -1,0 +1,69 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+
+const menus = [
+  { title: 'home', url: '/', external: false },
+  { title: 'archive', url: '/archive/', external: false },
+  { title: 'velog', url: 'https://velog.io/@frog', external: true },
+  { title: 'about', url: '/about/', external: false },
+];
+---
+
+<div class="navbar" role="navigation">
+  <nav class="menu">
+    <input type="checkbox" id="menu-trigger" class="menu-trigger" />
+    <label for="menu-trigger">
+      <span class="menu-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
+          <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
+        </svg>
+      </span>
+    </label>
+    <a id="mode">
+      <Icon name="lucide:sun" class="mode-sunny" size={22} />
+      <Icon name="ph:moon" class="mode-moon" size={22} style="stroke: currentColor; stroke-width: 4px;" />
+    </a>
+    <div class="trigger">
+      <div class="trigger-container">
+        {menus.map((menu) => (
+          menu.external ? (
+            <a class="menu-link" href={menu.url} target="_blank" rel="noopener">{menu.title}</a>
+          ) : (
+            <a class:list={['menu-link', { active: currentPath === menu.url }]} href={menu.url}>{menu.title}</a>
+          )
+        ))}
+        <a class="menu-link rss" href="https://github.com/froggydisk">
+          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<script>
+  const lamp = document.getElementById('mode');
+  lamp?.addEventListener('click', () => {
+    const current = localStorage.getItem('theme');
+    if (current === 'dark' || (!current)) {
+      localStorage.setItem('theme', 'light');
+      document.body.removeAttribute('data-theme');
+    } else {
+      localStorage.setItem('theme', 'dark');
+      document.body.setAttribute('data-theme', 'dark');
+    }
+  });
+
+  const cbox = document.getElementById('menu-trigger') as HTMLInputElement;
+  cbox?.addEventListener('change', function() {
+    const area = document.querySelector('.wrapper');
+    this.checked ? area?.classList.add('blurry') : area?.classList.remove('blurry');
+  });
+</script>

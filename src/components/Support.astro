@@ -1,0 +1,43 @@
+<div class="support-link-btn">
+  <button class="w-btn w-btn-gra1 w-btn-gra-anim" onclick="location.href='https://buymeacoffee.com/froggydisk'">
+    <span>Buy me a coffee</span>
+    <i class="fa-solid fa-mug-hot"></i>
+  </button>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<style>
+  .support-link-btn {
+    text-align: center;
+    margin-top: 3em;
+  }
+  .w-btn {
+    font-size: 0.8em;
+    position: relative;
+    border: none;
+    display: inline-block;
+    padding: 15px 30px;
+    border-radius: 15px;
+    font-family: "paybooc-Light", sans-serif;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.25s;
+    cursor: pointer;
+  }
+  .w-btn:hover { transform: scale(1.1); }
+  .w-btn-gra1 {
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    color: white;
+  }
+  .w-btn-gra-anim {
+    background-size: 400% 400%;
+    animation: gradient 7s ease infinite;
+  }
+  @keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+</style>

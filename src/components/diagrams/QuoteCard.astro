@@ -1,0 +1,82 @@
+---
+interface Props {
+  source: string;
+  url?: string;
+}
+const { source, url } = Astro.props;
+---
+
+<div class="quote-card">
+  <div class="quote-mark">"</div>
+  <div class="quote-body">
+    <slot />
+  </div>
+  <div class="quote-source">
+    {url ? <a href={url} target="_blank" rel="noopener noreferrer">— {source}</a> : <span>— {source}</span>}
+  </div>
+</div>
+
+<style>
+.quote-card {
+  position: relative;
+  border-left: 3px solid var(--qc-accent);
+  border-radius: 0 8px 8px 0;
+  background: var(--qc-bg);
+  padding: 20px 24px 16px 24px;
+  margin: 24px 0;
+}
+.quote-mark {
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  font-family: Georgia, serif;
+  font-size: 48px;
+  line-height: 1;
+  color: var(--qc-accent);
+  opacity: 0.4;
+  pointer-events: none;
+}
+.quote-body {
+  font-size: 0.95em;
+  line-height: 1.7;
+  color: var(--qc-text);
+}
+.quote-body :global(p) {
+  margin: 0 0 8px 0;
+}
+.quote-body :global(p:last-child) {
+  margin-bottom: 0;
+}
+.quote-body :global(strong) {
+  color: var(--qc-strong);
+}
+.quote-source {
+  margin-top: 12px;
+  font-size: 0.82em;
+  color: var(--qc-dim);
+}
+.quote-source a {
+  color: var(--qc-accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+.quote-source a:hover {
+  border-bottom-color: var(--qc-accent);
+}
+
+.quote-card {
+  --qc-accent: #818cf8;
+  --qc-bg: rgba(129, 140, 248, 0.06);
+  --qc-text: #c0c0cc;
+  --qc-strong: #e0e0ea;
+  --qc-dim: #8888a0;
+}
+:global(body:not([data-theme="dark"])) .quote-card {
+  --qc-accent: #4a5ac8;
+  --qc-bg: rgba(60, 80, 200, 0.05);
+  --qc-text: #4a4a58;
+  --qc-strong: #1c1c28;
+  --qc-dim: #6a6a80;
+}
+</style>

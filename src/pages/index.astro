@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => {
+    const dateA = a.id.slice(0, 10);
+    const dateB = b.id.slice(0, 10);
+    return dateB.localeCompare(dateA);
+  });
+
+const recentPosts = posts.slice(0, 5);
+---
+
+<BaseLayout title="Home">
+  <div class="author">
+    <img class="author-avatar" src="/img/profile.png" alt="avatar" />
+    <h2 class="author-name">./workspace</h2>
+    <div class="content">
+      <p class="content__text">intro =</p>
+      <ul class="content__list">
+        <p class="content__list__item">"froggy_disk"</p>
+        <p class="content__list__item">"frontend"</p>
+        <p class="content__list__item">"ML/DL"</p>
+        <p class="content__list__item">"devops"</p>
+      </ul>
+    </div>
+  </div>
+
+  <h4 class="posts-item-note">Recent Posts</h4>
+  {recentPosts.map((post) => {
+    const slug = post.id.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+    const dateStr = post.id.slice(0, 10);
+    const date = new Date(dateStr + 'T00:00:00');
+    return (
+      <div class="post-item">
+        <span class="post-item-date">{date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+        <h4 class="post-item-title">
+          <a href={`/${slug}/`}>{post.data.title}</a>
+        </h4>
+      </div>
+    );
+  })}
+</BaseLayout>
