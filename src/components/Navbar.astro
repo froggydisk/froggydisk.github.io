@@ -52,6 +52,8 @@ const menus = [
   const lamp = document.getElementById('mode');
   lamp?.addEventListener('click', () => {
     const current = localStorage.getItem('theme');
+    // Safari: transition 활성 중 속성 변경 시 repaint 누락 방지
+    document.body.classList.add('notransition');
     if (current === 'dark' || (!current)) {
       localStorage.setItem('theme', 'light');
       document.body.removeAttribute('data-theme');
@@ -59,6 +61,10 @@ const menus = [
       localStorage.setItem('theme', 'dark');
       document.body.setAttribute('data-theme', 'dark');
     }
+    void document.body.offsetHeight;
+    requestAnimationFrame(() => {
+      document.body.classList.remove('notransition');
+    });
   });
 
   const cbox = document.getElementById('menu-trigger') as HTMLInputElement;
