@@ -1,0 +1,94 @@
+<div class="fb-bottleneck">
+<svg width="100%" viewBox="0 0 680 220" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="fb-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+    <path d="M2 2L8 5L2 8" fill="none" stroke="context-stroke" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+
+<!-- Title -->
+<text x="340" y="20" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" font-weight="600" fill="var(--fb-dim)" letter-spacing="0.08em">FEEDBACK LOOP — 실제 병목 지점</text>
+
+<!-- Step 1 -->
+<rect x="20" y="50" width="110" height="44" rx="8" fill="var(--fb-inner)" stroke="var(--fb-blue)" stroke-width="1.2"/>
+<text x="75" y="68" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" font-weight="600" fill="var(--fb-blue-text)">1. 코드 작성</text>
+<text x="75" y="82" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="8" fill="var(--fb-dim)">TDD 기반</text>
+
+<!-- Arrow 1→2 -->
+<line x1="130" y1="72" x2="152" y2="72" stroke="var(--fb-gray)" stroke-width="1.2" marker-end="url(#fb-arr)"/>
+
+<!-- Step 2 -->
+<rect x="155" y="50" width="110" height="44" rx="8" fill="var(--fb-inner)" stroke="var(--fb-blue)" stroke-width="1.2"/>
+<text x="210" y="68" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" font-weight="600" fill="var(--fb-blue-text)">2. 테스트 생성</text>
+<text x="210" y="82" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="8" fill="var(--fb-dim)">QA 에이전트</text>
+
+<!-- Bottleneck zone (highlighted gap between 2 and 3) -->
+<rect x="270" y="38" width="100" height="70" rx="10" fill="var(--fb-red-bg)" stroke="var(--fb-red)" stroke-width="1.5" stroke-dasharray="6 3"/>
+<text x="320" y="56" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="9" font-weight="700" fill="var(--fb-red-text)">BOTTLENECK</text>
+
+<!-- X mark -->
+<line x1="302" y1="68" x2="314" y2="80" stroke="var(--fb-red)" stroke-width="2.5" stroke-linecap="round"/>
+<line x1="314" y1="68" x2="302" y2="80" stroke="var(--fb-red)" stroke-width="2.5" stroke-linecap="round"/>
+
+<!-- Missing state label -->
+<text x="346" y="78" font-family="'Pretendard', -apple-system, sans-serif" font-size="8" fill="var(--fb-red-text)" font-style="italic">상태 없음</text>
+<text x="346" y="90" font-family="'Pretendard', -apple-system, sans-serif" font-size="8" fill="var(--fb-red-text)" font-style="italic">실행 불가</text>
+
+<!-- Arrow 2→3 (broken) -->
+<line x1="265" y1="72" x2="282" y2="72" stroke="var(--fb-red)" stroke-width="1.2" opacity="0.6"/>
+
+<!-- Arrow bottleneck→3 (broken) -->
+<line x1="355" y1="72" x2="382" y2="72" stroke="var(--fb-red)" stroke-width="1.2" opacity="0.6"/>
+
+<!-- Step 3 -->
+<rect x="385" y="50" width="90" height="44" rx="8" fill="var(--fb-inner)" stroke="var(--fb-gray)" stroke-width="1" opacity="0.5"/>
+<text x="430" y="68" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--fb-dim)" opacity="0.5">3. 실행</text>
+<text x="430" y="82" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="8" fill="var(--fb-dim)" opacity="0.4">도달 못함</text>
+
+<!-- Arrow 3→4 (faded) -->
+<line x1="475" y1="72" x2="497" y2="72" stroke="var(--fb-gray)" stroke-width="1" opacity="0.3" marker-end="url(#fb-arr)"/>
+
+<!-- Step 4 -->
+<rect x="500" y="50" width="80" height="44" rx="8" fill="var(--fb-inner)" stroke="var(--fb-gray)" stroke-width="1" opacity="0.5"/>
+<text x="540" y="68" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--fb-dim)" opacity="0.5">4. 수정</text>
+
+<!-- Arrow 4→5 (faded) -->
+<line x1="580" y1="72" x2="602" y2="72" stroke="var(--fb-gray)" stroke-width="1" opacity="0.3" marker-end="url(#fb-arr)"/>
+
+<!-- Step 5 -->
+<rect x="605" y="50" width="60" height="44" rx="8" fill="var(--fb-inner)" stroke="var(--fb-gray)" stroke-width="1" opacity="0.5"/>
+<text x="635" y="72" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--fb-dim)" opacity="0.5">5. 통과</text>
+
+<!-- Bottom annotation -->
+<rect x="120" y="130" width="440" height="44" rx="8" fill="var(--fb-red-bg)" stroke="var(--fb-red)" stroke-width="1" opacity="0.7"/>
+<text x="340" y="150" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" font-weight="600" fill="var(--fb-red-text)">테스트 코드는 맞았다. selector도 정확했다.</text>
+<text x="340" y="166" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" fill="var(--fb-dim)" font-style="italic">하지만 테스트가 전제하는 상태가 없었다.</text>
+
+<!-- Caption -->
+<text x="340" y="200" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" fill="var(--fb-dim)" font-style="italic">생성은 됐지만 실행은 안 됐다 — 병목은 2번과 3번 사이에 있었다</text>
+
+</svg>
+</div>
+
+<style>
+.fb-bottleneck {
+  --fb-blue: #818cf8;
+  --fb-blue-text: #b8c0f8;
+  --fb-red-bg: rgba(248, 113, 113, 0.1);
+  --fb-red: #f87171;
+  --fb-red-text: #fca5a5;
+  --fb-gray: #6f6f78;
+  --fb-inner: rgba(255,255,255,0.03);
+  --fb-dim: #908caa;
+}
+:global(body:not([data-theme="dark"])) .fb-bottleneck {
+  --fb-blue: #4a5ac8;
+  --fb-blue-text: #3a4a90;
+  --fb-red-bg: rgba(220, 60, 60, 0.08);
+  --fb-red: #dc3c3c;
+  --fb-red-text: #a02020;
+  --fb-gray: #8b8b8e;
+  --fb-inner: rgba(0,0,0,0.03);
+  --fb-dim: #6e6a86;
+}
+</style>

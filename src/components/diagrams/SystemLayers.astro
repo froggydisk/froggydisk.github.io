@@ -1,0 +1,84 @@
+<div class="sys-layers">
+<svg width="100%" viewBox="0 0 680 290" xmlns="http://www.w3.org/2000/svg">
+
+<!-- Layer 5: 판정하기 (top) -->
+<rect x="100" y="10" width="480" height="42" rx="8" fill="var(--sl-l5)" stroke="var(--sl-l5-border)" stroke-width="1"/>
+<text x="140" y="28" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" font-weight="600" fill="var(--sl-l5-text)">판정하기</text>
+<text x="140" y="44" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--sl-dim)">assertion, skip reason, validation result</text>
+
+<!-- Layer 4: 실행하기 -->
+<rect x="100" y="60" width="480" height="42" rx="8" fill="var(--sl-l4)" stroke="var(--sl-l4-border)" stroke-width="1"/>
+<text x="140" y="78" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" font-weight="600" fill="var(--sl-l4-text)">실행하기</text>
+<text x="140" y="94" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--sl-dim)">generated spec</text>
+
+<!-- Layer 3: 준비하기 -->
+<rect x="100" y="110" width="480" height="52" rx="8" fill="var(--sl-l3)" stroke="var(--sl-l3-border)" stroke-width="1"/>
+<text x="140" y="130" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" font-weight="600" fill="var(--sl-l3-text)">준비하기</text>
+<text x="140" y="146" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--sl-dim)">precondition manifest, fixture catalog, precondition→fixture mapping</text>
+
+<!-- Layer 2: 이해하기 -->
+<rect x="100" y="170" width="480" height="42" rx="8" fill="var(--sl-l2)" stroke="var(--sl-l2-border)" stroke-width="1"/>
+<text x="140" y="188" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" font-weight="600" fill="var(--sl-l2-text)">이해하기</text>
+<text x="140" y="204" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--sl-dim)">scenario, tc-schema, ui-action-manifest</text>
+
+<!-- Layer 1: 찾기 (bottom) -->
+<rect x="100" y="220" width="480" height="42" rx="8" fill="var(--sl-l1)" stroke="var(--sl-l1-border)" stroke-width="1"/>
+<text x="140" y="238" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" font-weight="600" fill="var(--sl-l1-text)">찾기</text>
+<text x="140" y="254" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--sl-dim)">data-testid, selector</text>
+
+<!-- Caption -->
+<text x="340" y="282" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" font-weight="600" fill="var(--sl-dim)" letter-spacing="0.08em">SYSTEM LAYERS — 5계층 구조</text>
+
+</svg>
+</div>
+
+<style>
+.sys-layers {
+  /* 판정하기 - rose */
+  --sl-l5: rgba(244, 114, 140, 0.22);
+  --sl-l5-border: #f4728c;
+  --sl-l5-text: #f8b0c0;
+  /* 실행하기 - teal */
+  --sl-l4: rgba(80, 200, 200, 0.22);
+  --sl-l4-border: #50c8c8;
+  --sl-l4-text: #a0e4e4;
+  /* 준비하기 - sky */
+  --sl-l3: rgba(100, 160, 240, 0.22);
+  --sl-l3-border: #64a0f0;
+  --sl-l3-text: #b0d0f8;
+  /* 이해하기 - lime */
+  --sl-l2: rgba(160, 210, 80, 0.22);
+  --sl-l2-border: #a0d250;
+  --sl-l2-text: #c8e8a0;
+  /* 찾기 - lavender */
+  --sl-l1: rgba(160, 140, 210, 0.22);
+  --sl-l1-border: #a08cd2;
+  --sl-l1-text: #c8c0e8;
+
+  --sl-dim: #908caa;
+}
+:global(body:not([data-theme="dark"])) .sys-layers {
+  /* 판정하기 - rose */
+  --sl-l5: rgba(200, 60, 80, 0.14);
+  --sl-l5-border: #c83c50;
+  --sl-l5-text: #8a2030;
+  /* 실행하기 - teal */
+  --sl-l4: rgba(20, 150, 150, 0.14);
+  --sl-l4-border: #149696;
+  --sl-l4-text: #0a6464;
+  /* 준비하기 - sky */
+  --sl-l3: rgba(40, 110, 200, 0.14);
+  --sl-l3-border: #286ec8;
+  --sl-l3-text: #1a4a8a;
+  /* 이해하기 - lime */
+  --sl-l2: rgba(100, 160, 30, 0.14);
+  --sl-l2-border: #64a01e;
+  --sl-l2-text: #3a6a10;
+  /* 찾기 - lavender */
+  --sl-l1: rgba(110, 90, 170, 0.14);
+  --sl-l1-border: #6e5aaa;
+  --sl-l1-text: #4a3a78;
+
+  --sl-dim: #6e6a86;
+}
+</style>

@@ -1,0 +1,106 @@
+<div class="exec-contract">
+<svg width="100%" viewBox="0 0 680 260" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="ec-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+    <path d="M2 2L8 5L2 8" fill="none" stroke="context-stroke" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+<style>
+  @keyframes ec-flow { to { stroke-dashoffset: -16; } }
+  .ec-anim { animation: ec-flow 1.4s linear infinite; }
+</style>
+
+<!-- Title -->
+<text x="340" y="20" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" font-weight="600" fill="var(--ec-dim)" letter-spacing="0.08em">EXECUTION CONTRACT — intent → state → action → validation</text>
+
+<!-- Node 1: Intent (scenario) -->
+<rect x="30" y="50" width="130" height="60" rx="10" fill="var(--ec-blue-bg)" stroke="var(--ec-blue)" stroke-width="1.5"/>
+<text x="95" y="72" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="700" fill="var(--ec-blue-text)">Intent</text>
+<text x="95" y="92" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ec-blue-sub)">scenario</text>
+<text x="95" y="104" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="8" fill="var(--ec-dim)" font-style="italic">무엇을 검증할 것인가</text>
+
+<!-- Arrow 1→2 -->
+<line x1="160" y1="80" x2="192" y2="80" stroke="var(--ec-green)" stroke-width="1.5" stroke-dasharray="6 4" class="ec-anim" marker-end="url(#ec-arr)"/>
+
+<!-- Node 2: State (precondition + fixture) -->
+<rect x="195" y="50" width="150" height="60" rx="10" fill="var(--ec-accent-bg)" stroke="var(--ec-accent)" stroke-width="1.5"/>
+<text x="270" y="72" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="700" fill="var(--ec-accent-text)">State</text>
+<text x="270" y="92" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ec-accent-sub)">precondition + fixture</text>
+<text x="270" y="104" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="8" fill="var(--ec-dim)" font-style="italic">어떤 세계가 필요한가</text>
+
+<!-- Arrow 2→3 -->
+<line x1="345" y1="80" x2="377" y2="80" stroke="var(--ec-green)" stroke-width="1.5" stroke-dasharray="6 4" class="ec-anim" marker-end="url(#ec-arr)"/>
+
+<!-- Node 3: Action (action manifest + spec) -->
+<rect x="380" y="50" width="130" height="60" rx="10" fill="var(--ec-blue-bg)" stroke="var(--ec-blue)" stroke-width="1.5"/>
+<text x="445" y="72" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="700" fill="var(--ec-blue-text)">Action</text>
+<text x="445" y="92" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ec-blue-sub)">manifest + spec</text>
+<text x="445" y="104" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="8" fill="var(--ec-dim)" font-style="italic">어떤 조작을 하는가</text>
+
+<!-- Arrow 3→4 -->
+<line x1="510" y1="80" x2="542" y2="80" stroke="var(--ec-green)" stroke-width="1.5" stroke-dasharray="6 4" class="ec-anim" marker-end="url(#ec-arr)"/>
+
+<!-- Node 4: Validation (assertion + result) -->
+<rect x="545" y="50" width="120" height="60" rx="10" fill="var(--ec-green-bg)" stroke="var(--ec-green)" stroke-width="1.5"/>
+<text x="605" y="72" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="700" fill="var(--ec-green-text)">Validation</text>
+<text x="605" y="92" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ec-green-sub)">assertion + result</text>
+<text x="605" y="104" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="8" fill="var(--ec-dim)" font-style="italic">결과가 맞는가</text>
+
+<!-- Contract guarantees (bottom arrows) -->
+<rect x="70" y="140" width="540" height="40" rx="8" fill="var(--ec-inner)" stroke="var(--ec-gray)" stroke-width="1" opacity="0.6"/>
+
+<text x="165" y="164" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ec-dim)">"나는 의도를 정의한다"</text>
+<text x="340" y="164" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ec-accent-text)">"나는 상태를 보장한다"</text>
+<text x="510" y="164" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ec-dim)">"나는 결과를 증명한다"</text>
+
+<!-- Arrows connecting nodes to guarantees -->
+<line x1="95" y1="110" x2="165" y2="140" stroke="var(--ec-gray)" stroke-width="0.8" opacity="0.4"/>
+<line x1="270" y1="110" x2="340" y2="140" stroke="var(--ec-accent)" stroke-width="0.8" opacity="0.6"/>
+<line x1="605" y1="110" x2="510" y2="140" stroke="var(--ec-gray)" stroke-width="0.8" opacity="0.4"/>
+
+<!-- Bottom highlight -->
+<rect x="120" y="200" width="440" height="30" rx="6" fill="var(--ec-accent-bg)" stroke="var(--ec-accent)" stroke-width="1" opacity="0.7"/>
+<text x="340" y="220" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" font-weight="600" fill="var(--ec-accent-text)">각 단계가 다음 단계에게 약속하고, 그 약속 위에서 다음 단계가 작동한다</text>
+
+<!-- Caption -->
+<text x="340" y="252" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" fill="var(--ec-dim)" font-style="italic">harness는 이 네 단계를 잇는 계약 시스템이다</text>
+
+</svg>
+</div>
+
+<style>
+.exec-contract {
+  --ec-blue-bg: rgba(129, 140, 248, 0.1);
+  --ec-blue: #818cf8;
+  --ec-blue-text: #b8c0f8;
+  --ec-blue-sub: #7a82c8;
+  --ec-green-bg: rgba(109, 208, 160, 0.1);
+  --ec-green: #6dd0a0;
+  --ec-green-text: #c0ead5;
+  --ec-green-sub: #50b880;
+  --ec-accent-bg: rgba(248, 180, 100, 0.1);
+  --ec-accent: #f8b464;
+  --ec-accent-text: #f8d4a0;
+  --ec-accent-sub: #c8a060;
+  --ec-gray: #3a3d5a;
+  --ec-inner: rgba(255,255,255,0.03);
+  --ec-dim: #908caa;
+}
+:global(body:not([data-theme="dark"])) .exec-contract {
+  --ec-blue-bg: rgba(60, 80, 200, 0.07);
+  --ec-blue: #4a5ac8;
+  --ec-blue-text: #3a4a90;
+  --ec-blue-sub: #5a60a0;
+  --ec-green-bg: rgba(40, 160, 100, 0.07);
+  --ec-green: #28a064;
+  --ec-green-text: #1a6e44;
+  --ec-green-sub: #208050;
+  --ec-accent-bg: rgba(220, 140, 30, 0.1);
+  --ec-accent: #d08a1e;
+  --ec-accent-text: #8a5e10;
+  --ec-accent-sub: #a07030;
+  --ec-gray: #c8c8d0;
+  --ec-inner: rgba(0,0,0,0.03);
+  --ec-dim: #6e6a86;
+}
+</style>

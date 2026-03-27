@@ -1,0 +1,56 @@
+<div class="setup-outside">
+<svg width="100%" viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg">
+
+<!-- Left: 준비 (API / Fixture) -->
+<rect x="40" y="30" width="200" height="120" rx="10" fill="var(--su-api-bg)" stroke="var(--su-api)" stroke-width="1.2"/>
+<text x="140" y="56" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="700" fill="var(--su-api-text)">환경 준비</text>
+<text x="140" y="74" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--su-dim)">API seed / fixture</text>
+
+<text x="140" y="100" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="9" fill="var(--su-dim)">환자 생성, 접수 처리,</text>
+<text x="140" y="114" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="9" fill="var(--su-dim)">진료 대기 상태 조성</text>
+
+<text x="140" y="140" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" font-weight="600" fill="var(--su-api-text)" font-style="italic">UI를 거치지 않는다</text>
+
+<!-- Arrow -->
+<line x1="250" y1="90" x2="310" y2="90" stroke="var(--su-arrow)" stroke-width="1.5"/>
+<polygon points="310,90 300,84 300,96" fill="var(--su-arrow)"/>
+<text x="280" y="80" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="9" fill="var(--su-dim)">상태 전달</text>
+
+<!-- Right: 검증 (UI) -->
+<rect x="320" y="30" width="320" height="120" rx="10" fill="var(--su-ui-bg)" stroke="var(--su-ui)" stroke-width="1.2"/>
+<text x="480" y="56" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="700" fill="var(--su-ui-text)">검증</text>
+<text x="480" y="74" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--su-dim)">UI (Playwright)</text>
+
+<text x="480" y="100" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="9" fill="var(--su-dim)">호출 버튼 클릭, 상태 변경 확인,</text>
+<text x="480" y="114" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="9" fill="var(--su-dim)">toast 표시, URL 이동</text>
+
+<text x="480" y="140" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" font-weight="600" fill="var(--su-ui-text)" font-style="italic">사용자 행동과 결과에만 집중</text>
+
+<!-- Caption -->
+<text x="340" y="180" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" fill="var(--su-dim)" font-style="italic">UI 테스트를 더 UI답게 만들기 위해, setup은 UI 밖으로 내린다</text>
+
+</svg>
+</div>
+
+<style>
+.setup-outside {
+  --su-api-bg: rgba(109, 208, 160, 0.12);
+  --su-api: #6dd0a0;
+  --su-api-text: #c0ead5;
+  --su-ui-bg: rgba(129, 140, 248, 0.12);
+  --su-ui: #818cf8;
+  --su-ui-text: #b8c0f8;
+  --su-arrow: #6f6f78;
+  --su-dim: #908caa;
+}
+:global(body:not([data-theme="dark"])) .setup-outside {
+  --su-api-bg: rgba(40, 160, 100, 0.1);
+  --su-api: #28a064;
+  --su-api-text: #1a6e44;
+  --su-ui-bg: rgba(60, 80, 200, 0.1);
+  --su-ui: #4a5ac8;
+  --su-ui-text: #3a4a90;
+  --su-arrow: #8b8b8e;
+  --su-dim: #6e6a86;
+}
+</style>

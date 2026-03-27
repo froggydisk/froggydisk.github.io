@@ -1,0 +1,241 @@
+---
+title: "셀렉터 너머의 하네스 엔지니어링: 상태 준비와 실행 계약"
+comments: true
+categories:
+  - Blog
+tags:
+  - AI, Harness Engineering, E2E Testing, Fixture
+last_modified_at: 2026-03-27T
+---
+
+import FeedbackBottleneck from "../../components/diagrams/FeedbackBottleneck.astro";
+import SystemLayers from "../../components/diagrams/SystemLayers.astro";
+import ExecutionContract from "../../components/diagrams/ExecutionContract.astro";
+import SetupOutsideUI from "../../components/diagrams/SetupOutsideUI.astro";
+
+[지난 글](/harness-engineering-agent-orchestration)에서 멀티 에이전트 오케스트레이션과 TDD 기반 피드백 루프를 다뤘다. QA 에이전트가 테스트를 자동 생성하고, 에이전트가 스스로 검증하는 구조.
+
+하지만 **그 테스트들을 실제로 돌려보니 skip되거나 실패하는 케이스들이 많았다.**
+
+그리고 원인은 코드가 아니었다.
+
+## ▍1편 이후의 질문
+
+1편의 피드백 루프는 이랬다. **코드 작성 → 테스트 생성 → 실행 → 실패 시 수정 → 통과 시 다음 작업**. 이론적으로는 깔끔하다.
+
+실제로 E2E 테스트를 자동 생성해서 돌려보니, 병목은 2번과 3번 사이에 있었다. 테스트 코드 자체는 문법적으로 맞았다. selector도 정확했다. 그런데 **테스트가 시작조차 못 하는 경우**가 대부분이었다.
+
+예를 들어 "접수 완료된 환자의 진료 대기 화면에서 호출 버튼을 클릭한다"는 테스트가 있다고 하자. 이 테스트가 돌아가려면 접수 완료된 환자가 있어야 하고 진료 대기 상태여야 하며 해당 환자가 화면에 보여야 한다. 하지만 테스트 코드는 이 중 아무것도 만들어주지 않는다.
+
+**생성된 테스트는 "무엇을 검증할지"는 알았지만, "어떤 조건에서 검증해야 하는지"는 몰랐다.**
+
+## ▍우리 시스템이 가진 재료들
+
+현재 시스템에 쌓인 요소들을 역할별로 정리하면 이렇다.
+
+| 역할     | 요소                                     |
+| -------- | ---------------------------------------- |
+| 찾기     | data-testid, selector                    |
+| 이해하기 | scenario / tc-schema, ui-action-manifest |
+| 실행하기 | generated spec                           |
+| 판정하기 | assertion, skip reason                   |
+
+**data-testid**는 UI 요소를 안정적으로 식별하기 위한 식별자다. **selector**는 Playwright가 실제로 쓰는 locator — `getByTestId`, `getByRole`, `a[href=...]` 같은 형태. **scenario**는 어떤 흐름을 테스트할지에 대한 구조화된 정의이고, **ui-action-manifest**는 어떤 selector를 누르면 navigate, open_modal, api_call, toast 같은 효과가 나는지 정리한 메타데이터다.
+
+여기까지는 있었다.
+
+빠진 건 **해당 테스트가 성립될 조건을 갖춘 환경**이었다. 테스트가 전제하는 상태를 만드는 계층이 없었다.
+
+## ▍병목은 코드 생성이 아니라 상태 준비였다
+
+selector를 확보하고, action/effect를 추출하고, spec을 생성하는 데까지는 자동화가 됐다. 에이전트가 코드를 못 쓰는 게 아니었다. 문제는 다른 곳에 있었다.
+
+실제 skip 사유를 분류해보면 패턴이 보인다.
+
+- **data_missing** — 테스트에 필요한 환자, 접수, 처방 데이터가 없다
+- **selector_not_deployed** — 해당 testid가 아직 프론트에 반영되지 않았다
+- **conditional_render** — 특정 조건에서만 렌더링되는 UI라 접근이 안 된다
+- **feature_unavailable** — 해당 기능이 현재 환경에서 비활성화 상태다
+- **redirected** — 페이지 진입 시 다른 곳으로 리다이렉트된다
+
+이 중 가장 빈번한 건 **data_missing**이었다. 테스트 코드의 품질 문제가 아니라, 테스트가 돌아갈 환경이 준비되지 않은 것이다.
+
+**더 많은 테스트를 만드는 게 아니라, 실행 가능한 테스트를 만드는 것**이 다음 과제였다.
+
+## ▍Harness의 역할 재정의
+
+여기서 harness의 정의가 바뀐다.
+
+1편에서 harness는 "에이전트가 올바르게 작동하도록 둘러싼 시스템"이었다. 컨텍스트 분배, 가드레일, 피드백 루프. 에이전트의 **실행을 보조하는 도구**.
+
+하지만 E2E 테스트 자동화를 실제로 해보니, harness가 해야 하는 일은 실행 보조가 아니었다. **테스트가 돌아갈 수 있는 환경을 구성하는 것**이었다.
+
+관점의 전환을 한 문장으로 쓰면 이렇다.
+
+**"무엇을 클릭할까"에서 "이 클릭이 가능하려면 무엇이 전제인가"로.**
+
+selector-first에서 precondition-first로. 이 전환이 생성된 테스트의 실행률을 올렸다.
+
+## ▍Setup은 UI 밖으로
+
+E2E 테스트에서 흔히 하는 실수가 있다. setup도 UI로 하는 것이다.
+
+"환자를 접수하려면 먼저 접수 화면에서 환자를 검색하고, 정보를 입력하고, 접수 버튼을 누르고..." — 이걸 테스트 코드의 beforeEach에 넣는 순간, 테스트는 **자기가 검증하려는 것이 아닌 다른 UI의 안정성에 의존**하게 된다.
+
+접수 화면 UI가 바뀌면? 접수 테스트뿐 아니라 접수된 환자를 전제로 하는 모든 테스트가 깨진다. 테스트가 검증하고 싶은 건 "진료 호출 버튼"인데, "접수 화면"이 바뀌어서 실패한다. 이건 테스트의 의미가 없다.
+
+원칙은 단순하다.
+
+- **검증은 UI에서 한다** — 사용자가 실제로 보고 누르는 그 화면을
+- **준비는 API/fixture에서 한다** — UI를 거치지 않고 필요한 상태를 직접 만든다
+
+이렇게 하면 테스트는 **본래 검증하고 싶은 행동과 결과에만 집중**할 수 있다. UI 테스트를 더 UI답게 만들기 위해, setup은 UI 밖으로 내린 것이다.
+
+<SetupOutsideUI />
+
+## ▍Fixture Catalog
+
+fixture를 테스트 하나하나마다 만들면 금방 관리 불가능해진다. "접수된 환자"를 만드는 코드가 테스트 A에도, B에도, C에도 중복된다. 접수 API가 바뀌면 전부 고쳐야 한다.
+
+그래서 fixture를 **시나리오 종류별 재사용 가능한 준비 단위**로 만든다. 이것이 fixture catalog다.
+
+| Fixture                        | 보장하는 상태                  |
+| ------------------------------ | ------------------------------ |
+| `registered_reception_patient` | 접수 완료된 환자가 존재한다    |
+| `medical_waiting_patient`      | 진료 대기 중인 환자가 존재한다 |
+| `claimable_registration`       | 청구 가능한 접수 건이 존재한다 |
+| `prescribed_patient`           | 처방이 완료된 환자가 존재한다  |
+
+각 fixture는 **입력**(어떤 파라미터가 필요한지)과 **출력**(어떤 상태를 보장하는지)이 명확하다. API를 호출해서 데이터를 seed하거나, 공용 helper를 통해 필요한 상태를 조성한다.
+
+테스트 코드는 fixture를 **선언적으로 요청**하기만 하면 된다. 어떤 API를 어떤 순서로 호출해야 하는지는 fixture가 알고 있다. 테스트는 몰라도 된다.
+
+## ▍Precondition → Fixture 매핑
+
+fixture catalog가 생기면 다음 질문은 이거다. **이 테스트가 어떤 fixture를 써야 하는지 누가 결정하는가?**
+
+precondition manifest가 그 답이다. 각 테스트(또는 시나리오)가 시작 전에 어떤 조건을 필요로 하는지 선언한 메타데이터다.
+
+```
+시나리오: 진료 대기 화면에서 환자를 호출한다
+precondition: medical_waiting_patient
+```
+
+이 선언이 fixture catalog의 `medical_waiting_patient`와 연결된다. 테스트는 **필요한 상태를 선언만 하고, 구현은 모른다.** fixture가 API seed든 DB 직접 조작이든, 테스트 코드에는 영향이 없다.
+
+이 매핑이 있으면:
+
+- **새 테스트 추가가 빨라진다** — precondition만 선언하면 fixture가 자동으로 붙는다
+- **fixture 변경이 안전해진다** — 구현을 바꿔도 테스트 코드는 안 건드린다
+- **수동 wiring이 줄어든다** — 사람이 매번 "이 테스트에는 이 setup을" 연결하지 않아도 된다
+
+## ▍Skip을 시스템 신호로 읽는다
+
+대부분의 테스트 프레임워크에서 skip은 "나중에 고칠 것"이라는 뜻이다. TODO와 비슷하다. 쌓이고, 잊히고, 방치된다.
+
+우리는 다르게 접근했다. **skip은 harness가 아직 충족시키지 못한 전제 조건의 관측값**이다.
+
+skip reason을 표준화하면 흥미로운 일이 생긴다.
+
+| Skip Reason             | 의미             | 해결 방향                   |
+| ----------------------- | ---------------- | --------------------------- |
+| `data_missing`          | fixture가 없다   | fixture catalog 확장        |
+| `selector_not_deployed` | 프론트 배포 필요 | 배포 후 자동 재시도         |
+| `conditional_render`    | 조건부 UI        | precondition에 조건 추가    |
+| `feature_unavailable`   | 환경 제약        | environment capability 매핑 |
+| `redirected`            | 진입 불가        | 인증/권한 fixture 추가      |
+
+skip reason이 곧 **fixture catalog 확장의 로드맵**이 된다. data_missing이 가장 많으면 fixture를 더 만들어야 하고, selector_not_deployed가 많으면 배포 파이프라인과 연결해야 한다.
+
+skip을 줄이는 건 테스트를 고치는 게 아니라, **harness의 커버리지를 넓히는 것**이다.
+
+## ▍시스템의 계층 구조
+
+여기까지 오면 시스템 전체를 5개 계층으로 정리할 수 있다.
+
+<SystemLayers />
+
+<table>
+  <colgroup>
+    <col style="width: 20%" />
+    <col style="width: 30%" />
+    <col style="width: 50%" />
+  </colgroup>
+  <thead>
+    <tr>
+      <th>계층</th>
+      <th>역할</th>
+      <th>구성 요소</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>찾기</td>
+      <td>UI 요소를 식별한다</td>
+      <td>data-testid, selector</td>
+    </tr>
+    <tr>
+      <td>이해하기</td>
+      <td>무엇을 테스트할지 정의한다</td>
+      <td>scenario, tc-schema, ui-action-manifest</td>
+    </tr>
+    <tr>
+      <td>준비하기</td>
+      <td>테스트 가능한 상태를 만든다</td>
+      <td>
+        precondition manifest, fixture catalog, precondition→fixture mapping
+      </td>
+    </tr>
+    <tr>
+      <td>실행하기</td>
+      <td>테스트를 수행한다</td>
+      <td>generated spec</td>
+    </tr>
+    <tr>
+      <td>판정하기</td>
+      <td>결과를 판단한다</td>
+      <td>assertion, skip reason, validation result</td>
+    </tr>
+  </tbody>
+</table>
+
+1편까지는 "찾기 → 이해하기 → 실행하기"가 주된 관심사였다. 이번 글의 핵심은 **"준비하기" 계층이 빠져 있었고, 그것이 전체 시스템의 병목이었다**는 것이다.
+
+각 계층은 아래 계층에 의존한다. selector가 없으면 scenario를 정의해도 실행할 수 없다. fixture가 없으면 spec을 생성해도 돌릴 수 없다. **실행 가능한 테스트는 모든 계층이 갖춰졌을 때만 나온다.**
+
+## ▍Execution Contract
+
+이 5개 계층을 관통하는 개념이 하나 있다. 바로 **실행 계약(Execution Contract)** 이다.
+
+- **scenario**는 intent를 말한다 — 무엇을 검증하고 싶은가
+- **action manifest**는 UI behavior를 말한다 — 어떤 조작이 어떤 효과를 내는가
+- **precondition**은 필요한 세계 상태를 말한다 — 이 검증이 가능하려면 무엇이 있어야 하는가
+- **fixture**는 그 상태를 실제로 만든다 — API seed, helper, 데이터 조성
+- **spec**은 그 위에서 검증을 수행한다 — 행동하고, 결과를 확인한다
+
+이걸 하나의 흐름으로 쓰면: **intent → state → action → validation**.
+
+<ExecutionContract />
+
+harness는 agent 주변의 wrapper가 아니다. 이 네 단계를 잇는 **계약 시스템**이다. 각 단계가 다음 단계에게 "나는 이것을 보장한다"고 약속하고, 그 약속 위에서 다음 단계가 작동한다.
+
+테스트 코드 생성기는 이 계약의 마지막 단계만 만든다. **진짜 어려운 건 그 앞의 세 단계를 체계화하는 것**이었다.
+
+## ▍결론
+
+1편에서 "에이전트가 스스로 검증할 수 있는 구조를 만들라"고 했다. 그건 맞는 말이다. 하지만 실제로 해보니 한 단계가 더 있었다.
+
+**에이전트가 검증하려면, 검증 가능한 상태가 먼저 있어야 한다.**
+
+좋은 harness는 에이전트가 코드를 쓰게 하는 시스템이 아니다. 에이전트가 **검증 가능한 상태를 만들고, 그 상태 위에서 UI를 증명하게 하는 시스템**이다. 코드 생성보다 상태 준비가 어려웠고, orchestration의 핵심은 tool sequence가 아니라 state preparation이었다.
+
+1편의 접근은 TDD-driven이었다. "테스트를 먼저 쓰고, 그 테스트를 통과시켜라." 코드 구조의 문제를 풀기에는 맞는 방향이었다. 하지만 E2E에서는 코드 구조가 아니라 실행 환경이 문제였다. 테스트 코드를 아무리 잘 짜도 전제 조건이 없으면 돌아가지 않는다.
+
+그래서 접근이 바뀌었다. **TDD-driven에서 validation-driven으로.** 출발점이 코드가 아니라 검증 의도다. 무엇을 검증할지 정의하고, 그 검증이 가능한 상태를 먼저 만든다. intent → state → action → validation. 이것이 이 글에서 말한 execution contract의 골격이다.
+
+간단하게 시작하면 된다. 테스트가 skip되는 이유를 보라. 거기에 다음에 만들어야 할 fixture가 적혀 있다.
+
+## ▍참고 자료
+
+- 전편: [하네스 엔지니어링의 핵심: 에이전트 오케스트레이션과 TDD](/harness-engineering-agent-orchestration)
+- 1편: [하네스 엔지니어링: 프롬프트 너머의 세계](/harness-engineering)
