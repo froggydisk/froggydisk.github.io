@@ -541,7 +541,8 @@ body {
   overflow-x: hidden;
   position: relative;
   color: #434648;
-  background-color: #fff;
+  background: linear-gradient(135deg, #faf9f6 0%, #f5f3ef 100%);
+  background-attachment: fixed;
   font: 400 17px/1.7 Roboto, sans-serif;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
@@ -763,8 +764,8 @@ blockquote > :last-child {
 }
 
 .wrapper {
-  max-width: -webkit-calc(720px - (30px * 2));
-  max-width: calc(720px - 30px * 2);
+  max-width: -webkit-calc(780px - (30px * 2));
+  max-width: calc(780px - 30px * 2);
   position: relative;
   margin-right: auto;
   margin-left: auto;
@@ -773,8 +774,8 @@ blockquote > :last-child {
 }
 @media screen and (max-width: 768px) {
   .wrapper {
-    max-width: -webkit-calc(720px - (30px));
-    max-width: calc(720px - (30px));
+    max-width: -webkit-calc(780px - (30px));
+    max-width: calc(780px - (30px));
     padding-right: 20px;
     padding-left: 20px;
   }
@@ -845,8 +846,8 @@ mark,
 
 .navbar {
   height: auto;
-  max-width: calc(720px - 30px * 2);
-  max-width: -webkit-calc(720px - (30px * 2));
+  max-width: calc(780px - 30px * 2);
+  max-width: -webkit-calc(780px - (30px * 2));
   position: relative;
   margin-right: auto;
   margin-left: auto;
@@ -1024,6 +1025,7 @@ mark,
   width: 100px;
   height: 100px;
   border-radius: 100%;
+  object-fit: cover;
   user-select: none;
   background-color: #fff;
   -ms-user-select: none;
@@ -1641,7 +1643,7 @@ mark,
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
-  right: calc((100vw - 720px) / 2 - 220px);
+  right: calc((100vw - 780px) / 2 - 220px);
   width: 200px;
   max-height: 70vh;
   overflow-y: auto;
@@ -1923,7 +1925,19 @@ pre.highlight > code, pre > code {
 
 body[data-theme=dark] {
   color: #c7bebe;
-  background-color: #131418;
+  background: linear-gradient(135deg, #131418 0%, #16171c 100%);
+  background-attachment: fixed;
+}
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.05) 100%);
+}
+body[data-theme=dark]::after {
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.3) 100%);
 }
 body[data-theme=dark] h1,
 body[data-theme=dark] h2,

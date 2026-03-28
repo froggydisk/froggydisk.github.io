@@ -11,8 +11,9 @@
     renderer.setSize(canvas.clientWidth, canvas.clientHeight);
     renderer.setClearColor(0x000000, 0);
 
-    const geometry = new THREE.BufferGeometry();
-    const vertices = new Float32Array(500 * 3);
+    const starGroup = new THREE.Group();
+    const parallaxGroup = new THREE.Group();
+    parallaxGroup.add(starGroup);
 
     function randomInSphere(radius: number) {
       let x, y, z, d;
@@ -26,23 +27,59 @@
       return [x * scale, y * scale, z * scale];
     }
 
-    for (let i = 0; i < vertices.length; i += 3) {
-      const [x, y, z] = randomInSphere(1.5);
-      vertices[i] = x;
-      vertices[i + 1] = y;
-      vertices[i + 2] = z;
+    function createStarLayer(count: number, size: number, opacity: number) {
+      const geometry = new THREE.BufferGeometry();
+      const vertices = new Float32Array(count * 3);
+      for (let i = 0; i < vertices.length; i += 3) {
+        const [x, y, z] = randomInSphere(1.5);
+        vertices[i] = x;
+        vertices[i + 1] = y;
+        vertices[i + 2] = z;
+      }
+      geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+      const material = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size,
+        transparent: true,
+        opacity,
+      });
+      return new THREE.Points(geometry, material);
     }
 
-    geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-    const material = new THREE.PointsMaterial({ color: 0xffffff, size: 0.005, transparent: true });
-    const points = new THREE.Points(geometry, material);
-    scene.add(points);
+    // Small/dim stars
+    starGroup.add(createStarLayer(1400, 0.003, 0.45));
+    // Medium stars
+    starGroup.add(createStarLayer(500, 0.005, 0.75));
+    // Large/bright stars
+    starGroup.add(createStarLayer(100, 0.01, 1.0));
+
+    scene.add(parallaxGroup);
     camera.position.z = 1;
+
+    // Mouse parallax
+    let mouseX = 0;
+    let mouseY = 0;
+    let smoothX = 0;
+    let smoothY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+      mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
 
     function animate() {
       requestAnimationFrame(animate);
-      points.rotation.x -= 0.001;
-      points.rotation.y -= 0.00067;
+
+      // Base rotation (continuous spin)
+      starGroup.rotation.x -= 0.001;
+      starGroup.rotation.y -= 0.00067;
+
+      // Mouse parallax on wrapper (smooth lerp, independent of spin)
+      smoothX += (mouseY * 0.05 - smoothX) * 0.02;
+      smoothY += (mouseX * 0.05 - smoothY) * 0.02;
+      parallaxGroup.rotation.x = smoothX;
+      parallaxGroup.rotation.y = smoothY;
+
       renderer.render(scene, camera);
     }
     animate();

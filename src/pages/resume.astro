@@ -2,31 +2,263 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Dr.frog">
+<BaseLayout title="Resume" showStars={false}>
   <header class="header">
-    <h1 class="header-title">Dr.frog</h1>
+    <h1 class="header-title">Dr.frog <span class="badge">Software Engineer</span></h1>
   </header>
 
-  <div class="page-content">
-    <p>I have experience participating in IT product development at multiple start-ups as a software engineer. My diverse background, including QA, server infrastructure setup, and AI model development, has given me a comprehensive understanding of the development process. With a commitment to continuous learning and a creative problem-solving mindset, I strive to enhance innovative and user-friendly applications through collaboration across various platforms.</p>
+  <div class="page-content resume">
+    <section class="resume-section">
+      <p>소프트웨어 엔지니어로서 여러 스타트업에서 IT 제품 개발에 참여하며 QA, 서버 인프라 구축, 인공지능 모델 개발 등 다양한 분야를 경험했습니다. 개발 프로세스 전반에 대한 폭넓은 이해를 바탕으로, 사용자 중심적인 애플리케이션을 개발하고 개선하는 것을 목표로 합니다.</p>
+    </section>
 
-    <p><strong>Current Field</strong></p>
-    <ul>
-      <li>Frontend (Web, App)</li>
-      <li>DevOps (Kubernetes & real-time streaming services)</li>
-      <li>ML/DL</li>
-    </ul>
+    <section class="resume-section">
+      <h2>Contact</h2>
+      <ul>
+        <li>GitHub: <a href="https://github.com/froggydisk">github.com/froggydisk</a></li>
+        <li>Blog: <a href="https://froggydisk.github.io">froggydisk.github.io</a></li>
+      </ul>
+    </section>
 
-    <p><strong>My Interests</strong></p>
-    <ul>
-      <li>Generalist Medical AI</li>
-      <li>javascript 3D</li>
-    </ul>
+    <section class="resume-section">
+      <h2>Work Experience</h2>
 
-    <p><strong>Contact</strong></p>
-    <ul>
-      <li>sewoomkim93@gmail.com</li>
-      <li><a href="https://github.com/froggydisk">github.com/froggydisk</a></li>
-    </ul>
+      <div class="resume-entry">
+        <div class="resume-entry-header">
+          <h3>Full-Stack DevOps Engineer</h3>
+          <span class="resume-date">2022.09 — 현재</span>
+        </div>
+        <p class="resume-org">펌킨컴퍼니 → 커브컴퍼니 (2025.07~)</p>
+
+        <div class="resume-cards">
+          <div class="resume-card">
+            <div class="resume-card-header">
+              <h4>Cloud EMR</h4>
+              <span class="resume-date">2025.03 —</span>
+            </div>
+            <ul>
+              <li>진행중</li>
+            </ul>
+          </div>
+
+          <div class="resume-card">
+            <div class="resume-card-header">
+              <img class="resume-card-icon" src="/img/pumpkin-icon.png" alt="펌킨컴퍼니" />
+              <h4>온프레미스 서버 인프라</h4>
+              <span class="resume-date">2024.03 — 2026.02</span>
+            </div>
+            <ul>
+              <li>캐롯손해보험 IoT 디바이스의 매초 6만 건 MQTT 데이터 처리를 위한 쿠버네티스 기반 고가용성 온프레미스 서버 인프라를 KT 강남 IDC에 구축 (UTM, 스위치 장비, 네트워크 전체 관리)</li>
+
+            </ul>
+          </div>
+
+          <div class="resume-card">
+            <div class="resume-card-header">
+              <img class="resume-card-icon" src="/img/kooki-icon.png" alt="kooki" />
+              <h4>반려견 AI 건강관리 서비스</h4>
+              <span class="resume-date">2022.09 — 2026.02</span>
+            </div>
+            <ul>
+              <li>React Native를 활용한 크로스 플랫폼 반려동물 건강관리 애플리케이션 개발 및 배포</li>
+              <li>Java, Objective-C 네이티브 코드와 React Native 브리지를 개발하여 BLE 기반 IoT 디바이스 데이터 송수신 구현</li>
+              <li>KAIST 뉴로-기계 증강지능 연구실과 협력하여 IMU 데이터 기반 반려견 행동예측 AI 모델 개발</li>
+              <li>Jenkins, Harbor, ArgoCD 기반 CI/CD 파이프라인 구축 및 무중단 배포 환경 사내 구축</li>
+            </ul>
+          </div>
+
+          <div class="resume-card">
+            <div class="resume-card-header">
+              <img class="resume-card-icon resume-card-icon--wide" src="/img/care25-icon.png" alt="CARE25" />
+              <h4>CARE25</h4>
+              <span class="resume-date">2023.05 — 2024.01</span>
+            </div>
+            <ul>
+              <li>React.js, Express 기반 마케팅 홈페이지 개발 및 모객 데이터 파이프라인 구축 (DAU 1,400명, 카카오채널 5천명 달성)</li>
+              <li>그린벳, 인투씨엔에스 포함 3사 기술 파트 커뮤니케이션 리드 및 전체 서비스 구조 설계</li>
+              <li>Next.js 기반 B2C 건강검진 웹 애플리케이션 개발, LIS 연동 데이터 파이프라인 구축</li>
+              <li>QR 코드 기반 검진 데이터 조회 시스템 개발 (사용자 300명 이상 확보)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="resume-entry">
+        <div class="resume-entry-header">
+          <h3>Lead QA Ops Engineer</h3>
+          <span class="resume-date">2021.11 — 2022.09</span>
+        </div>
+        <p class="resume-org">museLIVE Inc. — 실리콘밸리 가상 라이브 콘서트 플랫폼 (Primer Sazze 30억 초기투자 유치)</p>
+        <div class="resume-cards">
+          <div class="resume-card">
+            <div class="resume-card-header">
+              <img class="resume-card-icon" src="/img/muselive-icon.png" alt="museLIVE" />
+              <h4>museLIVE 서비스</h4>
+              <span class="resume-date">2021.11 — 2022.09</span>
+            </div>
+            <ul>
+              <li>가상 라이브 콘서트 플랫폼 museLIVE의 QA 시스템 구축 및 DevOps 운영 자동화</li>
+              <li>PC, 앱, 서버 버전 간 호환성 문제 해결을 위한 통합 버전 관리 시스템 및 배포 파이프라인 자동화</li>
+              <li>백엔드, 프론트엔드, 기획팀 간 커뮤니케이션을 통해 개발품 미스매치 해결 방법론 제시 및 CI/CD 자동화로 서비스 통합 이슈 개선</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <section class="resume-section">
+      <h2>Patent</h2>
+      <p>반려동물 산책 판단 장치, 방법, 애플리케이션 및 시스템 — 특허 출원</p>
+    </section>
+
+    <section class="resume-section">
+      <h2>Certifications</h2>
+      <ul class="resume-certs">
+        <li>리눅스마스터 1급 (2025)</li>
+        <li>빅데이터분석기사 (2024)</li>
+        <li>SQL Developer — SQLD (2024)</li>
+        <li>데이터분석 준전문가 — ADsP (2024)</li>
+        <li>네트워크관리사 2급 (2023)</li>
+        <li>SW 테스트 전문가 — CSTS 일반 (2022)</li>
+        <li>정보처리기사 (2022)</li>
+      </ul>
+    </section>
   </div>
 </BaseLayout>
+
+<style>
+  .badge {
+    display: inline-block;
+    font-size: 0.4em;
+    font-weight: 500;
+    padding: 0.2em 0.6em;
+    border-radius: 4px;
+    border: 1px solid rgba(128, 128, 128, 0.4);
+    vertical-align: middle;
+    opacity: 0.7;
+    position: relative;
+    top: -0.15em;
+  }
+  .resume-section {
+    margin-bottom: 2.5em;
+  }
+  .resume-section h2 {
+    border-bottom: 1px solid rgba(128, 128, 128, 0.3);
+    padding-bottom: 0.3em;
+    margin-bottom: 1em;
+  }
+  .resume-entry {
+    margin-bottom: 2em;
+  }
+  .resume-entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5em;
+  }
+  .resume-entry-header h3 {
+    margin: 0;
+    font-size: 1.15em;
+  }
+  .resume-date {
+    font-size: 0.9em;
+    opacity: 0.6;
+    white-space: nowrap;
+  }
+  .resume-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8em;
+    margin-top: 1em;
+  }
+  .resume-card {
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    border-radius: 8px;
+    padding: 1em 1.2em;
+  }
+  .resume-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5em;
+    margin-bottom: 0.5em;
+  }
+  .resume-card-header h4 {
+    margin: 0;
+    font-size: 1em;
+    flex: 1;
+  }
+  .resume-card-icon {
+    width: 24px;
+    min-width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    object-fit: cover;
+    display: block;
+  }
+  .resume-card-icon--wide {
+    width: auto;
+    min-width: unset;
+    max-height: 24px;
+    border-radius: 4px;
+    object-fit: contain;
+  }
+  .resume-card-header .resume-date {
+    font-size: 0.85em;
+  }
+  .resume-card ul {
+    margin: 0;
+    padding-left: 1.2em;
+  }
+  .resume-card-links {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5em;
+    margin-top: 0.6em;
+  }
+  .resume-card-links a {
+    display: inline-block;
+    font-size: 0.75em;
+    padding: 0.15em 0.5em;
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    border-radius: 4px;
+    text-decoration: none;
+    opacity: 0.6;
+  }
+  .resume-card-links a:hover {
+    opacity: 1;
+  }
+  .resume-card-links a::after {
+    content: none !important;
+  }
+  .resume-org {
+    opacity: 0.75;
+    font-size: 0.95em;
+    margin-top: 0.2em;
+    margin-bottom: 0.8em;
+  }
+  .resume-section table {
+    width: 100%;
+  }
+  .resume-section table td:first-child {
+    width: 120px;
+    white-space: nowrap;
+    vertical-align: top;
+  }
+  .resume-publications li,
+  .resume-certs li {
+    margin-bottom: 0.3em;
+  }
+  @media screen and (max-width: 768px) {
+    .resume-entry-header {
+      flex-direction: column;
+      gap: 0;
+    }
+    .resume-date {
+      font-size: 0.85em;
+    }
+  }
+</style>

@@ -1,0 +1,520 @@
+---
+// ═══════════════════════════════════════════
+// LEFT SVG: Animated via client-side JS
+// Static defs only (gradients, patterns, filters)
+// ═══════════════════════════════════════════
+
+// Wood grain pattern lines (pre-computed for static defs)
+const woodGrainLines = Array.from({length: 30}, (_, i) => ({
+  x1: 0,
+  y1: (i * 7 + Math.sin(i) * 3).toFixed(1),
+  x2: 200,
+  y2: (i * 7 + Math.cos(i * 0.5) * 5).toFixed(1),
+}));
+
+// ═══════════════════════════════════════════
+// RIGHT SVG: Wireframe View (now animated via client-side JS)
+// Only static grid data needed from frontmatter
+// ═══════════════════════════════════════════
+const wfCx = 500, wfCy = 380;
+
+// Grid lines
+const wfVLines = Array.from({length: 21}, (_, i) => i * 50);
+const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
+---
+
+<div class="moody-split">
+  <!-- LEFT: Animated 3D Product View -->
+  <div class="moody-split__panel moody-split__panel--product">
+    <svg id="pv-svg" width="100%" viewBox="0 0 1000 780" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Walnut wood gradients -->
+        <linearGradient id="pv-wf" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#7a5940"/><stop offset="25%" stop-color="#6b4c35"/>
+          <stop offset="50%" stop-color="#74533a"/><stop offset="75%" stop-color="#5a3d28"/>
+          <stop offset="100%" stop-color="#6b4c35"/>
+        </linearGradient>
+        <linearGradient id="pv-ws" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#5a3d28"/><stop offset="50%" stop-color="#4d3322"/>
+          <stop offset="100%" stop-color="#3e2a1a"/>
+        </linearGradient>
+        <linearGradient id="pv-wt" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#74533a"/><stop offset="100%" stop-color="#5a3d28"/>
+        </linearGradient>
+        <linearGradient id="pv-wb" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#4d3322"/><stop offset="100%" stop-color="#3e2a1a"/>
+        </linearGradient>
+        <linearGradient id="pv-sg" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#1a7fd4"/><stop offset="40%" stop-color="#1565b0"/>
+          <stop offset="65%" stop-color="#0d3a6e"/><stop offset="100%" stop-color="#0a1628"/>
+        </linearGradient>
+        <filter id="pv-sb"><feGaussianBlur stdDeviation="8"/></filter>
+        <radialGradient id="pv-ag" cx="60%" cy="55%">
+          <stop offset="0%" stop-color="rgba(26,18,10,0.3)"/>
+          <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+        </radialGradient>
+        <radialGradient id="pv-ambient" cx="50%" cy="50%" r="60%">
+          <stop offset="0%" stop-color="rgba(20,15,30,1)"/>
+          <stop offset="100%" stop-color="rgba(8,6,14,1)"/>
+        </radialGradient>
+        <radialGradient id="pv-lightglow" cx="30%" cy="25%" r="50%">
+          <stop offset="0%" stop-color="rgba(60,40,20,0.15)"/>
+          <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+        </radialGradient>
+        <pattern id="pv-wg" width="200" height="200" patternUnits="userSpaceOnUse">
+          {woodGrainLines.map(l => (
+            <line x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} stroke="rgba(0,0,0,0.08)" stroke-width="0.7"/>
+          ))}
+        </pattern>
+      </defs>
+
+      <!-- Static background (themed via CSS) -->
+      <rect class="pv-bg" width="1000" height="780"/>
+      <rect width="1000" height="780" fill="url(#pv-lightglow)"/>
+
+      <!-- Dynamic scene group (rebuilt each frame by JS) -->
+      <g id="pv-scene"></g>
+    </svg>
+  </div>
+
+  <!-- RIGHT: Wireframe View -->
+  <div class="moody-split__panel moody-split__panel--wireframe">
+    <svg id="wf-svg" width="100%" viewBox="0 0 1000 760" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="ms-glow">
+          <feGaussianBlur stdDeviation="3" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <linearGradient id="ms-screenGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="var(--ms-screen-grad-top)"/>
+          <stop offset="100%" stop-color="var(--ms-screen-grad-bot)"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Background grid -->
+      <g opacity="0.08">
+        {wfVLines.map(x => (
+          <line x1={x} y1={0} x2={x} y2={760} stroke="var(--ms-wire)" stroke-width="0.5"/>
+        ))}
+        {wfHLines.map(y => (
+          <line x1={0} y1={y} x2={1000} y2={y} stroke="var(--ms-wire)" stroke-width="0.5"/>
+        ))}
+      </g>
+
+      <!-- Crosshair at center -->
+      <g opacity="0.15">
+        <line x1={wfCx-20} y1={wfCy} x2={wfCx+20} y2={wfCy} stroke="var(--ms-wire)" stroke-width="0.5"/>
+        <line x1={wfCx} y1={wfCy-20} x2={wfCx} y2={wfCy+20} stroke="var(--ms-wire)" stroke-width="0.5"/>
+      </g>
+
+      <!-- Dynamic wireframe scene group (rebuilt each frame by JS) -->
+      <g id="wf-scene"></g>
+    </svg>
+  </div>
+</div>
+
+<script>
+  const pvScene = document.getElementById('pv-scene');
+  const wfScene = document.getElementById('wf-scene');
+
+  if (pvScene && wfScene) {
+    // Shared state (both views use the same rotation)
+    let rotY = -25;
+    let rotX = 5;
+
+    // Shared geometry constants
+    const W = 130, H = 220, D = 30, B = 12, SI = 3;
+
+    // ═══════════════════════════════════════════
+    // Product View constants
+    // ═══════════════════════════════════════════
+    const pvSc = 1.15, pvCx = 500, pvCy = 390;
+
+    // Light direction (normalized)
+    const lx = -0.4, ly = -0.6, lz = -0.7;
+    const lLen = Math.sqrt(lx * lx + ly * ly + lz * lz);
+    const lightDir = { x: lx / lLen, y: ly / lLen, z: lz / lLen };
+
+    // ═══════════════════════════════════════════
+    // Wireframe View constants
+    // ═══════════════════════════════════════════
+    const wfSc = 1.1, wfCx = 500, wfCy = 380;
+
+    // ═══════════════════════════════════════════
+    // Shared 3D geometry definitions
+    // ═══════════════════════════════════════════
+    const frontCorners3D = [[-W - B, -H - B, -D], [W + B, -H - B, -D], [W + B, H + B, -D], [-W - B, H + B, -D]];
+    const backCorners3D = [[-W - B, -H - B, D], [W + B, -H - B, D], [W + B, H + B, D], [-W - B, H + B, D]];
+    const rightCorners3D = [[W + B, -H - B, -D], [W + B, -H - B, D], [W + B, H + B, D], [W + B, H + B, -D]];
+    const leftCorners3D = [[-W - B, -H - B, D], [-W - B, -H - B, -D], [-W - B, H + B, -D], [-W - B, H + B, D]];
+    const topCorners3D = [[-W - B, -H - B, D], [W + B, -H - B, D], [W + B, -H - B, -D], [-W - B, -H - B, -D]];
+    const bottomCorners3D = [[-W - B, H + B, -D], [W + B, H + B, -D], [W + B, H + B, D], [-W - B, H + B, D]];
+
+    const screenCorners3D = [[-W, -H, -D + SI], [W, -H, -D + SI], [W, H, -D + SI], [-W, H, -D + SI]];
+    const albumBot = -H + W * 2; // 40
+    const albumCorners3D = [[-W, -H, -D + SI - 1], [W, -H, -D + SI - 1], [W, albumBot, -D + SI - 1], [-W, albumBot, -D + SI - 1]];
+    const infoCorners3D = [[-W, albumBot, -D + SI - 1], [W, albumBot, -D + SI - 1], [W, H, -D + SI - 1], [-W, H, -D + SI - 1]];
+
+    const t = albumBot + 18;
+    const zUI = -D + SI - 1.5;
+    const pad = 15;
+    const trackCorners3D = [[-W + pad, t, zUI], [W - 40, t, zUI], [W - 40, t + 15, zUI], [-W + pad, t + 15, zUI]];
+    const artistCorners3D = [[-W + pad, t + 20, zUI], [W - 80, t + 20, zUI], [W - 80, t + 31, zUI], [-W + pad, t + 31, zUI]];
+    const labelCorners3D = [[-W + pad, t + 36, zUI], [W - 100, t + 36, zUI], [W - 100, t + 45, zUI], [-W + pad, t + 45, zUI]];
+    const yearCorners3D = [[-W + pad, t + 50, zUI], [W - 100, t + 50, zUI], [W - 100, t + 59, zUI], [-W + pad, t + 59, zUI]];
+
+    // Wireframe-only geometry
+    const wfBackPanelCorners3D = [[-W - B + 10, -H - B + 10, D + 2], [W + B - 10, -H - B + 10, D + 2], [W + B - 10, H + B - 10, D + 2], [-W - B + 10, H + B - 10, D + 2]];
+    const wfUsbCorners3D = [[-20, H + B - 2, D + 3], [20, H + B - 2, D + 3], [20, H + B + 5, D + 3], [-20, H + B + 5, D + 3]];
+
+    // ═══════════════════════════════════════════
+    // Projection math (parameterized by scale & center)
+    // ═══════════════════════════════════════════
+    function degToRad(d: number) { return (d * Math.PI) / 180; }
+
+    function project3D(x: number, y: number, z: number, rY: number, rX: number, sc: number, cxp: number, cyp: number) {
+      const cY = Math.cos(degToRad(rY)), sY = Math.sin(degToRad(rY));
+      const cX = Math.cos(degToRad(rX)), sX = Math.sin(degToRad(rX));
+      const x1 = x * cY - z * sY, z1 = x * sY + z * cY;
+      const y1 = y * cX - z1 * sX, z2 = y * sX + z1 * cX;
+      const p = 800, f = p / (p + z2);
+      return { x: cxp + x1 * f * sc, y: cyp + y1 * f * sc, z: z2, scale: f };
+    }
+
+    function projPV(pts: number[][], rY: number, rX: number) {
+      return pts.map(([x, y, z]) => project3D(x, y, z, rY, rX, pvSc, pvCx, pvCy));
+    }
+
+    function projWF(pts: number[][], rY: number, rX: number) {
+      return pts.map(([x, y, z]) => project3D(x, y, z, rY, rX, wfSc, wfCx, wfCy));
+    }
+
+    function pp(pts: { x: number; y: number }[]) {
+      return pts.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+    }
+
+    function faceNZ(pts: { x: number; y: number }[]) {
+      return (pts[1].x - pts[0].x) * (pts[3].y - pts[0].y) - (pts[1].y - pts[0].y) * (pts[3].x - pts[0].x);
+    }
+
+    function faceNormal(a: number[], b: number[], c: number[]) {
+      const ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2];
+      const vx = c[0] - a[0], vy = c[1] - a[1], vz = c[2] - a[2];
+      const nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
+      const len = Math.sqrt(nx * nx + ny * ny + nz * nz) || 1;
+      return { x: nx / len, y: ny / len, z: nz / len };
+    }
+
+    function rotateNormal(n: { x: number; y: number; z: number }, rY: number, rX: number) {
+      const cY = Math.cos(degToRad(rY)), sY = Math.sin(degToRad(rY));
+      const cX = Math.cos(degToRad(rX)), sX = Math.sin(degToRad(rX));
+      const x1 = n.x * cY - n.z * sY, z1 = n.x * sY + n.z * cY;
+      const y1 = n.y * cX - z1 * sX, z2 = n.y * sX + z1 * cX;
+      return { x: x1, y: y1, z: z2 };
+    }
+
+    function faceBrightness(a: number[], b: number[], c: number[], rY: number, rX: number) {
+      const n = faceNormal(a, b, c);
+      const rn = rotateNormal(n, rY, rX);
+      const dot = -(rn.x * lightDir.x + rn.y * lightDir.y + rn.z * lightDir.z);
+      return Math.max(0, Math.min(1, dot * 0.6 + 0.4));
+    }
+
+    // Unique clip-path ID counter to avoid stale references
+    let clipId = 0;
+
+    // ═══════════════════════════════════════════
+    // Product View render
+    // ═══════════════════════════════════════════
+    function renderProductView() {
+      const fF = projPV(frontCorners3D, rotY, rotX);
+      const fB = projPV(backCorners3D, rotY, rotX);
+      const rV = projPV(rightCorners3D, rotY, rotX);
+      const lV = projPV(leftCorners3D, rotY, rotX);
+      const tV = projPV(topCorners3D, rotY, rotX);
+      const bV = projPV(bottomCorners3D, rotY, rotX);
+
+      const sF = projPV(screenCorners3D, rotY, rotX);
+      const aZ = projPV(albumCorners3D, rotY, rotX);
+      const iZ = projPV(infoCorners3D, rotY, rotX);
+      const tB = projPV(trackCorners3D, rotY, rotX);
+      const aB = projPV(artistCorners3D, rotY, rotX);
+      const lB = projPV(labelCorners3D, rotY, rotX);
+      const yB = projPV(yearCorners3D, rotY, rotX);
+
+      // Visibility
+      const frontVis = faceNZ(fF) > 0;
+      const backVis = !frontVis;
+      const rightVis = faceNZ(rV) > 0;
+      const leftVis = faceNZ(lV) > 0;
+      const topVis = faceNZ(tV) > 0;
+      const bottomVis = faceNZ(bV) > 0;
+
+      // Brightness
+      const brFront = faceBrightness(frontCorners3D[0], frontCorners3D[1], frontCorners3D[2], rotY, rotX);
+      const brBack = faceBrightness(backCorners3D[0], backCorners3D[1], backCorners3D[2], rotY, rotX);
+      const brRight = faceBrightness(rightCorners3D[0], rightCorners3D[1], rightCorners3D[2], rotY, rotX);
+      const brLeft = faceBrightness(leftCorners3D[0], leftCorners3D[1], leftCorners3D[2], rotY, rotX);
+      const brTop = faceBrightness(topCorners3D[0], topCorners3D[1], topCorners3D[2], rotY, rotX);
+      const brBottom = faceBrightness(bottomCorners3D[0], bottomCorners3D[1], bottomCorners3D[2], rotY, rotX);
+
+      // Floor shadow
+      const shadowCX = (bV[0].x + bV[1].x + bV[2].x + bV[3].x) / 4;
+      const shadowCY = Math.max(bV[0].y, bV[1].y, bV[2].y, bV[3].y) + 30;
+
+      const cid = `pv-sc-${++clipId}`;
+      let html = '';
+
+      // Floor shadow
+      html += `<ellipse cx="${shadowCX.toFixed(1)}" cy="${shadowCY.toFixed(1)}" rx="200" ry="20" fill="rgba(0,0,0,0.35)" filter="url(#pv-sb)"/>`;
+
+      // Back face (if visible, render first so it's behind)
+      if (backVis) {
+        html += `<g>`;
+        html += `<polygon points="${pp(fB)}" fill="url(#pv-wf)" stroke="#5a3d28" stroke-width="1"/>`;
+        html += `<polygon points="${pp(fB)}" fill="url(#pv-wg)" opacity="0.4"/>`;
+        html += `<polygon points="${pp(fB)}" fill="rgba(0,0,0,${((1 - brBack) * 0.35).toFixed(3)})"/>`;
+        html += `</g>`;
+      }
+
+      // Side faces
+      if (rightVis) {
+        html += `<g>`;
+        html += `<polygon points="${pp(rV)}" fill="url(#pv-ws)" stroke="none"/>`;
+        html += `<polygon points="${pp(rV)}" fill="url(#pv-wg)" opacity="0.3"/>`;
+        html += `<polygon points="${pp(rV)}" fill="rgba(0,0,0,${((1 - brRight) * 0.6).toFixed(3)})"/>`;
+        html += `</g>`;
+      }
+      if (leftVis) {
+        html += `<g>`;
+        html += `<polygon points="${pp(lV)}" fill="url(#pv-ws)" stroke="none"/>`;
+        html += `<polygon points="${pp(lV)}" fill="url(#pv-wg)" opacity="0.3"/>`;
+        html += `<polygon points="${pp(lV)}" fill="rgba(0,0,0,${((1 - brLeft) * 0.6).toFixed(3)})"/>`;
+        html += `</g>`;
+      }
+      if (topVis) {
+        html += `<g>`;
+        html += `<polygon points="${pp(tV)}" fill="url(#pv-wt)" stroke="none"/>`;
+        html += `<polygon points="${pp(tV)}" fill="url(#pv-wg)" opacity="0.3"/>`;
+        html += `<polygon points="${pp(tV)}" fill="rgba(0,0,0,${((1 - brTop) * 0.6).toFixed(3)})"/>`;
+        html += `</g>`;
+      }
+      if (bottomVis) {
+        html += `<g>`;
+        html += `<polygon points="${pp(bV)}" fill="url(#pv-wb)" stroke="none"/>`;
+        html += `<polygon points="${pp(bV)}" fill="url(#pv-wg)" opacity="0.3"/>`;
+        html += `<polygon points="${pp(bV)}" fill="rgba(0,0,0,${((1 - brBottom) * 0.6).toFixed(3)})"/>`;
+        html += `</g>`;
+      }
+
+      // Front face (if visible)
+      if (frontVis) {
+        html += `<g>`;
+        html += `<polygon points="${pp(fF)}" fill="url(#pv-wf)" stroke="none"/>`;
+        html += `<polygon points="${pp(fF)}" fill="url(#pv-wg)" opacity="0.4"/>`;
+        html += `<polygon points="${pp(fF)}" fill="rgba(0,0,0,${((1 - brFront) * 0.5).toFixed(3)})"/>`;
+        html += `<clipPath id="${cid}"><polygon points="${pp(sF)}"/></clipPath>`;
+        html += `<g clip-path="url(#${cid})">`;
+        html += `<polygon points="${pp(sF)}" fill="#000000"/>`;
+        html += `<polygon points="${pp(aZ)}" fill="rgba(255,255,255,0.15)"/>`;
+        html += `<polygon points="${pp(iZ)}" fill="rgba(255,255,255,0.08)"/>`;
+        html += `<polygon points="${pp(tB)}" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.25)" stroke-width="0.8" stroke-linejoin="round"/>`;
+        html += `<polygon points="${pp(aB)}" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.15)" stroke-width="0.6" stroke-linejoin="round"/>`;
+        html += `<polygon points="${pp(lB)}" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.12)" stroke-width="0.5" stroke-linejoin="round"/>`;
+        html += `<polygon points="${pp(yB)}" fill="rgba(0,204,255,0.08)" stroke="rgba(0,204,255,0.25)" stroke-width="0.6" stroke-linejoin="round"/>`;
+        html += `</g></g>`;
+      }
+
+      pvScene.innerHTML = html;
+    }
+
+    // ═══════════════════════════════════════════
+    // Wireframe View render
+    // ═══════════════════════════════════════════
+    function renderWireframeView() {
+      const wfFF = projWF(frontCorners3D, rotY, rotX);
+      const wfFB = projWF(backCorners3D, rotY, rotX);
+      const wfSF = projWF(screenCorners3D, rotY, rotX);
+      const wfAZ = projWF(albumCorners3D, rotY, rotX);
+      const wfIZ = projWF(infoCorners3D, rotY, rotX);
+      const wfTZ = projWF(trackCorners3D, rotY, rotX);
+      const wfArZ = projWF(artistCorners3D, rotY, rotX);
+      const wfYZ = projWF(yearCorners3D, rotY, rotX);
+      const wfBP = projWF(wfBackPanelCorners3D, rotY, rotX);
+      const wfUP = projWF(wfUsbCorners3D, rotY, rotX);
+
+      const cornerSize = 6;
+      let html = '';
+
+      // Back panel & USB (with glow filter)
+      html += `<g filter="url(#ms-glow)">`;
+      html += `<polygon points="${pp(wfBP)}" fill="var(--ms-backpanel-fill)" stroke="var(--ms-wirealt)" stroke-width="1" opacity="0.6" stroke-dasharray="4 3" stroke-linejoin="round"/>`;
+      html += `<polygon points="${pp(wfUP)}" fill="none" stroke="var(--ms-wirealt)" stroke-width="0.8" opacity="0.5" stroke-linejoin="round"/>`;
+      html += `</g>`;
+
+      // Frame back face
+      html += `<polygon points="${pp(wfFB)}" fill="var(--ms-surface)" stroke="var(--ms-wire)" stroke-width="0.8" opacity="0.3" stroke-linejoin="round"/>`;
+
+      // Edge lines connecting front to back corners
+      for (let i = 0; i < 4; i++) {
+        html += `<line x1="${wfFF[i].x.toFixed(1)}" y1="${wfFF[i].y.toFixed(1)}" x2="${wfFB[i].x.toFixed(1)}" y2="${wfFB[i].y.toFixed(1)}" stroke="var(--ms-wire)" stroke-width="0.8" opacity="0.3"/>`;
+      }
+
+      // Frame front face (with glow filter)
+      html += `<g filter="url(#ms-glow)">`;
+      html += `<polygon points="${pp(wfFF)}" fill="var(--ms-surface)" stroke="var(--ms-wire)" stroke-width="1.5" opacity="0.9" stroke-linejoin="round"/>`;
+      html += `</g>`;
+
+      // Screen with corner squares
+      html += `<polygon points="${pp(wfSF)}" fill="url(#ms-screenGrad)" stroke="var(--ms-accent)" stroke-width="1.2" opacity="0.8" stroke-linejoin="round"/>`;
+      for (let i = 0; i < wfSF.length; i++) {
+        const cx = wfSF[i].x - cornerSize / 2;
+        const cy = wfSF[i].y - cornerSize / 2;
+        html += `<rect x="${cx.toFixed(1)}" y="${cy.toFixed(1)}" width="${cornerSize}" height="${cornerSize}" fill="none" stroke="var(--ms-accent)" stroke-width="0.8" opacity="0.6"/>`;
+      }
+
+      // UI layer (with glow filter)
+      html += `<g filter="url(#ms-glow)">`;
+      html += `<polygon points="${pp(wfAZ)}" fill="var(--ms-album-fill)" stroke="var(--ms-accent)" stroke-width="0.8" opacity="0.6" stroke-dasharray="3 2" stroke-linejoin="round"/>`;
+      html += `<polygon points="${pp(wfIZ)}" fill="var(--ms-info-fill)" stroke="var(--ms-accent)" stroke-width="0.6" opacity="0.5" stroke-linejoin="round"/>`;
+      html += `<polygon points="${pp(wfTZ)}" fill="var(--ms-track-fill)" stroke="var(--ms-wire)" stroke-width="0.6" opacity="0.7" stroke-linejoin="round"/>`;
+      html += `<polygon points="${pp(wfArZ)}" fill="var(--ms-artist-fill)" stroke="var(--ms-wire)" stroke-width="0.5" opacity="0.5" stroke-linejoin="round"/>`;
+      html += `<polygon points="${pp(wfYZ)}" fill="var(--ms-year-fill)" stroke="var(--ms-wirealt)" stroke-width="0.5" opacity="0.5" stroke-linejoin="round"/>`;
+      html += `</g>`;
+
+      // Annotations helper
+      function ann(from: {x:number,y:number}, text: string, ox: number, oy: number, color: string) {
+        const ex = from.x + ox, ey = from.y + oy;
+        const anchor = ox > 0 ? 'start' : 'end';
+        const tx = ex + (ox > 0 ? 8 : -8), ty = ey + 4;
+        let s = '';
+        s += `<circle cx="${from.x.toFixed(1)}" cy="${from.y.toFixed(1)}" r="3" fill="${color}" opacity="0.8"/>`;
+        s += `<line x1="${from.x.toFixed(1)}" y1="${from.y.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="${color}" stroke-width="0.8" opacity="0.6" stroke-dasharray="3 2"/>`;
+        s += `<text x="${tx.toFixed(1)}" y="${ty.toFixed(1)}" fill="${color}" font-size="11" font-family="'JetBrains Mono','SF Mono','Consolas',monospace" text-anchor="${anchor}" opacity="0.85">${text}</text>`;
+        return s;
+      }
+
+      // Dimension helper
+      function dim(p1: {x:number,y:number}, p2: {x:number,y:number}, label: string, offset: number, color: string) {
+        const dx = p2.x - p1.x, dy = p2.y - p1.y;
+        const len = Math.sqrt(dx*dx + dy*dy) || 1;
+        const nx = -dy/len, ny = dx/len;
+        const mx = (p1.x+p2.x)/2, my = (p1.y+p2.y)/2;
+        let s = '';
+        s += `<line x1="${p1.x.toFixed(1)}" y1="${p1.y.toFixed(1)}" x2="${(p1.x+nx*offset).toFixed(1)}" y2="${(p1.y+ny*offset).toFixed(1)}" stroke="${color}" stroke-width="0.5" opacity="0.5"/>`;
+        s += `<line x1="${p2.x.toFixed(1)}" y1="${p2.y.toFixed(1)}" x2="${(p2.x+nx*offset).toFixed(1)}" y2="${(p2.y+ny*offset).toFixed(1)}" stroke="${color}" stroke-width="0.5" opacity="0.5"/>`;
+        s += `<line x1="${(p1.x+nx*offset).toFixed(1)}" y1="${(p1.y+ny*offset).toFixed(1)}" x2="${(p2.x+nx*offset).toFixed(1)}" y2="${(p2.y+ny*offset).toFixed(1)}" stroke="${color}" stroke-width="1" opacity="0.8"/>`;
+        s += `<text x="${(mx+nx*(offset+14)).toFixed(1)}" y="${(my+ny*(offset+14)).toFixed(1)}" fill="${color}" font-size="11" font-family="'JetBrains Mono','SF Mono','Consolas',monospace" text-anchor="middle" dominant-baseline="middle" opacity="0.9">${label}</text>`;
+        return s;
+      }
+
+      // Annotations
+      html += ann(wfFF[0], 'Walnut Wood Frame', -140, -50, 'var(--ms-wire)');
+      html += ann(wfSF[0], '10.1" IPS Display', -120, 20, 'var(--ms-accent)');
+      html += ann(wfAZ[1], 'Album Artwork', 90, -60, 'var(--ms-accent)');
+      html += ann(wfTZ[0], 'Track Title', -120, -20, 'var(--ms-wire)');
+      html += ann(wfArZ[0], 'Artist Name', -110, 10, 'var(--ms-wire)');
+      html += ann(wfYZ[0], 'Release Year', -130, 30, 'var(--ms-wirealt)');
+      html += ann(wfUP[0], 'USB-C / Power', 120, 30, 'var(--ms-wirealt)');
+      html += ann(wfBP[0], 'Back Cover', -100, -30, 'var(--ms-wirealt)');
+
+      // Dimensions
+      html += dim(wfFF[0], wfFF[1], '284mm', -35, 'var(--ms-wirealt)');
+      html += dim(wfFF[1], wfFF[2], '464mm', 35, 'var(--ms-wirealt)');
+
+      wfScene.innerHTML = html;
+    }
+
+    // ═══════════════════════════════════════════
+    // Animation loop (both views in sync)
+    // ═══════════════════════════════════════════
+    function animate() {
+      rotY += 0.3;
+      renderProductView();
+      renderWireframeView();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  }
+</script>
+
+<style>
+.moody-split {
+  --ms-panel-bg: #0a0a0f;
+  --ms-panel-border: rgba(255, 255, 255, 0.06);
+  --ms-label-color: #00ffcc;
+  --ms-wire: #00ffcc;
+  --ms-wirealt: #ff6b35;
+  --ms-accent: #00d4ff;
+  --ms-surface: rgba(0, 255, 204, 0.04);
+  --ms-screen-grad-top: rgba(0, 102, 204, 0.15);
+  --ms-screen-grad-bot: rgba(0, 26, 51, 0.25);
+  --ms-album-fill: rgba(0, 212, 255, 0.04);
+  --ms-info-fill: rgba(0, 102, 204, 0.06);
+  --ms-track-fill: rgba(0, 255, 204, 0.1);
+  --ms-artist-fill: rgba(0, 255, 204, 0.06);
+  --ms-year-fill: rgba(255, 107, 53, 0.08);
+  --ms-backpanel-fill: rgba(255, 107, 53, 0.03);
+
+  display: flex;
+  gap: 8px;
+}
+
+.moody-split__panel {
+  flex: 1;
+  border: 1px solid var(--ms-panel-border);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  background: var(--ms-panel-bg);
+}
+
+.moody-split__label {
+  position: absolute;
+  top: 12px;
+  left: 16px;
+  font-size: 10px;
+  color: var(--ms-label-color);
+  letter-spacing: 2px;
+  opacity: 0.6;
+  z-index: 1;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.moody-split__panel svg {
+  display: block;
+}
+
+.pv-bg {
+  fill: #0a0a0f;
+}
+
+:global(body:not([data-theme="dark"])) .pv-bg {
+  fill: #f0f0f0;
+}
+
+@media (max-width: 768px) {
+  .moody-split {
+    flex-direction: column;
+  }
+}
+
+:global(body:not([data-theme="dark"])) .moody-split {
+  --ms-panel-bg: #f5f5f5;
+  --ms-panel-border: rgba(0, 0, 0, 0.08);
+  --ms-label-color: #008866;
+  --ms-wire: #008866;
+  --ms-wirealt: #cc4400;
+  --ms-accent: #0088aa;
+  --ms-surface: rgba(0, 136, 102, 0.06);
+  --ms-screen-grad-top: rgba(0, 102, 204, 0.1);
+  --ms-screen-grad-bot: rgba(0, 26, 51, 0.15);
+  --ms-album-fill: rgba(0, 136, 170, 0.06);
+  --ms-info-fill: rgba(0, 80, 160, 0.06);
+  --ms-track-fill: rgba(0, 136, 102, 0.1);
+  --ms-artist-fill: rgba(0, 136, 102, 0.06);
+  --ms-year-fill: rgba(204, 68, 0, 0.08);
+  --ms-backpanel-fill: rgba(204, 68, 0, 0.04);
+}
+</style>

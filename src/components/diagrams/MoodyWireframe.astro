@@ -1,0 +1,256 @@
+---
+// 3D projection math from wireframe.jsx
+function degToRad(d: number) { return (d * Math.PI) / 180; }
+function project3D(x: number, y: number, z: number, rotY: number, rotX: number, scale: number, cx: number, cy: number) {
+  const cY = Math.cos(degToRad(rotY)), sY = Math.sin(degToRad(rotY));
+  const cX = Math.cos(degToRad(rotX)), sX = Math.sin(degToRad(rotX));
+  let x1 = x * cY - z * sY, z1 = x * sY + z * cY;
+  let y1 = y * cX - z1 * sX, z2 = y * sX + z1 * cX;
+  const p = 800, f = p / (p + z2);
+  return { x: cx + x1 * f * scale, y: cy + y1 * f * scale };
+}
+function proj(pts: number[][], rotY: number, rotX: number, sc: number, cx: number, cy: number) {
+  return pts.map(([x,y,z]) => project3D(x,y,z,rotY,rotX,sc,cx,cy));
+}
+function pp(pts: {x:number,y:number}[]) { return pts.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" "); }
+
+const rotY = -25, rotX = 5, sc = 1.1, cx = 500, cy = 380;
+const W = 130, H = 220, D = 30, B = 12, SI = 3;
+
+// Frame outer front & back
+const fF = proj([[-W-B,-H-B,-D],[W+B,-H-B,-D],[W+B,H+B,-D],[-W-B,H+B,-D]], rotY, rotX, sc, cx, cy);
+const fB = proj([[-W-B,-H-B,D],[W+B,-H-B,D],[W+B,H+B,D],[-W-B,H+B,D]], rotY, rotX, sc, cx, cy);
+
+// Screen
+const sF = proj([[-W,-H,-D+SI],[W,-H,-D+SI],[W,H,-D+SI],[-W,H,-D+SI]], rotY, rotX, sc, cx, cy);
+
+// Album area
+const albumBot = -H + W * 2; // = 40
+const aZ = proj([[-W,-H,-D+SI-1],[W,-H,-D+SI-1],[W,albumBot,-D+SI-1],[-W,albumBot,-D+SI-1]], rotY, rotX, sc, cx, cy);
+
+// Info area
+const iZ = proj([[-W,albumBot,-D+SI-1],[W,albumBot,-D+SI-1],[W,H,-D+SI-1],[-W,H,-D+SI-1]], rotY, rotX, sc, cx, cy);
+
+// Text boxes
+const t = albumBot + 18; // = 58
+const z = -D + SI - 1.5; // = -28.5
+const pad = 15;
+const tZ = proj([[-W+pad, t, z],[W-40, t, z],[W-40, t+15, z],[-W+pad, t+15, z]], rotY, rotX, sc, cx, cy);
+const arZ = proj([[-W+pad, t+20, z],[W-80, t+20, z],[W-80, t+31, z],[-W+pad, t+31, z]], rotY, rotX, sc, cx, cy);
+const yZ = proj([[-W+pad, t+36, z],[W-100, t+36, z],[W-100, t+45, z],[-W+pad, t+45, z]], rotY, rotX, sc, cx, cy);
+
+// Back panel & USB
+const bP = proj([[-W-B+10,-H-B+10,D+2],[W+B-10,-H-B+10,D+2],[W+B-10,H+B-10,D+2],[-W-B+10,H+B-10,D+2]], rotY, rotX, sc, cx, cy);
+const uP = proj([[-20,H+B-2,D+3],[20,H+B-2,D+3],[20,H+B+5,D+3],[-20,H+B+5,D+3]], rotY, rotX, sc, cx, cy);
+
+// Dimension helper: compute perpendicular offset line endpoints
+function dimLine(p1: {x:number,y:number}, p2: {x:number,y:number}, offset: number) {
+  const dx = p2.x - p1.x, dy = p2.y - p1.y;
+  const len = Math.sqrt(dx*dx + dy*dy);
+  const nx = -dy / len, ny = dx / len;
+  const ox = nx * offset, oy = ny * offset;
+  return {
+    ext1Start: p1, ext1End: {x: p1.x + ox, y: p1.y + oy},
+    ext2Start: p2, ext2End: {x: p2.x + ox, y: p2.y + oy},
+    lineStart: {x: p1.x + ox, y: p1.y + oy},
+    lineEnd: {x: p2.x + ox, y: p2.y + oy},
+    mid: {x: (p1.x + p2.x)/2 + nx*(offset+14), y: (p1.y + p2.y)/2 + ny*(offset+14)},
+  };
+}
+
+const dimWidth = dimLine(fF[0], fF[1], -35);
+const dimHeight = dimLine(fF[1], fF[2], 35);
+
+// Annotation helper: source point + offset → endpoint
+function ann(from: {x:number,y:number}, ox: number, oy: number) {
+  return { sx: from.x, sy: from.y, ex: from.x + ox, ey: from.y + oy, tx: from.x + ox + (ox > 0 ? 8 : -8), ty: from.y + oy + 4, anchor: ox > 0 ? "start" : "end" };
+}
+
+const annFrame = ann(fF[0], -140, -50);
+const annDisplay = ann(sF[0], -120, 20);
+const annAlbum = ann(aZ[1], 90, -60);
+const annTrack = ann(tZ[0], -120, -20);
+const annArtist = ann(arZ[0], -110, 10);
+const annYear = ann(yZ[0], -130, 30);
+const annUsb = ann(uP[0], 120, 30);
+const annBack = ann(bP[0], -100, -30);
+
+// Screen corner squares
+const cornerSize = 6;
+const screenCorners = sF.map(p => ({x: p.x - cornerSize/2, y: p.y - cornerSize/2}));
+
+// Grid lines
+const vLines = Array.from({length: 21}, (_, i) => i * 50);
+const hLines = Array.from({length: 16}, (_, i) => i * 50);
+---
+
+<div class="moody-wireframe">
+<svg width="100%" viewBox="0 0 1000 760" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="mw-glow">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <linearGradient id="mw-screenGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="var(--mw-screen-grad-top)"/>
+      <stop offset="100%" stop-color="var(--mw-screen-grad-bot)"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background grid -->
+  <g opacity="0.08">
+    {vLines.map(x => (
+      <line x1={x} y1={0} x2={x} y2={760} stroke="var(--mw-wire)" stroke-width="0.5"/>
+    ))}
+    {hLines.map(y => (
+      <line x1={0} y1={y} x2={1000} y2={y} stroke="var(--mw-wire)" stroke-width="0.5"/>
+    ))}
+  </g>
+
+  <!-- Crosshair at center -->
+  <g opacity="0.15">
+    <line x1={cx-20} y1={cy} x2={cx+20} y2={cy} stroke="var(--mw-wire)" stroke-width="0.5"/>
+    <line x1={cx} y1={cy-20} x2={cx} y2={cy+20} stroke="var(--mw-wire)" stroke-width="0.5"/>
+  </g>
+
+  <!-- Back panel & USB -->
+  <g filter="url(#mw-glow)">
+    <polygon points={pp(bP)} fill="var(--mw-backpanel-fill)" stroke="var(--mw-wirealt)" stroke-width="1" opacity="0.6" stroke-dasharray="4 3" stroke-linejoin="round"/>
+    <polygon points={pp(uP)} fill="none" stroke="var(--mw-wirealt)" stroke-width="0.8" opacity="0.5" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Back panel annotations -->
+  <g>
+    <circle cx={annUsb.sx.toFixed(1)} cy={annUsb.sy.toFixed(1)} r="3" fill="var(--mw-wirealt)" opacity="0.8"/>
+    <line x1={annUsb.sx.toFixed(1)} y1={annUsb.sy.toFixed(1)} x2={annUsb.ex.toFixed(1)} y2={annUsb.ey.toFixed(1)} stroke="var(--mw-wirealt)" stroke-width="0.8" opacity="0.6" stroke-dasharray="3 2"/>
+    <text x={annUsb.tx.toFixed(1)} y={annUsb.ty.toFixed(1)} fill="var(--mw-wirealt)" font-size="11" font-family="'JetBrains Mono','SF Mono','Consolas',monospace" text-anchor={annUsb.anchor} opacity="0.85">USB-C / Power</text>
+  </g>
+  <g>
+    <circle cx={annBack.sx.toFixed(1)} cy={annBack.sy.toFixed(1)} r="3" fill="var(--mw-wirealt)" opacity="0.8"/>
+    <line x1={annBack.sx.toFixed(1)} y1={annBack.sy.toFixed(1)} x2={annBack.ex.toFixed(1)} y2={annBack.ey.toFixed(1)} stroke="var(--mw-wirealt)" stroke-width="0.8" opacity="0.6" stroke-dasharray="3 2"/>
+    <text x={annBack.tx.toFixed(1)} y={annBack.ty.toFixed(1)} fill="var(--mw-wirealt)" font-size="11" font-family="'JetBrains Mono','SF Mono','Consolas',monospace" text-anchor={annBack.anchor} opacity="0.85">Back Cover</text>
+  </g>
+
+  <!-- Frame back face -->
+  <polygon points={pp(fB)} fill="var(--mw-surface)" stroke="var(--mw-wire)" stroke-width="0.8" opacity="0.3" stroke-linejoin="round"/>
+
+  <!-- Edge lines connecting front to back corners -->
+  {fF.map((f, i) => (
+    <line x1={f.x.toFixed(1)} y1={f.y.toFixed(1)} x2={fB[i].x.toFixed(1)} y2={fB[i].y.toFixed(1)} stroke="var(--mw-wire)" stroke-width="0.8" opacity="0.3"/>
+  ))}
+
+  <!-- Frame front face -->
+  <g filter="url(#mw-glow)">
+    <polygon points={pp(fF)} fill="var(--mw-surface)" stroke="var(--mw-wire)" stroke-width="1.5" opacity="0.9" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Screen -->
+  <g>
+    <polygon points={pp(sF)} fill="url(#mw-screenGrad)" stroke="var(--mw-accent)" stroke-width="1.2" opacity="0.8" stroke-linejoin="round"/>
+    {screenCorners.map(c => (
+      <rect x={c.x.toFixed(1)} y={c.y.toFixed(1)} width={cornerSize} height={cornerSize} fill="none" stroke="var(--mw-accent)" stroke-width="0.8" opacity="0.6"/>
+    ))}
+  </g>
+
+  <!-- UI layer -->
+  <g filter="url(#mw-glow)">
+    <!-- Album area -->
+    <polygon points={pp(aZ)} fill="var(--mw-album-fill)" stroke="var(--mw-accent)" stroke-width="0.8" opacity="0.6" stroke-dasharray="3 2" stroke-linejoin="round"/>
+    <!-- Info area -->
+    <polygon points={pp(iZ)} fill="var(--mw-info-fill)" stroke="var(--mw-accent)" stroke-width="0.6" opacity="0.5" stroke-linejoin="round"/>
+    <!-- Track title box -->
+    <polygon points={pp(tZ)} fill="var(--mw-track-fill)" stroke="var(--mw-wire)" stroke-width="0.6" opacity="0.7" stroke-linejoin="round"/>
+    <!-- Artist box -->
+    <polygon points={pp(arZ)} fill="var(--mw-artist-fill)" stroke="var(--mw-wire)" stroke-width="0.5" opacity="0.5" stroke-linejoin="round"/>
+    <!-- Year box -->
+    <polygon points={pp(yZ)} fill="var(--mw-year-fill)" stroke="var(--mw-wirealt)" stroke-width="0.5" opacity="0.5" stroke-linejoin="round"/>
+  </g>
+
+  <!-- UI annotations -->
+  <g>
+    <circle cx={annAlbum.sx.toFixed(1)} cy={annAlbum.sy.toFixed(1)} r="3" fill="var(--mw-accent)" opacity="0.8"/>
+    <line x1={annAlbum.sx.toFixed(1)} y1={annAlbum.sy.toFixed(1)} x2={annAlbum.ex.toFixed(1)} y2={annAlbum.ey.toFixed(1)} stroke="var(--mw-accent)" stroke-width="0.8" opacity="0.6" stroke-dasharray="3 2"/>
+    <text x={annAlbum.tx.toFixed(1)} y={annAlbum.ty.toFixed(1)} fill="var(--mw-accent)" font-size="11" font-family="'JetBrains Mono','SF Mono','Consolas',monospace" text-anchor={annAlbum.anchor} opacity="0.85">Album Artwork</text>
+  </g>
+  <g>
+    <circle cx={annTrack.sx.toFixed(1)} cy={annTrack.sy.toFixed(1)} r="3" fill="var(--mw-accent)" opacity="0.8"/>
+    <line x1={annTrack.sx.toFixed(1)} y1={annTrack.sy.toFixed(1)} x2={annTrack.ex.toFixed(1)} y2={annTrack.ey.toFixed(1)} stroke="var(--mw-accent)" stroke-width="0.8" opacity="0.6" stroke-dasharray="3 2"/>
+    <text x={annTrack.tx.toFixed(1)} y={annTrack.ty.toFixed(1)} fill="var(--mw-accent)" font-size="11" font-family="'JetBrains Mono','SF Mono','Consolas',monospace" text-anchor={annTrack.anchor} opacity="0.85">Track Title</text>
+  </g>
+  <g>
+    <circle cx={annArtist.sx.toFixed(1)} cy={annArtist.sy.toFixed(1)} r="3" fill="var(--mw-accent)" opacity="0.8"/>
+    <line x1={annArtist.sx.toFixed(1)} y1={annArtist.sy.toFixed(1)} x2={annArtist.ex.toFixed(1)} y2={annArtist.ey.toFixed(1)} stroke="var(--mw-accent)" stroke-width="0.8" opacity="0.6" stroke-dasharray="3 2"/>
+    <text x={annArtist.tx.toFixed(1)} y={annArtist.ty.toFixed(1)} fill="var(--mw-accent)" font-size="11" font-family="'JetBrains Mono','SF Mono','Consolas',monospace" text-anchor={annArtist.anchor} opacity="0.85">Artist Name</text>
+  </g>
+  <g>
+    <circle cx={annYear.sx.toFixed(1)} cy={annYear.sy.toFixed(1)} r="3" fill="var(--mw-wirealt)" opacity="0.8"/>
+    <line x1={annYear.sx.toFixed(1)} y1={annYear.sy.toFixed(1)} x2={annYear.ex.toFixed(1)} y2={annYear.ey.toFixed(1)} stroke="var(--mw-wirealt)" stroke-width="0.8" opacity="0.6" stroke-dasharray="3 2"/>
+    <text x={annYear.tx.toFixed(1)} y={annYear.ty.toFixed(1)} fill="var(--mw-wirealt)" font-size="11" font-family="'JetBrains Mono','SF Mono','Consolas',monospace" text-anchor={annYear.anchor} opacity="0.85">Release Year</text>
+  </g>
+
+  <!-- Dimensions -->
+  <g>
+    <!-- Width: 284mm -->
+    <line x1={dimWidth.ext1Start.x.toFixed(1)} y1={dimWidth.ext1Start.y.toFixed(1)} x2={dimWidth.ext1End.x.toFixed(1)} y2={dimWidth.ext1End.y.toFixed(1)} stroke="var(--mw-wirealt)" stroke-width="0.5" opacity="0.5"/>
+    <line x1={dimWidth.ext2Start.x.toFixed(1)} y1={dimWidth.ext2Start.y.toFixed(1)} x2={dimWidth.ext2End.x.toFixed(1)} y2={dimWidth.ext2End.y.toFixed(1)} stroke="var(--mw-wirealt)" stroke-width="0.5" opacity="0.5"/>
+    <line x1={dimWidth.lineStart.x.toFixed(1)} y1={dimWidth.lineStart.y.toFixed(1)} x2={dimWidth.lineEnd.x.toFixed(1)} y2={dimWidth.lineEnd.y.toFixed(1)} stroke="var(--mw-wirealt)" stroke-width="1" opacity="0.8"/>
+    <text x={dimWidth.mid.x.toFixed(1)} y={dimWidth.mid.y.toFixed(1)} fill="var(--mw-wirealt)" font-size="11" font-family="'JetBrains Mono','SF Mono','Consolas',monospace" text-anchor="middle" dominant-baseline="middle" opacity="0.9">284mm</text>
+  </g>
+  <g>
+    <!-- Height: 464mm -->
+    <line x1={dimHeight.ext1Start.x.toFixed(1)} y1={dimHeight.ext1Start.y.toFixed(1)} x2={dimHeight.ext1End.x.toFixed(1)} y2={dimHeight.ext1End.y.toFixed(1)} stroke="var(--mw-wirealt)" stroke-width="0.5" opacity="0.5"/>
+    <line x1={dimHeight.ext2Start.x.toFixed(1)} y1={dimHeight.ext2Start.y.toFixed(1)} x2={dimHeight.ext2End.x.toFixed(1)} y2={dimHeight.ext2End.y.toFixed(1)} stroke="var(--mw-wirealt)" stroke-width="0.5" opacity="0.5"/>
+    <line x1={dimHeight.lineStart.x.toFixed(1)} y1={dimHeight.lineStart.y.toFixed(1)} x2={dimHeight.lineEnd.x.toFixed(1)} y2={dimHeight.lineEnd.y.toFixed(1)} stroke="var(--mw-wirealt)" stroke-width="1" opacity="0.8"/>
+    <text x={dimHeight.mid.x.toFixed(1)} y={dimHeight.mid.y.toFixed(1)} fill="var(--mw-wirealt)" font-size="11" font-family="'JetBrains Mono','SF Mono','Consolas',monospace" text-anchor="middle" dominant-baseline="middle" opacity="0.9">464mm</text>
+  </g>
+
+  <!-- Frame annotation -->
+  <g>
+    <circle cx={annFrame.sx.toFixed(1)} cy={annFrame.sy.toFixed(1)} r="3" fill="var(--mw-wire)" opacity="0.8"/>
+    <line x1={annFrame.sx.toFixed(1)} y1={annFrame.sy.toFixed(1)} x2={annFrame.ex.toFixed(1)} y2={annFrame.ey.toFixed(1)} stroke="var(--mw-wire)" stroke-width="0.8" opacity="0.6" stroke-dasharray="3 2"/>
+    <text x={annFrame.tx.toFixed(1)} y={annFrame.ty.toFixed(1)} fill="var(--mw-wire)" font-size="11" font-family="'JetBrains Mono','SF Mono','Consolas',monospace" text-anchor={annFrame.anchor} opacity="0.85">Walnut Wood Frame</text>
+  </g>
+
+  <!-- Display annotation -->
+  <g>
+    <circle cx={annDisplay.sx.toFixed(1)} cy={annDisplay.sy.toFixed(1)} r="3" fill="var(--mw-accent)" opacity="0.8"/>
+    <line x1={annDisplay.sx.toFixed(1)} y1={annDisplay.sy.toFixed(1)} x2={annDisplay.ex.toFixed(1)} y2={annDisplay.ey.toFixed(1)} stroke="var(--mw-accent)" stroke-width="0.8" opacity="0.6" stroke-dasharray="3 2"/>
+    <text x={annDisplay.tx.toFixed(1)} y={annDisplay.ty.toFixed(1)} fill="var(--mw-accent)" font-size="11" font-family="'JetBrains Mono','SF Mono','Consolas',monospace" text-anchor={annDisplay.anchor} opacity="0.85">10.1" IPS Display</text>
+  </g>
+</svg>
+</div>
+
+<style>
+.moody-wireframe {
+  --mw-wire: #00ffcc;
+  --mw-wirealt: #ff6b35;
+  --mw-accent: #00d4ff;
+  --mw-text: #e0e0e0;
+  --mw-text-muted: #666;
+  --mw-surface: rgba(0, 255, 204, 0.04);
+  --mw-screen-grad-top: rgba(0, 102, 204, 0.15);
+  --mw-screen-grad-bot: rgba(0, 26, 51, 0.25);
+  --mw-album-fill: rgba(0, 212, 255, 0.04);
+  --mw-info-fill: rgba(0, 102, 204, 0.06);
+  --mw-track-fill: rgba(0, 255, 204, 0.1);
+  --mw-artist-fill: rgba(0, 255, 204, 0.06);
+  --mw-year-fill: rgba(255, 107, 53, 0.08);
+  --mw-backpanel-fill: rgba(255, 107, 53, 0.03);
+}
+:global(body:not([data-theme="dark"])) .moody-wireframe {
+  --mw-wire: #008866;
+  --mw-wirealt: #cc4400;
+  --mw-accent: #0088aa;
+  --mw-text: #333333;
+  --mw-text-muted: #999999;
+  --mw-surface: rgba(0, 136, 102, 0.06);
+  --mw-screen-grad-top: rgba(0, 102, 204, 0.1);
+  --mw-screen-grad-bot: rgba(0, 26, 51, 0.15);
+  --mw-album-fill: rgba(0, 136, 170, 0.06);
+  --mw-info-fill: rgba(0, 80, 160, 0.06);
+  --mw-track-fill: rgba(0, 136, 102, 0.1);
+  --mw-artist-fill: rgba(0, 136, 102, 0.06);
+  --mw-year-fill: rgba(204, 68, 0, 0.08);
+  --mw-backpanel-fill: rgba(204, 68, 0, 0.04);
+}
+</style>
