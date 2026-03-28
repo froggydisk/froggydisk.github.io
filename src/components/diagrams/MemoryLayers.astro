@@ -1,0 +1,130 @@
+<div class="memory-layers">
+<svg width="100%" viewBox="0 0 700 310" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="ml-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+    <path d="M2 2L8 5L2 8" fill="none" stroke="context-stroke" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+  <linearGradient id="ml-fade" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="var(--ml-gray-border)" stop-opacity="0.6"/>
+    <stop offset="50%" stop-color="var(--ml-gray-border)" stop-opacity="0.3"/>
+    <stop offset="100%" stop-color="var(--ml-gray-border)" stop-opacity="0.05"/>
+  </linearGradient>
+</defs>
+<style>
+  @keyframes ml-flow { to { stroke-dashoffset: -16; } }
+  .ml-anim { animation: ml-flow 1.4s linear infinite; }
+</style>
+
+<!-- Left side: Input sources -->
+
+<!-- 편집된 자아 -->
+<rect x="20" y="50" width="120" height="56" rx="10" fill="var(--ml-blue-bg)" stroke="var(--ml-blue-border)" stroke-width="1.2"/>
+<text x="80" y="74" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="600" fill="var(--ml-blue-text)">편집된 자아</text>
+<text x="80" y="94" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="8" fill="var(--ml-dim)">기록 · 의도 · 가치관</text>
+
+<!-- 날것의 자아 -->
+<rect x="20" y="126" width="120" height="56" rx="10" fill="var(--ml-brown-bg)" stroke="var(--ml-brown-border)" stroke-width="1.2"/>
+<text x="80" y="150" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="600" fill="var(--ml-brown-text)">날것의 자아</text>
+<text x="80" y="170" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="8" fill="var(--ml-dim)">흔적 · 무의식 · 패턴</text>
+
+<!-- Center: Concentric memory layers -->
+
+<!-- Outermost: Recall Memory -->
+<rect x="200" y="24" width="300" height="200" rx="14" fill="var(--ml-inner)" stroke="var(--ml-gray-border)" stroke-width="1"/>
+<text x="220" y="46" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" font-weight="600" fill="var(--ml-gray-text)">Recall Memory</text>
+<text x="220" y="60" font-family="'SF Mono', 'Consolas', monospace" font-size="8" fill="var(--ml-dim)">대화 이력</text>
+
+<!-- Middle: Archival Memory -->
+<rect x="230" y="70" width="240" height="134" rx="12" fill="var(--ml-purple-bg)" stroke="var(--ml-purple-border)" stroke-width="1.2"/>
+<text x="250" y="92" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" font-weight="600" fill="var(--ml-purple-text)">Archival Memory</text>
+<text x="250" y="106" font-family="'SF Mono', 'Consolas', monospace" font-size="8" fill="var(--ml-dim)">장기 저장소</text>
+
+<!-- Inner core: Core Memory -->
+<rect x="264" y="116" width="172" height="68" rx="10" fill="var(--ml-accent-bg)" stroke="var(--ml-accent-border)" stroke-width="1.5"/>
+<text x="350" y="148" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="700" fill="var(--ml-accent-text)">Core Memory</text>
+<text x="350" y="168" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ml-dim)">핵심 기억</text>
+
+<!-- Right side: Output -->
+
+<!-- 페르소나 -->
+<rect x="560" y="88" width="120" height="56" rx="10" fill="var(--ml-green-bg)" stroke="var(--ml-green-border)" stroke-width="1.5"/>
+<text x="620" y="112" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="700" fill="var(--ml-green-text)">페르소나</text>
+<text x="620" y="128" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="8" fill="var(--ml-dim)">Persona</text>
+
+<!-- Arrows: 편집된 자아 → Core Memory -->
+<line x1="140" y1="78" x2="260" y2="140" stroke="var(--ml-blue-border)" stroke-width="1.2" stroke-dasharray="8 4" class="ml-anim" marker-end="url(#ml-arr)"/>
+
+<!-- Arrows: 날것의 자아 → Archival Memory -->
+<line x1="140" y1="154" x2="226" y2="140" stroke="var(--ml-brown-border)" stroke-width="1.2" stroke-dasharray="8 4" class="ml-anim" marker-end="url(#ml-arr)"/>
+
+<!-- Arrows: Memory layers → 페르소나 -->
+<line x1="500" y1="120" x2="556" y2="116" stroke="var(--ml-green-border)" stroke-width="1.2" stroke-dasharray="8 4" class="ml-anim" marker-end="url(#ml-arr)"/>
+
+<!-- Bottom: Decay / Forgetting mechanism -->
+
+<!-- Decay bar background -->
+<rect x="190" y="252" width="320" height="44" rx="6" fill="var(--ml-inner)" stroke="var(--ml-gray-border)" stroke-width="0.8" stroke-dasharray="4 3"/>
+
+<!-- Fading gradient overlay -->
+<rect x="192" y="254" width="316" height="40" rx="5" fill="url(#ml-fade)" opacity="0.5"/>
+
+<!-- Decay label -->
+<text x="350" y="270" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" font-weight="600" fill="var(--ml-gray-text)">망각 (Forgetting)</text>
+<text x="350" y="288" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="7.5" fill="var(--ml-dim)">score = recency × importance × relevance</text>
+
+<!-- Dashed arrow: 망각 → memory layers (upward) -->
+<line x1="350" y1="250" x2="350" y2="228" stroke="var(--ml-gray-text)" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#ml-arr)" opacity="0.6"/>
+
+<!-- Fading dashes on sides of decay bar (visual decay effect) -->
+<line x1="500" y1="274" x2="540" y2="274" stroke="var(--ml-gray-border)" stroke-width="1" stroke-dasharray="3 5" opacity="0.3"/>
+<line x1="545" y1="274" x2="570" y2="274" stroke="var(--ml-gray-border)" stroke-width="1" stroke-dasharray="2 6" opacity="0.15"/>
+<line x1="160" y1="274" x2="200" y2="274" stroke="var(--ml-gray-border)" stroke-width="1" stroke-dasharray="3 5" opacity="0.3"/>
+<line x1="130" y1="274" x2="155" y2="274" stroke="var(--ml-gray-border)" stroke-width="1" stroke-dasharray="2 6" opacity="0.15"/>
+
+</svg>
+</div>
+
+<style>
+.memory-layers {
+  --ml-blue-bg: rgba(129,140,248,0.08);
+  --ml-blue-border: #818cf8;
+  --ml-blue-text: #c4b5fd;
+  --ml-brown-bg: rgba(200,140,80,0.08);
+  --ml-brown-border: #c88c50;
+  --ml-brown-text: #e0c097;
+  --ml-purple-bg: rgba(180,130,220,0.08);
+  --ml-purple-border: #b482dc;
+  --ml-purple-text: #d4b8e8;
+  --ml-green-bg: rgba(109,208,160,0.08);
+  --ml-green-border: #6dd0a0;
+  --ml-green-text: #a0e8c8;
+  --ml-accent-bg: rgba(129,140,248,0.15);
+  --ml-accent-border: #818cf8;
+  --ml-accent-text: #e0ddff;
+  --ml-gray-border: rgba(255,255,255,0.1);
+  --ml-gray-text: #908caa;
+  --ml-inner: rgba(255,255,255,0.03);
+  --ml-dim: #908caa;
+}
+:global(body:not([data-theme="dark"])) .memory-layers {
+  --ml-blue-bg: rgba(74,90,200,0.08);
+  --ml-blue-border: #4a5ac8;
+  --ml-blue-text: #3a4a98;
+  --ml-brown-bg: rgba(180,110,40,0.08);
+  --ml-brown-border: #b46e28;
+  --ml-brown-text: #8a5420;
+  --ml-purple-bg: rgba(140,90,180,0.08);
+  --ml-purple-border: #8c5ab4;
+  --ml-purple-text: #6a3a8c;
+  --ml-green-bg: rgba(40,160,100,0.08);
+  --ml-green-border: #28a064;
+  --ml-green-text: #1a7048;
+  --ml-accent-bg: rgba(74,90,200,0.15);
+  --ml-accent-border: #4a5ac8;
+  --ml-accent-text: #3a3a6a;
+  --ml-gray-border: rgba(0,0,0,0.1);
+  --ml-gray-text: #6e6a86;
+  --ml-inner: rgba(0,0,0,0.03);
+  --ml-dim: #6e6a86;
+}
+</style>

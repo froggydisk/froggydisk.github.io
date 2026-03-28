@@ -1,0 +1,113 @@
+---
+---
+<div class="diagram-zoom">
+  <div class="diagram-zoom__content">
+    <slot />
+  </div>
+  <div class="diagram-zoom__overlay" aria-hidden="true">
+    <div class="diagram-zoom__overlay-inner">
+      <button class="diagram-zoom__close" aria-label="닫기">&times;</button>
+      <div class="diagram-zoom__zoomed"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+.diagram-zoom {
+  position: relative;
+}
+
+@media screen and (max-width: 768px) {
+  .diagram-zoom__content {
+    cursor: zoom-in;
+  }
+}
+
+.diagram-zoom__overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.85);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.diagram-zoom__overlay.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.diagram-zoom__overlay-inner {
+  position: relative;
+  width: 100%;
+  max-height: 100vh;
+  padding: 20px;
+  overflow: auto;
+}
+
+.diagram-zoom__zoomed {
+  width: max(90vw, 600px);
+  margin: 0 auto;
+}
+
+.diagram-zoom__zoomed :global(svg) {
+  width: 100%;
+  height: auto;
+}
+
+.diagram-zoom__close {
+  position: fixed;
+  top: 12px;
+  right: 16px;
+  z-index: 10000;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 32px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 10px;
+  opacity: 0.7;
+}
+.diagram-zoom__close:hover {
+  opacity: 1;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const isMobile = () => window.innerWidth <= 768;
+
+  document.querySelectorAll('.diagram-zoom').forEach((wrapper) => {
+    const content = wrapper.querySelector('.diagram-zoom__content') as HTMLElement;
+    const overlay = wrapper.querySelector('.diagram-zoom__overlay') as HTMLElement;
+    const zoomed = wrapper.querySelector('.diagram-zoom__zoomed') as HTMLElement;
+    const closeBtn = wrapper.querySelector('.diagram-zoom__close') as HTMLElement;
+
+    if (!content || !overlay || !zoomed || !closeBtn) return;
+
+    content.addEventListener('click', () => {
+      if (!isMobile()) return;
+      zoomed.innerHTML = content.innerHTML;
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+
+    closeBtn.addEventListener('click', () => {
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay || e.target === wrapper.querySelector('.diagram-zoom__overlay-inner')) {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  });
+});
+</script>
