@@ -1,0 +1,132 @@
+<div class="verify-loop">
+<svg width="100%" viewBox="0 0 700 384" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="vl-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+    <path d="M2 2L8 5L2 8" fill="none" stroke="context-stroke" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+
+<style>
+  @keyframes vl-flow { to { stroke-dashoffset: -20; } }
+  .vl-anim { animation: vl-flow 1.4s linear infinite; }
+</style>
+
+<!-- Section labels -->
+<text x="175" y="22" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="9" font-weight="600" fill="var(--vl-dim)" letter-spacing="0.08em">기존 루프</text>
+<text x="525" y="22" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="9" font-weight="600" fill="var(--vl-dim)" letter-spacing="0.08em">시각 검증 포함</text>
+
+<!-- ===== LEFT SIDE: 기존 루프 ===== -->
+
+<!-- 1. 코드 생성 (blue) -->
+<rect x="95" y="42" width="160" height="48" rx="10" fill="var(--vl-blue-bg)" stroke="var(--vl-blue)" stroke-width="1.5"/>
+<text x="175" y="72" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="600" fill="var(--vl-blue-text)">코드 생성</text>
+
+<!-- Arrow 1→2 -->
+<line x1="175" y1="90" x2="175" y2="112" stroke="var(--vl-dim)" stroke-width="1.2" marker-end="url(#vl-arr)"/>
+
+<!-- 2. 빌드 / 타입체크 (purple) -->
+<rect x="95" y="114" width="160" height="48" rx="10" fill="var(--vl-purple-bg)" stroke="var(--vl-purple)" stroke-width="1.5"/>
+<text x="175" y="144" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="600" fill="var(--vl-purple-text)">빌드 / 타입체크</text>
+
+<!-- Arrow 2→3 -->
+<line x1="175" y1="162" x2="175" y2="184" stroke="var(--vl-dim)" stroke-width="1.2" marker-end="url(#vl-arr)"/>
+
+<!-- 3. 테스트 (DOM) (purple) -->
+<rect x="95" y="186" width="160" height="48" rx="10" fill="var(--vl-purple-bg)" stroke="var(--vl-purple)" stroke-width="1.5"/>
+<text x="175" y="216" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="600" fill="var(--vl-purple-text)">테스트 (DOM)</text>
+
+<!-- 시각 검증 없음 label -->
+<text x="175" y="252" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="8" fill="var(--vl-dim)" opacity="0.6">시각 검증 없음</text>
+
+<!-- Arrow 3→4 -->
+<line x1="175" y1="258" x2="175" y2="280" stroke="var(--vl-dim)" stroke-width="1.2" marker-end="url(#vl-arr)"/>
+
+<!-- 4. 커밋 (green) -->
+<rect x="95" y="282" width="160" height="48" rx="10" fill="var(--vl-green-bg)" stroke="var(--vl-green)" stroke-width="1.5"/>
+<text x="175" y="312" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="600" fill="var(--vl-green-text)">커밋</text>
+
+<!-- ===== RIGHT SIDE: 시각 검증 루프 ===== -->
+
+<!-- 1. 코드 생성 (blue) -->
+<rect x="445" y="42" width="160" height="42" rx="10" fill="var(--vl-blue-bg)" stroke="var(--vl-blue)" stroke-width="1.5"/>
+<text x="525" y="68" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="600" fill="var(--vl-blue-text)">코드 생성</text>
+
+<!-- Arrow 1→2 -->
+<line x1="525" y1="84" x2="525" y2="98" stroke="var(--vl-dim)" stroke-width="1.2" marker-end="url(#vl-arr)"/>
+
+<!-- 2. 빌드 / 타입체크 (purple) -->
+<rect x="445" y="100" width="160" height="42" rx="10" fill="var(--vl-purple-bg)" stroke="var(--vl-purple)" stroke-width="1.5"/>
+<text x="525" y="126" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="600" fill="var(--vl-purple-text)">빌드 / 타입체크</text>
+
+<!-- Arrow 2→3 -->
+<line x1="525" y1="142" x2="525" y2="156" stroke="var(--vl-dim)" stroke-width="1.2" marker-end="url(#vl-arr)"/>
+
+<!-- 3. 브라우저 렌더링 (accent, emphasized) -->
+<rect x="445" y="158" width="160" height="42" rx="10" fill="var(--vl-accent-bg)" stroke="var(--vl-accent)" stroke-width="1.8"/>
+<text x="525" y="184" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="700" fill="var(--vl-accent-text)">브라우저 렌더링</text>
+
+<!-- Arrow 3→4 -->
+<line x1="525" y1="200" x2="525" y2="214" stroke="var(--vl-dim)" stroke-width="1.2" marker-end="url(#vl-arr)"/>
+
+<!-- 4. 스크린샷 비교 (accent, emphasized) -->
+<rect x="445" y="216" width="160" height="42" rx="10" fill="var(--vl-accent-bg)" stroke="var(--vl-accent)" stroke-width="1.8"/>
+<text x="525" y="242" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="700" fill="var(--vl-accent-text)">스크린샷 비교</text>
+
+<!-- Feedback arrow: from box 4 back to box 1 (right side, animated) -->
+<path d="M605 237 L640 237 L640 63 L607 63" fill="none" stroke="var(--vl-accent)" stroke-width="1.2" stroke-dasharray="6 4" class="vl-anim" marker-end="url(#vl-arr)"/>
+<text x="660" y="154" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="7.5" fill="var(--vl-accent-text)" writing-mode="tb" letter-spacing="0.05em">차이 발견 시</text>
+
+<!-- Arrow 4→5 -->
+<line x1="525" y1="258" x2="525" y2="272" stroke="var(--vl-dim)" stroke-width="1.2" marker-end="url(#vl-arr)"/>
+
+<!-- 5. 테스트 (DOM + Visual) (purple) -->
+<rect x="445" y="274" width="160" height="42" rx="10" fill="var(--vl-purple-bg)" stroke="var(--vl-purple)" stroke-width="1.5"/>
+<text x="525" y="300" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="600" fill="var(--vl-purple-text)">테스트 (DOM + Visual)</text>
+
+<!-- Arrow 5→6 -->
+<line x1="525" y1="316" x2="525" y2="330" stroke="var(--vl-dim)" stroke-width="1.2" marker-end="url(#vl-arr)"/>
+
+<!-- 6. 커밋 (green) -->
+<rect x="445" y="332" width="160" height="42" rx="10" fill="var(--vl-green-bg)" stroke="var(--vl-green)" stroke-width="1.5"/>
+<text x="525" y="358" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="600" fill="var(--vl-green-text)">커밋</text>
+
+<!-- Divider line -->
+<line x1="350" y1="14" x2="350" y2="374" stroke="var(--vl-dim)" stroke-width="0.5" stroke-dasharray="4 4" opacity="0.4"/>
+
+</svg>
+</div>
+
+<style>
+.verify-loop {
+  --vl-inner: rgba(255,255,255,0.03);
+  --vl-dim: #908caa;
+  --vl-blue-bg: rgba(129,140,248,0.08);
+  --vl-blue: #818cf8;
+  --vl-blue-text: #c4b5fd;
+  --vl-purple-bg: rgba(180,130,220,0.08);
+  --vl-purple: #b482dc;
+  --vl-purple-text: #d4b8e8;
+  --vl-green-bg: rgba(109,208,160,0.08);
+  --vl-green: #6dd0a0;
+  --vl-green-text: #a0e8c8;
+  --vl-accent-bg: rgba(129,140,248,0.15);
+  --vl-accent: #818cf8;
+  --vl-accent-text: #e0ddff;
+}
+:global(body:not([data-theme="dark"])) .verify-loop {
+  --vl-inner: rgba(0,0,0,0.03);
+  --vl-dim: #6e6a86;
+  --vl-blue-bg: rgba(74,90,200,0.08);
+  --vl-blue: #4a5ac8;
+  --vl-blue-text: #3a4a98;
+  --vl-purple-bg: rgba(140,90,180,0.08);
+  --vl-purple: #8c5ab4;
+  --vl-purple-text: #6a3a8c;
+  --vl-green-bg: rgba(40,160,100,0.08);
+  --vl-green: #28a064;
+  --vl-green-text: #1a7048;
+  --vl-accent-bg: rgba(74,90,200,0.15);
+  --vl-accent: #4a5ac8;
+  --vl-accent-text: #3a3a6a;
+}
+</style>
