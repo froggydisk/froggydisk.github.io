@@ -1,0 +1,130 @@
+<div class="vec-sparse">
+<svg width="100%" viewBox="0 0 680 320" xmlns="http://www.w3.org/2000/svg">
+
+<!-- Title -->
+<text x="340" y="20" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" font-weight="600" fill="var(--vs-dim)" letter-spacing="0.08em">VECTOR SPACE — 단어 임베딩의 희소성</text>
+
+<!-- Large space boundary (768-dim space represented as 2D) -->
+<rect x="40" y="40" width="600" height="240" rx="12" fill="var(--vs-space)" stroke="var(--vs-border)" stroke-width="1.2" stroke-dasharray="6 3"/>
+
+<!-- Empty space label -->
+<text x="500" y="72" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--vs-empty)" opacity="0.6">텅 빈 영역</text>
+<text x="130" y="250" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--vs-empty)" opacity="0.6">텅 빈 영역</text>
+<text x="460" y="220" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--vs-empty)" opacity="0.6">텅 빈 영역</text>
+
+<!-- Manifold curve (where words cluster) -->
+<path d="M 100,180 Q 180,90 280,130 Q 380,170 420,110 Q 460,60 540,100"
+      fill="none" stroke="var(--vs-manifold)" stroke-width="1.5" stroke-dasharray="4 2" opacity="0.5"/>
+<text x="555" y="96" font-family="'SF Mono', 'Consolas', monospace" font-size="8" fill="var(--vs-manifold)" opacity="0.7">manifold</text>
+
+<!-- Word clusters on manifold -->
+<!-- Emotion cluster -->
+<g>
+  <circle cx="140" cy="168" r="30" fill="var(--vs-cluster1)" stroke="var(--vs-cluster1-border)" stroke-width="0.8" opacity="0.3"/>
+  <circle cx="128" cy="160" r="4" fill="var(--vs-word1)"/>
+  <text x="128" y="152" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="8" font-weight="600" fill="var(--vs-word1)">슬프다</text>
+  <circle cx="152" cy="172" r="4" fill="var(--vs-word1)"/>
+  <text x="152" y="185" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="8" font-weight="600" fill="var(--vs-word1)">기쁘다</text>
+  <circle cx="135" cy="178" r="3" fill="var(--vs-word1)" opacity="0.6"/>
+  <text x="108" y="180" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="7" fill="var(--vs-dim)">감정</text>
+</g>
+
+<!-- Royalty cluster -->
+<g>
+  <circle cx="300" cy="125" r="35" fill="var(--vs-cluster2)" stroke="var(--vs-cluster2-border)" stroke-width="0.8" opacity="0.3"/>
+  <circle cx="285" cy="118" r="4" fill="var(--vs-word2)"/>
+  <text x="285" y="110" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="8" font-weight="600" fill="var(--vs-word2)">왕</text>
+  <circle cx="315" cy="128" r="4" fill="var(--vs-word2)"/>
+  <text x="315" y="142" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="8" font-weight="600" fill="var(--vs-word2)">여왕</text>
+  <circle cx="295" cy="135" r="3" fill="var(--vs-word2)" opacity="0.6"/>
+  <!-- Vector arrow king->queen -->
+  <line x1="289" y1="120" x2="311" y2="126" stroke="var(--vs-arrow)" stroke-width="1" marker-end="url(#vs-arrowhead)"/>
+  <text x="300" y="108" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="7" fill="var(--vs-dim)">왕족</text>
+</g>
+
+<!-- Nature cluster -->
+<g>
+  <circle cx="440" cy="105" r="28" fill="var(--vs-cluster3)" stroke="var(--vs-cluster3-border)" stroke-width="0.8" opacity="0.3"/>
+  <circle cx="430" cy="98" r="4" fill="var(--vs-word3)"/>
+  <text x="430" y="90" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="8" font-weight="600" fill="var(--vs-word3)">강</text>
+  <circle cx="450" cy="112" r="4" fill="var(--vs-word3)"/>
+  <text x="450" y="125" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="8" font-weight="600" fill="var(--vs-word3)">산</text>
+  <text x="440" y="80" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="7" fill="var(--vs-dim)">자연</text>
+</g>
+
+<!-- Scattered dim dots (other sparse words) -->
+<circle cx="210" cy="150" r="2" fill="var(--vs-dim)" opacity="0.3"/>
+<circle cx="370" cy="155" r="2" fill="var(--vs-dim)" opacity="0.3"/>
+<circle cx="500" cy="95" r="2" fill="var(--vs-dim)" opacity="0.3"/>
+<circle cx="245" cy="170" r="2" fill="var(--vs-dim)" opacity="0.25"/>
+<circle cx="480" cy="140" r="2" fill="var(--vs-dim)" opacity="0.2"/>
+
+<!-- Arrow marker definition -->
+<defs>
+  <marker id="vs-arrowhead" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
+    <polygon points="0 0, 6 2, 0 4" fill="var(--vs-arrow)"/>
+  </marker>
+</defs>
+
+<!-- Annotation: dimension info -->
+<text x="60" y="56" font-family="'SF Mono', 'Consolas', monospace" font-size="8" fill="var(--vs-dim)" opacity="0.5">768-dim space</text>
+
+<!-- Bottom legend -->
+<circle cx="160" cy="300" r="4" fill="var(--vs-word1)"/>
+<text x="172" y="303" font-family="'Pretendard', -apple-system, sans-serif" font-size="9" fill="var(--vs-dim)">단어 (수십만 개)</text>
+
+<rect x="290" y="294" width="40" height="12" rx="6" fill="var(--vs-cluster2)" stroke="var(--vs-cluster2-border)" stroke-width="0.6" opacity="0.5"/>
+<text x="340" y="303" font-family="'Pretendard', -apple-system, sans-serif" font-size="9" fill="var(--vs-dim)">의미 클러스터</text>
+
+<line x1="450" y1="300" x2="480" y2="300" stroke="var(--vs-manifold)" stroke-width="1.5" stroke-dasharray="4 2" opacity="0.5"/>
+<text x="490" y="303" font-family="'Pretendard', -apple-system, sans-serif" font-size="9" fill="var(--vs-dim)">매니폴드</text>
+
+</svg>
+</div>
+
+<style>
+.vec-sparse {
+  --vs-space: rgba(60, 60, 100, 0.08);
+  --vs-border: rgba(140, 140, 180, 0.3);
+  --vs-dim: #908caa;
+  --vs-empty: #6e6a86;
+  --vs-manifold: #c4a7e7;
+  --vs-arrow: #c4a7e7;
+
+  --vs-cluster1: rgba(235, 160, 172, 0.15);
+  --vs-cluster1-border: rgba(235, 160, 172, 0.4);
+  --vs-word1: #ebbcba;
+
+  --vs-cluster2: rgba(156, 207, 216, 0.15);
+  --vs-cluster2-border: rgba(156, 207, 216, 0.4);
+  --vs-word2: #9ccfd8;
+
+  --vs-cluster3: rgba(246, 193, 119, 0.15);
+  --vs-cluster3-border: rgba(246, 193, 119, 0.4);
+  --vs-word3: #f6c177;
+
+  margin: 2rem 0;
+  overflow-x: auto;
+}
+
+:global(body:not([data-theme="dark"])) .vec-sparse {
+  --vs-space: rgba(60, 60, 100, 0.05);
+  --vs-border: rgba(100, 100, 140, 0.25);
+  --vs-dim: #6e6a86;
+  --vs-empty: #908caa;
+  --vs-manifold: #907aa9;
+  --vs-arrow: #907aa9;
+
+  --vs-cluster1: rgba(180, 80, 100, 0.12);
+  --vs-cluster1-border: rgba(180, 80, 100, 0.35);
+  --vs-word1: #b4546a;
+
+  --vs-cluster2: rgba(60, 150, 160, 0.12);
+  --vs-cluster2-border: rgba(60, 150, 160, 0.35);
+  --vs-word2: #3c969a;
+
+  --vs-cluster3: rgba(200, 140, 50, 0.12);
+  --vs-cluster3-border: rgba(200, 140, 50, 0.35);
+  --vs-word3: #c88c32;
+}
+</style>

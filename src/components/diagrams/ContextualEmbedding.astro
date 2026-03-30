@@ -1,0 +1,148 @@
+<div class="ctx-embed">
+<svg width="100%" viewBox="0 0 680 370" xmlns="http://www.w3.org/2000/svg">
+
+<!-- Title -->
+<text x="340" y="20" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" font-weight="600" fill="var(--ce-dim)" letter-spacing="0.08em">STATIC vs CONTEXTUAL — 임베딩 비교</text>
+
+<!-- LEFT: Static Embedding (Word2Vec) -->
+<g>
+  <rect x="30" y="40" width="290" height="290" rx="10" fill="var(--ce-bg-left)" stroke="var(--ce-border)" stroke-width="1"/>
+  <text x="175" y="64" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="700" fill="var(--ce-title-left)">Static Embedding</text>
+  <text x="175" y="82" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ce-dim)">Word2Vec — 단어 = 고정 좌표</text>
+
+  <!-- Sentence labels -->
+  <rect x="50" y="105" width="110" height="26" rx="5" fill="var(--ce-sent1)" stroke="var(--ce-sent1-border)" stroke-width="1"/>
+  <text x="105" y="122" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ce-sent1-text)">deposit money</text>
+
+  <rect x="195" y="105" width="110" height="26" rx="5" fill="var(--ce-sent2)" stroke="var(--ce-sent2-border)" stroke-width="1"/>
+  <text x="250" y="122" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ce-sent2-text)">river bank</text>
+
+  <!-- Arrows converging to same point -->
+  <line x1="105" y1="131" x2="168" y2="178" stroke="var(--ce-sent1-border)" stroke-width="1.2" marker-end="url(#ce-arrow1)"/>
+  <line x1="250" y1="131" x2="182" y2="178" stroke="var(--ce-sent2-border)" stroke-width="1.2" marker-end="url(#ce-arrow2)"/>
+
+  <!-- "bank" as single fixed point -->
+  <circle cx="175" cy="190" r="10" fill="var(--ce-word-static)" stroke="var(--ce-word-static-border)" stroke-width="1.5"/>
+  <text x="175" y="215" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" font-weight="700" fill="var(--ce-word-static-text)">bank</text>
+  <text x="175" y="232" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" fill="var(--ce-dim)">항상 같은 좌표</text>
+
+  <!-- X mark -->
+  <line x1="158" y1="250" x2="192" y2="274" stroke="var(--ce-x)" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="192" y1="250" x2="158" y2="274" stroke="var(--ce-x)" stroke-width="2.5" stroke-linecap="round"/>
+  <text x="175" y="298" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" font-weight="600" fill="var(--ce-x)">문맥 구분 불가</text>
+
+  <!-- dim grid dots -->
+  <circle cx="70" cy="190" r="1.5" fill="var(--ce-dim)" opacity="0.2"/>
+  <circle cx="100" cy="220" r="1.5" fill="var(--ce-dim)" opacity="0.2"/>
+  <circle cx="250" cy="200" r="1.5" fill="var(--ce-dim)" opacity="0.2"/>
+  <circle cx="275" cy="165" r="1.5" fill="var(--ce-dim)" opacity="0.2"/>
+</g>
+
+<!-- CENTER: VS divider -->
+<text x="340" y="195" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="700" fill="var(--ce-dim)" opacity="0.4">vs</text>
+
+<!-- RIGHT: Contextual Embedding (LLM) -->
+<g>
+  <rect x="360" y="40" width="290" height="290" rx="10" fill="var(--ce-bg-right)" stroke="var(--ce-active-border)" stroke-width="1.2"/>
+  <text x="505" y="64" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="700" fill="var(--ce-title-right)">Contextual Embedding</text>
+  <text x="505" y="82" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ce-dim)">LLM — 단어 = 문맥별 좌표</text>
+
+  <!-- Financial bank cluster -->
+  <rect x="385" y="100" width="110" height="26" rx="5" fill="var(--ce-sent1)" stroke="var(--ce-sent1-border)" stroke-width="1"/>
+  <text x="440" y="117" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ce-sent1-text)">deposit money</text>
+  <line x1="440" y1="126" x2="440" y2="146" stroke="var(--ce-sent1-border)" stroke-width="1.2"/>
+  <circle cx="440" cy="158" r="9" fill="var(--ce-sent1)" stroke="var(--ce-sent1-border)" stroke-width="1.5"/>
+  <text x="440" y="180" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" font-weight="700" fill="var(--ce-sent1-text)">bank</text>
+  <text x="440" y="196" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ce-sent1-text)" opacity="0.8">금융 영역</text>
+  <circle cx="415" cy="168" r="3" fill="var(--ce-sent1)" opacity="0.5"/>
+  <circle cx="462" cy="148" r="3" fill="var(--ce-sent1)" opacity="0.4"/>
+
+  <!-- Nature bank cluster -->
+  <circle cx="570" cy="228" r="9" fill="var(--ce-sent2)" stroke="var(--ce-sent2-border)" stroke-width="1.5"/>
+  <text x="570" y="250" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" font-weight="700" fill="var(--ce-sent2-text)">bank</text>
+  <text x="570" y="266" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ce-sent2-text)" opacity="0.8">자연 영역</text>
+  <line x1="570" y1="275" x2="570" y2="285" stroke="var(--ce-sent2-border)" stroke-width="1.2"/>
+  <rect x="515" y="286" width="110" height="26" rx="5" fill="var(--ce-sent2)" stroke="var(--ce-sent2-border)" stroke-width="1"/>
+  <text x="570" y="303" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--ce-sent2-text)">river bank</text>
+  <circle cx="548" cy="215" r="3" fill="var(--ce-sent2)" opacity="0.5"/>
+  <circle cx="592" cy="242" r="3" fill="var(--ce-sent2)" opacity="0.4"/>
+
+  <!-- Distance line between two banks -->
+  <line x1="448" y1="163" x2="562" y2="222" stroke="var(--ce-distance)" stroke-width="1.2" stroke-dasharray="5 3"/>
+  <text x="515" y="186" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="9" font-weight="600" fill="var(--ce-distance)" transform="rotate(-25, 515, 186)">먼 거리</text>
+
+</g>
+
+<!-- Bottom: check mark + result label -->
+<polyline points="490,345 500,355 520,339" fill="none" stroke="var(--ce-check)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="505" y="365" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" font-weight="600" fill="var(--ce-check)">문맥에 따라 다른 좌표</text>
+
+<!-- Arrow markers -->
+<defs>
+  <marker id="ce-arrow1" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
+    <polygon points="0 0, 6 2, 0 4" fill="var(--ce-sent1-border)"/>
+  </marker>
+  <marker id="ce-arrow2" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto">
+    <polygon points="0 0, 6 2, 0 4" fill="var(--ce-sent2-border)"/>
+  </marker>
+</defs>
+
+</svg>
+</div>
+
+<style>
+.ctx-embed {
+  --ce-dim: #908caa;
+  --ce-border: rgba(140, 140, 180, 0.3);
+  --ce-x: #eb6f92;
+  --ce-check: #9ccfd8;
+  --ce-active-border: rgba(156, 207, 216, 0.5);
+  --ce-distance: #9ccfd8;
+
+  --ce-bg-left: rgba(60, 60, 80, 0.06);
+  --ce-bg-right: rgba(80, 160, 170, 0.06);
+  --ce-title-left: #e0def4;
+  --ce-title-right: #9ccfd8;
+
+  --ce-word-static: rgba(110, 106, 134, 0.3);
+  --ce-word-static-border: #6e6a86;
+  --ce-word-static-text: #e0def4;
+
+  --ce-sent1: rgba(196, 167, 231, 0.18);
+  --ce-sent1-border: #c4a7e7;
+  --ce-sent1-text: #c4a7e7;
+
+  --ce-sent2: rgba(246, 193, 119, 0.18);
+  --ce-sent2-border: #f6c177;
+  --ce-sent2-text: #f6c177;
+
+  margin: 2rem 0;
+  overflow-x: auto;
+}
+
+:global(body:not([data-theme="dark"])) .ctx-embed {
+  --ce-dim: #6e6a86;
+  --ce-border: rgba(100, 100, 140, 0.25);
+  --ce-x: #b4546a;
+  --ce-check: #3c969a;
+  --ce-active-border: rgba(60, 150, 160, 0.4);
+  --ce-distance: #3c969a;
+
+  --ce-bg-left: rgba(60, 60, 80, 0.04);
+  --ce-bg-right: rgba(60, 150, 160, 0.05);
+  --ce-title-left: #575279;
+  --ce-title-right: #286983;
+
+  --ce-word-static: rgba(87, 82, 121, 0.25);
+  --ce-word-static-border: #575279;
+  --ce-word-static-text: #575279;
+
+  --ce-sent1: rgba(130, 80, 180, 0.12);
+  --ce-sent1-border: #907aa9;
+  --ce-sent1-text: #6e4a8a;
+
+  --ce-sent2: rgba(200, 140, 50, 0.12);
+  --ce-sent2-border: #c88c32;
+  --ce-sent2-text: #a06a1a;
+}
+</style>
