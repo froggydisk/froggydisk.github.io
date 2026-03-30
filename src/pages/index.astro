@@ -41,4 +41,29 @@ const recentPosts = posts.slice(0, 5);
       </div>
     );
   })}
+  <style>
+    :global(body) {
+      overflow: hidden;
+    }
+    :global(.wrapper) {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      height: 100dvh;
+    }
+    :global(.page-content) {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-bottom: 0;
+    }
+    .author {
+      margin-top: 0;
+      margin-bottom: 2rem;
+    }
+    :global(.footer) {
+      margin-top: auto;
+    }
+  </style>
 </BaseLayout>
