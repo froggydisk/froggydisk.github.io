@@ -46,7 +46,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
   <link rel="manifest" href="/favicons/site.webmanifest" />
-  <meta name="theme-color" content="#2c2c2c" />
+  <meta name="theme-color" content="#131418" id="theme-color-meta" />
 
   <!-- Fonts -->
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
@@ -61,8 +61,12 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   {showStars && <StarBackground />}
   <script is:inline>
     const theme = localStorage.getItem('theme');
+    var themeColorMeta = document.getElementById('theme-color-meta');
     if (theme === 'dark' || (!theme)) {
       document.body.setAttribute('data-theme', 'dark');
+      themeColorMeta.setAttribute('content', '#131418');
+    } else {
+      themeColorMeta.setAttribute('content', '#faf9f6');
     }
   </script>
   <Navbar currentPath={Astro.url.pathname} />
