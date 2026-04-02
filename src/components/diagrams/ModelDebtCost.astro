@@ -1,0 +1,130 @@
+<div class="md-cost">
+<svg width="100%" viewBox="0 0 620 400" xmlns="http://www.w3.org/2000/svg">
+
+<!-- Title -->
+<text x="310" y="22" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" font-weight="600" fill="var(--md-dim)" letter-spacing="0.08em">TIME vs TOTAL COST — 모델 선택에 따른 누적 비용</text>
+
+<!-- Axes -->
+<line x1="80" y1="310" x2="560" y2="310" stroke="var(--md-axis)" stroke-width="1.2"/>
+<line x1="80" y1="310" x2="80" y2="50" stroke="var(--md-axis)" stroke-width="1.2"/>
+<!-- Y-axis arrow -->
+<polygon points="80 50, 76 60, 84 60" fill="var(--md-axis)"/>
+<!-- X-axis arrow -->
+<polygon points="560 310, 550 306, 550 314" fill="var(--md-axis)"/>
+
+<!-- Y-axis label -->
+<text x="28" y="180" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" font-weight="600" fill="var(--md-dim)" transform="rotate(-90, 28, 180)">누적 비용</text>
+
+<!-- X-axis label -->
+<text x="320" y="345" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" font-weight="600" fill="var(--md-dim)">시간</text>
+
+<!-- X-axis ticks -->
+<line x1="140" y1="310" x2="140" y2="315" stroke="var(--md-axis)" stroke-width="1"/>
+<text x="140" y="330" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--md-dim)">배포</text>
+<line x1="250" y1="310" x2="250" y2="315" stroke="var(--md-axis)" stroke-width="1"/>
+<text x="250" y="330" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--md-dim)">3개월</text>
+<line x1="360" y1="310" x2="360" y2="315" stroke="var(--md-axis)" stroke-width="1"/>
+<text x="360" y="330" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--md-dim)">6개월</text>
+<line x1="470" y1="310" x2="470" y2="315" stroke="var(--md-axis)" stroke-width="1"/>
+<text x="470" y="330" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="9" fill="var(--md-dim)">12개월</text>
+
+<!-- Gridlines -->
+<line x1="140" y1="310" x2="140" y2="55" stroke="var(--md-grid)" stroke-width="0.5"/>
+<line x1="250" y1="310" x2="250" y2="55" stroke="var(--md-grid)" stroke-width="0.5"/>
+<line x1="360" y1="310" x2="360" y2="55" stroke="var(--md-grid)" stroke-width="0.5"/>
+<line x1="470" y1="310" x2="470" y2="55" stroke="var(--md-grid)" stroke-width="0.5"/>
+
+<!-- Expensive model area fill -->
+<path d="M 110 245 C 180 240, 240 230, 300 220 C 360 210, 420 198, 500 185 L 500 310 L 110 310 Z"
+      fill="var(--md-expensive-fill)" opacity="0.08"/>
+
+<!-- Cheap model area fill -->
+<path d="M 110 278 C 180 272, 240 250, 300 220 C 360 188, 420 130, 500 80 L 500 310 L 110 310 Z"
+      fill="var(--md-cheap-fill)" opacity="0.1"/>
+
+<!-- Expensive model curve -->
+<path d="M 110 245 C 180 240, 240 230, 300 220 C 360 210, 420 198, 500 185"
+      fill="none" stroke="var(--md-expensive)" stroke-width="2.5" stroke-linecap="round"/>
+
+<!-- Cheap model curve -->
+<path d="M 110 278 C 180 272, 240 250, 300 220 C 360 188, 420 130, 500 80"
+      fill="none" stroke="var(--md-cheap)" stroke-width="2.5" stroke-linecap="round"/>
+
+<!-- Crossover point (both curves pass through 300,220) -->
+<circle cx="300" cy="220" r="5" fill="var(--md-cross)" stroke="var(--md-cross-border)" stroke-width="1.5"/>
+
+<!-- 손익분기점 label -->
+<line x1="300" y1="230" x2="300" y2="260" stroke="var(--md-cross)" stroke-width="1" stroke-dasharray="4 3"/>
+<rect x="245" y="263" width="110" height="24" rx="5" fill="var(--md-cross-bg)" stroke="var(--md-cross)" stroke-width="1"/>
+<text x="300" y="279" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" font-weight="600" fill="var(--md-cross)">손익분기점</text>
+
+<!-- Curve end labels (inline, right side of each curve) -->
+<rect x="505" y="68" width="100" height="22" rx="4" fill="var(--md-cheap-label-bg)" stroke="var(--md-cheap)" stroke-width="1"/>
+<text x="555" y="83" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" font-weight="700" fill="var(--md-cheap)">싼 모델</text>
+
+<rect x="505" y="173" width="100" height="22" rx="4" fill="var(--md-expensive-label-bg)" stroke="var(--md-expensive)" stroke-width="1"/>
+<text x="555" y="188" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="10" font-weight="700" fill="var(--md-expensive)">비싼 모델</text>
+
+<!-- Initial cost gap: double-headed arrow at x=120, between y=248 and y=276 -->
+<line x1="120" y1="250" x2="120" y2="274" stroke="var(--md-dim)" stroke-width="1"/>
+<polygon points="120 248, 117 254, 123 254" fill="var(--md-dim)"/>
+<polygon points="120 276, 117 270, 123 270" fill="var(--md-dim)"/>
+<text x="130" y="266" font-family="'SF Mono', 'Consolas', monospace" font-size="8" fill="var(--md-dim)">초기 차이</text>
+
+<!-- Model debt gap: double-headed arrow at x=490, between y=85 and y=180 -->
+<line x1="490" y1="90" x2="490" y2="178" stroke="var(--md-gap)" stroke-width="1.5"/>
+<polygon points="490 87, 486 95, 494 95" fill="var(--md-gap)"/>
+<polygon points="490 181, 486 173, 494 173" fill="var(--md-gap)"/>
+<text x="483" y="138" text-anchor="end" font-family="'Pretendard', -apple-system, sans-serif" font-size="11" font-weight="700" fill="var(--md-gap)">모델 부채</text>
+
+<!-- Sub-labels for cost composition -->
+<text x="555" y="100" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="7.5" fill="var(--md-dim)">API + 후처리 + 유지보수</text>
+<text x="555" y="205" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="7.5" fill="var(--md-dim)">API 비용만</text>
+
+</svg>
+</div>
+
+<style>
+.md-cost {
+  --md-dim: #908caa;
+  --md-axis: #6e6a86;
+  --md-grid: rgba(140, 140, 180, 0.15);
+
+  --md-cheap: #eb6f92;
+  --md-cheap-fill: #eb6f92;
+  --md-cheap-label-bg: rgba(235, 111, 146, 0.08);
+
+  --md-expensive: #9ccfd8;
+  --md-expensive-fill: #9ccfd8;
+  --md-expensive-label-bg: rgba(156, 207, 216, 0.08);
+
+  --md-cross: #f6c177;
+  --md-cross-border: #f6c177;
+  --md-cross-bg: rgba(246, 193, 119, 0.1);
+
+  --md-gap: #eb6f92;
+
+  margin: 2rem 0;
+  overflow-x: auto;
+}
+
+:global(body:not([data-theme="dark"])) .md-cost {
+  --md-dim: #6e6a86;
+  --md-axis: #9893a5;
+  --md-grid: rgba(100, 100, 140, 0.12);
+
+  --md-cheap: #b4546a;
+  --md-cheap-fill: #b4546a;
+  --md-cheap-label-bg: rgba(180, 84, 106, 0.06);
+
+  --md-expensive: #286983;
+  --md-expensive-fill: #286983;
+  --md-expensive-label-bg: rgba(40, 105, 131, 0.06);
+
+  --md-cross: #c88c32;
+  --md-cross-border: #c88c32;
+  --md-cross-bg: rgba(200, 140, 50, 0.08);
+
+  --md-gap: #b4546a;
+}
+</style>
