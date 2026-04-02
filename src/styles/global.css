@@ -552,7 +552,6 @@ body {
   font-feature-settings: "kern" 1;
   font-kerning: normal;
   box-sizing: border-box;
-  padding-top: env(safe-area-inset-top, 0px);
 }
 
 h1,
