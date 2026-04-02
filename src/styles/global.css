@@ -853,7 +853,6 @@ mark,
   margin-left: auto;
   border-bottom: none;
   padding: 15px 30px;
-  padding-top: calc(15px + env(safe-area-inset-top, 0px));
 }
 
 .background {
