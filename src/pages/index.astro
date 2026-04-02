@@ -44,12 +44,17 @@ const recentPosts = posts.slice(0, 5);
   <style>
     :global(body) {
       overflow: hidden;
-    }
-    :global(.wrapper) {
       display: flex;
       flex-direction: column;
       height: 100vh;
       height: 100dvh;
+      padding-top: env(safe-area-inset-top, 0px);
+    }
+    :global(.wrapper) {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
     }
     :global(.page-content) {
       flex: 1;
