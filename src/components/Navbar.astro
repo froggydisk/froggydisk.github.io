@@ -65,6 +65,8 @@ const menus = [
     requestAnimationFrame(() => {
       document.body.classList.remove('notransition');
     });
+    // StarBackground 캔버스 크기 재설정을 위해 resize 이벤트 발생
+    window.dispatchEvent(new Event('resize'));
   });
 
   const cbox = document.getElementById('menu-trigger') as HTMLInputElement;
