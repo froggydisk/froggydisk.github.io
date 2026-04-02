@@ -44,18 +44,12 @@ const recentPosts = posts.slice(0, 5);
   <style>
     :global(body) {
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      height: 100svh;
-      min-height: 0;
-      box-sizing: border-box;
     }
     :global(.wrapper) {
       display: flex;
       flex-direction: column;
-      flex: 1;
-      min-height: 0;
+      height: 100vh;
+      height: 100dvh;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
@@ -72,14 +66,12 @@ const recentPosts = posts.slice(0, 5);
     .author {
       margin-top: auto;
       margin-bottom: 1.5rem;
+      padding-top: 2rem;
     }
     :global(.posts-item-note) {
       margin-bottom: auto;
     }
     :global(.footer) {
-      flex-shrink: 0;
-    }
-    :global(.navbar) {
       flex-shrink: 0;
     }
   </style>
