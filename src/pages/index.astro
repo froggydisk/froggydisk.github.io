@@ -46,15 +46,21 @@ const recentPosts = posts.slice(0, 5);
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      height: 100vh;
       height: 100dvh;
-      padding-top: env(safe-area-inset-top, 0px);
+      height: 100vh;
+      min-height: 0;
+    }
+    @supports (height: 100dvh) {
+      :global(body) {
+        height: 100dvh;
+      }
     }
     :global(.wrapper) {
       display: flex;
       flex-direction: column;
       flex: 1;
       min-height: 0;
+      overflow: hidden;
     }
     :global(.page-content) {
       flex: 1;
@@ -62,13 +68,18 @@ const recentPosts = posts.slice(0, 5);
       flex-direction: column;
       justify-content: center;
       margin-bottom: 0;
+      min-height: 0;
     }
     .author {
       margin-top: 0;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
     :global(.footer) {
       margin-top: auto;
+      flex-shrink: 0;
+    }
+    :global(.navbar) {
+      flex-shrink: 0;
     }
   </style>
 </BaseLayout>

@@ -54,12 +54,15 @@ const menus = [
     const current = localStorage.getItem('theme');
     // Safari: transition 활성 중 속성 변경 시 repaint 누락 방지
     document.body.classList.add('notransition');
+    const themeColorMeta = document.getElementById('theme-color-meta');
     if (current === 'dark' || (!current)) {
       localStorage.setItem('theme', 'light');
       document.body.removeAttribute('data-theme');
+      themeColorMeta?.setAttribute('content', '#faf9f6');
     } else {
       localStorage.setItem('theme', 'dark');
       document.body.setAttribute('data-theme', 'dark');
+      themeColorMeta?.setAttribute('content', '#131418');
     }
     void document.body.offsetHeight;
     requestAnimationFrame(() => {
