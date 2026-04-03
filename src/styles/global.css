@@ -541,8 +541,9 @@ body {
   overflow-x: hidden;
   position: relative;
   color: #434648;
-  background: linear-gradient(135deg, #faf9f6 0%, #f5f3ef 100%);
-  background-attachment: fixed;
+  color-scheme: light;
+  touch-action: manipulation;
+  background: #faf9f6;
   font: 400 17px/1.7 Roboto, sans-serif;
   -webkit-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
@@ -767,6 +768,7 @@ blockquote > :last-child {
   max-width: -webkit-calc(780px - (30px * 2));
   max-width: calc(780px - 30px * 2);
   position: relative;
+  z-index: 1;
   margin-right: auto;
   margin-left: auto;
   padding-right: 30px;
@@ -849,6 +851,7 @@ mark,
   max-width: calc(780px - 30px * 2);
   max-width: -webkit-calc(780px - (30px * 2));
   position: relative;
+  z-index: 3;
   margin-right: auto;
   margin-left: auto;
   border-bottom: none;
@@ -856,7 +859,13 @@ mark,
 }
 
 .background {
-  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .menu {
@@ -909,11 +918,12 @@ mark,
 .menu .trigger {
   float: right;
 }
-.menu .menu-trigger {
-  display: none;
-}
 .menu .menu-icon {
   display: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
 }
 .menu .menu-link {
   color: #0d122b;
@@ -952,25 +962,28 @@ mark,
     z-index: 2;
     text-align: center;
     height: 50px;
-    background-color: #fff;
-    border-bottom: 1px solid #ececec;
+    background-color: transparent;
+    border-bottom: none;
   }
   .menu a#mode {
-    left: 10px;
-    top: 12px;
+    left: 2px;
+    top: 4px;
+    padding: 10px;
+    -webkit-tap-highlight-color: transparent;
   }
   .menu .menu-icon {
     display: block;
     position: absolute;
     right: 0;
     width: 50px;
-    height: 23px;
+    height: 50px;
     line-height: 0;
-    padding-top: 13px;
-    padding-bottom: 15px;
+    padding: 13px;
     cursor: pointer;
     text-align: center;
     z-index: 1;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
   }
   .menu .menu-icon > svg {
     fill: #0d122b;
@@ -983,19 +996,20 @@ mark,
     -webkit-transform: scale(0.9, 0.9);
     transform: scale(0.9, 0.9);
   }
-  .menu input[type=checkbox]:not(:checked) ~ .trigger {
+  .menu .trigger {
     clear: both;
     visibility: hidden;
   }
-  .menu input[type=checkbox]:checked ~ .trigger {
+  .menu.menu-open .trigger {
     position: fixed;
+    visibility: visible;
     animation: 0.2s ease-in forwards fadein;
     -webkit-animation: 0.2s ease-in forwards fadein;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    background-color: #fff;
+    background-color: #faf9f6;
     height: 100vh;
     width: 100%;
     top: 0;
@@ -1004,6 +1018,7 @@ mark,
     display: block;
     box-sizing: border-box;
     font-size: 1.1em;
+    -webkit-tap-highlight-color: transparent;
   }
   .menu .menu-link:not(:last-child) {
     margin: 0;
@@ -1933,19 +1948,11 @@ pre.highlight > code, pre > code {
 
 body[data-theme=dark] {
   color: #c7bebe;
-  background: linear-gradient(135deg, #131418 0%, #16171c 100%);
-  background-attachment: fixed;
+  background: #131418;
+  color-scheme: dark;
 }
 body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.05) 100%);
-}
-body[data-theme=dark]::after {
-  background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.3) 100%);
+  display: none;
 }
 body[data-theme=dark] h1,
 body[data-theme=dark] h2,
@@ -2036,13 +2043,13 @@ body[data-theme=dark] .navbar .menu .menu-link {
 }
 @media screen and (max-width: 768px) {
   body[data-theme=dark] .navbar .menu {
-    background-color: #131418;
-    border-color: #1b1d25;
+    background-color: transparent;
+    border-color: transparent;
   }
   body[data-theme=dark] .navbar .menu .menu-icon > svg {
     fill: #eaeaea;
   }
-  body[data-theme=dark] .navbar .menu input[type=checkbox]:checked ~ .trigger {
+  body[data-theme=dark] .navbar .menu.menu-open .trigger {
     background: #131418;
   }
 }
@@ -2118,13 +2125,6 @@ body[data-theme=dark] .toc-nav .toc-list .toc-item a:hover {
 body[data-theme=dark] .toc-nav .toc-list .toc-item a.active {
   color: #ff5277;
   border-left-color: #ff5277;
-}
-body[data-theme=dark] .background {
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: -1;
 }
 body[data-theme=dark] #canvas {
   width: 100%;

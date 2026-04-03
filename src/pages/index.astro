@@ -48,8 +48,11 @@ const recentPosts = posts.slice(0, 5);
     :global(.wrapper) {
       display: flex;
       flex-direction: column;
-      height: 100vh;
-      height: 100dvh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
@@ -67,6 +70,11 @@ const recentPosts = posts.slice(0, 5);
       margin-top: auto;
       margin-bottom: 1.5rem;
       padding-top: 2rem;
+    }
+    @media screen and (max-width: 768px) {
+      .author {
+        padding-top: 60px;
+      }
     }
     :global(.posts-item-note) {
       margin-bottom: auto;

@@ -17,14 +17,11 @@ const menus = [
 
 <div class="navbar" role="navigation">
   <nav class="menu">
-    <input type="checkbox" id="menu-trigger" class="menu-trigger" />
-    <label for="menu-trigger">
-      <span class="menu-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
-          <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
-        </svg>
-      </span>
-    </label>
+    <button id="menu-toggle" class="menu-icon" aria-label="Menu">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
+        <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
+      </svg>
+    </button>
     <a id="mode">
       <Icon name="lucide:sun" class="mode-sunny" size={22} />
       <Icon name="ph:moon" class="mode-moon" size={22} style="stroke: currentColor; stroke-width: 4px;" />
@@ -49,32 +46,29 @@ const menus = [
 </div>
 
 <script>
+  const menu = document.querySelector('.menu')!;
+  const toggle = document.getElementById('menu-toggle')!;
+  const wrapper = document.querySelector('.wrapper');
+
+  // 메뉴 토글
+  toggle.addEventListener('click', () => {
+    const isOpen = menu.classList.toggle('menu-open');
+    if (isOpen) {
+      wrapper?.classList.add('blurry');
+    } else {
+      wrapper?.classList.remove('blurry');
+    }
+  });
+
+  // 모드 전환
   const lamp = document.getElementById('mode');
   lamp?.addEventListener('click', () => {
     const current = localStorage.getItem('theme');
-    // Safari: transition 활성 중 속성 변경 시 repaint 누락 방지
-    document.body.classList.add('notransition');
-    const themeColorMeta = document.getElementById('theme-color-meta');
     if (current === 'dark' || (!current)) {
       localStorage.setItem('theme', 'light');
-      document.body.removeAttribute('data-theme');
-      themeColorMeta?.setAttribute('content', '#faf9f6');
     } else {
       localStorage.setItem('theme', 'dark');
-      document.body.setAttribute('data-theme', 'dark');
-      themeColorMeta?.setAttribute('content', '#131418');
     }
-    void document.body.offsetHeight;
-    requestAnimationFrame(() => {
-      document.body.classList.remove('notransition');
-    });
-    // StarBackground 캔버스 크기 재설정을 위해 resize 이벤트 발생
-    window.dispatchEvent(new Event('resize'));
-  });
-
-  const cbox = document.getElementById('menu-trigger') as HTMLInputElement;
-  cbox?.addEventListener('change', function() {
-    const area = document.querySelector('.wrapper');
-    this.checked ? area?.classList.add('blurry') : area?.classList.remove('blurry');
+    location.reload();
   });
 </script>
