@@ -1763,7 +1763,7 @@ mark,
 }
 
 code {
-  font-family: Consolas, monospace;
+  font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', Consolas, monospace;
   text-rendering: optimizeLegibility;
   font-feature-settings: "calt" 1;
   font-variant-ligatures: normal;
@@ -1773,40 +1773,59 @@ code {
   word-wrap: normal;
   font-size: inherit;
 }
+:not(pre) > code,
 code.highlighter-rouge {
-  padding: 1px 3px;
-  position: relative;
-  top: -1px;
-  background-color: #f6f6f6;
-  border-radius: 2px;
-  border: 1px solid rgba(128, 128, 128, 0.1);
+  padding: 0.15em 0.4em;
+  margin: 0 0.1em;
+  font-size: 0.88em;
+  background-color: rgba(128, 128, 128, 0.12);
+  border-radius: 4px;
+  border: 1px solid rgba(128, 128, 128, 0.12);
+  color: #c44d6a;
 }
 
-pre.highlight, pre {
-  margin: 0 -27px;
-}
-@media screen and (max-width: 768px) {
-  pre.highlight, pre {
-    margin: 0;
-    padding-left: 20px;
-  }
-}
-pre.highlight, pre {
-  border: 1px solid rgba(128, 128, 128, 0.1);
-  background-color: #1a1b21;
-  border-radius: 2px;
-  padding: 10px;
+pre.highlight, pre.astro-code, pre {
+  margin: 1.4em 0;
+  border: 1px solid rgba(128, 128, 128, 0.18);
+  border-radius: 8px;
+  padding: 18px 20px;
   display: block;
   overflow-x: auto;
+  font-size: 0.92em;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  position: relative;
 }
-pre.highlight > code, pre > code {
+@media screen and (max-width: 768px) {
+  pre.highlight, pre.astro-code, pre {
+    padding: 14px 16px;
+    border-radius: 6px;
+    font-size: 0.85em;
+  }
+}
+pre.highlight > code, pre.astro-code > code, pre > code {
   width: 100%;
   max-width: 50rem;
   margin-left: auto;
   margin-right: auto;
-  line-height: 1.5;
+  line-height: 1.6;
   display: block;
   border: 0;
+  background: transparent;
+  padding: 0;
+  color: inherit;
+}
+pre.astro-code[data-language]:not([data-language="plaintext"])::before {
+  content: attr(data-language);
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  font-size: 0.7em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  pointer-events: none;
 }
 
 .highlight table td {
@@ -1988,8 +2007,17 @@ body[data-theme=dark] .page-content h5 .anchor-head,
 body[data-theme=dark] .page-content h6 .anchor-head {
   color: #ff5277;
 }
+body[data-theme=dark] :not(pre) > code,
 body[data-theme=dark] code.highlighter-rouge {
-  background-color: #1b1d25;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: #ff8aa3;
+}
+body[data-theme=dark] pre.highlight,
+body[data-theme=dark] pre.astro-code,
+body[data-theme=dark] pre {
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 body[data-theme=dark] kbd {
   border-color: #1b1d25;

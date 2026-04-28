@@ -48,11 +48,17 @@ const recentPosts = posts.slice(0, 5);
     :global(.wrapper) {
       display: flex;
       flex-direction: column;
-      height: 100vh;
-      height: 100dvh;
+      height: calc(100vh - 76px);
+      height: calc(100dvh - 76px);
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
+    }
+    @media screen and (max-width: 768px) {
+      :global(.wrapper) {
+        height: 100vh;
+        height: 100dvh;
+      }
     }
     :global(.wrapper)::-webkit-scrollbar {
       display: none;
@@ -73,7 +79,7 @@ const recentPosts = posts.slice(0, 5);
         padding-top: 60px;
       }
     }
-    :global(.posts-item-note) {
+    :global(.post-item:last-of-type) {
       margin-bottom: auto;
     }
     :global(.footer) {

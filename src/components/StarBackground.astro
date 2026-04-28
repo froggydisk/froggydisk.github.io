@@ -1,10 +1,12 @@
+<div class="light-layer"></div>
 <canvas id="canvas" class="background"></canvas>
 
 <script>
   import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js';
 
+  const isDark = document.body.getAttribute('data-theme') === 'dark';
   const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-  if (canvas) {
+  if (canvas && isDark) {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
@@ -91,3 +93,21 @@
     });
   }
 </script>
+
+<style>
+  .light-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    background-image:
+      radial-gradient(circle, rgba(13, 18, 43, 0.55) 1px, transparent 1.2px),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 24px 24px, 200px 200px;
+    mix-blend-mode: multiply;
+  }
+  :global(body:not([data-theme="dark"])) .light-layer {
+    opacity: 0.22;
+  }
+</style>
