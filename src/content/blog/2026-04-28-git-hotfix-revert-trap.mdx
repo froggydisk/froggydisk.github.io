@@ -1,0 +1,270 @@
+---
+title: "[Git] revert the revert를 해야하는 이유"
+comments: true
+categories:
+  - Blog
+tags:
+  - Git, Hotfix, Revert, Merge, Workflow
+last_modified_at: 2026-04-28T
+toc: true
+use_math: false
+---
+
+import HotfixTrapTimeline from "../../components/diagrams/HotfixTrapTimeline.astro";
+import MergeBaseDiff from "../../components/diagrams/MergeBaseDiff.astro";
+import NoteBlock from "../../components/diagrams/NoteBlock.astro";
+
+> main에 핫픽스를 머지했다가 문제가 생겨서 revert를 했다. 하지만 이미 develop에도 같은 코드를 커밋한 뒤다. 며칠 후 정기 main → develop 동기화 머지를 했는데, develop의 코드가 감쪽같이 사라져버렸다.
+
+Git에서 핫픽스를 다룰 때 가장 자주 만나게 되는 일이다. 잘못 걸리면 엄청난 삽질을 하게 되는데, 원인을 잘 알아두면 쉽게 예방할 수 있다.
+
+## ▍사건의 발단
+
+<HotfixTrapTimeline />
+
+사건의 순서를 나열하자면 아래와 같다.
+
+1. main에서 hotfix 브랜치 분기
+2. 그 브랜치를 main에 머지 (긴급 배포)
+3. 같은 브랜치를 develop에도 머지 (동기화)
+4. main에서 문제 발견 → revert
+5. 정기 main → develop 머지 → develop에서 코드 사라짐
+
+각 단계를 보면 참 자연스럽다. 보통 핫픽스 워크플로우가 이런 느낌으로 흘러가기 때문이다. 보통 아래와 같이 생각할 것이다.
+
+- 핫픽스니까 main 기준으로 따야 함 (현재 production 상태에서 패치)
+- 핫픽스니까 main에 빨리 머지해야 함
+- develop에도 반영해야 함 (안 그러면 다음 release 때 회귀)
+- 핫픽스가 잘못됐다고 판명되면 main에서 revert하는 게 자연스러움
+- 나중에 main → develop 정기 동기화는 당연히 함
+
+어디에도 명백한 실수가 없다. 그런데 이건 생각보다 심각한 문제를 불러온다.
+
+## ▍왜 사라지는가
+
+Git의 머지를 이해하려면 한 가지를 먼저 알아야 한다.
+
+> **Git의 머지는 "현재 코드"를 비교하는 게 아니다. "공통 조상 대비 변화량(net diff)"을 비교한다.**
+
+3-way merge가 보는 것은 이렇다.
+
+<NoteBlock label="3-way merge 모델" text={`base   = 두 브랜치의 가장 최근 공통 조상 (merge-base)
+ours   = 현재 브랜치의 tip
+theirs = 머지하려는 브랜치의 tip
+
+각 file에 대해:
+  ours_diff   = ours - base
+  theirs_diff = theirs - base
+
+  한쪽만 변경    → 그쪽 채택
+  양쪽 같은 변경 → 그대로 채택
+  양쪽 다른 변경 → CONFLICT`} />
+
+이 모델 위에서 위 사건을 따라가보자.
+
+### 5단계 시점의 셈법
+
+<MergeBaseDiff />
+
+`merge-base(main, develop)`는 양쪽이 마지막으로 공유한 commit이다. main과 develop은 hotfix를 각각 따로 머지했기 때문에 두 머지 커밋(`M_main`, `M_develop`)은 서로 다른 별개의 commit이고, 양쪽이 실제로 공유하는 건 hotfix 브랜치 자체의 commit들뿐이다. 따라서 merge-base는 **hotfix 브랜치의 마지막 commit**이고, 그 시점의 file에는 코드가 들어 있다. 반면 main은 그 뒤로 revert를 거치며 코드가 빠졌고, develop은 그동안 file을 안 건드렸다.
+
+<NoteBlock label="동기화 시점의 셈법" text={`develop_diff = 0       (file이 base와 동일)
+main_diff    = −code   (base에서 코드 제거됨)
+
+→ 한쪽만 변경 → main의 −code 채택
+→ develop에서 코드 사라짐`} />
+
+여기서 develop은 그동안 file을 안 건드렸으니 변화가 없고(net-zero), base 이후 코드가 제거된 main의 커밋이 일방적으로 채택된다.
+
+### 좌표계 비유
+
+<NoteBlock label="좌표계 비유" text={`원점 = base = "코드 있음" 상태
+
+develop의 위치 = "코드 있음" → 원점에서 0만큼 이동
+main의 위치    = "코드 없음" → 원점에서 −code만큼 이동
+
+develop을 main 쪽으로 끌어가면? → main의 위치로 끌려감`} />
+
+코드가 바뀐 상태가 base가 되면서 develop은 net-zero가 되었고 main만 revert 커밋이 생긴 셈이다.
+
+## ▍더 무서운 점
+
+문제는 단순히 같은 feature 브랜치를 develop에 다시 머지하려 해도 코드가 안 들어온다는 것이다. Git 입장에서는 "이미 머지했던 commit"이라 skip하기 때문이다. 모르고 지나가면 feature가 영영 develop에서 사라진 채 배포될 수 있다.
+필자도 이거 때문에 엄청난 시간을 날렸다.
+
+이 시나리오는 Linus Torvalds가 직접 [Reverting a faulty merge](https://github.com/git/git/blob/master/Documentation/howto/revert-a-faulty-merge.adoc) 문서에서 다룰 정도로 유명한 함정이다. 그의 결론도 단순명료하다 — **"revert the revert"**.
+
+## ▍해결 — revert 자체를 무효화
+
+메인에 적용한 hotfix가 revert 되었을 때 무심코 지나가는 경우가 있다.
+
+### 잘못된 생각 1: develop의 코드를 그냥 두면 된다
+
+> "develop엔 코드가 살아있으니까, 그대로 두고 다음 release 때 main으로 올리면 되겠지?"
+
+안 된다. main의 revert commit이 살아있는 한, **모든 미래 머지에서 그게 base가 되어 develop의 코드를 상쇄시킨다.**
+
+<NoteBlock label="develop → main 머지 시도" text={`Base = feature merge commit (양쪽이 공유)
+Base의 file = 코드 있음
+develop_diff = 0
+main_diff    = −code (revert됨)
+
+→ main의 −code 우세 → main에 코드 안 들어감`} />
+
+main의 revert가 살아있는 동안엔 develop의 코드를 main으로 올리는 것 자체가 막힌다.
+
+### 잘못된 생각 2: develop에 빈 commit을 박으면 된다
+
+> "develop에 새 SHA의 commit을 박으면 ancestry에 뭔가 추가되니까 막아주겠지?"
+
+안 된다. **빈 commit은 file을 안 건드리기 때문에 develop의 net diff를 0에서 1로 만들어주지 못한다.**
+
+본질은 ancestry가 아니라 **file 내용의 net diff**다. develop의 file 내용이 base와 같은 한, 무슨 commit을 하든 의미가 없다.
+
+### 해결 — revert the revert
+
+결국 main의 revert를 무효화해야 문제가 해결된다. 두 가지 방법이 있다.
+
+## ▍방법 1 — main에 직접 revert the revert
+
+```bash
+git checkout main
+git pull
+git checkout -b restore/NEX-XXXX-undo-mistaken-revert
+git revert <revert-commit-SHA>
+# PR로 main에 머지
+```
+
+결과 상태:
+
+<NoteBlock label="결과 상태" text={`main의 file    = 코드 있음 (revert가 무효화됨)
+develop의 file = 코드 있음 (원래부터)
+
+→ 양쪽 대칭 → 미래 머지 안전`} />
+
+**장점**
+
+- PR 한 번으로 끝
+- history가 정직하다 — "실수로 revert했다가 되살림" 흐름이 그대로 보존됨
+- develop을 안 건드려도 됨 — develop에 코드가 살아있다면 그대로 두고 main만 고치면 자동 정상화
+
+**단점**
+
+- main에 직접 PR이라 hotfix 채널 사용
+- qa 환경 검증 단계를 건너뜀
+
+## ▍방법 2 — develop → qa → main 정상 승격 흐름
+
+main에 직접 PR이 부담스럽고 정상 승격 워크플로우를 살리고 싶다면, develop에서 작업해서 흘려보낼 수 있다. 트릭은 **develop에 새 SHA의 commit을 박아서 그게 main까지 올라가게** 하는 것이다.
+
+```bash
+git checkout develop
+git checkout -b NEX-XXXX-restore-policy
+
+# main의 revert를 cherry-pick으로 가져옴
+# (이 시점에 develop에서도 일시적으로 코드 사라짐)
+git cherry-pick <main의-revert-commit-SHA>
+
+# 가져온 revert를 다시 revert (코드 복구, 새 SHA로)
+git revert HEAD
+
+# PR 생성 → develop 머지 → qa 승격 → main 승격
+```
+
+핵심 동작 두 줄 요약:
+
+```
+git cherry-pick <revert-SHA>  # revert를 가져옴 (코드 사라짐)
+git revert HEAD               # 그걸 revert (코드 복구, 새 SHA)
+```
+
+### 왜 작동하는가
+
+<NoteBlock label="develop history" text={`..., 원본 feature, ..., revert (cherry-pick), revert-the-revert (새 SHA)
+                                                    ↑
+                                          이 commit이 핵심
+
+이 commit이 develop → qa → main으로 정상 승격되면
+main의 기존 revert commit을 상쇄함
+
+→ main의 file = "코드 있음"으로 정상화`} />
+
+cherry-pick은 **diff를 새 SHA로 재적용**하기 때문에 Git 입장에서는 별개의 commit이다. 이 새 commit이 양쪽 ancestry에 들어가면 꼬인게 풀린다.
+
+### 두 방법 비교
+
+| 측면                  | 방법 1 (main 직접) | 방법 2 (develop → qa → main) |
+| --------------------- | ------------------ | ---------------------------- |
+| **PR 위치**           | main 직접          | develop                      |
+| **작업 단계**         | revert 1번         | cherry-pick + revert 2번     |
+| **qa 검증**           | 별도 절차 필요     | 정상 워크플로우에 포함       |
+| **develop 상태 변화** | 없음               | 일시적으로 사라졌다가 복구   |
+| **history 깔끔함**    | 매우 깔끔          | 약간 복잡                    |
+| **추천 상황**         | 빠른 복구 우선     | 검증 단계가 중요할 때        |
+
+## ▍예방 — 처음부터 막아보자
+
+복구보다 예방이 낫다. 핫픽스 워크플로우에서 함정을 피하는 원칙은 단순하다.
+
+### 원칙 1 — revert는 항상 양쪽에 대칭으로
+
+main에서 hotfix를 revert했다면, **같은 시점에 develop에도 동일한 revert를 적용**한다.
+
+```bash
+# main에서 revert
+git checkout main
+git revert <hotfix-merge-commit>
+
+# 같은 시점에 develop에도 revert (cherry-pick으로 가져옴)
+git checkout develop
+git cherry-pick <main의-revert-commit>
+```
+
+이러면 양쪽이 대칭이 되어 다음 동기화 머지에서 함정이 안 작동한다.
+
+### 원칙 2 — revert PR은 양쪽 브랜치에 짝지어 머지
+
+조직 정책으로 강제할 수 있다.
+
+- main에 revert PR을 만들 때 develop 대응 PR도 함께 생성
+- 두 PR을 동시에 머지
+- PR 본문에 서로의 링크 명시
+
+branch protection에서 revert 라벨이 붙은 PR은 짝이 되는 PR 링크를 본문에 강제하는 자동화도 가능하다.
+
+### 원칙 3 — 핫픽스 워크플로우 체크리스트
+
+<NoteBlock label="핫픽스 체크리스트" text={`□ feature를 main에 머지했는가?
+□ 같은 feature를 develop에도 머지했는가?
+□ main에서 revert가 발생했는가?
+   → YES면: develop에서도 동일하게 revert/cherry-pick 즉시 수행
+   → main → develop 동기화 머지 전에 무조건 처리`} />
+
+PR 템플릿이나 hotfix 런북에 넣어두면 사람이 잊어버려도 시스템이 막아준다.
+
+## ▍revert 자체가 실수였더라도
+
+지금까지는 "revert가 의도된 것이었다면 양쪽에 대칭으로 적용하라"는 얘기였다. 하지만 **revert 자체가 실수**라면?
+
+이 경우엔 develop의 코드를 그냥 냅두고 싶어진다. 하지만 main의 revert가 미래 머지의 base가 되어 결국 코드를 삭제하게 된다.
+
+답은 그냥 **main에서 revert the revert.** 위의 두 방법 중 하나를 골라 적용하면 된다.
+
+main의 revert가 모든 함정의 시작점이고, 그걸 고치지 않는 한 어디서 뭘 해도 꼬이기 시작한다.
+
+## ▍Git 머지의 진짜 본질
+
+이번 사건이 알려주는 교훈은 이렇다.
+
+> **Git의 머지는 "현재 코드"가 아니라 "base 이후 한 일"을 합친다.**
+
+이 한 줄에 모든 게 함축돼 있다.
+
+1. file 내용은 같아도 base가 다르면 의미가 다르다.
+2. history 변경(ancestry 추가)은 file 변경 없이도 미래에 영향을 미친다.
+3. revert는 commit history에 박힌 도장이다.
+4. 대칭이 안전이다. 양쪽 long-running 브랜치가 같은 변경에 대해 같은 상태를 유지해야 안전하다.
+
+## ▍마치며
+
+핫픽스를 main에 머지했다가 revert했다면, 같은 revert를 develop에도 즉시 적용하자. 깜빡하면 다음 동기화 머지에서 develop의 코드가 사라진다. 이미 사라졌다면 main에서 revert the revert를 하자. develop만 건드려선 영영 안 풀린다.

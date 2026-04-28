@@ -1,0 +1,103 @@
+<div class="hotfix-trap">
+<svg width="100%" viewBox="0 0 720 350" xmlns="http://www.w3.org/2000/svg">
+
+<!-- Title -->
+<text x="360" y="22" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="600" fill="var(--ht-dim)" letter-spacing="0.08em">HOTFIX TRAP — 5단계 시간선</text>
+
+<!-- Branch labels -->
+<text x="70" y="105" text-anchor="end" font-family="'SF Mono', 'Consolas', monospace" font-size="14" font-weight="700" fill="var(--ht-text)">main</text>
+<text x="70" y="245" text-anchor="end" font-family="'SF Mono', 'Consolas', monospace" font-size="14" font-weight="700" fill="var(--ht-text)">develop</text>
+
+<!-- Branch lines -->
+<line x1="80" y1="100" x2="700" y2="100" stroke="var(--ht-line)" stroke-width="2"/>
+<line x1="80" y1="240" x2="700" y2="240" stroke="var(--ht-line)" stroke-width="2"/>
+
+<!-- Step 1: branch from main -->
+<circle cx="130" cy="100" r="7" fill="var(--ht-line)"/>
+<path d="M 130 100 Q 160 130 195 165" stroke="var(--ht-feature)" stroke-width="1.5" fill="none"/>
+<circle cx="200" cy="170" r="8" fill="var(--ht-feature)"/>
+<text x="200" y="190" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="12" fill="var(--ht-feature-text)">hotfix</text>
+
+<!-- Step 2: feature → main merge -->
+<path d="M 200 170 Q 250 140 285 105" stroke="var(--ht-feature)" stroke-width="1.5" fill="none"/>
+<circle cx="290" cy="100" r="12" fill="var(--ht-feature-fill)" stroke="var(--ht-feature)" stroke-width="2"/>
+<text x="290" y="104" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="12" font-weight="700" fill="var(--ht-feature-text)">F</text>
+<text x="290" y="76" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="600" fill="var(--ht-text)">feature 머지</text>
+
+<!-- Step 3: feature → develop merge -->
+<path d="M 200 170 Q 280 200 375 235" stroke="var(--ht-feature)" stroke-width="1.5" fill="none" stroke-dasharray="4 3"/>
+<circle cx="380" cy="240" r="12" fill="var(--ht-feature-fill)" stroke="var(--ht-feature)" stroke-width="2"/>
+<text x="380" y="244" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="12" font-weight="700" fill="var(--ht-feature-text)">F</text>
+<text x="380" y="270" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="600" fill="var(--ht-text)">feature 동기화</text>
+
+<!-- Step 4: revert on main -->
+<circle cx="490" cy="100" r="12" fill="var(--ht-revert-fill)" stroke="var(--ht-revert)" stroke-width="2"/>
+<text x="490" y="104" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="12" font-weight="700" fill="var(--ht-revert-text)">R</text>
+<text x="490" y="76" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="600" fill="var(--ht-revert-text)">revert</text>
+
+<!-- Step 5: main → develop sync (the trap fires) -->
+<path d="M 490 100 Q 565 170 615 235" stroke="var(--ht-bomb)" stroke-width="2" fill="none"/>
+<circle cx="620" cy="240" r="14" fill="var(--ht-bomb-fill)" stroke="var(--ht-bomb)" stroke-width="2"/>
+<text x="620" y="244" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="12" font-weight="700" fill="var(--ht-bomb-text)">M</text>
+<text x="620" y="270" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="700" fill="var(--ht-bomb-text)">정기 동기화</text>
+
+<!-- Boom marker (8-pointed star) -->
+<g transform="translate(680, 240)">
+  <path d="M 0 -18 L 5 -5 L 18 0 L 5 5 L 0 18 L -5 5 L -18 0 L -5 -5 z" fill="var(--ht-bomb)" opacity="0.9"/>
+</g>
+<text x="680" y="218" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="700" fill="var(--ht-bomb-text)">코드 사라짐</text>
+
+<!-- Step number badges -->
+<g font-family="'SF Mono', 'Consolas', monospace" font-size="12" fill="var(--ht-dim)">
+  <text x="130" y="320" text-anchor="middle">① 분기</text>
+  <text x="290" y="320" text-anchor="middle">② main 머지</text>
+  <text x="380" y="320" text-anchor="middle">③ develop 동기화</text>
+  <text x="490" y="320" text-anchor="middle">④ revert</text>
+  <text x="620" y="320" text-anchor="middle">⑤ 정기 동기화</text>
+</g>
+
+<!-- Time axis hint -->
+<line x1="80" y1="305" x2="660" y2="305" stroke="var(--ht-dim)" stroke-width="0.5" stroke-dasharray="2 3" opacity="0.4"/>
+<text x="700" y="308" font-family="'SF Mono', 'Consolas', monospace" font-size="11" fill="var(--ht-dim)">→ time</text>
+
+</svg>
+</div>
+
+<style>
+.hotfix-trap {
+  --ht-text: #c0bdd0;
+  --ht-dim: #908caa;
+  --ht-line: #5a5a78;
+  --ht-feature: #9ccfd8;
+  --ht-feature-fill: rgba(156, 207, 216, 0.18);
+  --ht-feature-text: #c8e8f0;
+  --ht-revert: #f6c177;
+  --ht-revert-fill: rgba(246, 193, 119, 0.18);
+  --ht-revert-text: #f8d8a0;
+  --ht-bomb: #eb6f92;
+  --ht-bomb-fill: rgba(235, 111, 146, 0.2);
+  --ht-bomb-text: #f4a0b8;
+
+  margin: 2rem 0;
+  overflow-x: auto;
+}
+.hotfix-trap svg {
+  display: block;
+  min-width: 720px;
+  height: auto;
+}
+:global(body:not([data-theme="dark"])) .hotfix-trap {
+  --ht-text: #4a4a5a;
+  --ht-dim: #6e6a86;
+  --ht-line: #b8b8c8;
+  --ht-feature: #286983;
+  --ht-feature-fill: rgba(40, 105, 131, 0.1);
+  --ht-feature-text: #1a4060;
+  --ht-revert: #c88c32;
+  --ht-revert-fill: rgba(200, 140, 50, 0.1);
+  --ht-revert-text: #8a5e10;
+  --ht-bomb: #b4546a;
+  --ht-bomb-fill: rgba(180, 84, 106, 0.1);
+  --ht-bomb-text: #8a2a40;
+}
+</style>

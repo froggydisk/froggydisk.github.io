@@ -1,0 +1,88 @@
+<div class="merge-base-diff">
+<svg width="100%" viewBox="0 0 720 410" xmlns="http://www.w3.org/2000/svg">
+
+<!-- Title -->
+<text x="360" y="22" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="600" fill="var(--mb-dim)" letter-spacing="0.08em">3-WAY MERGE — main → develop 동기화 시점의 셈법</text>
+
+<!-- Base box (top center) -->
+<rect x="270" y="50" width="180" height="82" rx="10" fill="var(--mb-base-bg)" stroke="var(--mb-base)" stroke-width="1.5"/>
+<text x="360" y="73" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="14" font-weight="700" fill="var(--mb-base-text)">Base (merge-base)</text>
+<text x="360" y="91" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="11" fill="var(--mb-dim)">hotfix tip commit</text>
+<line x1="290" y1="102" x2="430" y2="102" stroke="var(--mb-base)" stroke-width="0.5" opacity="0.4"/>
+<text x="360" y="120" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="15" font-weight="600" fill="var(--mb-base-text)">코드 있음</text>
+
+<!-- Develop (ours) box (left middle) -->
+<rect x="60" y="200" width="220" height="100" rx="10" fill="var(--mb-ours-bg)" stroke="var(--mb-ours)" stroke-width="1.5"/>
+<text x="170" y="223" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="14" font-weight="700" fill="var(--mb-ours-text)">develop (ours)</text>
+<text x="170" y="247" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="16" font-weight="600" fill="var(--mb-ours-text)">코드 있음</text>
+<line x1="80" y1="262" x2="260" y2="262" stroke="var(--mb-ours)" stroke-width="0.5" opacity="0.4"/>
+<text x="170" y="282" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="14" font-weight="700" fill="var(--mb-ours-text)">diff = 0</text>
+
+<!-- Main (theirs) box (right middle) -->
+<rect x="440" y="200" width="220" height="100" rx="10" fill="var(--mb-theirs-bg)" stroke="var(--mb-theirs)" stroke-width="1.5"/>
+<text x="550" y="223" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="14" font-weight="700" fill="var(--mb-theirs-text)">main (theirs)</text>
+<text x="550" y="247" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="16" font-weight="600" fill="var(--mb-theirs-text)">코드 없음 (revert됨)</text>
+<line x1="460" y1="262" x2="640" y2="262" stroke="var(--mb-theirs)" stroke-width="0.5" opacity="0.4"/>
+<text x="550" y="282" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="14" font-weight="700" fill="var(--mb-theirs-text)">diff = −code</text>
+
+<!-- Arrows from base to ours/theirs -->
+<line x1="320" y1="132" x2="200" y2="200" stroke="var(--mb-dim)" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
+<line x1="400" y1="132" x2="520" y2="200" stroke="var(--mb-dim)" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
+<text x="240" y="170" font-family="'SF Mono', 'Consolas', monospace" font-size="11" fill="var(--mb-dim)" font-style="italic">기준점</text>
+<text x="450" y="170" font-family="'SF Mono', 'Consolas', monospace" font-size="11" fill="var(--mb-dim)" font-style="italic">기준점</text>
+
+<!-- Result box (bottom center) -->
+<rect x="200" y="335" width="320" height="62" rx="10" fill="var(--mb-result-bg)" stroke="var(--mb-result)" stroke-width="2"/>
+<text x="360" y="361" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="16" font-weight="700" fill="var(--mb-result-text)">Result: 코드 사라짐</text>
+<text x="360" y="382" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="12" fill="var(--mb-result-text)">한쪽만 변경 → main의 −code 단독 채택</text>
+
+<!-- Arrows ours/theirs → result -->
+<line x1="200" y1="300" x2="290" y2="335" stroke="var(--mb-ours)" stroke-width="1" stroke-dasharray="3 3" opacity="0.4"/>
+<text x="225" y="324" font-family="'SF Mono', 'Consolas', monospace" font-size="11" fill="var(--mb-dim)" font-style="italic">발언권 없음</text>
+<line x1="520" y1="300" x2="430" y2="335" stroke="var(--mb-result)" stroke-width="1.8"/>
+<polygon points="430 335, 438 327, 438 333" fill="var(--mb-result)"/>
+<text x="475" y="324" font-family="'SF Mono', 'Consolas', monospace" font-size="11" font-weight="700" fill="var(--mb-result-text)">우세</text>
+
+</svg>
+</div>
+
+<style>
+.merge-base-diff {
+  --mb-dim: #908caa;
+  --mb-base: #c4a7e7;
+  --mb-base-bg: rgba(196, 167, 231, 0.1);
+  --mb-base-text: #d8c4f0;
+  --mb-ours: #9ccfd8;
+  --mb-ours-bg: rgba(156, 207, 216, 0.1);
+  --mb-ours-text: #c8e8f0;
+  --mb-theirs: #f6c177;
+  --mb-theirs-bg: rgba(246, 193, 119, 0.1);
+  --mb-theirs-text: #f8d8a0;
+  --mb-result: #eb6f92;
+  --mb-result-bg: rgba(235, 111, 146, 0.12);
+  --mb-result-text: #f4a0b8;
+
+  margin: 2rem 0;
+  overflow-x: auto;
+}
+.merge-base-diff svg {
+  display: block;
+  min-width: 720px;
+  height: auto;
+}
+:global(body:not([data-theme="dark"])) .merge-base-diff {
+  --mb-dim: #6e6a86;
+  --mb-base: #6a4ea8;
+  --mb-base-bg: rgba(106, 78, 168, 0.07);
+  --mb-base-text: #4a2e80;
+  --mb-ours: #286983;
+  --mb-ours-bg: rgba(40, 105, 131, 0.07);
+  --mb-ours-text: #1a4060;
+  --mb-theirs: #c88c32;
+  --mb-theirs-bg: rgba(200, 140, 50, 0.07);
+  --mb-theirs-text: #8a5e10;
+  --mb-result: #b4546a;
+  --mb-result-bg: rgba(180, 84, 106, 0.08);
+  --mb-result-text: #8a2a40;
+}
+</style>
