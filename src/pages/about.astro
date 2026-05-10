@@ -46,6 +46,50 @@ import MoodySplitView from '../components/diagrams/MoodySplitView.astro';
       </div>
 
     </div>
+
+    <div class="project-card">
+      <div class="project-header">
+        <img src="/img/econix-icon.png" alt="econix Logo" class="project-icon" />
+        <div>
+          <h2 class="project-title">econix</h2>
+          <p class="project-tagline">데이터가 바꾸는 경제 분석의 미래</p>
+        </div>
+      </div>
+      <p>경제 데이터를 자동으로 수집·분석해 다국어 대시보드와 리서치 리포트로 전달하는 경제 분석 플랫폼. Fed 발표·매크로 지표·시장 데이터·뉴스·전문가 소셜 시그널을 LLM으로 가공해 일반 투자자에게 전문가급 인사이트를 제공합니다.</p>
+
+      <a href="https://econix.ai.kr" target="_blank" rel="noopener noreferrer" class="project-wireframe-link" aria-label="econix 사이트 방문">
+        <div class="project-wireframe">
+          <img src="/img/econix-screenshot.png" alt="econix 대시보드 스크린샷" class="project-wireframe-img" />
+        </div>
+      </a>
+
+      <div class="project-details">
+        <div class="project-detail-group">
+          <h3>담당</h3>
+          <ul>
+            <li>Next.js 14 App Router 기반 8개 언어 대시보드</li>
+            <li>Fed·매크로·시장·뉴스·소셜 데이터 수집 파이프라인</li>
+            <li>LLM 컨텍스트 처리 및 감성 분석 리포트 자동 생성</li>
+            <li>Supabase 콘텐츠 발행과 Threads 자동 포스팅</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="project-tags-section">
+        <div class="project-tags">
+          <span class="project-tag">Next.js 14</span>
+          <span class="project-tag">TypeScript</span>
+          <span class="project-tag">MUI</span>
+          <span class="project-tag">Supabase</span>
+          <span class="project-tag">Recharts</span>
+          <span class="project-tag">Three.js</span>
+          <span class="project-tag">Python</span>
+          <span class="project-tag">LLM</span>
+          <span class="project-tag">i18n</span>
+        </div>
+      </div>
+
+    </div>
   </div>
 </BaseLayout>
 
@@ -107,6 +151,28 @@ import MoodySplitView from '../components/diagrams/MoodySplitView.astro';
   padding: 20px;
   border-radius: 8px;
   background: rgba(0, 0, 0, 0.03);
+}
+
+.project-wireframe-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+  margin: 0;
+}
+
+.project-wireframe-link {
+  display: block;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.project-wireframe-link:hover {
+  opacity: 0.85;
+}
+
+:global(.page-content .project-wireframe-link::after) {
+  content: none !important;
 }
 
 .project-details {
