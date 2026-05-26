@@ -39,32 +39,38 @@ const posts = (await getCollection('blog'))
   })}
 </BaseLayout>
 
-<script is:inline>
+{import.meta.env.PROD && <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />}
+
+<script is:inline define:vars={{ isProd: import.meta.env.PROD }}>
+  function attachFallback() {
+    var fallback = document.getElementById('search-fallback');
+    if (!fallback) return;
+    fallback.addEventListener('input', function() {
+      var query = this.value.toLowerCase();
+      document.querySelectorAll('.post-item').forEach(function(item) {
+        var title = item.querySelector('.post-item-title').textContent.toLowerCase();
+        item.style.display = title.includes(query) ? '' : 'none';
+      });
+    });
+  }
+
   async function initSearch() {
     var el = document.getElementById('search');
     if (!el) return;
+    if (!isProd) {
+      attachFallback();
+      return;
+    }
     try {
       await import('/pagefind/pagefind-ui.js');
       el.innerHTML = '';
       new PagefindUI({ element: '#search', showSubResults: true, showImages: false });
     } catch (e) {
-      // Dev mode: fallback to simple filter
-      var fallback = document.getElementById('search-fallback');
-      if (fallback) {
-        fallback.addEventListener('input', function() {
-          var query = this.value.toLowerCase();
-          document.querySelectorAll('.post-item').forEach(function(item) {
-            var title = item.querySelector('.post-item-title').textContent.toLowerCase();
-            item.style.display = title.includes(query) ? '' : 'none';
-          });
-        });
-      }
+      attachFallback();
     }
   }
   initSearch();
 </script>
-
-<link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
 
 <style>
   :global(.pagefind-ui) {

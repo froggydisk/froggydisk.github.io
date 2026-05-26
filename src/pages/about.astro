@@ -11,6 +11,47 @@ import MoodySplitView from '../components/diagrams/MoodySplitView.astro';
   <div class="page-content">
     <div class="project-card">
       <div class="project-header">
+        <img src="/img/gc-icon.webp" alt="GC Symbol Logo" class="project-icon" />
+        <div>
+          <h2 class="project-title">GC Symbol Study</h2>
+          <p class="project-tagline">2D 로고를 3차원 WebGL 심볼로</p>
+        </div>
+      </div>
+      <p>SVG 패스로 그려진 GC 브랜드 마크를 Three.js와 GLSL 셰이더로 3D 메시로 압출하고, 매 프레임 큐브맵·박막 간섭 컬러·이중 스페큘러를 계산해 비눗방울 같은 이리데선트 표면을 실시간으로 렌더링합니다. 커서·클릭·스크롤에 반응해 표면 아래에서 핫스팟과 리플이 번지는 인터랙티브 심볼 실험.</p>
+      <p class="project-note">화면 전환과 모션 아이디어는 <a href="https://oryzo.ai/" target="_blank" rel="noopener noreferrer">oryzo.ai</a>에서 영감을 받아 직접 구현했습니다.</p>
+
+      <a href="https://gallery-lime-chi.vercel.app/gc-logo-intro.html" target="_blank" rel="noopener noreferrer" class="project-wireframe-link" aria-label="GC Symbol Study 데모 열기">
+        <div class="project-wireframe">
+          <img src="/img/gc-intro-cover.webp" alt="GC Symbol Study 커버 — 3D로 압출된 GC AI 심볼" class="project-wireframe-img" />
+        </div>
+      </a>
+
+      <div class="project-details project-details-single">
+        <div class="project-detail-group">
+          <h3>담당</h3>
+          <ul>
+            <li>SVGLoader · ExtrudeGeometry 기반 2D → 3D 메시 변환</li>
+            <li>박막 간섭 컬러 + 이중 스페큘러 프래그먼트 셰이더</li>
+            <li>3프레임 주기 큐브맵 갱신으로 120fps 유지</li>
+            <li>호버·클릭·스크롤 반응형 GLSL 모듈 6종</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="project-tags-section">
+        <div class="project-tags">
+          <span class="project-tag">Three.js</span>
+          <span class="project-tag">WebGL</span>
+          <span class="project-tag">GLSL</span>
+          <span class="project-tag">Shader</span>
+          <span class="project-tag">SVG</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="project-card">
+      <div class="project-header">
         <img src="/img/moody-icon.png" alt="Moody App Icon" class="project-icon" />
         <div>
           <h2 class="project-title">Moody</h2>
@@ -153,6 +194,16 @@ import MoodySplitView from '../components/diagrams/MoodySplitView.astro';
   background: rgba(0, 0, 0, 0.03);
 }
 
+.project-note {
+  font-size: 13px;
+  color: #6b7886;
+  margin-top: -4px;
+}
+
+:global(body[data-theme="dark"]) .project-note {
+  color: #908caa;
+}
+
 .project-wireframe-img {
   width: 100%;
   height: auto;
@@ -180,6 +231,10 @@ import MoodySplitView from '../components/diagrams/MoodySplitView.astro';
   grid-template-columns: 1fr 1fr;
   gap: 20px;
   margin-top: 20px;
+}
+
+.project-details.project-details-single {
+  grid-template-columns: 1fr;
 }
 
 .project-detail-group h3 {
