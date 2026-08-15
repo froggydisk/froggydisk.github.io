@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**froggydisk.github.io** is a personal technical blog and portfolio website built with **Astro 6**, deployed to GitHub Pages. The site features 52+ blog posts covering frontend development, DevOps, ML/DL, and technical problem-solving, with a focus on Korean-language technical content.
+**froggydisk.github.io** is a personal technical blog and portfolio website built with **Astro 7**, deployed to GitHub Pages. The site features 52+ blog posts covering frontend development, DevOps, ML/DL, and technical problem-solving, with a focus on Korean-language technical content.
 
 - **Primary Language**: Korean (blog content), JavaScript/TypeScript (code)
 - **Live Site**: https://froggydisk.github.io
@@ -14,16 +14,17 @@
 ## Tech Stack
 
 ### Core Framework
-- **Astro 6.0.8** - Static site generator optimized for performance
+- **Astro 7.2.2** - Static site generator optimized for performance
 - **TypeScript (strict mode)** - Type-safe configuration and components
 - **MDX** - Enhanced markdown with component support
 
 ### Key Dependencies
 ```json
 {
-  "@astrojs/mdx": "^5.0.2",        // Markdown + React component rendering
-  "@astrojs/rss": "^4.0.17",       // RSS feed generation
-  "@astrojs/sitemap": "^3.7.1",    // Sitemap auto-generation
+  "@astrojs/markdown-remark": "^7.2.2", // unified() markdown processor factory
+  "@astrojs/mdx": "^7.0.5",        // Markdown + React component rendering
+  "@astrojs/rss": "^4.0.19",       // RSS feed generation
+  "@astrojs/sitemap": "^3.7.3",    // Sitemap auto-generation
   "astro-icon": "^1.1.5",          // Icon system (Lucide, Phosphor)
   "@iconify-json/lucide": "^1.2.99",
   "@iconify-json/ph": "^1.2.2",
@@ -169,7 +170,17 @@ npm run preview  # Preview built site locally
 - **Diagram Theming**: 10+ CSS variables per diagram component
 
 ### 3. Content Enhancement
-- **Markdown Plugins**:
+- **Markdown Plugins**: configured via `markdown.processor` in `astro.config.mjs`.
+  Astro 7 deprecated `markdown.remarkPlugins` / `rehypePlugins` / `remarkRehype`;
+  pass them to `unified({...})` from `@astrojs/markdown-remark` instead:
+  ```js
+  import { unified } from '@astrojs/markdown-remark';
+
+  markdown: {
+    shikiConfig: { theme: 'one-dark-pro' },   // still a top-level markdown option
+    processor: unified({ rehypePlugins: [...] }),
+  }
+  ```
   - `rehype-slug` - Auto-generate heading IDs
   - `rehype-autolink-headings` - Add anchor links (class: `anchor-head`)
   - `shiki` - Syntax highlighting with one-dark-pro theme
@@ -457,6 +468,6 @@ npm run preview
 
 ---
 
-**Last Updated**: March 27, 2026
-**Framework**: Astro 6.0.8
+**Last Updated**: August 16, 2026
+**Framework**: Astro 7.2.2
 **Node**: 22
