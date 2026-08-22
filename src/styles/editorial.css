@@ -379,6 +379,21 @@ body[data-theme="dark"] blockquote {
   color: var(--muted);
 }
 
+/* 수식 (빌드 시점 KaTeX → MathML). 컨테이너가 인라인 span 이므로 블록 여백은
+   math 요소에 직접 준다. 긴 수식은 페이지를 밀지 않고 자기 안에서 스크롤한다. */
+.page-content math[display="block"] {
+  /* display 는 건드리지 않는다. MathML 의 내부 display 타입(block math)을
+     일반 block 으로 덮으면 수식 가운데 정렬이 풀린다. */
+  margin: 2.2rem auto;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.page-content .katex {
+  /* 본문 링크 규칙이 수식 내부까지 건드리지 않게 한다 */
+  text-decoration: none;
+}
+
 /* 이미지 · 캡션 */
 .page-content img,
 .page-content figure img {

@@ -5,6 +5,8 @@ import sitemap from '@astrojs/sitemap';
 import mdx from '@astrojs/mdx';
 import icon from 'astro-icon';
 import { unified } from '@astrojs/markdown-remark';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeRaw from 'rehype-raw';
@@ -107,6 +109,12 @@ export default defineConfig({
       theme: 'one-dark-pro',
     },
     processor: unified({
+      // 수식은 빌드 시점에 렌더링한다. 예전에는 MathJax 2.7.6 을 cdnjs 에서 런타임에
+      // 불러왔는데(글 1편당 약 500KB), 정작 MathJax 2 는 인라인 $ 를 기본으로 끄기 때문에
+      // 본문의 $f_k(x,y)$ 같은 수식이 원본 LaTeX 그대로 노출되고 있었다.
+      // KaTeX 의 MathML 출력을 쓰면 런타임 JS·CSS·웹폰트가 모두 0 이고
+      // 브라우저가 직접 그리므로 선택·스크린리더도 된다.
+      remarkPlugins: [remarkMath],
       rehypePlugins: [
         rehypeSlug,
         [rehypeAutolinkHeadings, { behavior: 'prepend', properties: { class: 'anchor-head' } }],
@@ -115,6 +123,7 @@ export default defineConfig({
         // 먼저 파싱해두면 raw HTML 이미지도 같은 처리를 받는다.
         rehypeRaw,
         rehypeImageAttrs,
+        [rehypeKatex, { output: 'mathml', strict: false, throwOnError: false }],
       ],
     }),
   },
