@@ -1,0 +1,105 @@
+---
+const rows = [
+  {
+    mark: '✕',
+    tone: 'bad',
+    sql: ['WHERE created_at < :c'],
+    note: '커서와 같은 시각인 행이 통째로 누락된다',
+  },
+  {
+    mark: '✕',
+    tone: 'bad',
+    sql: ['WHERE created_at <= :c'],
+    note: '커서 행이 다시 나와 무한 루프에 빠진다',
+  },
+  {
+    mark: '△',
+    tone: 'warn',
+    sql: ['WHERE created_at < :c', '   OR (created_at = :c AND id < :cid)'],
+    note: '결과는 맞지만 옵티마이저가 필터로 처리할 수 있다',
+  },
+  {
+    mark: '✓',
+    tone: 'good',
+    sql: [
+      'WHERE (created_at, id) < (:c, :cid)',
+      'ORDER BY created_at DESC, id DESC',
+      'INDEX (created_at DESC, id DESC)',
+    ],
+    note: 'row 비교 → Index Cond로 내려가 B-tree seek 한 번',
+  },
+];
+
+// 위아래 여백을 16px로 맞춘다.
+//   첫 SQL 베이스라인 = y + 26  (여백 16 + ascender 10)
+//   SQL 줄 간격 18, 주석은 마지막 SQL에서 +19, 주석 아래 여백 18
+const PAD_TOP = 26;
+const LINE = 18;
+const NOTE_GAP = 19;
+const PAD_BOTTOM = 18;
+
+let y = 34;
+const cards = rows.map((r) => {
+  const h = PAD_TOP + (r.sql.length - 1) * LINE + NOTE_GAP + PAD_BOTTOM;
+  const c = { ...r, y, h };
+  y += h + 9;
+  return c;
+});
+const H = y + 4;
+
+// 아이콘은 항상 채운 원 + 배경색 글자. 대비는 원의 색으로만 구분한다.
+const disc = { bad: 'var(--muted)', warn: 'var(--accent-strong)', good: 'var(--ink)' };
+const edge = { bad: 'var(--rule)', warn: 'var(--accent)', good: 'var(--ink)' };
+const ink = { bad: 'var(--muted)', warn: 'var(--accent-strong)', good: 'var(--ink)' };
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="커서 조건 네 가지 비교 — row 비교 문법이 정답">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">같은 목적, 네 가지 조건문</text>
+
+{cards.map((c) => (
+  <g>
+    <rect x={24} y={c.y} width={624} height={c.h} rx={3}
+          fill={c.tone === 'good' ? 'var(--bg-soft)' : 'none'}
+          stroke={edge[c.tone]}
+          stroke-width={c.tone === 'good' ? 1.6 : 1}/>
+
+    <circle cx={48} cy={c.y + 21} r={9} fill={disc[c.tone]}/>
+    <text class="mark" x={48} y={c.y + 24.6} text-anchor="middle" fill="var(--bg)">{c.mark}</text>
+
+    {c.sql.map((ln, j) => (
+      <text class="m sql" x={70} y={c.y + PAD_TOP + j * LINE}
+            font-weight={c.tone === 'good' && j === 0 ? 700 : 400}
+            fill={c.tone === 'good' ? 'var(--ink)' : 'var(--body)'}
+            opacity={c.tone === 'good' && j > 0 ? 0.6 : 1}>{ln}</text>
+    ))}
+
+    <text class="cap" x={70} y={c.y + PAD_TOP + (c.sql.length - 1) * LINE + NOTE_GAP}
+          fill={ink[c.tone]}>{c.note}</text>
+
+    {c.tone === 'good' && (
+      <text class="badge" x={628} y={c.y + PAD_TOP} text-anchor="end" fill="var(--ink)">이게 정답</text>
+    )}
+  </g>
+))}
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .m { font-family: var(--font-mono); }
+.dg .sql { font-size: 12px; }
+.dg .cap { font-size: 11px; }
+.dg .mark { font-size: 10px; font-weight: 700; }
+.dg .badge { font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 540px; }
+}
+</style>

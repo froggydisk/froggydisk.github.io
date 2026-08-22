@@ -1,0 +1,92 @@
+---
+const rows = [
+  {
+    q: '임의의 페이지로 곧장 점프해야 하는가?',
+    hint: '페이지 번호 UI가 있다는 것 자체는 이유가 아니다',
+    verdict: 'OFFSET 유지',
+    vhint: '상한을 두거나, 앵커 커서로',
+    tone: 'off',
+  },
+  {
+    q: '요청 사이에 데이터가 계속 삽입 / 삭제되는가?',
+    hint: '실시간 피드, 알림, 로그',
+    verdict: 'CURSOR',
+    vhint: '중복과 누락이 사라진다',
+    tone: 'cur',
+  },
+  {
+    q: '도달 깊이가 수만 행을 넘어가는가?',
+    hint: '무한 스크롤, 전체 순회, 데이터 내보내기',
+    verdict: 'CURSOR',
+    vhint: '깊이와 무관하게 일정',
+    tone: 'cur',
+  },
+  {
+    q: '정렬키가 unique한가? tie-breaker를 붙일 수 있는가?',
+    hint: 'created_at 단독은 부족하다 · (created_at, id)',
+    verdict: '정렬키 설계부터',
+    vhint: 'CURSOR의 전제 조건',
+    tone: 'warn',
+  },
+];
+const ys = [42, 120, 198, 276];
+const stroke = { off: 'var(--rule)', cur: 'var(--ink)', warn: 'var(--accent)' };
+const ink = { off: 'var(--body)', cur: 'var(--ink)', warn: 'var(--accent-strong)' };
+---
+
+<div class="dg">
+<svg width="100%" viewBox="0 0 672 434" xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="위에서부터 내려가며 처음 예가 나오는 곳에서 멈추는 페이지네이션 선택 흐름도">
+
+<defs>
+  <marker id="treeYes" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+  <marker id="treeNo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--rule)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">위에서부터 내려가며, 처음 &quot;예&quot;가 나오는 곳에서 멈춘다</text>
+
+{rows.map((r, i) => (
+  <g>
+    <rect x={24} y={ys[i]} width={340} height={52} rx={3} fill="none" stroke="var(--rule)" stroke-width="1"/>
+    <text class="q" x={40} y={ys[i] + 22} fill="var(--ink)">{r.q}</text>
+    <text class="cap" x={40} y={ys[i] + 39} fill="var(--muted)">{r.hint}</text>
+
+    <text class="cap" x={392} y={ys[i] + 22} text-anchor="middle" fill="var(--muted)">예</text>
+    <line x1={368} y1={ys[i] + 28} x2={412} y2={ys[i] + 28} stroke="var(--muted)" stroke-width="1" marker-end="url(#treeYes)"/>
+
+    <rect x={420} y={ys[i] + 2} width={228} height={48} rx={3}
+          fill={r.tone === 'cur' ? 'var(--bg-soft)' : 'none'}
+          stroke={stroke[r.tone]} stroke-width={r.tone === 'off' ? 1 : 1.6}/>
+    <text class="m verdict" x={534} y={ys[i] + 22} text-anchor="middle" fill={ink[r.tone]}>{r.verdict}</text>
+    <text class="cap" x={534} y={ys[i] + 38} text-anchor="middle" fill={ink[r.tone]}>{r.vhint}</text>
+
+    <line x1={194} y1={ys[i] + 52} x2={194} y2={ys[i] + 74} stroke="var(--rule)" stroke-width="1" marker-end="url(#treeNo)"/>
+    <text class="cap" x={206} y={ys[i] + 69} fill="var(--muted)">아니오</text>
+  </g>
+))}
+
+<rect x={88} y={358} width={496} height={50} rx={3} fill="none" stroke="var(--rule)" stroke-width="1" stroke-dasharray="5 4"/>
+<text class="m verdict" x={336} y={379} text-anchor="middle" fill="var(--body)">OFFSET으로 시작하되, 커서 인터페이스로 감싸둔다</text>
+<text class="cap" x={336} y={396} text-anchor="middle" fill="var(--muted)">내부를 keyset으로 바꿔도 API 계약이 깨지지 않는다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .m { font-family: var(--font-mono); }
+.dg .q { font-size: 12.5px; font-weight: 600; }
+.dg .verdict { font-size: 12px; font-weight: 700; }
+.dg .cap { font-size: 11px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

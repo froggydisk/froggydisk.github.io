@@ -1,0 +1,83 @@
+---
+const page1 = ['1000000', '999999', '999998', '999997', '999996'];
+const offsetPage2 = ['999996', '999995', '999994', '999993', '999992'];
+const keysetPage2 = ['999995', '999994', '999993', '999992', '999991'];
+const xs = [116, 224, 332, 440, 548];
+const W = 100;
+---
+
+<div class="dg">
+<svg width="100%" viewBox="0 0 672 330" xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="페이지 1과 2 사이에 글이 하나 등록되면 OFFSET은 이미 본 행을 다시 반환하고, KEYSET은 중복 없이 이어진다">
+
+<defs>
+  <marker id="driftArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">페이지 1과 페이지 2 사이에 글 1건이 등록되면</text>
+
+<!-- ── t1 ── -->
+<text class="m row" x="104" y="60" text-anchor="end" fill="var(--ink)">t1 · page 1</text>
+<text class="m cap" x="104" y="75" text-anchor="end" fill="var(--muted)">LIMIT 5</text>
+{page1.map((id, i) => (
+  <g>
+    <rect x={xs[i]} y={44} width={W} height={30} rx={3} fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+    <text class="m val" x={xs[i] + W / 2} y={64} text-anchor="middle">{id}</text>
+  </g>
+))}
+<text class="cap" x={xs[4] + W / 2} y={90} text-anchor="middle" fill="var(--accent-strong)">↑ 마지막 행 = 커서</text>
+
+<!-- ── t2 ── -->
+<text class="m row" x="104" y="126" text-anchor="end" fill="var(--accent-strong)">t2 · INSERT</text>
+<line x1="116" y1="122" x2="644" y2="122" stroke="var(--accent)" stroke-width="1" stroke-dasharray="4 4" marker-end="url(#driftArrow)"/>
+<text x="382" y="113" text-anchor="middle" font-size="12" fill="var(--accent-strong)">새 글 1건 → 모든 행의 순번이 한 칸씩 밀린다</text>
+
+<!-- ── t3 offset ── -->
+<text class="m row" x="104" y="168" text-anchor="end" fill="var(--accent-strong)">t3 · OFFSET 5</text>
+<text class="m cap" x="104" y="183" text-anchor="end" fill="var(--muted)">page 2</text>
+{offsetPage2.map((id, i) => (
+  <g>
+    <rect x={xs[i]} y={152} width={W} height={30} rx={3}
+          fill={i === 0 ? 'var(--accent)' : 'var(--bg-soft)'}
+          fill-opacity={i === 0 ? 0.12 : 1}
+          stroke={i === 0 ? 'var(--accent)' : 'var(--rule)'}
+          stroke-width={i === 0 ? 1.5 : 1}/>
+    <text class="m val" x={xs[i] + W / 2} y={172} text-anchor="middle"
+          font-weight={i === 0 ? 700 : 400}
+          fill={i === 0 ? 'var(--accent-strong)' : 'var(--body)'}>{id}</text>
+  </g>
+))}
+<text class="cap" x={xs[0] + W / 2} y={198} text-anchor="middle" fill="var(--accent-strong)">page 1에서 이미 본 행</text>
+
+<!-- ── t3 keyset ── -->
+<text class="m row" x="104" y="254" text-anchor="end" fill="var(--ink)">t3 · KEYSET</text>
+<text class="m cap" x="104" y="269" text-anchor="end" fill="var(--muted)">cursor = 999996</text>
+{keysetPage2.map((id, i) => (
+  <g>
+    <rect x={xs[i]} y={238} width={W} height={30} rx={3} fill="none" stroke="var(--ink)" stroke-width="1"/>
+    <text class="m val" x={xs[i] + W / 2} y={258} text-anchor="middle" fill="var(--ink)">{id}</text>
+  </g>
+))}
+
+<line x1="116" y1="294" x2="644" y2="294" stroke="var(--rule)" stroke-width="1"/>
+<text class="cap" x="382" y="313" text-anchor="middle" fill="var(--muted)">중복 없음 · 커서는 순번이 아니라 값을 기준으로 한다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .m { font-family: var(--font-mono); }
+.dg .val { font-size: 11.5px; }
+.dg .cap { font-size: 11px; }
+.dg .row { font-size: 12px; font-weight: 700; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

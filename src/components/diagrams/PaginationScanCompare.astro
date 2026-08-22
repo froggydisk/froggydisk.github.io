@@ -1,0 +1,62 @@
+<div class="dg">
+<svg width="100%" viewBox="0 0 672 286" xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="OFFSET은 999,980행을 읽고 버린 뒤 20행을 반환하고, KEYSET은 B-tree seek 한 번으로 20행만 읽는다">
+
+<defs>
+  <pattern id="scanHatch" width="6" height="6" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+    <line x1="0" y1="0" x2="0" y2="6" stroke="var(--accent)" stroke-width="1" opacity="0.55"/>
+  </pattern>
+  <marker id="scanSeek" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--ink)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">같은 20행을 얻는 두 가지 방법 · 100만 행의 마지막 페이지</text>
+
+<!-- ── OFFSET ── -->
+<text class="m row" x="72" y="80" text-anchor="end" fill="var(--accent-strong)">OFFSET</text>
+<text class="m cap" x="72" y="95" text-anchor="end" fill="var(--muted)">999980</text>
+
+<rect x="88" y="62" width="528" height="38" fill="url(#scanHatch)"/>
+<rect x="88" y="62" width="528" height="38" fill="none" stroke="var(--accent)" stroke-width="1"/>
+<rect x="274" y="70" width="156" height="22" fill="var(--bg)"/>
+<text x="352" y="86" text-anchor="middle" font-size="12" fill="var(--accent-strong)">읽고 버린 999,980행</text>
+
+<text class="cap" x="632" y="55" text-anchor="middle" fill="var(--muted)">반환 20</text>
+<rect x="616" y="62" width="32" height="38" fill="var(--ink)"/>
+
+<text class="m cap" x="88" y="120" fill="var(--muted)">141.140 ms · 37,168 buffers · 1,000,000 rows scanned</text>
+
+<line x1="88" y1="144" x2="648" y2="144" stroke="var(--rule)" stroke-width="1"/>
+
+<!-- ── KEYSET ── -->
+<text class="m row" x="72" y="218" text-anchor="end" fill="var(--ink)">KEYSET</text>
+<text class="m cap" x="72" y="233" text-anchor="end" fill="var(--muted)">cursor</text>
+
+<text x="352" y="166" text-anchor="middle" font-size="11.5" fill="var(--ink)">B-tree seek 1회 · 커서 값으로 바로 찾아간다</text>
+<path d="M 92 190 Q 352 180 604 194" fill="none" stroke="var(--ink)" stroke-width="1.2" marker-end="url(#scanSeek)"/>
+
+<rect x="88" y="200" width="528" height="38" fill="none" stroke="var(--rule)" stroke-width="1" stroke-dasharray="4 4"/>
+<text class="cap" x="352" y="224" text-anchor="middle" fill="var(--muted)">건드리지 않음</text>
+
+<text class="cap" x="632" y="193" text-anchor="middle" fill="var(--muted)">읽은 20</text>
+<rect x="616" y="200" width="32" height="38" fill="var(--ink)"/>
+
+<text class="m cap" x="88" y="258" fill="var(--muted)">0.017 ms · 4 buffers · 20 rows scanned</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .m { font-family: var(--font-mono); }
+.dg .cap { font-size: 11px; }
+.dg .row { font-size: 13px; font-weight: 700; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>
