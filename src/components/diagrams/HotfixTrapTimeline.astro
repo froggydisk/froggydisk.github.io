@@ -1,92 +1,111 @@
-<div class="hotfix-trap">
-<svg width="100%" viewBox="0 0 720 350" xmlns="http://www.w3.org/2000/svg">
+---
+const MAIN = 96, DEV = 228, HOTFIX = 162;
 
-<!-- Title -->
-<text x="360" y="22" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="600" fill="var(--ht-dim)" letter-spacing="0.08em">HOTFIX TRAP — 5단계 시간선</text>
+const nodes = {
+  branch: { x: 112, y: MAIN,   r: 6,  hue: 5 },
+  hotfix: { x: 176, y: HOTFIX, r: 8,  hue: 5 },
+  fMain:  { x: 264, y: MAIN,   r: 13, hue: 5 },
+  fDev:   { x: 352, y: DEV,    r: 13, hue: 5 },
+  revert: { x: 456, y: MAIN,   r: 13, hue: 4 },
+  sync:   { x: 560, y: DEV,    r: 14, hue: 1 },
+};
 
-<!-- Branch labels -->
-<text x="70" y="105" text-anchor="end" font-family="'SF Mono', 'Consolas', monospace" font-size="14" font-weight="700" fill="var(--ht-text)">main</text>
-<text x="70" y="245" text-anchor="end" font-family="'SF Mono', 'Consolas', monospace" font-size="14" font-weight="700" fill="var(--ht-text)">develop</text>
+// 연결선 끝을 원 반지름만큼 잘라내 노드를 파고들지 않게 한다.
+function link(a, b, cx, cy, gap = 3) {
+  const trim = (p, tx, ty, r) => {
+    const dx = tx - p.x, dy = ty - p.y;
+    const d = Math.hypot(dx, dy) || 1;
+    const k = (r + gap) / d;
+    return [(p.x + dx * k).toFixed(1), (p.y + dy * k).toFixed(1)];
+  };
+  const [sx, sy] = trim(a, cx, cy, a.r);
+  const [ex, ey] = trim(b, cx, cy, b.r);
+  return `M ${sx} ${sy} Q ${cx} ${cy} ${ex} ${ey}`;
+}
 
-<!-- Branch lines -->
-<line x1="80" y1="100" x2="700" y2="100" stroke="var(--ht-line)" stroke-width="2"/>
-<line x1="80" y1="240" x2="700" y2="240" stroke="var(--ht-line)" stroke-width="2"/>
+const links = [
+  { d: link(nodes.branch, nodes.hotfix, 144, 128), hue: 5, w: 1.5, dash: null },
+  { d: link(nodes.hotfix, nodes.fMain,  220, 128), hue: 5, w: 1.5, dash: null },
+  { d: link(nodes.hotfix, nodes.fDev,   264, 196), hue: 5, w: 1.5, dash: '4 3' },
+  { d: link(nodes.revert, nodes.sync,   516, 162), hue: 1, w: 2,   dash: null },
+];
 
-<!-- Step 1: branch from main -->
-<circle cx="130" cy="100" r="7" fill="var(--ht-line)"/>
-<path d="M 130 100 Q 160 130 195 165" stroke="var(--ht-feature)" stroke-width="1.5" fill="none"/>
-<circle cx="200" cy="170" r="8" fill="var(--ht-feature)"/>
-<text x="200" y="190" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="12" fill="var(--ht-feature-text)">hotfix</text>
+const badges = [
+  { x: 112, t: '① 분기' },
+  { x: 264, t: '② main 머지' },
+  { x: 352, t: '③ develop 동기화' },
+  { x: 456, t: '④ revert' },
+  { x: 560, t: '⑤ 정기 동기화' },
+];
+---
 
-<!-- Step 2: feature → main merge -->
-<path d="M 200 170 Q 250 140 285 105" stroke="var(--ht-feature)" stroke-width="1.5" fill="none"/>
-<circle cx="290" cy="100" r="12" fill="var(--ht-feature-fill)" stroke="var(--ht-feature)" stroke-width="2"/>
-<text x="290" y="104" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="12" font-weight="700" fill="var(--ht-feature-text)">F</text>
-<text x="290" y="76" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="600" fill="var(--ht-text)">feature 머지</text>
+<div class="dg">
+<svg width="100%" viewBox="0 0 672 330" xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="main에서 revert한 뒤 정기 동기화를 하면 develop의 코드가 사라지는 다섯 단계">
 
-<!-- Step 3: feature → develop merge -->
-<path d="M 200 170 Q 280 200 375 235" stroke="var(--ht-feature)" stroke-width="1.5" fill="none" stroke-dasharray="4 3"/>
-<circle cx="380" cy="240" r="12" fill="var(--ht-feature-fill)" stroke="var(--ht-feature)" stroke-width="2"/>
-<text x="380" y="244" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="12" font-weight="700" fill="var(--ht-feature-text)">F</text>
-<text x="380" y="270" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="600" fill="var(--ht-text)">feature 동기화</text>
+<text class="ttl" x="336" y="20" text-anchor="middle" fill="var(--muted)">핫픽스 함정이 터지기까지 다섯 단계</text>
 
-<!-- Step 4: revert on main -->
-<circle cx="490" cy="100" r="12" fill="var(--ht-revert-fill)" stroke="var(--ht-revert)" stroke-width="2"/>
-<text x="490" y="104" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="12" font-weight="700" fill="var(--ht-revert-text)">R</text>
-<text x="490" y="76" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="600" fill="var(--ht-revert-text)">revert</text>
+<!-- 브랜치 -->
+<text class="m branch" x="64" y={MAIN + 5} text-anchor="end" fill="var(--ink)">main</text>
+<text class="m branch" x="64" y={DEV + 5} text-anchor="end" fill="var(--ink)">develop</text>
+<line x1="76" y1={MAIN} x2="640" y2={MAIN} stroke="var(--rule)" stroke-width="1.5"/>
+<line x1="76" y1={DEV} x2="640" y2={DEV} stroke="var(--rule)" stroke-width="1.5"/>
 
-<!-- Step 5: main → develop sync (the trap fires) -->
-<path d="M 490 100 Q 565 170 615 235" stroke="var(--ht-bomb)" stroke-width="2" fill="none"/>
-<circle cx="620" cy="240" r="14" fill="var(--ht-bomb-fill)" stroke="var(--ht-bomb)" stroke-width="2"/>
-<text x="620" y="244" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="12" font-weight="700" fill="var(--ht-bomb-text)">M</text>
-<text x="620" y="270" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="700" fill="var(--ht-bomb-text)">정기 동기화</text>
+<!-- 연결선을 노드보다 먼저 그린다 -->
+{links.map((l) => (
+  <path d={l.d} fill="none" stroke={`var(--dg-${l.hue})`} stroke-width={l.w} stroke-dasharray={l.dash ?? undefined}/>
+))}
 
-<!-- Boom marker (8-pointed star) -->
-<g transform="translate(680, 240)">
-  <path d="M 0 -18 L 5 -5 L 18 0 L 5 5 L 0 18 L -5 5 L -18 0 L -5 -5 z" fill="var(--ht-bomb)" opacity="0.9"/>
+<!-- 노드 -->
+<circle cx={nodes.branch.x} cy={nodes.branch.y} r={nodes.branch.r} fill="var(--rule)"/>
+
+<circle cx={nodes.hotfix.x} cy={nodes.hotfix.y} r={nodes.hotfix.r} fill="var(--dg-5-soft)" stroke="var(--dg-5)" stroke-width="1.5"/>
+<text class="m lbl" x={nodes.hotfix.x} y={nodes.hotfix.y + 26} text-anchor="middle" fill="var(--dg-5-ink)">hotfix</text>
+
+<circle cx={nodes.fMain.x} cy={nodes.fMain.y} r={nodes.fMain.r} fill="var(--dg-5-soft)" stroke="var(--dg-5)" stroke-width="1.5"/>
+<text class="m mark" x={nodes.fMain.x} y={nodes.fMain.y + 4} text-anchor="middle" fill="var(--dg-5-ink)">F</text>
+<text class="lbl" x={nodes.fMain.x} y={nodes.fMain.y - 24} text-anchor="middle" fill="var(--body)">feature 머지</text>
+
+<circle cx={nodes.fDev.x} cy={nodes.fDev.y} r={nodes.fDev.r} fill="var(--dg-5-soft)" stroke="var(--dg-5)" stroke-width="1.5"/>
+<text class="m mark" x={nodes.fDev.x} y={nodes.fDev.y + 4} text-anchor="middle" fill="var(--dg-5-ink)">F</text>
+<text class="lbl" x={nodes.fDev.x} y={nodes.fDev.y + 30} text-anchor="middle" fill="var(--body)">feature 동기화</text>
+
+<circle cx={nodes.revert.x} cy={nodes.revert.y} r={nodes.revert.r} fill="var(--dg-4-soft)" stroke="var(--dg-4)" stroke-width="1.5"/>
+<text class="m mark" x={nodes.revert.x} y={nodes.revert.y + 4} text-anchor="middle" fill="var(--dg-4-ink)">R</text>
+<text class="lbl" x={nodes.revert.x} y={nodes.revert.y - 24} text-anchor="middle" fill="var(--dg-4-ink)">revert</text>
+
+<circle cx={nodes.sync.x} cy={nodes.sync.y} r={nodes.sync.r} fill="var(--dg-1-soft)" stroke="var(--dg-1)" stroke-width="1.8"/>
+<text class="m mark" x={nodes.sync.x} y={nodes.sync.y + 4} text-anchor="middle" fill="var(--dg-1-ink)">M</text>
+<text class="lbl" x={nodes.sync.x} y={nodes.sync.y + 32} text-anchor="middle" fill="var(--dg-1-ink)">정기 동기화</text>
+
+<!-- 폭발 -->
+<g transform={`translate(612, ${DEV})`}>
+  <path d="M 0 -16 L 4.5 -4.5 L 16 0 L 4.5 4.5 L 0 16 L -4.5 4.5 L -16 0 L -4.5 -4.5 z" fill="var(--dg-1)"/>
 </g>
-<text x="680" y="218" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="700" fill="var(--ht-bomb-text)">코드 사라짐</text>
+<text class="cap" x="612" y={DEV - 24} text-anchor="middle" fill="var(--dg-1-ink)">코드 사라짐</text>
 
-<!-- Step number badges -->
-<g font-family="'SF Mono', 'Consolas', monospace" font-size="12" fill="var(--ht-dim)">
-  <text x="130" y="320" text-anchor="middle">① 분기</text>
-  <text x="290" y="320" text-anchor="middle">② main 머지</text>
-  <text x="380" y="320" text-anchor="middle">③ develop 동기화</text>
-  <text x="490" y="320" text-anchor="middle">④ revert</text>
-  <text x="620" y="320" text-anchor="middle">⑤ 정기 동기화</text>
-</g>
-
-<!-- Time axis hint -->
-<line x1="80" y1="305" x2="660" y2="305" stroke="var(--ht-dim)" stroke-width="0.5" stroke-dasharray="2 3" opacity="0.4"/>
-<text x="700" y="308" font-family="'SF Mono', 'Consolas', monospace" font-size="11" fill="var(--ht-dim)">→ time</text>
+<!-- 단계 -->
+<line x1="76" y1="284" x2="600" y2="284" stroke="var(--rule)" stroke-width="1" stroke-dasharray="3 3"/>
+<text class="m cap" x="640" y="288" text-anchor="end" fill="var(--muted)">time →</text>
+{badges.map((b) => (
+  <text class="cap" x={b.x} y="306" text-anchor="middle" fill="var(--muted)">{b.t}</text>
+))}
 
 </svg>
 </div>
 
 <style>
-.hotfix-trap {
-  --ht-text: var(--body);
-  --ht-dim: var(--muted);
-  --ht-line: var(--rule);
-  --ht-feature: var(--dg-5);
-  --ht-feature-fill: var(--dg-5-soft);
-  --ht-feature-text: var(--dg-5-ink);
-  --ht-revert: var(--dg-4);
-  --ht-revert-fill: var(--dg-4-soft);
-  --ht-revert-text: var(--dg-4-ink);
-  --ht-bomb: var(--dg-1);
-  --ht-bomb-fill: var(--dg-1-soft);
-  --ht-bomb-text: var(--dg-1-ink);
-
-  margin: 2rem 0;
-  overflow-x: auto;
-}
-.hotfix-trap svg {
-  display: block;
-  height: auto;
-}
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .m { font-family: var(--font-mono); }
+.dg .branch { font-size: 13px; font-weight: 700; }
+.dg .mark { font-size: 12px; font-weight: 700; }
+.dg .lbl { font-size: 12px; font-weight: 600; }
+.dg .cap { font-size: 11px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
 @media (max-width: 700px) {
-  .hotfix-trap { overflow-x: auto; }
-  .hotfix-trap svg { min-width: 560px; }
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
 }
 </style>
