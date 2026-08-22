@@ -197,7 +197,25 @@ const description =
     var DRIFT = 14, PARALLAX = 18;
     var x = 0, y = 0, tx = 0, ty = 0, clock = 0, last = performance.now();
 
+    // 헤딩 위치는 pointermove 마다 다시 재면 매 이벤트가 강제 레이아웃을 유발한다.
+    // 한 번 재서 캐시하고, 레이아웃이 바뀔 수 있는 시점(리사이즈·스크롤)에만 버린다.
+    var rect = null;
+    function headingRect() {
+      if (!rect) rect = heading.getBoundingClientRect();
+      return rect;
+    }
+    function dropRect() { rect = null; }
+    window.addEventListener('resize', dropRect);
+    window.addEventListener('scroll', dropRect, { passive: true });
+    // 홈은 .wrapper 가 실제 스크롤 컨테이너다
+    var scroller = document.querySelector('.wrapper');
+    if (scroller) scroller.addEventListener('scroll', dropRect, { passive: true });
+
+    var rafId = null;
+    var lastWritten = '';
+
     function frame(now) {
+      rafId = requestAnimationFrame(frame);
       var dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       clock += dt;
@@ -206,12 +224,27 @@ const description =
       var ease = 1 - Math.exp(-dt / 0.18);
       x += (tx + dx - x) * ease;
       y += (ty + dy - y) * ease;
-      heading.style.backgroundPosition = (50 + x).toFixed(2) + '% ' + (50 + y).toFixed(2) + '%';
-      requestAnimationFrame(frame);
+      var pos = (50 + x).toFixed(2) + '% ' + (50 + y).toFixed(2) + '%';
+      // 값이 그대로면 쓰지 않는다 (불필요한 스타일 무효화 방지)
+      if (pos !== lastWritten) {
+        heading.style.backgroundPosition = pos;
+        lastWritten = pos;
+      }
+    }
+
+    function start() {
+      if (rafId !== null) return;
+      last = performance.now();
+      rafId = requestAnimationFrame(frame);
+    }
+    function stop() {
+      if (rafId === null) return;
+      cancelAnimationFrame(rafId);
+      rafId = null;
     }
 
     hit.addEventListener('pointermove', function (e) {
-      var r = heading.getBoundingClientRect();
+      var r = headingRect();
       var nx = ((e.clientX - r.left) / (r.width || 1)) * 2 - 1;
       var ny = ((e.clientY - r.top) / (r.height || 1)) * 2 - 1;
       tx = Math.max(-1, Math.min(1, nx)) * -PARALLAX;
@@ -219,6 +252,14 @@ const description =
     });
     hit.addEventListener('pointerleave', function () { tx = 0; ty = 0; });
 
-    requestAnimationFrame(frame);
+    // 화면에서 벗어나면 멈춘다. 보이지도 않는 텍스트를 매 프레임 다시 그릴 이유가 없다.
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) start();
+        else stop();
+      }).observe(heading);
+    } else {
+      start();
+    }
   })();
 </script>
