@@ -2,94 +2,142 @@
 <canvas id="canvas" class="background"></canvas>
 
 <script>
-  import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js';
+  // three는 다크 모드에서만 쓰이므로 정적 import를 쓰면 안 된다.
+  // ES import는 호이스팅되어 가드보다 먼저 평가되므로, 라이트(기본 테마) 방문자도
+  // 곧바로 버려질 1.2MB를 내려받게 된다. 첫 다크 진입 시점에 동적 import로 불러온다.
+  //
+  // 테마 토글이 페이지를 리로드하지 않으므로, 로드 시점의 테마만 보고 끝낼 수 없다.
+  // themechange 이벤트를 받아 루프를 시작/정지한다. three는 한 번만 받아온다.
+  const canvas = document.getElementById('canvas') as HTMLCanvasElement | null;
 
-  const isDark = document.body.getAttribute('data-theme') === 'dark';
-  const canvas = document.getElementById('canvas') as HTMLCanvasElement;
-  if (canvas && isDark) {
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-    renderer.setClearColor(0x000000, 0);
+  if (canvas) {
+    let rafId: number | null = null;
+    let render: (() => void) | null = null;
+    let booting = false;
 
-    const starGroup = new THREE.Group();
-    const parallaxGroup = new THREE.Group();
-    parallaxGroup.add(starGroup);
-
-    function randomInSphere(radius: number) {
-      let x, y, z, d;
-      do {
-        x = Math.random() * 2 - 1;
-        y = Math.random() * 2 - 1;
-        z = Math.random() * 2 - 1;
-        d = x * x + y * y + z * z;
-      } while (d > 1);
-      const scale = radius / Math.sqrt(d);
-      return [x * scale, y * scale, z * scale];
+    function loop() {
+      rafId = requestAnimationFrame(loop);
+      render!();
     }
 
-    function createStarLayer(count: number, size: number, opacity: number) {
-      const geometry = new THREE.BufferGeometry();
-      const vertices = new Float32Array(count * 3);
-      for (let i = 0; i < vertices.length; i += 3) {
-        const [x, y, z] = randomInSphere(1.5);
-        vertices[i] = x;
-        vertices[i + 1] = y;
-        vertices[i + 2] = z;
-      }
-      geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-      const material = new THREE.PointsMaterial({
-        color: 0xffffff,
-        size,
-        transparent: true,
-        opacity,
-      });
-      return new THREE.Points(geometry, material);
+    function startLoop() {
+      if (rafId === null && render) rafId = requestAnimationFrame(loop);
     }
 
-    // Small/dim stars
-    starGroup.add(createStarLayer(1400, 0.003, 0.45));
-    // Medium stars
-    starGroup.add(createStarLayer(500, 0.005, 0.75));
-    // Large/bright stars
-    starGroup.add(createStarLayer(100, 0.01, 1.0));
-
-    scene.add(parallaxGroup);
-    camera.position.z = 1;
-
-    // Mouse parallax
-    let mouseX = 0;
-    let mouseY = 0;
-    let smoothX = 0;
-    let smoothY = 0;
-
-    document.addEventListener('mousemove', (e) => {
-      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-      mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-    });
-
-    function animate() {
-      requestAnimationFrame(animate);
-
-      // Base rotation (continuous spin)
-      starGroup.rotation.x -= 0.001;
-      starGroup.rotation.y -= 0.00067;
-
-      // Mouse parallax on wrapper (smooth lerp, independent of spin)
-      smoothX += (mouseY * 0.05 - smoothX) * 0.02;
-      smoothY += (mouseX * 0.05 - smoothY) * 0.02;
-      parallaxGroup.rotation.x = smoothX;
-      parallaxGroup.rotation.y = smoothY;
-
-      renderer.render(scene, camera);
+    function stopLoop() {
+      if (rafId === null) return;
+      cancelAnimationFrame(rafId);
+      rafId = null;
     }
-    animate();
 
-    window.addEventListener('resize', () => {
+    async function boot() {
+      const THREE = await import(
+        'https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.min.js'
+      );
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ canvas: canvas!, antialias: true, alpha: true });
+      // 캔버스가 숨겨진 상태에서도 올바른 크기를 잡도록 clientWidth 대신 뷰포트를 쓴다
       renderer.setSize(window.innerWidth, window.innerHeight);
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
+      renderer.setClearColor(0x000000, 0);
+
+      const starGroup = new THREE.Group();
+      const parallaxGroup = new THREE.Group();
+      parallaxGroup.add(starGroup);
+
+      function randomInSphere(radius: number) {
+        let x, y, z, d;
+        do {
+          x = Math.random() * 2 - 1;
+          y = Math.random() * 2 - 1;
+          z = Math.random() * 2 - 1;
+          d = x * x + y * y + z * z;
+        } while (d > 1);
+        const scale = radius / Math.sqrt(d);
+        return [x * scale, y * scale, z * scale];
+      }
+
+      function createStarLayer(count: number, size: number, opacity: number) {
+        const geometry = new THREE.BufferGeometry();
+        const vertices = new Float32Array(count * 3);
+        for (let i = 0; i < vertices.length; i += 3) {
+          const [x, y, z] = randomInSphere(1.5);
+          vertices[i] = x;
+          vertices[i + 1] = y;
+          vertices[i + 2] = z;
+        }
+        geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+        const material = new THREE.PointsMaterial({
+          color: 0xffffff,
+          size,
+          transparent: true,
+          opacity,
+        });
+        return new THREE.Points(geometry, material);
+      }
+
+      // Small/dim stars
+      starGroup.add(createStarLayer(1400, 0.003, 0.45));
+      // Medium stars
+      starGroup.add(createStarLayer(500, 0.005, 0.75));
+      // Large/bright stars
+      starGroup.add(createStarLayer(100, 0.01, 1.0));
+
+      scene.add(parallaxGroup);
+      camera.position.z = 1;
+
+      // Mouse parallax
+      let mouseX = 0;
+      let mouseY = 0;
+      let smoothX = 0;
+      let smoothY = 0;
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+        mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+      });
+
+      window.addEventListener('resize', () => {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+      });
+
+      render = () => {
+        // Base rotation (continuous spin)
+        starGroup.rotation.x -= 0.001;
+        starGroup.rotation.y -= 0.00067;
+
+        // Mouse parallax on wrapper (smooth lerp, independent of spin)
+        smoothX += (mouseY * 0.05 - smoothX) * 0.02;
+        smoothY += (mouseX * 0.05 - smoothY) * 0.02;
+        parallaxGroup.rotation.x = smoothX;
+        parallaxGroup.rotation.y = smoothY;
+
+        renderer.render(scene, camera);
+      };
+    }
+
+    async function enable() {
+      if (booting) return;
+      if (!render) {
+        booting = true;
+        try {
+          await boot();
+        } finally {
+          booting = false;
+        }
+        // 로딩 중에 사용자가 다시 라이트로 돌렸을 수 있다
+        if (document.body.getAttribute('data-theme') !== 'dark') return;
+      }
+      startLoop();
+    }
+
+    if (document.body.getAttribute('data-theme') === 'dark') enable();
+
+    document.addEventListener('themechange', (e) => {
+      if ((e as CustomEvent<{ theme: string }>).detail.theme === 'dark') enable();
+      else stopLoop();
     });
   }
 </script>
@@ -109,5 +157,9 @@
   }
   :global(body:not([data-theme="dark"])) .light-layer {
     opacity: 0.22;
+  }
+  /* 라이트에서는 루프를 멈추므로 마지막 프레임이 남는다. 캔버스 자체를 숨긴다. */
+  :global(body:not([data-theme="dark"])) .background {
+    display: none;
   }
 </style>
