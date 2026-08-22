@@ -49,7 +49,7 @@ const description =
     :global(html) {
       overflow: hidden;
     }
-    :global(.wrapper) {
+    :global(body > .wrapper) {
       display: flex;
       flex-direction: column;
       height: calc(100vh - 76px);
@@ -59,15 +59,15 @@ const description =
       scrollbar-width: none;
     }
     @media screen and (max-width: 768px) {
-      :global(.wrapper) {
+      :global(body > .wrapper) {
         height: 100vh;
         height: 100dvh;
       }
     }
-    :global(.wrapper)::-webkit-scrollbar {
+    :global(body > .wrapper)::-webkit-scrollbar {
       display: none;
     }
-    :global(.page-content) {
+    :global(.wrapper > .page-content) {
       flex: 1;
       display: flex;
       flex-direction: column;
