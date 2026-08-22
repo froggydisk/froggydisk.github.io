@@ -439,15 +439,59 @@ const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
 
     // ═══════════════════════════════════════════
     // Animation loop (both views in sync)
+    //
+    // 한 프레임마다 SVG 두 장을 문자열로 조립해 innerHTML에 넣기 때문에
+    // 프레임당 비용이 크다(SVG 전체 재파싱 + 레이아웃 + 페인트). 그래서
+    //   1) 화면에 보일 때만 돌리고,
+    //   2) 30fps로 제한하고,
+    //   3) prefers-reduced-motion이면 한 장만 그리고 멈춘다.
+    // 회전 속도는 경과 시간 기반으로 계산해 기존(60fps × 0.3°)과 동일하게 유지한다.
     // ═══════════════════════════════════════════
-    function animate() {
-      rotY += 0.3;
+    const DEG_PER_SEC = 0.3 * 60;
+    const FRAME_MS = 1000 / 30;
+
+    function draw() {
       renderProductView();
       renderWireframeView();
-      requestAnimationFrame(animate);
     }
 
-    animate();
+    let rafId = null;
+    let last = 0;
+    let onScreen = false;
+
+    function tick(now) {
+      if (!onScreen) { rafId = null; return; }
+      rafId = requestAnimationFrame(tick);
+      const dt = now - last;
+      if (dt < FRAME_MS) return;
+      rotY += DEG_PER_SEC * (dt / 1000);
+      last = now;
+      draw();
+    }
+
+    function start() {
+      if (rafId !== null) return;
+      last = performance.now();
+      rafId = requestAnimationFrame(tick);
+    }
+
+    function stop() {
+      if (rafId === null) return;
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+
+    draw(); // 정지 상태에서도 다이어그램은 보여야 한다
+
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const root = document.querySelector('.moody-split');
+      const io = new IntersectionObserver((entries) => {
+        onScreen = entries[0].isIntersecting;
+        if (onScreen) start();
+        else stop();
+      }, { rootMargin: '100px' });
+      io.observe(root);
+    }
   }
 </script>
 
