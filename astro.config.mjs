@@ -7,6 +7,8 @@ import icon from 'astro-icon';
 import { unified } from '@astrojs/markdown-remark';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeRaw from 'rehype-raw';
+import rehypeImageAttrs from './src/plugins/rehype-image-attrs.mjs';
 
 const SITE = 'https://froggydisk.github.io';
 
@@ -108,6 +110,11 @@ export default defineConfig({
       rehypePlugins: [
         rehypeSlug,
         [rehypeAutolinkHeadings, { behavior: 'prepend', properties: { class: 'anchor-head' } }],
+        // Astro는 rehype-raw를 사용자 플러그인 "뒤"에 돌린다. 그래서 본문에 손으로 쓴
+        // <img> 같은 raw HTML이 아래 rehypeImageAttrs에게는 아직 element로 안 보인다.
+        // 먼저 파싱해두면 raw HTML 이미지도 같은 처리를 받는다.
+        rehypeRaw,
+        rehypeImageAttrs,
       ],
     }),
   },

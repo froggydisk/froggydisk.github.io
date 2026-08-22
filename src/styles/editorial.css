@@ -386,6 +386,12 @@ body[data-theme="dark"] blockquote {
   margin: 2.4rem auto;
   border-radius: 3px;
 }
+/* rehype-image-attrs가 원본 크기를 width/height로 넣어준 이미지.
+   max-width로 폭이 줄 때 height도 같이 줄어야 늘어나 보이지 않는다.
+   손으로 크기를 지정한 이미지에는 적용되지 않도록 이 속성에만 건다. */
+.page-content img[data-intrinsic] {
+  height: auto;
+}
 .page-content figure { margin: 2.4rem 0; }
 .page-content figure img { margin: 0 auto; }
 .page-content figure figcaption {
