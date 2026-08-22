@@ -44,7 +44,7 @@ last_modified_at: 2025-02-24T
 
 영상이라 소음의 정도를 가늠하기는 힘들지만 생각만큼 엄청나지는 않다. 조용한 사무실에서는 쓰기 힘들고 따로 서버실이 있으면 좋을 듯하다.
 
-<video width="100%" controls>
+<video width="100%" controls preload="metadata">
 <source src="/img/server-noise.mp4" type="video/mp4">
 브라우저가 비디오 태그를 지원하지 않습니다.
 </video>
