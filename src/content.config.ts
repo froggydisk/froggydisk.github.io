@@ -5,6 +5,8 @@ const blog = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
   schema: z.object({
     title: z.string(),
+    // 지정하지 않으면 본문 첫 문단에서 자동 추출된다 (src/utils/seo.ts)
+    description: z.string().optional(),
     comments: z.boolean().default(false),
     categories: z.array(z.string()).default(['Blog']),
     tags: z.array(z.string()).default([]),

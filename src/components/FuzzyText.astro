@@ -1,0 +1,255 @@
+---
+/**
+ * reactbits.dev의 FuzzyText(TextAnimations)를 이 사이트용 바닐라 JS로 옮긴 것.
+ * 원본: https://reactbits.dev/text-animations/fuzzy-text (MIT)
+ *
+ * 원본은 React 컴포넌트라 그대로 쓸 수 없어 canvas 렌더링 로직만 가져오고,
+ * 색은 CSS 토큰(--ink)에서 읽어 라이트/다크에 모두 대응하도록 했다.
+ * 원본에 없던 devicePixelRatio 대응과 prefers-reduced-motion 폴백을 추가했다.
+ */
+interface Props {
+  text: string;
+  fontSize?: string;
+  fontWeight?: number;
+  baseIntensity?: number;
+  hoverIntensity?: number;
+  fuzzRange?: number;
+  fps?: number;
+  letterSpacing?: number;
+  colorVar?: string;
+  class?: string;
+}
+
+const {
+  text,
+  fontSize = 'clamp(4rem, 18vw, 9rem)',
+  fontWeight = 600,
+  baseIntensity = 0.16,
+  hoverIntensity = 0.45,
+  fuzzRange = 26,
+  fps = 60,
+  letterSpacing = 0,
+  colorVar = '--ink',
+  class: className = '',
+} = Astro.props;
+---
+
+<div
+  class:list={['fuzzy-text', className]}
+  style={`--fuzzy-size: ${fontSize}; --fuzzy-weight: ${fontWeight};`}
+  data-fuzzy
+  data-text={text}
+  data-font-size={fontSize}
+  data-font-weight={String(fontWeight)}
+  data-base-intensity={String(baseIntensity)}
+  data-hover-intensity={String(hoverIntensity)}
+  data-fuzz-range={String(fuzzRange)}
+  data-fps={String(fps)}
+  data-letter-spacing={String(letterSpacing)}
+  data-color-var={colorVar}
+>
+  <span class="fuzzy-text__fallback">{text}</span>
+  <canvas class="fuzzy-text__canvas" aria-hidden="true"></canvas>
+</div>
+
+<style>
+  .fuzzy-text {
+    font-family: var(--font-sans);
+    line-height: 1;
+  }
+  .fuzzy-text__fallback {
+    display: inline-block;
+    font-size: var(--fuzzy-size);
+    font-weight: var(--fuzzy-weight);
+    color: var(--ink);
+    letter-spacing: var(--fuzzy-tracking, -0.02em);
+  }
+  .fuzzy-text__canvas {
+    display: none;
+    max-width: 100%;
+  }
+  /* 캔버스 초기화에 성공했을 때만 교체한다 (JS 꺼짐·실패 시 텍스트 유지) */
+  .fuzzy-text.is-ready .fuzzy-text__fallback {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .fuzzy-text.is-ready .fuzzy-text__canvas {
+    display: block;
+    margin: 0 auto;
+  }
+</style>
+
+<script>
+  type Cleanup = () => void;
+
+  function initFuzzy(root: HTMLElement): Cleanup | void {
+    const canvas = root.querySelector<HTMLCanvasElement>('.fuzzy-text__canvas');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const text = root.dataset.text ?? '';
+    const fontWeight = Number(root.dataset.fontWeight ?? 600);
+    const baseIntensity = Number(root.dataset.baseIntensity ?? 0.16);
+    const hoverIntensity = Number(root.dataset.hoverIntensity ?? 0.45);
+    const fps = Number(root.dataset.fps ?? 60);
+    const colorVar = root.dataset.colorVar ?? '--ink';
+
+    const styles = window.getComputedStyle(root);
+    const fontFamily = styles.fontFamily || 'sans-serif';
+    const color = styles.getPropertyValue(colorVar).trim() || '#141413';
+
+    // clamp() 같은 표현식을 실제 px로 확정하기 위해 임시 노드로 계산한다
+    const probe = document.createElement('span');
+    probe.style.cssText = `position:absolute;visibility:hidden;font-size:${root.dataset.fontSize ?? '6rem'}`;
+    root.appendChild(probe);
+    const numericFontSize = parseFloat(window.getComputedStyle(probe).fontSize) || 96;
+    probe.remove();
+
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const px = numericFontSize * dpr;
+    const fuzzRange = Number(root.dataset.fuzzRange ?? 26) * dpr;
+    const fontString = `${fontWeight} ${px}px ${fontFamily}`;
+
+    const tracking = Number(root.dataset.letterSpacing ?? 0) * dpr;
+
+    const offscreen = document.createElement('canvas');
+    const offCtx = offscreen.getContext('2d');
+    if (!offCtx) return;
+
+    offCtx.font = fontString;
+    offCtx.textBaseline = 'alphabetic';
+
+    const chars = Array.from(text);
+    const metrics = offCtx.measureText(text);
+    const ascent = metrics.actualBoundingBoxAscent ?? px;
+    const descent = metrics.actualBoundingBoxDescent ?? px * 0.2;
+
+    // 좌우 여백을 '잉크 박스' 기준으로 대칭으로 잡아야 캔버스 중앙 = 글자 중앙이 된다.
+    // advance(전진폭)로 계산하면 마지막 글자의 오른쪽 사이드베어링만큼 왼쪽으로 쏠린다.
+    let inkLeft: number;
+    let inkWidth: number;
+    if (tracking !== 0) {
+      const first = offCtx.measureText(chars[0] ?? text);
+      const last = offCtx.measureText(chars[chars.length - 1] ?? text);
+      inkLeft = first.actualBoundingBoxLeft ?? 0;
+      let cursor = 0;
+      for (let i = 0; i < chars.length - 1; i++) {
+        cursor += offCtx.measureText(chars[i]).width + tracking;
+      }
+      inkWidth = inkLeft + cursor + (last.actualBoundingBoxRight ?? last.width);
+    } else {
+      inkLeft = metrics.actualBoundingBoxLeft ?? 0;
+      inkWidth = inkLeft + (metrics.actualBoundingBoxRight ?? metrics.width);
+    }
+
+    const textWidth = Math.ceil(inkWidth);
+    const textHeight = Math.ceil(ascent + descent);
+    const buffer = 10 * dpr;
+    const offWidth = textWidth + buffer;
+
+    offscreen.width = offWidth;
+    offscreen.height = textHeight;
+    offCtx.font = fontString;
+    offCtx.textBaseline = 'alphabetic';
+    offCtx.fillStyle = color;
+
+    const startX = buffer / 2 + inkLeft;
+    if (tracking !== 0) {
+      let x = startX;
+      for (const c of chars) {
+        offCtx.fillText(c, x, ascent);
+        x += offCtx.measureText(c).width + tracking;
+      }
+    } else {
+      offCtx.fillText(text, startX, ascent);
+    }
+
+    const margin = fuzzRange + 20 * dpr;
+    canvas.width = offWidth + margin * 2;
+    canvas.height = textHeight;
+    canvas.style.width = `${canvas.width / dpr}px`;
+    canvas.style.height = `${canvas.height / dpr}px`;
+    ctx.translate(margin, 0);
+
+    root.classList.add('is-ready');
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) {
+      // 모션을 줄이도록 설정한 사용자에게는 흔들림 없이 한 번만 그린다
+      ctx.drawImage(offscreen, 0, 0);
+      return;
+    }
+
+    const hoverLeft = margin + buffer / 2;
+    const hoverRight = hoverLeft + textWidth;
+
+    let isHovering = false;
+    let frameId = 0;
+    let lastFrame = 0;
+    const frameDuration = 1000 / fps;
+
+    const run = (timestamp: number) => {
+      if (timestamp - lastFrame < frameDuration) {
+        frameId = requestAnimationFrame(run);
+        return;
+      }
+      lastFrame = timestamp;
+
+      const intensity = isHovering ? hoverIntensity : baseIntensity;
+      ctx.clearRect(-margin, 0, canvas.width, canvas.height);
+
+      for (let j = 0; j < textHeight; j++) {
+        const dx = Math.floor(intensity * (Math.random() - 0.5) * fuzzRange);
+        ctx.drawImage(offscreen, 0, j, offWidth, 1, dx, j, offWidth, 1);
+      }
+
+      frameId = requestAnimationFrame(run);
+    };
+    frameId = requestAnimationFrame(run);
+
+    const onPointerMove = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX - rect.left) * dpr;
+      isHovering = x >= hoverLeft && x <= hoverRight;
+    };
+    const onPointerLeave = () => {
+      isHovering = false;
+    };
+
+    canvas.addEventListener('pointermove', onPointerMove);
+    canvas.addEventListener('pointerleave', onPointerLeave);
+
+    return () => {
+      cancelAnimationFrame(frameId);
+      canvas.removeEventListener('pointermove', onPointerMove);
+      canvas.removeEventListener('pointerleave', onPointerLeave);
+    };
+  }
+
+  const cleanups: Cleanup[] = [];
+
+  function start() {
+    document.querySelectorAll<HTMLElement>('[data-fuzzy]').forEach((el) => {
+      const cleanup = initFuzzy(el);
+      if (cleanup) cleanups.push(cleanup);
+    });
+  }
+
+  // 웹폰트가 붙기 전에 측정하면 폭이 틀어지므로 로드를 기다린다
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(start);
+  } else {
+    start();
+  }
+
+  window.addEventListener('beforeunload', () => cleanups.forEach((fn) => fn()));
+</script>

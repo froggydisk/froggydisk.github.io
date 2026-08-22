@@ -36,7 +36,7 @@ last_modified_at: 2025-02-24T
 
 ## 서버 전면부
 
-![server](/img/server-facade.png)
+![server](/img/server-facade.webp)
 
 사진을 보면 가로로 하나, 세로로 하나 총 두 장의 GPU가 달려있는 것을 확인할 수 있다. 공기 흐름은 아래만 흡기로 하고 나머지는 배기로 하였다. 측면에는 남는 팬을 몇 개 더 달아주었다.
 
@@ -59,15 +59,15 @@ last_modified_at: 2025-02-24T
 
 ### • Time Spy Score
 
-![score](/img/time_spy_score.png)
+![score](/img/time_spy_score.webp)
 
 ### • Fire Strike Score
 
-![score](/img/fire_strike_score.png)
+![score](/img/fire_strike_score.webp)
 
 ### • Night Raid Score
 
-![score](/img/night_raid_score.png)
+![score](/img/night_raid_score.webp)
 
 ## 결론
 

@@ -14,3 +14,6 @@ _site/
 
 # Editor
 ._config.yml.swp
+
+# 스킬/도구 생성물
+graphify-out/

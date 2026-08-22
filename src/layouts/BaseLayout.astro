@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import StarBackground from '../components/StarBackground.astro';
 import '../styles/global.css';
+import '../styles/editorial.css';
 
 interface Props {
   title: string;
@@ -10,10 +11,34 @@ interface Props {
   image?: string;
   isPost?: boolean;
   showStars?: boolean;
+  publishedTime?: string;
+  modifiedTime?: string;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown> | null;
 }
 
-const { title, description = 'Frontend, DevOps, ML/DL 관련 기술 블로그. 개발 과정에서의 문제 해결과 새로운 기술을 기록합니다.', image = '/img/profile.png', isPost = false, showStars = true } = Astro.props;
+const SITE_NAME = 'froggydisk';
+const DEFAULT_DESCRIPTION =
+  'Frontend, DevOps, ML/DL 관련 기술 블로그. 개발 과정에서의 문제 해결과 새로운 기술을 기록합니다.';
+
+const {
+  title,
+  description = DEFAULT_DESCRIPTION,
+  image = '/img/profile.png',
+  isPost = false,
+  showStars = true,
+  publishedTime,
+  modifiedTime,
+  noindex = false,
+  jsonLd = null,
+} = Astro.props;
+
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const imageURL = new URL(image, Astro.site);
+const isDefaultImage = image === '/img/profile.png';
+const pageTitle = `${title} - ${SITE_NAME}`;
+// JSON.stringify는 '<'를 그대로 두므로 제목 등에 </script>가 들어오면 스크립트를 탈출할 수 있다
+const jsonLdText = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : null;
 ---
 
 <!DOCTYPE html>
@@ -21,44 +46,67 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{pageTitle}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonicalURL} />
+  {noindex
+    ? <meta name="robots" content="noindex, follow" />
+    : <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />}
+  <meta name="author" content={SITE_NAME} />
 
   <!-- Open Graph -->
-  <meta property="og:site_name" content={`${title} | froggydisk`} />
-  <meta property="og:title" content={`${title} | froggydisk`} />
+  <meta property="og:site_name" content={SITE_NAME} />
+  <meta property="og:locale" content="ko_KR" />
+  <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonicalURL} />
-  <meta property="og:image" content={new URL(image, Astro.site)} />
-  <meta property="og:image:width" content="640" />
-  <meta property="og:image:height" content="640" />
+  <meta property="og:image" content={imageURL} />
+  <meta property="og:image:alt" content={title} />
+  {isDefaultImage && (
+    <>
+      <meta property="og:image:width" content="640" />
+      <meta property="og:image:height" content="640" />
+    </>
+  )}
   <meta property="og:type" content={isPost ? 'article' : 'website'} />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content={`${title} | froggydisk`} />
+  {isPost && publishedTime && <meta property="article:published_time" content={publishedTime} />}
+  {isPost && modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+  {isPost && <meta property="article:author" content={SITE_NAME} />}
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content={isDefaultImage ? 'summary' : 'summary_large_image'} />
+  <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
-  <meta name="twitter:url" content={canonicalURL} />
+  <meta name="twitter:image" content={imageURL} />
 
   <!-- Favicons -->
   <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
   <link rel="manifest" href="/favicons/site.webmanifest" />
-  <meta name="theme-color" content="#131418" id="theme-color-meta" />
+  <link rel="alternate" type="application/rss+xml" title={SITE_NAME} href={new URL('/rss.xml', Astro.site)} />
+  <meta name="theme-color" content="#faf9f5" id="theme-color-meta" />
   <script is:inline>
     (function() {
       var t = localStorage.getItem('theme');
       var m = document.getElementById('theme-color-meta');
-      if (t === 'light') m.setAttribute('content', '#faf9f6');
+      if (t === 'dark') m.setAttribute('content', '#191816');
     })();
   </script>
 
   <!-- Fonts -->
-  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link
+    rel="stylesheet"
+    crossorigin="anonymous"
+    integrity="sha384-GIdEBaqGN9mNkDkMkzMHW8EKUqtpPIe/sLj1X7DIrnc9uPtLROJgmuDlh+3rBw0j"
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+  />
 
   <!-- AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4715878791193779" crossorigin="anonymous"></script>
 
-  <title>{title} - froggydisk</title>
+  {jsonLdText && <script type="application/ld+json" set:html={jsonLdText} />}
 </head>
 
 <body class="notransition">
@@ -66,11 +114,11 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <script is:inline>
     const theme = localStorage.getItem('theme');
     var themeColorMeta = document.getElementById('theme-color-meta');
-    if (theme === 'dark' || (!theme)) {
+    if (theme === 'dark') {
       document.body.setAttribute('data-theme', 'dark');
-      themeColorMeta.setAttribute('content', '#131418');
+      themeColorMeta.setAttribute('content', '#191816');
     } else {
-      themeColorMeta.setAttribute('content', '#faf9f6');
+      themeColorMeta.setAttribute('content', '#faf9f5');
     }
   </script>
   <Navbar currentPath={Astro.url.pathname} />

@@ -8,9 +8,9 @@ interface Props {
 const { currentPath } = Astro.props;
 
 const menus = [
-  { title: 'home', url: '/', external: false },
-  { title: 'archive', url: '/archive/', external: false },
-  { title: 'about', url: '/about/', external: false },
+  { title: 'Home', url: '/', external: false },
+  { title: 'Archive', url: '/archive/', external: false },
+  { title: 'Projects', url: '/projects/', external: false },
 ];
 ---
 
@@ -63,7 +63,7 @@ const menus = [
   const lamp = document.getElementById('mode');
   lamp?.addEventListener('click', () => {
     const current = localStorage.getItem('theme');
-    if (current === 'dark' || (!current)) {
+    if (current === 'dark') {
       localStorage.setItem('theme', 'light');
     } else {
       localStorage.setItem('theme', 'dark');

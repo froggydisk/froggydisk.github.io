@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { postSlug, postDate, formatDate } from '../utils/seo';
 
 const posts = (await getCollection('blog'))
   .sort((a, b) => {
@@ -10,7 +11,11 @@ const posts = (await getCollection('blog'))
   });
 ---
 
-<BaseLayout title="Archive" showStars={false}>
+<BaseLayout
+  title="Archive"
+  description={`froggydisk 기술 블로그의 전체 글 ${posts.length}편 목록. 프론트엔드, 쿠버네티스·DevOps, ML/DL 문제 해결 기록을 검색하고 연도순으로 훑어볼 수 있습니다.`}
+  showStars={false}
+>
   <header class="header" style="margin-bottom: 2em;">
     <h1 class="header-title">Archive</h1>
   </header>
@@ -25,12 +30,10 @@ const posts = (await getCollection('blog'))
   </div>
 
   {posts.map((post) => {
-    const slug = post.id.replace(/^\d{4}-\d{2}-\d{2}-/, '');
-    const dateStr = post.id.slice(0, 10);
-    const date = new Date(dateStr + 'T00:00:00');
+    const slug = postSlug(post.id);
     return (
       <div class="post-item">
-        <span class="post-item-date">{date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+        <span class="post-item-date">{formatDate(postDate(post.id))}</span>
         <h4 class="post-item-title">
           <a href={`/${slug}/`}>{post.data.title}</a>
         </h4>
@@ -75,19 +78,19 @@ const posts = (await getCollection('blog'))
 <style>
   :global(.pagefind-ui) {
     --pagefind-ui-scale: 0.9;
-    --pagefind-ui-primary: #6b7886;
-    --pagefind-ui-text: #434648;
-    --pagefind-ui-background: #fff;
-    --pagefind-ui-border: #ececec;
+    --pagefind-ui-primary: #6b6a63;
+    --pagefind-ui-text: #2b2a26;
+    --pagefind-ui-background: #faf9f5;
+    --pagefind-ui-border: #e3e0d8;
     --pagefind-ui-border-width: 1px;
     --pagefind-ui-border-radius: 5px;
     --pagefind-ui-font: 'Pretendard Variable', Pretendard, Roboto, sans-serif;
   }
 
   :global(body[data-theme="dark"] .pagefind-ui) {
-    --pagefind-ui-primary: #767f87;
-    --pagefind-ui-text: #c7bebe;
-    --pagefind-ui-background: #131418;
-    --pagefind-ui-border: #1b1d25;
+    --pagefind-ui-primary: #918e84;
+    --pagefind-ui-text: #dedbd0;
+    --pagefind-ui-background: #191816;
+    --pagefind-ui-border: #2d2b26;
   }
 </style>

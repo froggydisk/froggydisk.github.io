@@ -4,10 +4,15 @@ import TOC from '../components/TOC.astro';
 import Comments from '../components/Comments.astro';
 import Support from '../components/Support.astro';
 import PostNav from '../components/PostNav.astro';
+import { formatDate } from '../utils/seo';
 
 interface Props {
   title: string;
+  description: string;
   date: Date;
+  modified: Date;
+  canonicalPath: string;
+  image?: string;
   tags?: string[];
   comments?: boolean;
   toc?: boolean;
@@ -16,35 +21,85 @@ interface Props {
   next?: { title: string; slug: string } | null;
 }
 
-const { title, date, tags = [], comments = false, toc = true, use_math = false, prev = null, next = null } = Astro.props;
+const {
+  title,
+  description,
+  date,
+  modified,
+  canonicalPath,
+  image,
+  tags = [],
+  comments = false,
+  toc = true,
+  use_math = false,
+  prev = null,
+  next = null,
+} = Astro.props;
 
-const formattedDate = date.toLocaleDateString('en-US', {
-  month: 'short',
-  day: 'numeric',
-  year: 'numeric',
-});
+const formattedDate = formatDate(date);
+
+const site = Astro.site!;
+const pageUrl = new URL(canonicalPath, site).href;
+const imagePath = image ?? '/img/profile.png';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description,
+  image: [new URL(imagePath, site).href],
+  datePublished: date.toISOString(),
+  dateModified: modified.toISOString(),
+  inLanguage: 'ko-KR',
+  keywords: tags.join(', ') || undefined,
+  mainEntityOfPage: { '@type': 'WebPage', '@id': pageUrl },
+  url: pageUrl,
+  author: {
+    '@type': 'Person',
+    name: 'froggydisk',
+    url: 'https://github.com/froggydisk',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'froggydisk',
+    url: site.href,
+    logo: {
+      '@type': 'ImageObject',
+      url: new URL('/img/profile.png', site).href,
+    },
+  },
+};
 ---
 
-<BaseLayout title={title} isPost={true} showStars={false}>
-  <article itemscope itemtype="https://schema.org/BlogPosting">
+<BaseLayout
+  title={title}
+  description={description}
+  image={imagePath}
+  isPost={true}
+  showStars={false}
+  publishedTime={date.toISOString()}
+  modifiedTime={modified.toISOString()}
+  jsonLd={jsonLd}
+>
+  <article>
     <header class="header">
       {tags.length > 0 && (
         <div class="tags">
           {tags.map((tag, i) => (
             <>
-              <a class="tag" href={`/tags/#${tag.toLowerCase().replace(/\s+/g, '-')}`}>{tag.toUpperCase()}</a>{i < tags.length - 1 && ', '}
+              <a class="tag" href={`/tags/#tag-${tag.toLowerCase().replace(/\s+/g, '-')}`}>{tag.toUpperCase()}</a>{i < tags.length - 1 && ', '}
             </>
           ))}
         </div>
       )}
-      <h1 class="header-title" itemprop="headline">{title}</h1>
+      <h1 class="header-title">{title}</h1>
       <div class="post-meta">
-        <time datetime={date.toISOString()} itemprop="datePublished">{formattedDate}</time>
-        <span itemprop="author">./workspace</span>
+        <time datetime={date.toISOString()}>{formattedDate}</time>
+        <span>./workspace</span>
       </div>
     </header>
 
-    <div class="page-content post-body" itemprop="articleBody">
+    <div class="page-content post-body">
       <slot />
     </div>
   </article>

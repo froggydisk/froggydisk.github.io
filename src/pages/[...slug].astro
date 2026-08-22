@@ -1,26 +1,22 @@
 ---
 import { getCollection, render } from 'astro:content';
 import PostLayout from '../layouts/PostLayout.astro';
+import { postSlug, postDate, parseTags, modifiedDate, excerpt } from '../utils/seo';
 
 export async function getStaticPaths() {
   const posts = (await getCollection('blog'))
-    .sort((a, b) => {
-      const dateA = a.id.slice(0, 10);
-      const dateB = b.id.slice(0, 10);
-      return dateA.localeCompare(dateB);
-    });
+    .sort((a, b) => a.id.slice(0, 10).localeCompare(b.id.slice(0, 10)));
 
   return posts.map((post, i) => {
-    const slug = post.id.replace(/^\d{4}-\d{2}-\d{2}-/, '');
     const prevPost = i > 0 ? posts[i - 1] : null;
     const nextPost = i < posts.length - 1 ? posts[i + 1] : null;
 
     return {
-      params: { slug },
+      params: { slug: postSlug(post.id) },
       props: {
         post,
-        prev: prevPost ? { title: prevPost.data.title, slug: prevPost.id.replace(/^\d{4}-\d{2}-\d{2}-/, '') } : null,
-        next: nextPost ? { title: nextPost.data.title, slug: nextPost.id.replace(/^\d{4}-\d{2}-\d{2}-/, '') } : null,
+        prev: prevPost ? { title: prevPost.data.title, slug: postSlug(prevPost.id) } : null,
+        next: nextPost ? { title: nextPost.data.title, slug: postSlug(nextPost.id) } : null,
       },
     };
   });
@@ -29,16 +25,20 @@ export async function getStaticPaths() {
 const { post, prev, next } = Astro.props;
 const { Content } = await render(post);
 
-const dateStr = post.id.slice(0, 10);
-const date = new Date(dateStr + 'T00:00:00');
-
-const rawTags = post.data.tags || [];
-const tags = rawTags.flatMap((t: string) => t.split(',').map((s: string) => s.trim())).filter(Boolean);
+const slug = postSlug(post.id);
+const date = postDate(post.id);
+const modified = modifiedDate(post.id, post.data.last_modified_at);
+const tags = parseTags(post.data.tags);
+const description = post.data.description?.trim() || excerpt(post.body ?? '');
 ---
 
 <PostLayout
   title={post.data.title}
+  description={description}
   date={date}
+  modified={modified}
+  canonicalPath={`/${slug}/`}
+  image={post.data.image}
   tags={tags}
   comments={post.data.comments}
   toc={post.data.toc}

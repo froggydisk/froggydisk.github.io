@@ -51,16 +51,19 @@ froggydisk.github.io/
 │   │   ├── index.astro          # Homepage (recent posts)
 │   │   ├── [...slug].astro      # Dynamic blog post routing
 │   │   ├── archive.astro        # Post archive with search
-│   │   ├── about.astro          # About page
+│   │   ├── about.astro          # 소개 + 연락처 (ProfilePage JSON-LD)
+│   │   ├── projects.astro       # 사이드 프로젝트 목록 (구 about.astro)
 │   │   ├── resume.astro         # Resume/CV
 │   │   ├── privacy-policy.astro # Privacy policy
 │   │   ├── 404.astro            # 404 error page
 │   │   ├── rss.xml.ts           # RSS feed endpoint
-│   │   └── tags/                # Tag-based archive pages
+│   │   └── tags/                # 태그별 앵커 목록 페이지 (개별 태그 라우트는 없음)
+│   ├── content.config.ts        # Content schema & validation (여기가 실제 위치)
+│   ├── utils/
+│   │   └── seo.ts               # slug·날짜·태그·description 추출 공용 헬퍼
 │   ├── content/
-│   │   └── blog/                # 52+ markdown blog posts
-│   │       ├── YYYY-MM-DD-*.md  # Post naming convention
-│   │       └── content.config.ts # Content schema & validation
+│   │   └── blog/                # 62 markdown/mdx blog posts
+│   │       └── YYYY-MM-DD-*.md  # Post naming convention
 │   ├── components/              # 14 Astro components
 │   │   ├── Navbar.astro        # Navigation + theme toggle
 │   │   ├── Footer.astro        # Footer
@@ -78,7 +81,8 @@ froggydisk.github.io/
 │   │   ├── BaseLayout.astro    # Base HTML + meta tags
 │   │   └── PostLayout.astro    # Blog post wrapper
 │   └── styles/
-│       └── global.css          # Monolithic 50KB stylesheet
+│       ├── global.css         # Klisé 유래 베이스 스타일 (팔레트는 웜 뉴트럴로 교체)
+│       └── editorial.css     # 타이포그래피·여백·레이아웃 재정의 레이어 (global.css 다음 로드)
 ├── public/                      # Static assets
 │   ├── img/                    # Images (profile.png, etc)
 │   ├── favicons/               # Favicon set
@@ -160,13 +164,17 @@ npm run preview  # Preview built site locally
 ### 1. Dynamic Blog Routing
 - **Post Naming**: `YYYY-MM-DD-slug-title.md`
 - **Slug Generation**: Filename prefix stripped, used as URL path
+- **Legacy Slugs**: 2026-08 정비로 순번 슬러그(`second-post`, `20th-post` 등) 30건을 주제 슬러그로 교체.
+  구 URL은 `astro.config.mjs`의 `LEGACY_SLUGS`가 리다이렉트(noindex + canonical)를 생성하므로 **절대 삭제하지 말 것**
 - **Sort Order**: By date descending (newest first)
 - **Navigation**: Automatic prev/next links based on chronological order
 
 ### 2. Theme System
-- **Light/Dark Mode**: Stored in localStorage
-- **CSS Variables**: `data-theme="dark"` attribute on `<body>`
-- **Toggle**: Navbar hamburger menu icon
+- **Light/Dark Mode**: Stored in localStorage — **라이트가 기본** (`theme` 값이 없으면 라이트)
+- **CSS Variables**: `data-theme="dark"` attribute on `<body>`; 색·폰트 토큰은 `editorial.css`의
+  `:root` / `body[data-theme="dark"]`에 정의 (`--bg`, `--ink`, `--body`, `--muted`, `--rule`, `--accent` …)
+- **Palette**: 아이보리 `#faf9f5` / 잉크 `#141413` / 클레이 액센트 `#cc785c`, 다크는 `#191816` / `#f5f3ec` / `#d9836a`
+- **Toggle**: Navbar sun/moon icon
 - **Diagram Theming**: 10+ CSS variables per diagram component
 
 ### 3. Content Enhancement
@@ -198,16 +206,23 @@ npm run preview  # Preview built site locally
 - **Open Graph Tags**: Site, title, description, image, URL, type
 - **Twitter Card**: Summary card format
 - **Canonical URLs**: Prevent duplicate content issues
-- **Schema.org**: BlogPosting microdata markup
-- **Sitemap**: Auto-generated sitemap.xml
+- **Schema.org**: BlogPosting JSON-LD (author Person, publisher, datePublished/dateModified, mainEntityOfPage).
+  `/about/`은 ProfilePage. `PostLayout.astro`에서 생성해 `BaseLayout`의 `jsonLd` prop으로 주입
+- **Meta Description**: 포스트마다 고유. frontmatter `description`이 있으면 그것을, 없으면
+  `src/utils/seo.ts`의 `excerpt()`가 본문 첫 산문 문단에서 자동 추출 (헤딩·코드블록·JSX 제외)
+- **Sitemap lastmod**: `astro.config.mjs`가 포스트 frontmatter를 읽어 주입. 리다이렉트·404는 `filter`로 제외
+- **Sitemap**: `/sitemap-index.xml` + `/sitemap-0.xml` (`@astrojs/sitemap`은 `sitemap.xml`을 만들지 않는다)
 - **Robots.txt**: Allow all, sitemap reference
 
 ### 6. Styling Approach
-- **No CSS Framework**: Pure vanilla CSS (50KB total)
-- **Font**: Pretendard (Korean typography support)
+- **No CSS Framework**: Pure vanilla CSS (global.css + editorial.css)
+- **Fonts**: 본문·제목 모두 Pretendard(산세리프), 코드 JetBrains Mono
+  → `--font-sans`, `--font-mono` 토큰으로 사용 (제목 굵기 600, 목록 제목 450~550)
+- **Measure**: 본문 폭 700px (`--measure`), 본문 18px / line-height 1.78
 - **Mobile-First**: Responsive breakpoints for tab/mobile
-- **Design Pattern**: Minimalist, focus on readability
-- **Light/Dark**: CSS variables for theme switching
+- **Design Pattern**: 편집체(editorial) 지향 — 헤어라인 구분선, 넓은 여백, 박스·그림자 최소화
+- **Link Rule**: 본문 링크는 `.page-content a`에서 잉크색 + 클레이 밑줄로 한 곳에서 정의.
+  목록·내비게이션 링크(`.post-item-title a`, `.home-post-link`, `.posts-more` 등)는 특이도를 높여 밑줄 제외
 
 ### 7. Icon System
 - **Library**: astro-icon (integrates Iconify)
@@ -244,6 +259,7 @@ Content here...
 - Automatic code splitting & optimization
 
 ### Styling
+- 타이포그래피·여백·색 토큰은 `/src/styles/editorial.css`에서 수정 (global.css는 베이스/레거시)
 - Edit `/src/styles/global.css` for global styles
 - Component-scoped styles use `<style>` tags
 - CSS variables for theme consistency
@@ -305,7 +321,7 @@ _site/, .jekyll-*, .sass-*    # Jekyll legacy
 - **Velog**: External link to Velog blog (`https://velog.io/@frog`)
 - **AdSense**: Google AdSense ads (CA-PUB-4715878791193779)
 - **Ko-fi**: Donation link (Support component)
-- **Google Analytics**: Referenced in base config (not visible in current files)
+- **Google Analytics**: 미설치 (개인정보처리방침 문구는 설치 예정 기준으로 작성돼 있음)
 
 ---
 
@@ -468,6 +484,6 @@ npm run preview
 
 ---
 
-**Last Updated**: August 16, 2026
+**Last Updated**: August 22, 2026
 **Framework**: Astro 7.2.2
 **Node**: 22

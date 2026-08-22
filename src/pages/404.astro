@@ -1,11 +1,70 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import FuzzyText from '../components/FuzzyText.astro';
 ---
 
-<BaseLayout title="404">
+<BaseLayout
+  title="404"
+  description="요청하신 페이지를 찾을 수 없습니다."
+  noindex={true}
+  showStars={false}
+>
   <div class="not-found">
-    <h1 class="title">404</h1>
-    <p class="phrase">Page not found</p>
-    <a class="solution" href="/">Go home</a>
+    <h1 class="visually-hidden">404 — 페이지를 찾을 수 없습니다</h1>
+    <FuzzyText text="404" fontSize="clamp(3rem, 11vw, 5.5rem)" />
+    <FuzzyText
+      text="Page not found"
+      fontSize="15px"
+      fontWeight={500}
+      letterSpacing={2.4}
+      fuzzRange={7}
+      baseIntensity={0.3}
+      hoverIntensity={0.7}
+      colorVar="--muted"
+      class="not-found-label"
+    />
+    <p class="phrase">
+      개구리도 여기서 길을 잃었습니다.<br />
+      이 주소에는 아무것도 없는 것 같아요.
+    </p>
+    <div class="not-found-links">
+      <a class="solution" href="/">홈으로</a>
+      <span class="not-found-sep" aria-hidden="true">·</span>
+      <a class="solution" href="/archive/">전체 글</a>
+    </div>
   </div>
 </BaseLayout>
+
+<style>
+  .not-found {
+    align-items: center;
+    gap: 1rem;
+  }
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .not-found .phrase {
+    margin: 0;
+    line-height: 1.8;
+    color: var(--muted);
+  }
+  .not-found-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    font-size: 14px;
+  }
+  .not-found-sep {
+    color: var(--muted);
+    opacity: 0.5;
+  }
+</style>

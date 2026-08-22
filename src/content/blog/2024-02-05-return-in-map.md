@@ -5,7 +5,7 @@ comments: true
 categories:
   - Blog
 tags:
-  - React, React Native, Javascript
+  - React, React Native, JavaScript
 last_modified_at: 2024-02-05T
 ---
 
@@ -15,7 +15,7 @@ JS 문법에도 익숙지 않아서 map 함수를 보면 지레 겁을 먹었던
 
 항상 사용할 때마다 return문을 꼭 써야하는 것인지 궁금했었는데 오늘 그 이야기를 하고자한다.
 
-답을 먼저 말하면 **`그렇지 않다`**이다.
+답을 먼저 말하면 <strong>`그렇지 않다`</strong>이다.
 
 map 함수 안에서 return 문의 유무를 결정하는 기준은 화살표(=>) 뒤에 **중괄호를 쓰냐 소괄호를 쓰냐에 따라** 갈리게 되는데 일반적으로 소괄호를 쓰는 형태는 다음과 같다.
 

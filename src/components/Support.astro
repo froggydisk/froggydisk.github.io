@@ -1,43 +1,56 @@
-<div class="support-link-btn">
-  <button class="w-btn w-btn-gra1 w-btn-gra-anim" onclick="location.href='https://buymeacoffee.com/froggydisk'">
-    <span>Buy me a coffee</span>
-    <i class="fa-solid fa-mug-hot"></i>
-  </button>
-</div>
+---
+import { Icon } from 'astro-icon/components';
+---
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<div class="support-link-btn">
+  <a
+    class="w-btn"
+    href="https://buymeacoffee.com/froggydisk"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <span>Buy me a coffee</span>
+    <Icon name="lucide:coffee" size={15} />
+  </a>
+</div>
 
 <style>
   .support-link-btn {
     text-align: center;
-    margin-top: 3em;
+    margin-top: 4.5rem;
   }
-  .w-btn {
-    font-size: 0.8em;
+  .w-btn,
+  :global(.page-content) .w-btn {
     position: relative;
-    border: none;
-    display: inline-block;
-    padding: 15px 30px;
-    border-radius: 15px;
-    font-family: "paybooc-Light", sans-serif;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-    text-decoration: none;
-    font-weight: 600;
-    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.7em 1.4em;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--accent-strong);
+    background: transparent;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    box-shadow: none;
     cursor: pointer;
+    text-decoration: none;
+    transition: border-color 0.18s ease, color 0.18s ease, background-color 0.18s ease;
   }
-  .w-btn:hover { transform: scale(1.1); }
-  .w-btn-gra1 {
-    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-    color: white;
+  .w-btn:hover,
+  :global(.page-content) .w-btn:hover {
+    border-color: var(--accent);
+    background-color: rgba(204, 120, 92, 0.07);
+    color: var(--accent-strong);
+    text-decoration: none;
   }
-  .w-btn-gra-anim {
-    background-size: 400% 400%;
-    animation: gradient 7s ease infinite;
+  /* 본문 링크 규칙이 붙이는 외부링크 화살표는 이 버튼에서 제외 */
+  :global(.page-content) .w-btn[target="_blank"]::after {
+    content: none;
   }
-  @keyframes gradient {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+  :global(body[data-theme="dark"]) .w-btn:hover {
+    background-color: rgba(217, 131, 106, 0.1);
   }
 </style>

@@ -10,7 +10,9 @@
   const tocList = document.getElementById('toc-list');
   if (article && tocList) {
     const headings = article.querySelectorAll('h2, h3');
-    if (headings.length < 2) {
+    // anthropic 방식: 섹션이 많은 긴 글에만 목차를 노출 (H2 5개 미만이면 숨김)
+    const SECTION_THRESHOLD = 5;
+    if (article.querySelectorAll('h2').length < SECTION_THRESHOLD) {
       document.getElementById('toc-sidebar')!.style.display = 'none';
     } else {
       headings.forEach((h) => {

@@ -3,7 +3,7 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="footer">
-  <div style="display: flex; align-items: center; justify-content: center">
+  <div class="footer-row">
     <a class="letter-image" href="/resume/">
       <div class="animated-mail">
         <div class="back-fold"></div>
@@ -16,12 +16,12 @@ const year = new Date().getFullYear();
         <div class="body"></div>
         <div class="left-fold"></div>
       </div>
-      <span style="margin-left: 25px">resume</span>
+      <span class="letter-label">resume</span>
     </a>
-    <span class="footer_item">&copy; {year}</span>
+    <span class="footer-sep" aria-hidden="true">&middot;</span>
+    <a class="footer_item" href="/privacy-policy/">개인정보처리방침</a>
   </div>
   <small class="footer_copyright">
-    <a href="/privacy-policy/">개인정보처리방침</a> &middot;
-    Powered by <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>
+    &copy; {year} &middot; Powered by <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>
   </small>
 </footer>

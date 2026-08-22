@@ -1,14 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { postSlug, parseTags } from '../../utils/seo';
 
 const posts = await getCollection('blog');
 
 const tagMap = new Map<string, typeof posts>();
 posts.forEach((post) => {
-  const rawTags = post.data.tags || [];
-  const tags = rawTags.flatMap((t: string) => t.split(',').map((s: string) => s.trim())).filter(Boolean);
-  tags.forEach((tag) => {
+  parseTags(post.data.tags).forEach((tag) => {
     if (!tagMap.has(tag)) tagMap.set(tag, []);
     tagMap.get(tag)!.push(post);
   });
@@ -20,39 +19,35 @@ function toSlug(tag: string) {
   return tag.toLowerCase().replace(/\s+/g, '-');
 }
 
-function postSlug(id: string) {
-  return id.replace(/^\d{4}-\d{2}-\d{2}-/, '');
-}
+const topTags = sortedTags.slice(0, 12).map(([tag]) => tag).join(', ');
+const description = `froggydisk 기술 블로그의 주제별 글 목록. ${sortedTags.length}개 태그, ${posts.length}개 글 — ${topTags} 등.`;
 ---
 
-<BaseLayout title="Tags">
+<BaseLayout title="Tags" description={description}>
   <header class="header" style="margin-bottom: 2em;">
     <h1 class="header-title">Tags</h1>
   </header>
 
-  <div class="archive-tags">
+  <nav class="archive-tags" aria-label="태그 목록">
     {sortedTags.map(([tag, tagPosts]) => (
-      <span class="tag-item" id={toSlug(tag)}>
+      <a class="tag-item" href={`#tag-${toSlug(tag)}`}>
         {tag} ({tagPosts.length})
-      </span>
+      </a>
     ))}
-  </div>
+  </nav>
 
   {sortedTags.map(([tag, tagPosts]) => (
-    <div style="margin-top: 2em;">
-      <h3 id={toSlug(tag)}>{tag}</h3>
+    <section style="margin-top: 2em;">
+      <h2 id={`tag-${toSlug(tag)}`}>{tag}</h2>
       {tagPosts
-        .sort((a, b) => b.id.slice(0,10).localeCompare(a.id.slice(0,10)))
-        .map((post) => {
-          const slug = postSlug(post.id);
-          return (
-            <div class="post-item">
-              <h4 class="post-item-title">
-                <a href={`/${slug}/`}>{post.data.title}</a>
-              </h4>
-            </div>
-          );
-        })}
-    </div>
+        .sort((a, b) => b.id.slice(0, 10).localeCompare(a.id.slice(0, 10)))
+        .map((post) => (
+          <div class="post-item">
+            <h3 class="post-item-title">
+              <a href={`/${postSlug(post.id)}/`}>{post.data.title}</a>
+            </h3>
+          </div>
+        ))}
+    </section>
   ))}
 </BaseLayout>

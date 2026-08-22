@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { postSlug, postDate, formatDate } from '../utils/seo';
 
 const posts = (await getCollection('blog'))
   .sort((a, b) => {
@@ -9,13 +10,17 @@ const posts = (await getCollection('blog'))
     return dateB.localeCompare(dateA);
   });
 
-const recentPosts = posts.slice(0, 5);
+const recentPosts = posts.slice(0, 8);
+
+const description =
+  'froggydisk의 기술 블로그. React Native·Next.js 프론트엔드, 쿠버네티스·CI/CD 인프라, ' +
+  'PyTorch 기반 ML/DL까지 직접 부딪힌 문제와 해결 과정을 기록합니다.';
 ---
 
-<BaseLayout title="Home">
+<BaseLayout title="Home" description={description}>
   <div class="author">
     <video class="author-avatar" src="/img/profile.mp4" autoplay loop muted playsinline></video>
-    <h2 class="author-name">./workspace</h2>
+    <h1 class="author-name"><span class="masked-name" data-masked-heading>./workspace</span></h1>
     <div class="content">
       <p class="content__text">$ whoami</p>
       <ul class="content__list">
@@ -29,18 +34,17 @@ const recentPosts = posts.slice(0, 5);
 
   <h4 class="posts-item-note">Recent Posts</h4>
   {recentPosts.map((post) => {
-    const slug = post.id.replace(/^\d{4}-\d{2}-\d{2}-/, '');
-    const dateStr = post.id.slice(0, 10);
-    const date = new Date(dateStr + 'T00:00:00');
+    const slug = postSlug(post.id);
     return (
       <div class="post-item">
-        <span class="post-item-date">{date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+        <span class="post-item-date">{formatDate(postDate(post.id))}</span>
         <h4 class="post-item-title">
           <a href={`/${slug}/`}>{post.data.title}</a>
         </h4>
       </div>
     );
   })}
+  <a class="posts-more" href="/archive/">전체 글 {posts.length}편 보기 →</a>
   <style>
     :global(html) {
       overflow: hidden;
@@ -69,6 +73,16 @@ const recentPosts = posts.slice(0, 5);
       flex-direction: column;
       margin-bottom: 0;
     }
+    .author-name {
+      margin-top: 0;
+    }
+    .author-bio {
+      margin: 0.9rem auto 0;
+      max-width: 34rem;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
     .author {
       margin-top: auto;
       margin-bottom: 1.5rem;
@@ -86,4 +100,125 @@ const recentPosts = posts.slice(0, 5);
       flex-shrink: 0;
     }
   </style>
+
+  <style>
+    /* reactbits "Masked Heading" 방식: 글자 모양으로 클립된 채움이 천천히 흐르고 커서에 반응 */
+    .masked-name {
+      --mask-ink: var(--ink);
+      --mask-a: #8b7062;
+      --mask-b: #a8907e;
+      display: inline-block;
+      background-image: linear-gradient(
+        112deg,
+        var(--mask-ink) 0%,
+        var(--mask-ink) 30%,
+        var(--mask-a) 44%,
+        var(--mask-b) 51%,
+        var(--mask-a) 58%,
+        var(--mask-ink) 72%,
+        var(--mask-ink) 100%
+      );
+      background-size: 260% 260%;
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+      will-change: background-position;
+    }
+    :global(body[data-theme="dark"]) .masked-name {
+      --mask-a: #b6a293;
+      --mask-b: #d3c3b3;
+    }
+    @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+      .masked-name {
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+    /* reactbits "Fold Text": 글자마다 위쪽 힌지를 축으로 접혀 있다가 펴진다 */
+    .fold-seg {
+      display: inline-block;
+      perspective: 700px;
+      transform-style: preserve-3d;
+    }
+    .fold-piece {
+      display: inline-block;
+      transform-origin: 50% 0%;
+      backface-visibility: hidden;
+      animation: fold-in 0.65s cubic-bezier(0.215, 0.61, 0.355, 1) var(--fold-delay, 0s) both;
+    }
+    @keyframes fold-in {
+      from {
+        opacity: 0;
+        transform: rotateX(-92deg);
+      }
+      to {
+        opacity: 1;
+        transform: rotateX(0deg);
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .fold-piece {
+        animation: none;
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+
 </BaseLayout>
+
+<script is:inline>
+  (function () {
+    var heading = document.querySelector('[data-masked-heading]');
+    if (!heading) return;
+    var hit = heading.closest('.author') || heading;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var label = heading.textContent;
+    heading.setAttribute('aria-label', label);
+
+    var visual = document.createElement('span');
+    visual.setAttribute('aria-hidden', 'true');
+    Array.prototype.forEach.call(label, function (ch, i) {
+      var seg = document.createElement('span');
+      seg.className = 'fold-seg';
+      var piece = document.createElement('span');
+      piece.className = 'fold-piece';
+      piece.style.setProperty('--fold-delay', (i * 0.045).toFixed(3) + 's');
+      piece.textContent = ch === ' ' ? '\u00A0' : ch;
+      seg.appendChild(piece);
+      visual.appendChild(seg);
+    });
+    heading.textContent = '';
+    heading.appendChild(visual);
+
+    if (reduce) return;
+
+    var DRIFT = 14, PARALLAX = 18;
+    var x = 0, y = 0, tx = 0, ty = 0, clock = 0, last = performance.now();
+
+    function frame(now) {
+      var dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      clock += dt;
+      var dx = Math.sin(clock * 0.34) * DRIFT;
+      var dy = Math.cos(clock * 0.27) * DRIFT * 0.6;
+      var ease = 1 - Math.exp(-dt / 0.18);
+      x += (tx + dx - x) * ease;
+      y += (ty + dy - y) * ease;
+      heading.style.backgroundPosition = (50 + x).toFixed(2) + '% ' + (50 + y).toFixed(2) + '%';
+      requestAnimationFrame(frame);
+    }
+
+    hit.addEventListener('pointermove', function (e) {
+      var r = heading.getBoundingClientRect();
+      var nx = ((e.clientX - r.left) / (r.width || 1)) * 2 - 1;
+      var ny = ((e.clientY - r.top) / (r.height || 1)) * 2 - 1;
+      tx = Math.max(-1, Math.min(1, nx)) * -PARALLAX;
+      ty = Math.max(-1, Math.min(1, ny)) * -PARALLAX;
+    });
+    hit.addEventListener('pointerleave', function () { tx = 0; ty = 0; });
+
+    requestAnimationFrame(frame);
+  })();
+</script>
