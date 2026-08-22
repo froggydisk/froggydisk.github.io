@@ -109,7 +109,7 @@ const jsonLdText = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : nu
   {jsonLdText && <script type="application/ld+json" set:html={jsonLdText} />}
 </head>
 
-<body class="notransition">
+<body>
   {showStars && <StarBackground />}
   <script is:inline>
     const theme = localStorage.getItem('theme');
@@ -128,9 +128,5 @@ const jsonLdText = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : nu
     </main>
     <Footer />
   </div>
-
-  <script>
-    setTimeout(() => document.body.classList.remove('notransition'), 75);
-  </script>
 </body>
 </html>
