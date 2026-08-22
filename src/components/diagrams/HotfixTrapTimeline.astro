@@ -65,39 +65,28 @@
 
 <style>
 .hotfix-trap {
-  --ht-text: #c0bdd0;
-  --ht-dim: #908caa;
-  --ht-line: #5a5a78;
-  --ht-feature: #9ccfd8;
-  --ht-feature-fill: rgba(156, 207, 216, 0.18);
-  --ht-feature-text: #c8e8f0;
-  --ht-revert: #f6c177;
-  --ht-revert-fill: rgba(246, 193, 119, 0.18);
-  --ht-revert-text: #f8d8a0;
-  --ht-bomb: #eb6f92;
-  --ht-bomb-fill: rgba(235, 111, 146, 0.2);
-  --ht-bomb-text: #f4a0b8;
+  --ht-text: var(--body);
+  --ht-dim: var(--muted);
+  --ht-line: var(--rule);
+  --ht-feature: var(--dg-5);
+  --ht-feature-fill: var(--dg-5-soft);
+  --ht-feature-text: var(--dg-5-ink);
+  --ht-revert: var(--dg-4);
+  --ht-revert-fill: var(--dg-4-soft);
+  --ht-revert-text: var(--dg-4-ink);
+  --ht-bomb: var(--dg-1);
+  --ht-bomb-fill: var(--dg-1-soft);
+  --ht-bomb-text: var(--dg-1-ink);
 
   margin: 2rem 0;
   overflow-x: auto;
 }
 .hotfix-trap svg {
   display: block;
-  min-width: 720px;
   height: auto;
 }
-:global(body:not([data-theme="dark"])) .hotfix-trap {
-  --ht-text: #4a4a5a;
-  --ht-dim: #6e6a86;
-  --ht-line: #b8b8c8;
-  --ht-feature: #286983;
-  --ht-feature-fill: rgba(40, 105, 131, 0.1);
-  --ht-feature-text: #1a4060;
-  --ht-revert: #c88c32;
-  --ht-revert-fill: rgba(200, 140, 50, 0.1);
-  --ht-revert-text: #8a5e10;
-  --ht-bomb: #b4546a;
-  --ht-bomb-fill: rgba(180, 84, 106, 0.1);
-  --ht-bomb-text: #8a2a40;
+@media (max-width: 700px) {
+  .hotfix-trap { overflow-x: auto; }
+  .hotfix-trap svg { min-width: 560px; }
 }
 </style>

@@ -8,6 +8,10 @@
 <style>
   @keyframes ec-flow { to { stroke-dashoffset: -16; } }
   .ec-anim { animation: ec-flow 1.4s linear infinite; }
+@media (max-width: 700px) {
+  .exec-contract { overflow-x: auto; }
+  .exec-contract svg { min-width: 560px; }
+}
 </style>
 
 <!-- Title -->
@@ -70,37 +74,20 @@
 
 <style>
 .exec-contract {
-  --ec-blue-bg: rgba(129, 140, 248, 0.1);
-  --ec-blue: #818cf8;
-  --ec-blue-text: #b8c0f8;
-  --ec-blue-sub: #7a82c8;
-  --ec-green-bg: rgba(109, 208, 160, 0.1);
-  --ec-green: #6dd0a0;
-  --ec-green-text: #c0ead5;
-  --ec-green-sub: #50b880;
-  --ec-accent-bg: rgba(248, 180, 100, 0.1);
-  --ec-accent: #f8b464;
-  --ec-accent-text: #f8d4a0;
-  --ec-accent-sub: #c8a060;
-  --ec-gray: #3a3d5a;
-  --ec-inner: rgba(255,255,255,0.03);
-  --ec-dim: #908caa;
-}
-:global(body:not([data-theme="dark"])) .exec-contract {
-  --ec-blue-bg: rgba(60, 80, 200, 0.07);
-  --ec-blue: #4a5ac8;
-  --ec-blue-text: #3a4a90;
-  --ec-blue-sub: #5a60a0;
-  --ec-green-bg: rgba(40, 160, 100, 0.07);
-  --ec-green: #28a064;
-  --ec-green-text: #1a6e44;
-  --ec-green-sub: #208050;
-  --ec-accent-bg: rgba(220, 140, 30, 0.1);
-  --ec-accent: #d08a1e;
-  --ec-accent-text: #8a5e10;
-  --ec-accent-sub: #a07030;
-  --ec-gray: #c8c8d0;
-  --ec-inner: rgba(0,0,0,0.03);
-  --ec-dim: #6e6a86;
+  --ec-blue-bg: var(--dg-5-soft);
+  --ec-blue: var(--dg-5);
+  --ec-blue-text: var(--dg-5-ink);
+  --ec-blue-sub: var(--muted);
+  --ec-green-bg: var(--dg-2-soft);
+  --ec-green: var(--dg-2);
+  --ec-green-text: var(--dg-2-ink);
+  --ec-green-sub: var(--muted);
+  --ec-accent-bg: var(--dg-1-soft);
+  --ec-accent: var(--dg-1);
+  --ec-accent-text: var(--dg-1-ink);
+  --ec-accent-sub: var(--muted);
+  --ec-gray: var(--rule);
+  --ec-inner: var(--bg-soft);
+  --ec-dim: var(--muted);
 }
 </style>

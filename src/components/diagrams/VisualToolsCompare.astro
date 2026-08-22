@@ -1,107 +1,95 @@
-<div class="visual-tools">
-<svg width="100%" viewBox="0 0 920 340" xmlns="http://www.w3.org/2000/svg">
+---
+// 4개 도구를 추상화 수준 순서로 세로 배열한다.
+// 가로 4단이면 920px가 필요해 본문(672)을 넘긴다.
+const tools = [
+  {
+    name: 'Playwright', kind: '브라우저 연결', gives: '실시간 렌더링 피드백', hue: 5,
+    chips: [{ t: 'gstack /browse', mono: true }],
+  },
+  {
+    name: 'Applitools / Percy', kind: '시각 회귀 테스트', gives: '스크린샷 베이스라인 비교', hue: 3,
+    chips: [{ t: '픽셀 비교' }, { t: 'AI 비교', accent: true }],
+  },
+  {
+    name: 'data-testid 레이어', kind: '시맨틱 식별자', gives: '명시적 UI 계약', hue: 4,
+    chips: [{ t: 'ts-morph → Claude API', t2: '→ Playwright 스펙', mono: true }],
+  },
+  {
+    name: 'Momentic', kind: 'Intent 로케이터', gives: '자연어 UI 요소 탐색', hue: 2,
+    chips: [{ t: '셀렉터 유지보수 불필요' }],
+  },
+];
+const ROW = 60, GAP = 8, TOP = 40;
+const ys = tools.map((_, i) => TOP + i * (ROW + GAP));
+const H = ys[ys.length - 1] + ROW + 36;
+---
+
+<div class="vt">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="에이전트 시각 검증 도구 네 가지를 추상화 수준 순서로 비교한 표">
+
 <defs>
-  <marker id="vt-arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
-    <path d="M2 2L8 5L2 8" fill="none" stroke="context-stroke" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <marker id="vtAxis" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
   </marker>
 </defs>
 
-<!-- Top spanning label -->
-<text x="460" y="28" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" font-weight="600" fill="var(--vt-dim)" letter-spacing="0.08em">에이전트 시각 검증 도구</text>
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">에이전트 시각 검증 도구</text>
 
-<!-- ===== COLUMN 1: 브라우저 연결 (blue) ===== -->
+<!-- 추상화 축 -->
+<line x1="40" y1={TOP + 6} x2="40" y2={ys[3] + ROW - 2} stroke="var(--rule)" stroke-width="1" marker-end="url(#vtAxis)"/>
+<text class="cap" x="22" y={(TOP + ys[3] + ROW) / 2} text-anchor="middle" fill="var(--muted)"
+      transform={`rotate(-90 22 ${(TOP + ys[3] + ROW) / 2})`}>추상화 수준</text>
 
-<rect x="15" y="50" width="205" height="72" rx="12" fill="var(--vt-blue-bg)" stroke="var(--vt-blue)" stroke-width="1.5"/>
-<text x="117" y="80" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="16" font-weight="700" fill="var(--vt-blue-text)">Playwright</text>
-<text x="117" y="102" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" fill="var(--vt-dim)">브라우저 연결</text>
+{tools.map((t, i) => (
+  <g>
+    <rect x={60} y={ys[i]} width={588} height={ROW} rx={3} fill="none" stroke="var(--rule)" stroke-width="1"/>
+    <line x1={60.5} y1={ys[i] + 10} x2={60.5} y2={ys[i] + ROW - 10} stroke={`var(--dg-${t.hue})`} stroke-width="3"/>
 
-<text x="117" y="146" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" fill="var(--vt-dim)">실시간 렌더링 피드백</text>
+    <text class="name" x={78} y={ys[i] + 26} fill={`var(--dg-${t.hue}-ink)`}>{t.name}</text>
+    <text class="cap" x={78} y={ys[i] + 43} fill="var(--muted)">{t.kind}</text>
+    <text class="gives" x={262} y={ys[i] + 34} fill="var(--body)">{t.gives}</text>
 
-<rect x="32" y="162" width="170" height="44" rx="9" fill="var(--vt-inner)" stroke="var(--vt-dim)" stroke-width="1" stroke-dasharray="5 3"/>
-<text x="117" y="189" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="12" fill="var(--vt-dim)">gstack /browse</text>
-
-<!-- ===== COLUMN 2: 시각 회귀 테스트 (purple) ===== -->
-
-<rect x="240" y="50" width="205" height="72" rx="12" fill="var(--vt-purple-bg)" stroke="var(--vt-purple)" stroke-width="1.5"/>
-<text x="342" y="80" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="16" font-weight="700" fill="var(--vt-purple-text)">Applitools / Percy</text>
-<text x="342" y="102" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" fill="var(--vt-dim)">시각 회귀 테스트</text>
-
-<text x="342" y="146" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" fill="var(--vt-dim)">스크린샷 베이스라인 비교</text>
-
-<rect x="247" y="162" width="86" height="44" rx="9" fill="var(--vt-inner)" stroke="var(--vt-dim)" stroke-width="1" stroke-dasharray="5 3"/>
-<text x="290" y="189" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" fill="var(--vt-dim)">픽셀 비교</text>
-
-<rect x="341" y="162" width="97" height="44" rx="9" fill="var(--vt-accent-bg)" stroke="var(--vt-accent)" stroke-width="1.2"/>
-<text x="389" y="189" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" font-weight="600" fill="var(--vt-accent-text)">AI 비교</text>
-
-<!-- ===== COLUMN 3: data-testid 시맨틱 레이어 (amber) ===== -->
-
-<rect x="465" y="50" width="205" height="72" rx="12" fill="var(--vt-amber-bg)" stroke="var(--vt-amber)" stroke-width="1.5"/>
-<text x="567" y="80" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="16" font-weight="700" fill="var(--vt-amber-text)">data-testid 레이어</text>
-<text x="567" y="102" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" fill="var(--vt-dim)">시맨틱 식별자</text>
-
-<text x="567" y="146" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" fill="var(--vt-dim)">명시적 UI 계약</text>
-
-<rect x="482" y="162" width="170" height="44" rx="9" fill="var(--vt-inner)" stroke="var(--vt-dim)" stroke-width="1" stroke-dasharray="5 3"/>
-<text x="567" y="182" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="11" fill="var(--vt-dim)">ts-morph → Claude API</text>
-<text x="567" y="198" text-anchor="middle" font-family="'SF Mono', 'Consolas', monospace" font-size="11" fill="var(--vt-dim)">→ Playwright 스펙</text>
-
-<!-- ===== COLUMN 4: Intent 로케이터 (green) ===== -->
-
-<rect x="690" y="50" width="205" height="72" rx="12" fill="var(--vt-green-bg)" stroke="var(--vt-green)" stroke-width="1.5"/>
-<text x="792" y="80" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="16" font-weight="700" fill="var(--vt-green-text)">Momentic</text>
-<text x="792" y="102" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" fill="var(--vt-dim)">Intent 로케이터</text>
-
-<text x="792" y="146" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" fill="var(--vt-dim)">자연어 UI 요소 탐색</text>
-
-<rect x="707" y="162" width="170" height="44" rx="9" fill="var(--vt-inner)" stroke="var(--vt-dim)" stroke-width="1" stroke-dasharray="5 3"/>
-<text x="792" y="189" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="12" fill="var(--vt-dim)">셀렉터 유지보수 불필요</text>
-
-<!-- ===== BOTTOM: Abstraction arrow ===== -->
-
-<line x1="40" y1="254" x2="870" y2="254" stroke="var(--vt-dim)" stroke-width="1.2" marker-end="url(#vt-arr)"/>
-<text x="460" y="282" text-anchor="middle" font-family="'Pretendard', -apple-system, sans-serif" font-size="13" fill="var(--vt-dim)" letter-spacing="0.05em">추상화 수준 →</text>
+    {t.chips.length === 2 ? t.chips.map((c, j) => (
+      <g>
+        <rect x={444 + j * 100} y={ys[i] + 15} width={92} height={30} rx={3}
+              fill={c.accent ? 'var(--dg-1-soft)' : 'var(--bg-soft)'}
+              stroke={c.accent ? 'var(--dg-1)' : 'var(--rule)'} stroke-width="1"/>
+        <text class="chip" x={490 + j * 100} y={ys[i] + 34} text-anchor="middle"
+              fill={c.accent ? 'var(--dg-1-ink)' : 'var(--muted)'}>{c.t}</text>
+      </g>
+    )) : (
+      <g>
+        <rect x={444} y={ys[i] + 12} width={192} height={36} rx={3} fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+        {t.chips[0].t2 ? (
+          <g>
+            <text class={t.chips[0].mono ? 'm chip2' : 'chip2'} x={540} y={ys[i] + 26} text-anchor="middle" fill="var(--muted)">{t.chips[0].t}</text>
+            <text class={t.chips[0].mono ? 'm chip2' : 'chip2'} x={540} y={ys[i] + 39} text-anchor="middle" fill="var(--muted)">{t.chips[0].t2}</text>
+          </g>
+        ) : (
+          <text class={t.chips[0].mono ? 'm chip' : 'chip'} x={540} y={ys[i] + 34} text-anchor="middle" fill="var(--muted)">{t.chips[0].t}</text>
+        )}
+      </g>
+    )}
+  </g>
+))}
 
 </svg>
 </div>
 
 <style>
-.visual-tools {
-  --vt-inner: rgba(255,255,255,0.03);
-  --vt-dim: #908caa;
-  --vt-blue-bg: rgba(129,140,248,0.08);
-  --vt-blue: #818cf8;
-  --vt-blue-text: #c4b5fd;
-  --vt-purple-bg: rgba(180,130,220,0.08);
-  --vt-purple: #b482dc;
-  --vt-purple-text: #d4b8e8;
-  --vt-amber-bg: rgba(240,180,80,0.08);
-  --vt-amber: #f0b450;
-  --vt-amber-text: #f0c878;
-  --vt-green-bg: rgba(109,208,160,0.08);
-  --vt-green: #6dd0a0;
-  --vt-green-text: #a0e8c8;
-  --vt-accent-bg: rgba(129,140,248,0.15);
-  --vt-accent: #818cf8;
-  --vt-accent-text: #e0ddff;
-}
-:global(body:not([data-theme="dark"])) .visual-tools {
-  --vt-inner: rgba(0,0,0,0.03);
-  --vt-dim: #6e6a86;
-  --vt-blue-bg: rgba(74,90,200,0.08);
-  --vt-blue: #4a5ac8;
-  --vt-blue-text: #3a4a98;
-  --vt-purple-bg: rgba(140,90,180,0.08);
-  --vt-purple: #8c5ab4;
-  --vt-purple-text: #6a3a8c;
-  --vt-amber-bg: rgba(200,140,30,0.08);
-  --vt-amber: #c88c1e;
-  --vt-amber-text: #8a6010;
-  --vt-green-bg: rgba(40,160,100,0.08);
-  --vt-green: #28a064;
-  --vt-green-text: #1a7048;
-  --vt-accent-bg: rgba(74,90,200,0.15);
-  --vt-accent: #4a5ac8;
-  --vt-accent-text: #3a3a6a;
+.vt { margin: 2.4rem 0; }
+.vt svg { display: block; width: 100%; height: auto; }
+.vt text { font-family: var(--font-sans); }
+.vt .m { font-family: var(--font-mono); }
+.vt .name { font-size: 13.5px; font-weight: 700; }
+.vt .gives { font-size: 11.5px; }
+.vt .chip { font-size: 11px; }
+.vt .chip2 { font-size: 9.5px; }
+.vt .cap { font-size: 11px; }
+.vt .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .vt { overflow-x: auto; }
+  .vt svg { min-width: 560px; }
 }
 </style>

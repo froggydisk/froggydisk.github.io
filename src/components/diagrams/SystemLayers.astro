@@ -35,50 +35,30 @@
 <style>
 .sys-layers {
   /* 판정하기 - rose */
-  --sl-l5: rgba(244, 114, 140, 0.22);
-  --sl-l5-border: #f4728c;
-  --sl-l5-text: #f8b0c0;
+  --sl-l5: var(--dg-1);
+  --sl-l5-border: var(--dg-1);
+  --sl-l5-text: var(--dg-1-ink);
   /* 실행하기 - teal */
-  --sl-l4: rgba(80, 200, 200, 0.22);
-  --sl-l4-border: #50c8c8;
-  --sl-l4-text: #a0e4e4;
+  --sl-l4: var(--dg-4);
+  --sl-l4-border: var(--dg-4);
+  --sl-l4-text: var(--dg-4-ink);
   /* 준비하기 - sky */
-  --sl-l3: rgba(100, 160, 240, 0.22);
-  --sl-l3-border: #64a0f0;
-  --sl-l3-text: #b0d0f8;
+  --sl-l3: var(--dg-3);
+  --sl-l3-border: var(--dg-3);
+  --sl-l3-text: var(--dg-3-ink);
   /* 이해하기 - lime */
-  --sl-l2: rgba(160, 210, 80, 0.22);
-  --sl-l2-border: #a0d250;
-  --sl-l2-text: #c8e8a0;
+  --sl-l2: var(--dg-2);
+  --sl-l2-border: var(--dg-2);
+  --sl-l2-text: var(--dg-2-ink);
   /* 찾기 - lavender */
-  --sl-l1: rgba(160, 140, 210, 0.22);
-  --sl-l1-border: #a08cd2;
-  --sl-l1-text: #c8c0e8;
+  --sl-l1: var(--dg-5);
+  --sl-l1-border: var(--dg-5);
+  --sl-l1-text: var(--dg-5-ink);
 
-  --sl-dim: #908caa;
+  --sl-dim: var(--muted);
 }
-:global(body:not([data-theme="dark"])) .sys-layers {
-  /* 판정하기 - rose */
-  --sl-l5: rgba(200, 60, 80, 0.14);
-  --sl-l5-border: #c83c50;
-  --sl-l5-text: #8a2030;
-  /* 실행하기 - teal */
-  --sl-l4: rgba(20, 150, 150, 0.14);
-  --sl-l4-border: #149696;
-  --sl-l4-text: #0a6464;
-  /* 준비하기 - sky */
-  --sl-l3: rgba(40, 110, 200, 0.14);
-  --sl-l3-border: #286ec8;
-  --sl-l3-text: #1a4a8a;
-  /* 이해하기 - lime */
-  --sl-l2: rgba(100, 160, 30, 0.14);
-  --sl-l2-border: #64a01e;
-  --sl-l2-text: #3a6a10;
-  /* 찾기 - lavender */
-  --sl-l1: rgba(110, 90, 170, 0.14);
-  --sl-l1-border: #6e5aaa;
-  --sl-l1-text: #4a3a78;
-
-  --sl-dim: #6e6a86;
+@media (max-width: 700px) {
+  .sys-layers { overflow-x: auto; }
+  .sys-layers svg { min-width: 560px; }
 }
 </style>

@@ -13,6 +13,10 @@
 <style>
   @keyframes ml-flow { to { stroke-dashoffset: -16; } }
   .ml-anim { animation: ml-flow 1.4s linear infinite; }
+@media (max-width: 700px) {
+  .memory-layers { overflow-x: auto; }
+  .memory-layers svg { min-width: 560px; }
+}
 </style>
 
 <!-- Left side: Input sources -->
@@ -86,45 +90,24 @@
 
 <style>
 .memory-layers {
-  --ml-blue-bg: rgba(129,140,248,0.08);
-  --ml-blue-border: #818cf8;
-  --ml-blue-text: #c4b5fd;
-  --ml-brown-bg: rgba(200,140,80,0.08);
-  --ml-brown-border: #c88c50;
-  --ml-brown-text: #e0c097;
-  --ml-purple-bg: rgba(180,130,220,0.08);
-  --ml-purple-border: #b482dc;
-  --ml-purple-text: #d4b8e8;
-  --ml-green-bg: rgba(109,208,160,0.08);
-  --ml-green-border: #6dd0a0;
-  --ml-green-text: #a0e8c8;
-  --ml-accent-bg: rgba(129,140,248,0.15);
-  --ml-accent-border: #818cf8;
-  --ml-accent-text: #e0ddff;
-  --ml-gray-border: rgba(255,255,255,0.1);
-  --ml-gray-text: #908caa;
-  --ml-inner: rgba(255,255,255,0.03);
-  --ml-dim: #908caa;
-}
-:global(body:not([data-theme="dark"])) .memory-layers {
-  --ml-blue-bg: rgba(74,90,200,0.08);
-  --ml-blue-border: #4a5ac8;
-  --ml-blue-text: #3a4a98;
-  --ml-brown-bg: rgba(180,110,40,0.08);
-  --ml-brown-border: #b46e28;
-  --ml-brown-text: #8a5420;
-  --ml-purple-bg: rgba(140,90,180,0.08);
-  --ml-purple-border: #8c5ab4;
-  --ml-purple-text: #6a3a8c;
-  --ml-green-bg: rgba(40,160,100,0.08);
-  --ml-green-border: #28a064;
-  --ml-green-text: #1a7048;
-  --ml-accent-bg: rgba(74,90,200,0.15);
-  --ml-accent-border: #4a5ac8;
-  --ml-accent-text: #3a3a6a;
-  --ml-gray-border: rgba(0,0,0,0.1);
-  --ml-gray-text: #6e6a86;
-  --ml-inner: rgba(0,0,0,0.03);
-  --ml-dim: #6e6a86;
+  --ml-blue-bg: var(--dg-5-soft);
+  --ml-blue-border: var(--dg-5);
+  --ml-blue-text: var(--dg-5-ink);
+  --ml-brown-bg: var(--dg-4-soft);
+  --ml-brown-border: var(--dg-4);
+  --ml-brown-text: var(--dg-4-ink);
+  --ml-purple-bg: var(--dg-3-soft);
+  --ml-purple-border: var(--dg-3);
+  --ml-purple-text: var(--dg-3-ink);
+  --ml-green-bg: var(--dg-2-soft);
+  --ml-green-border: var(--dg-2);
+  --ml-green-text: var(--dg-2-ink);
+  --ml-accent-bg: var(--dg-1-soft);
+  --ml-accent-border: var(--dg-1);
+  --ml-accent-text: var(--dg-1-ink);
+  --ml-gray-border: var(--rule);
+  --ml-gray-text: var(--muted);
+  --ml-inner: var(--bg-soft);
+  --ml-dim: var(--muted);
 }
 </style>

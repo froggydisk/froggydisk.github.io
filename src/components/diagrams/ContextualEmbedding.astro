@@ -90,57 +90,36 @@
 
 <style>
 .ctx-embed {
-  --ce-dim: #908caa;
-  --ce-border: rgba(140, 140, 180, 0.3);
-  --ce-x: #eb6f92;
-  --ce-check: #9ccfd8;
-  --ce-active-border: rgba(156, 207, 216, 0.5);
-  --ce-distance: #9ccfd8;
+  --ce-dim: var(--muted);
+  --ce-border: var(--rule);
+  --ce-x: var(--dg-1);
+  --ce-check: var(--dg-2);
+  --ce-active-border: var(--dg-1);
+  --ce-distance: var(--muted);
 
-  --ce-bg-left: rgba(60, 60, 80, 0.06);
-  --ce-bg-right: rgba(80, 160, 170, 0.06);
-  --ce-title-left: #e0def4;
-  --ce-title-right: #9ccfd8;
+  --ce-bg-left: var(--bg-soft);
+  --ce-bg-right: var(--bg-soft);
+  --ce-title-left: var(--muted);
+  --ce-title-right: var(--muted);
 
-  --ce-word-static: rgba(110, 106, 134, 0.3);
-  --ce-word-static-border: #6e6a86;
-  --ce-word-static-text: #e0def4;
+  --ce-word-static: var(--dg-4);
+  --ce-word-static-border: var(--dg-4);
+  --ce-word-static-text: var(--dg-4-ink);
 
-  --ce-sent1: rgba(196, 167, 231, 0.18);
-  --ce-sent1-border: #c4a7e7;
-  --ce-sent1-text: #c4a7e7;
+  --ce-sent1: var(--dg-5);
+  --ce-sent1-border: var(--dg-5);
+  --ce-sent1-text: var(--dg-5-ink);
 
-  --ce-sent2: rgba(246, 193, 119, 0.18);
-  --ce-sent2-border: #f6c177;
-  --ce-sent2-text: #f6c177;
+  --ce-sent2: var(--dg-3);
+  --ce-sent2-border: var(--dg-3);
+  --ce-sent2-text: var(--dg-3-ink);
 
   margin: 2rem 0;
   overflow-x: auto;
 }
 
-:global(body:not([data-theme="dark"])) .ctx-embed {
-  --ce-dim: #6e6a86;
-  --ce-border: rgba(100, 100, 140, 0.25);
-  --ce-x: #b4546a;
-  --ce-check: #3c969a;
-  --ce-active-border: rgba(60, 150, 160, 0.4);
-  --ce-distance: #3c969a;
-
-  --ce-bg-left: rgba(60, 60, 80, 0.04);
-  --ce-bg-right: rgba(60, 150, 160, 0.05);
-  --ce-title-left: #575279;
-  --ce-title-right: #286983;
-
-  --ce-word-static: rgba(87, 82, 121, 0.25);
-  --ce-word-static-border: #575279;
-  --ce-word-static-text: #575279;
-
-  --ce-sent1: rgba(130, 80, 180, 0.12);
-  --ce-sent1-border: #907aa9;
-  --ce-sent1-text: #6e4a8a;
-
-  --ce-sent2: rgba(200, 140, 50, 0.12);
-  --ce-sent2-border: #c88c32;
-  --ce-sent2-text: #a06a1a;
+@media (max-width: 700px) {
+  .ctx-embed { overflow-x: auto; }
+  .ctx-embed svg { min-width: 560px; }
 }
 </style>

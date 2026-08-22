@@ -8,6 +8,10 @@
 <style>
   @keyframes pill-flow { to { stroke-dashoffset: -16; } }
   .pill-anim { animation: pill-flow 1.4s linear infinite; }
+@media (max-width: 700px) {
+  .harness-pillars { overflow-x: auto; }
+  .harness-pillars svg { min-width: 560px; }
+}
 </style>
 
 <!-- Harness outer box -->
@@ -75,41 +79,22 @@
 
 <style>
 .harness-pillars {
-  --hp-bg: rgba(50, 50, 60, 0.3);
-  --hp-border: #3e3e44;
-  --hp-title: #ededef;
-  --hp-dim: #908caa;
-  --hp-inner: rgba(255,255,255,0.03);
-  --hp-green-bg: rgba(109, 208, 160, 0.08);
-  --hp-green: #6dd0a0;
-  --hp-green-text: #c0ead5;
-  --hp-green-sub: #82bfa0;
-  --hp-purple-bg: rgba(180, 140, 220, 0.08);
-  --hp-purple: #b48cdc;
-  --hp-purple-text: #d8c4f0;
-  --hp-purple-sub: #a088b8;
-  --hp-brown-bg: rgba(200, 140, 80, 0.08);
-  --hp-brown: #c88c50;
-  --hp-brown-text: #e0c4a0;
-  --hp-brown-sub: #b0904a;
-}
-body:not([data-theme="dark"]) .harness-pillars {
-  --hp-bg: rgba(200, 200, 210, 0.15);
-  --hp-border: #c8c8d0;
-  --hp-title: #1c1c22;
-  --hp-dim: #6e6a86;
-  --hp-inner: rgba(0,0,0,0.03);
-  --hp-green-bg: rgba(40, 160, 100, 0.07);
-  --hp-green: #28a064;
-  --hp-green-text: #1a6e44;
-  --hp-green-sub: #3a9060;
-  --hp-purple-bg: rgba(130, 80, 180, 0.08);
-  --hp-purple: #8250b4;
-  --hp-purple-text: #5a3080;
-  --hp-purple-sub: #7a60a0;
-  --hp-brown-bg: rgba(180, 110, 40, 0.08);
-  --hp-brown: #b46e28;
-  --hp-brown-text: #8a5a1a;
-  --hp-brown-sub: #a07030;
+  --hp-bg: var(--bg-soft);
+  --hp-border: var(--rule);
+  --hp-title: var(--ink);
+  --hp-dim: var(--muted);
+  --hp-inner: var(--bg-soft);
+  --hp-green-bg: var(--dg-2-soft);
+  --hp-green: var(--dg-2);
+  --hp-green-text: var(--dg-2-ink);
+  --hp-green-sub: var(--muted);
+  --hp-purple-bg: var(--dg-3-soft);
+  --hp-purple: var(--dg-3);
+  --hp-purple-text: var(--dg-3-ink);
+  --hp-purple-sub: var(--muted);
+  --hp-brown-bg: var(--dg-4-soft);
+  --hp-brown: var(--dg-4);
+  --hp-brown-text: var(--dg-4-ink);
+  --hp-brown-sub: var(--muted);
 }
 </style>

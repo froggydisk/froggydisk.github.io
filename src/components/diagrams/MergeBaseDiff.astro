@@ -48,41 +48,29 @@
 
 <style>
 .merge-base-diff {
-  --mb-dim: #908caa;
-  --mb-base: #c4a7e7;
-  --mb-base-bg: rgba(196, 167, 231, 0.1);
-  --mb-base-text: #d8c4f0;
-  --mb-ours: #9ccfd8;
-  --mb-ours-bg: rgba(156, 207, 216, 0.1);
-  --mb-ours-text: #c8e8f0;
-  --mb-theirs: #f6c177;
-  --mb-theirs-bg: rgba(246, 193, 119, 0.1);
-  --mb-theirs-text: #f8d8a0;
-  --mb-result: #eb6f92;
-  --mb-result-bg: rgba(235, 111, 146, 0.12);
-  --mb-result-text: #f4a0b8;
+  --mb-dim: var(--muted);
+  --mb-base: var(--dg-4);
+  --mb-base-bg: var(--dg-4-soft);
+  --mb-base-text: var(--dg-4-ink);
+  --mb-ours: var(--dg-5);
+  --mb-ours-bg: var(--dg-5-soft);
+  --mb-ours-text: var(--dg-5-ink);
+  --mb-theirs: var(--dg-2);
+  --mb-theirs-bg: var(--dg-2-soft);
+  --mb-theirs-text: var(--dg-2-ink);
+  --mb-result: var(--dg-1);
+  --mb-result-bg: var(--dg-1-soft);
+  --mb-result-text: var(--dg-1-ink);
 
   margin: 2rem 0;
   overflow-x: auto;
 }
 .merge-base-diff svg {
   display: block;
-  min-width: 720px;
   height: auto;
 }
-:global(body:not([data-theme="dark"])) .merge-base-diff {
-  --mb-dim: #6e6a86;
-  --mb-base: #6a4ea8;
-  --mb-base-bg: rgba(106, 78, 168, 0.07);
-  --mb-base-text: #4a2e80;
-  --mb-ours: #286983;
-  --mb-ours-bg: rgba(40, 105, 131, 0.07);
-  --mb-ours-text: #1a4060;
-  --mb-theirs: #c88c32;
-  --mb-theirs-bg: rgba(200, 140, 50, 0.07);
-  --mb-theirs-text: #8a5e10;
-  --mb-result: #b4546a;
-  --mb-result-bg: rgba(180, 84, 106, 0.08);
-  --mb-result-text: #8a2a40;
+@media (max-width: 700px) {
+  .merge-base-diff { overflow-x: auto; }
+  .merge-base-diff svg { min-width: 560px; }
 }
 </style>

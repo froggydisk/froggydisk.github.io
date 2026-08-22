@@ -9,6 +9,10 @@
 <style>
   @keyframes vl-flow { to { stroke-dashoffset: -20; } }
   .vl-anim { animation: vl-flow 1.4s linear infinite; }
+@media (max-width: 700px) {
+  .verify-loop { overflow-x: auto; }
+  .verify-loop svg { min-width: 560px; }
+}
 </style>
 
 <!-- Section labels -->
@@ -98,35 +102,19 @@
 
 <style>
 .verify-loop {
-  --vl-inner: rgba(255,255,255,0.03);
-  --vl-dim: #908caa;
-  --vl-blue-bg: rgba(129,140,248,0.08);
-  --vl-blue: #818cf8;
-  --vl-blue-text: #c4b5fd;
-  --vl-purple-bg: rgba(180,130,220,0.08);
-  --vl-purple: #b482dc;
-  --vl-purple-text: #d4b8e8;
-  --vl-green-bg: rgba(109,208,160,0.08);
-  --vl-green: #6dd0a0;
-  --vl-green-text: #a0e8c8;
-  --vl-accent-bg: rgba(129,140,248,0.15);
-  --vl-accent: #818cf8;
-  --vl-accent-text: #e0ddff;
-}
-:global(body:not([data-theme="dark"])) .verify-loop {
-  --vl-inner: rgba(0,0,0,0.03);
-  --vl-dim: #6e6a86;
-  --vl-blue-bg: rgba(74,90,200,0.08);
-  --vl-blue: #4a5ac8;
-  --vl-blue-text: #3a4a98;
-  --vl-purple-bg: rgba(140,90,180,0.08);
-  --vl-purple: #8c5ab4;
-  --vl-purple-text: #6a3a8c;
-  --vl-green-bg: rgba(40,160,100,0.08);
-  --vl-green: #28a064;
-  --vl-green-text: #1a7048;
-  --vl-accent-bg: rgba(74,90,200,0.15);
-  --vl-accent: #4a5ac8;
-  --vl-accent-text: #3a3a6a;
+  --vl-inner: var(--bg-soft);
+  --vl-dim: var(--muted);
+  --vl-blue-bg: var(--dg-5-soft);
+  --vl-blue: var(--dg-5);
+  --vl-blue-text: var(--dg-5-ink);
+  --vl-purple-bg: var(--dg-3-soft);
+  --vl-purple: var(--dg-3);
+  --vl-purple-text: var(--dg-3-ink);
+  --vl-green-bg: var(--dg-2-soft);
+  --vl-green: var(--dg-2);
+  --vl-green-text: var(--dg-2-ink);
+  --vl-accent-bg: var(--dg-1-soft);
+  --vl-accent: var(--dg-1);
+  --vl-accent-text: var(--dg-1-ink);
 }
 </style>

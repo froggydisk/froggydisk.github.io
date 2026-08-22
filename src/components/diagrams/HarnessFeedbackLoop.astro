@@ -9,6 +9,10 @@
 <style>
   @keyframes loop-flow { to { stroke-dashoffset: -20; } }
   .loop-anim { animation: loop-flow 1.4s linear infinite; }
+@media (max-width: 700px) {
+  .harness-loop { overflow-x: auto; }
+  .harness-loop svg { min-width: 560px; }
+}
 </style>
 
 <!-- Step 1: Agent executes -->
@@ -61,39 +65,21 @@
 
 <style>
 .harness-loop {
-  --lp-gray-bg: rgba(100, 100, 110, 0.15);
-  --lp-gray: #6f6f78;
-  --lp-title: #ededef;
-  --lp-dim: #908caa;
-  --lp-green-bg: rgba(109, 208, 160, 0.08);
-  --lp-green: #6dd0a0;
-  --lp-green-text: #c0ead5;
-  --lp-green-sub: #82bfa0;
-  --lp-purple-bg: rgba(180, 140, 220, 0.1);
-  --lp-purple: #b48cdc;
-  --lp-purple-text: #d8c4f0;
-  --lp-purple-sub: #a088b8;
-  --lp-brown-bg: rgba(200, 140, 80, 0.1);
-  --lp-brown: #c88c50;
-  --lp-brown-text: #e0c4a0;
-  --lp-brown-sub: #b0904a;
-}
-body:not([data-theme="dark"]) .harness-loop {
-  --lp-gray-bg: rgba(100, 100, 110, 0.08);
-  --lp-gray: #8b8b8e;
-  --lp-title: #1c1c22;
-  --lp-dim: #6e6a86;
-  --lp-green-bg: rgba(40, 160, 100, 0.07);
-  --lp-green: #28a064;
-  --lp-green-text: #1a6e44;
-  --lp-green-sub: #3a9060;
-  --lp-purple-bg: rgba(130, 80, 180, 0.08);
-  --lp-purple: #8250b4;
-  --lp-purple-text: #5a3080;
-  --lp-purple-sub: #7a60a0;
-  --lp-brown-bg: rgba(180, 110, 40, 0.08);
-  --lp-brown: #b46e28;
-  --lp-brown-text: #8a5a1a;
-  --lp-brown-sub: #a07030;
+  --lp-gray-bg: var(--bg-soft);
+  --lp-gray: var(--rule);
+  --lp-title: var(--ink);
+  --lp-dim: var(--muted);
+  --lp-green-bg: var(--dg-2-soft);
+  --lp-green: var(--dg-2);
+  --lp-green-text: var(--dg-2-ink);
+  --lp-green-sub: var(--muted);
+  --lp-purple-bg: var(--dg-3-soft);
+  --lp-purple: var(--dg-3);
+  --lp-purple-text: var(--dg-3-ink);
+  --lp-purple-sub: var(--muted);
+  --lp-brown-bg: var(--dg-4-soft);
+  --lp-brown: var(--dg-4);
+  --lp-brown-text: var(--dg-4-ink);
+  --lp-brown-sub: var(--muted);
 }
 </style>

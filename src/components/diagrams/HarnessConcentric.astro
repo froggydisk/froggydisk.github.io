@@ -38,33 +38,22 @@
 
 <style>
 .harness-concentric {
-  --h-green-bg: rgba(109, 208, 160, 0.08);
-  --h-green: #6dd0a0;
-  --h-green-text: #c0ead5;
-  --h-purple-bg: rgba(180, 140, 220, 0.1);
-  --h-purple: #b48cdc;
-  --h-purple-text: #d8c4f0;
-  --h-brown-bg: rgba(200, 140, 80, 0.1);
-  --h-brown: #c88c50;
-  --h-brown-text: #e0c4a0;
-  --h-core-bg: #2a2a30;
-  --h-core-border: #4a4a52;
-  --h-core-text: #909098;
-  --h-dim: #6f6f78;
+  --h-green-bg: var(--dg-2-soft);
+  --h-green: var(--dg-2);
+  --h-green-text: var(--dg-2-ink);
+  --h-purple-bg: var(--dg-3-soft);
+  --h-purple: var(--dg-3);
+  --h-purple-text: var(--dg-3-ink);
+  --h-brown-bg: var(--dg-4-soft);
+  --h-brown: var(--dg-4);
+  --h-brown-text: var(--dg-4-ink);
+  --h-core-bg: var(--ink);
+  --h-core-border: var(--ink);
+  --h-core-text: var(--bg);
+  --h-dim: var(--muted);
 }
-body:not([data-theme="dark"]) .harness-concentric {
-  --h-green-bg: rgba(40, 160, 100, 0.07);
-  --h-green: #28a064;
-  --h-green-text: #1a6e44;
-  --h-purple-bg: rgba(130, 80, 180, 0.08);
-  --h-purple: #8250b4;
-  --h-purple-text: #5a3080;
-  --h-brown-bg: rgba(180, 110, 40, 0.08);
-  --h-brown: #b46e28;
-  --h-brown-text: #8a5a1a;
-  --h-core-bg: #e8e8ec;
-  --h-core-border: #c8c8d0;
-  --h-core-text: #60606c;
-  --h-dim: #8b8b8e;
+@media (max-width: 700px) {
+  .harness-concentric { overflow-x: auto; }
+  .harness-concentric svg { min-width: 560px; }
 }
 </style>

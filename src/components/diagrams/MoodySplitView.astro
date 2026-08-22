@@ -81,10 +81,6 @@ const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
   <div class="moody-split__panel moody-split__panel--wireframe">
     <svg id="wf-svg" width="100%" viewBox="0 0 1000 760" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <filter id="ms-glow">
-          <feGaussianBlur stdDeviation="3" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
         <linearGradient id="ms-screenGrad" x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stop-color="var(--ms-screen-grad-top)"/>
           <stop offset="100%" stop-color="var(--ms-screen-grad-bot)"/>
@@ -347,7 +343,7 @@ const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
       let html = '';
 
       // Back panel & USB (with glow filter)
-      html += `<g filter="url(#ms-glow)">`;
+      html += `<g>`;
       html += `<polygon points="${pp(wfBP)}" fill="var(--ms-backpanel-fill)" stroke="var(--ms-wirealt)" stroke-width="1" opacity="0.6" stroke-dasharray="4 3" stroke-linejoin="round"/>`;
       html += `<polygon points="${pp(wfUP)}" fill="none" stroke="var(--ms-wirealt)" stroke-width="0.8" opacity="0.5" stroke-linejoin="round"/>`;
       html += `</g>`;
@@ -361,7 +357,7 @@ const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
       }
 
       // Frame front face (with glow filter)
-      html += `<g filter="url(#ms-glow)">`;
+      html += `<g>`;
       html += `<polygon points="${pp(wfFF)}" fill="var(--ms-surface)" stroke="var(--ms-wire)" stroke-width="1.5" opacity="0.9" stroke-linejoin="round"/>`;
       html += `</g>`;
 
@@ -374,7 +370,7 @@ const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
       }
 
       // UI layer (with glow filter)
-      html += `<g filter="url(#ms-glow)">`;
+      html += `<g>`;
       html += `<polygon points="${pp(wfAZ)}" fill="var(--ms-album-fill)" stroke="var(--ms-accent)" stroke-width="0.8" opacity="0.6" stroke-dasharray="3 2" stroke-linejoin="round"/>`;
       html += `<polygon points="${pp(wfIZ)}" fill="var(--ms-info-fill)" stroke="var(--ms-accent)" stroke-width="0.6" opacity="0.5" stroke-linejoin="round"/>`;
       html += `<polygon points="${pp(wfTZ)}" fill="var(--ms-track-fill)" stroke="var(--ms-wire)" stroke-width="0.6" opacity="0.7" stroke-linejoin="round"/>`;
@@ -382,15 +378,28 @@ const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
       html += `<polygon points="${pp(wfYZ)}" fill="var(--ms-year-fill)" stroke="var(--ms-wirealt)" stroke-width="0.5" opacity="0.5" stroke-linejoin="round"/>`;
       html += `</g>`;
 
+      // 라벨이 회전 중 viewBox 밖으로 나가지 않도록 가두는 상수
+      const VB_W = 1000, VB_H = 760, VB_M = 12, FS = 30;
+      // JetBrains Mono 기준 글자당 폭 ≈ 0.6em
+      const textW = (t: string) => t.length * FS * 0.6;
+      const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), Math.max(lo, hi));
+
       // Annotations helper
       function ann(from: {x:number,y:number}, text: string, ox: number, oy: number, color: string) {
-        const ex = from.x + ox, ey = from.y + oy;
         const anchor = ox > 0 ? 'start' : 'end';
-        const tx = ex + (ox > 0 ? 8 : -8), ty = ey + 4;
+        const lead = ox > 0 ? 22 : -22;
+        const w = textW(text);
+        // 글자 상자가 통째로 들어오도록 tx 를 먼저 가두고, 리더선 끝점을 거기에 맞춘다
+        let tx = from.x + ox + lead;
+        tx = anchor === 'start'
+          ? clamp(tx, VB_M, VB_W - VB_M - w)
+          : clamp(tx, VB_M + w, VB_W - VB_M);
+        let ty = clamp(from.y + oy + 10, VB_M + FS, VB_H - VB_M);
+        const ex = tx - lead, ey = ty - 10;
         let s = '';
         s += `<circle cx="${from.x.toFixed(1)}" cy="${from.y.toFixed(1)}" r="3" fill="${color}" opacity="0.8"/>`;
         s += `<line x1="${from.x.toFixed(1)}" y1="${from.y.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="${color}" stroke-width="0.8" opacity="0.6" stroke-dasharray="3 2"/>`;
-        s += `<text x="${tx.toFixed(1)}" y="${ty.toFixed(1)}" fill="${color}" font-size="11" font-family="'JetBrains Mono','SF Mono','Consolas',monospace" text-anchor="${anchor}" opacity="0.85">${text}</text>`;
+        s += `<text x="${tx.toFixed(1)}" y="${ty.toFixed(1)}" fill="${color}" font-size="30" font-family="'JetBrains Mono','SF Mono','Consolas',monospace" text-anchor="${anchor}">${text}</text>`;
         return s;
       }
 
@@ -404,7 +413,10 @@ const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
         s += `<line x1="${p1.x.toFixed(1)}" y1="${p1.y.toFixed(1)}" x2="${(p1.x+nx*offset).toFixed(1)}" y2="${(p1.y+ny*offset).toFixed(1)}" stroke="${color}" stroke-width="0.5" opacity="0.5"/>`;
         s += `<line x1="${p2.x.toFixed(1)}" y1="${p2.y.toFixed(1)}" x2="${(p2.x+nx*offset).toFixed(1)}" y2="${(p2.y+ny*offset).toFixed(1)}" stroke="${color}" stroke-width="0.5" opacity="0.5"/>`;
         s += `<line x1="${(p1.x+nx*offset).toFixed(1)}" y1="${(p1.y+ny*offset).toFixed(1)}" x2="${(p2.x+nx*offset).toFixed(1)}" y2="${(p2.y+ny*offset).toFixed(1)}" stroke="${color}" stroke-width="1" opacity="0.8"/>`;
-        s += `<text x="${(mx+nx*(offset+14)).toFixed(1)}" y="${(my+ny*(offset+14)).toFixed(1)}" fill="${color}" font-size="11" font-family="'JetBrains Mono','SF Mono','Consolas',monospace" text-anchor="middle" dominant-baseline="middle" opacity="0.9">${label}</text>`;
+        const hw = textW(label) / 2;
+        const lx = clamp(mx + nx*(offset+38), VB_M + hw, VB_W - VB_M - hw);
+        const ly = clamp(my + ny*(offset+38), VB_M + FS/2, VB_H - VB_M - FS/2);
+        s += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" fill="${color}" font-size="30" font-family="'JetBrains Mono','SF Mono','Consolas',monospace" text-anchor="middle" dominant-baseline="middle">${label}</text>`;
         return s;
       }
 
@@ -441,21 +453,21 @@ const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
 
 <style>
 .moody-split {
-  --ms-panel-bg: #0a0a0f;
-  --ms-panel-border: rgba(255, 255, 255, 0.06);
-  --ms-label-color: #00ffcc;
-  --ms-wire: #00ffcc;
-  --ms-wirealt: #ff6b35;
-  --ms-accent: #00d4ff;
-  --ms-surface: rgba(0, 255, 204, 0.04);
-  --ms-screen-grad-top: rgba(0, 102, 204, 0.15);
-  --ms-screen-grad-bot: rgba(0, 26, 51, 0.25);
-  --ms-album-fill: rgba(0, 212, 255, 0.04);
-  --ms-info-fill: rgba(0, 102, 204, 0.06);
-  --ms-track-fill: rgba(0, 255, 204, 0.1);
-  --ms-artist-fill: rgba(0, 255, 204, 0.06);
-  --ms-year-fill: rgba(255, 107, 53, 0.08);
-  --ms-backpanel-fill: rgba(255, 107, 53, 0.03);
+  --ms-panel-bg: var(--bg);
+  --ms-panel-border: var(--rule);
+  --ms-label-color: var(--muted);
+  --ms-wire: var(--dg-5);
+  --ms-wirealt: var(--dg-4-ink);
+  --ms-accent: var(--dg-1);
+  --ms-surface: var(--rule-soft);
+  --ms-screen-grad-top: var(--dg-5-soft);
+  --ms-screen-grad-bot: var(--bg-soft);
+  --ms-album-fill: var(--dg-5-soft);
+  --ms-info-fill: var(--bg-soft);
+  --ms-track-fill: var(--dg-5-soft);
+  --ms-artist-fill: var(--rule-soft);
+  --ms-year-fill: var(--dg-4-soft);
+  --ms-backpanel-fill: var(--dg-1-soft);
 
   display: flex;
   gap: 8px;
@@ -477,7 +489,6 @@ const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
   font-size: 10px;
   color: var(--ms-label-color);
   letter-spacing: 2px;
-  opacity: 0.6;
   z-index: 1;
   font-family: 'JetBrains Mono', monospace;
 }
@@ -487,34 +498,21 @@ const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
 }
 
 .pv-bg {
-  fill: #0a0a0f;
+  fill: var(--bg);
 }
 
-:global(body:not([data-theme="dark"])) .pv-bg {
-  fill: #f0f0f0;
+/* 라벨 크기는 CSS로 잡는다. SVG에서 CSS 규칙이 presentation attribute를 이기므로
+   JS가 찍는 font-size="30" 을 그대로 덮어쓴다. */
+.moody-split text {
+  font-size: 30px;
 }
 
 @media (max-width: 768px) {
   .moody-split {
     flex-direction: column;
   }
-}
-
-:global(body:not([data-theme="dark"])) .moody-split {
-  --ms-panel-bg: #f5f5f5;
-  --ms-panel-border: rgba(0, 0, 0, 0.08);
-  --ms-label-color: #008866;
-  --ms-wire: #008866;
-  --ms-wirealt: #cc4400;
-  --ms-accent: #0088aa;
-  --ms-surface: rgba(0, 136, 102, 0.06);
-  --ms-screen-grad-top: rgba(0, 102, 204, 0.1);
-  --ms-screen-grad-bot: rgba(0, 26, 51, 0.15);
-  --ms-album-fill: rgba(0, 136, 170, 0.06);
-  --ms-info-fill: rgba(0, 80, 160, 0.06);
-  --ms-track-fill: rgba(0, 136, 102, 0.1);
-  --ms-artist-fill: rgba(0, 136, 102, 0.06);
-  --ms-year-fill: rgba(204, 68, 0, 0.08);
-  --ms-backpanel-fill: rgba(204, 68, 0, 0.04);
+  .moody-split text {
+    font-size: 16px;
+  }
 }
 </style>

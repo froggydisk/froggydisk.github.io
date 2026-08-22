@@ -34,23 +34,17 @@
 
 <style>
 .setup-outside {
-  --su-api-bg: rgba(109, 208, 160, 0.12);
-  --su-api: #6dd0a0;
-  --su-api-text: #c0ead5;
-  --su-ui-bg: rgba(129, 140, 248, 0.12);
-  --su-ui: #818cf8;
-  --su-ui-text: #b8c0f8;
-  --su-arrow: #6f6f78;
-  --su-dim: #908caa;
+  --su-api-bg: var(--dg-5-soft);
+  --su-api: var(--dg-5);
+  --su-api-text: var(--dg-5-ink);
+  --su-ui-bg: var(--dg-1-soft);
+  --su-ui: var(--dg-1);
+  --su-ui-text: var(--dg-1-ink);
+  --su-arrow: var(--muted);
+  --su-dim: var(--muted);
 }
-:global(body:not([data-theme="dark"])) .setup-outside {
-  --su-api-bg: rgba(40, 160, 100, 0.1);
-  --su-api: #28a064;
-  --su-api-text: #1a6e44;
-  --su-ui-bg: rgba(60, 80, 200, 0.1);
-  --su-ui: #4a5ac8;
-  --su-ui-text: #3a4a90;
-  --su-arrow: #8b8b8e;
-  --su-dim: #6e6a86;
+@media (max-width: 700px) {
+  .setup-outside { overflow-x: auto; }
+  .setup-outside svg { min-width: 560px; }
 }
 </style>

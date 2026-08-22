@@ -72,23 +72,17 @@
 
 <style>
 .fb-bottleneck {
-  --fb-blue: #818cf8;
-  --fb-blue-text: #b8c0f8;
-  --fb-red-bg: rgba(248, 113, 113, 0.1);
-  --fb-red: #f87171;
-  --fb-red-text: #fca5a5;
-  --fb-gray: #6f6f78;
-  --fb-inner: rgba(255,255,255,0.03);
-  --fb-dim: #908caa;
+  --fb-blue: var(--dg-5);
+  --fb-blue-text: var(--dg-5-ink);
+  --fb-red-bg: var(--dg-1-soft);
+  --fb-red: var(--dg-1);
+  --fb-red-text: var(--dg-1-ink);
+  --fb-gray: var(--rule);
+  --fb-inner: var(--bg-soft);
+  --fb-dim: var(--muted);
 }
-:global(body:not([data-theme="dark"])) .fb-bottleneck {
-  --fb-blue: #4a5ac8;
-  --fb-blue-text: #3a4a90;
-  --fb-red-bg: rgba(220, 60, 60, 0.08);
-  --fb-red: #dc3c3c;
-  --fb-red-text: #a02020;
-  --fb-gray: #8b8b8e;
-  --fb-inner: rgba(0,0,0,0.03);
-  --fb-dim: #6e6a86;
+@media (max-width: 700px) {
+  .fb-bottleneck { overflow-x: auto; }
+  .fb-bottleneck svg { min-width: 560px; }
 }
 </style>

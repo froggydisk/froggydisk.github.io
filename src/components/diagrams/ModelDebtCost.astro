@@ -86,45 +86,30 @@
 
 <style>
 .md-cost {
-  --md-dim: #908caa;
-  --md-axis: #6e6a86;
-  --md-grid: rgba(140, 140, 180, 0.15);
+  --md-dim: var(--muted);
+  --md-axis: var(--rule);
+  --md-grid: var(--rule);
 
-  --md-cheap: #eb6f92;
-  --md-cheap-fill: #eb6f92;
-  --md-cheap-label-bg: rgba(235, 111, 146, 0.08);
+  --md-cheap: var(--dg-2);
+  --md-cheap-fill: var(--dg-2-soft);
+  --md-cheap-label-bg: var(--dg-2-soft);
 
-  --md-expensive: #9ccfd8;
-  --md-expensive-fill: #9ccfd8;
-  --md-expensive-label-bg: rgba(156, 207, 216, 0.08);
+  --md-expensive: var(--dg-1);
+  --md-expensive-fill: var(--dg-1-soft);
+  --md-expensive-label-bg: var(--dg-1-soft);
 
-  --md-cross: #f6c177;
-  --md-cross-border: #f6c177;
-  --md-cross-bg: rgba(246, 193, 119, 0.1);
+  --md-cross: var(--dg-4);
+  --md-cross-border: var(--dg-4);
+  --md-cross-bg: var(--dg-4-soft);
 
-  --md-gap: #eb6f92;
+  --md-gap: var(--muted);
 
   margin: 2rem 0;
   overflow-x: auto;
 }
 
-:global(body:not([data-theme="dark"])) .md-cost {
-  --md-dim: #6e6a86;
-  --md-axis: #9893a5;
-  --md-grid: rgba(100, 100, 140, 0.12);
-
-  --md-cheap: #b4546a;
-  --md-cheap-fill: #b4546a;
-  --md-cheap-label-bg: rgba(180, 84, 106, 0.06);
-
-  --md-expensive: #286983;
-  --md-expensive-fill: #286983;
-  --md-expensive-label-bg: rgba(40, 105, 131, 0.06);
-
-  --md-cross: #c88c32;
-  --md-cross-border: #c88c32;
-  --md-cross-bg: rgba(200, 140, 50, 0.08);
-
-  --md-gap: #b4546a;
+@media (max-width: 700px) {
+  .md-cost { overflow-x: auto; }
+  .md-cost svg { min-width: 560px; }
 }
 </style>

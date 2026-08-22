@@ -11,6 +11,10 @@
   @keyframes ex-blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
   .ex-flow { animation: ex-flow 1.4s linear infinite; }
   .ex-blink { animation: ex-blink 2s ease-in-out infinite; }
+@media (max-width: 700px) {
+  .vpn-diagram-ex { overflow-x: auto; }
+  .vpn-diagram-ex svg { min-width: 560px; }
+}
 </style>
 
 <!-- VPN mesh area (hand-drawn style) -->
@@ -91,59 +95,32 @@
 <style>
 /* Excalidraw style — dark */
 .vpn-diagram-ex {
-  --ex-bg: #1e1e2e;
-  --ex-mesh: rgba(100, 100, 140, 0.06);
-  --ex-text: #e0def4;
-  --ex-dim: #908caa;
-  --ex-border: #575279;
+  --ex-bg: var(--bg-soft);
+  --ex-mesh: var(--rule);
+  --ex-text: var(--body);
+  --ex-dim: var(--muted);
+  --ex-border: var(--rule);
 
-  --ex-blue-bg: rgba(125, 165, 230, 0.08);
-  --ex-blue: #7da5e6;
-  --ex-blue-text: #c4d6f2;
-  --ex-blue-sub: #8eadd4;
+  --ex-blue-bg: var(--dg-5-soft);
+  --ex-blue: var(--dg-5);
+  --ex-blue-text: var(--dg-5-ink);
+  --ex-blue-sub: var(--muted);
 
-  --ex-green-bg: rgba(109, 208, 160, 0.08);
-  --ex-green: #6dd0a0;
-  --ex-green-text: #c0ead5;
-  --ex-green-sub: #82bfa0;
+  --ex-green-bg: var(--dg-2-soft);
+  --ex-green: var(--dg-2);
+  --ex-green-text: var(--dg-2-ink);
+  --ex-green-sub: var(--muted);
 
-  --ex-orange-bg: rgba(230, 170, 100, 0.08);
-  --ex-orange: #e6aa64;
-  --ex-orange-text: #f0d4a8;
-  --ex-orange-sub: #c4a070;
+  --ex-orange-bg: var(--dg-4-soft);
+  --ex-orange: var(--dg-4);
+  --ex-orange-text: var(--dg-4-ink);
+  --ex-orange-sub: var(--muted);
 
-  --ex-purple-bg: rgba(180, 140, 220, 0.08);
-  --ex-purple: #b48cdc;
-  --ex-purple-text: #d8c4f0;
-  --ex-purple-sub: #a088b8;
+  --ex-purple-bg: var(--dg-3-soft);
+  --ex-purple: var(--dg-3);
+  --ex-purple-text: var(--dg-3-ink);
+  --ex-purple-sub: var(--muted);
 }
 
 /* Excalidraw style — light */
-body:not([data-theme="dark"]) .vpn-diagram-ex {
-  --ex-bg: #ffffff;
-  --ex-mesh: rgba(100, 100, 140, 0.04);
-  --ex-text: #1e1e2e;
-  --ex-dim: #6e6a86;
-  --ex-border: #9893a5;
-
-  --ex-blue-bg: rgba(66, 120, 200, 0.07);
-  --ex-blue: #4278c8;
-  --ex-blue-text: #2a5090;
-  --ex-blue-sub: #5a8ac0;
-
-  --ex-green-bg: rgba(40, 160, 100, 0.07);
-  --ex-green: #28a064;
-  --ex-green-text: #1a6e44;
-  --ex-green-sub: #3a9060;
-
-  --ex-orange-bg: rgba(200, 130, 40, 0.07);
-  --ex-orange: #c88228;
-  --ex-orange-text: #8a5a1a;
-  --ex-orange-sub: #a07030;
-
-  --ex-purple-bg: rgba(130, 80, 180, 0.07);
-  --ex-purple: #8250b4;
-  --ex-purple-text: #5a3080;
-  --ex-purple-sub: #7a60a0;
-}
 </style>

@@ -8,6 +8,10 @@
 <style>
   @keyframes ao-flow { to { stroke-dashoffset: -16; } }
   .ao-anim { animation: ao-flow 1.4s linear infinite; }
+@media (max-width: 700px) {
+  .agent-orch { overflow-x: auto; }
+  .agent-orch svg { min-width: 560px; }
+}
 </style>
 
 <!-- External Tools row -->
@@ -139,43 +143,23 @@
 
 <style>
 .agent-orch {
-  --ao-blue-bg: rgba(129, 140, 248, 0.1);
-  --ao-blue: #818cf8;
-  --ao-blue-text: #b8c0f8;
-  --ao-green-bg: rgba(109, 208, 160, 0.08);
-  --ao-green: #6dd0a0;
-  --ao-green-text: #c0ead5;
-  --ao-brown-bg: rgba(200, 140, 80, 0.1);
-  --ao-brown: #c88c50;
-  --ao-brown-text: #e0c4a0;
-  --ao-purple: #b48cdc;
-  --ao-purple-text: #d8c4f0;
-  --ao-accent-bg: rgba(248, 180, 100, 0.1);
-  --ao-accent: #f8b464;
-  --ao-accent-text: #f8d4a0;
-  --ao-gray: #6f6f78;
-  --ao-inner: rgba(255,255,255,0.03);
-  --ao-title: #ededef;
-  --ao-dim: #908caa;
-}
-:global(body:not([data-theme="dark"])) .agent-orch {
-  --ao-blue-bg: rgba(60, 80, 200, 0.07);
-  --ao-blue: #4a5ac8;
-  --ao-blue-text: #3a4a90;
-  --ao-green-bg: rgba(40, 160, 100, 0.07);
-  --ao-green: #28a064;
-  --ao-green-text: #1a6e44;
-  --ao-brown-bg: rgba(180, 110, 40, 0.08);
-  --ao-brown: #b46e28;
-  --ao-brown-text: #8a5a1a;
-  --ao-purple: #8250b4;
-  --ao-purple-text: #5a3080;
-  --ao-accent-bg: rgba(220, 140, 30, 0.1);
-  --ao-accent: #d08a1e;
-  --ao-accent-text: #8a5e10;
-  --ao-gray: #8b8b8e;
-  --ao-inner: rgba(0,0,0,0.03);
-  --ao-title: #1c1c22;
-  --ao-dim: #6e6a86;
+  --ao-blue-bg: var(--dg-5-soft);
+  --ao-blue: var(--dg-5);
+  --ao-blue-text: var(--dg-5-ink);
+  --ao-green-bg: var(--dg-2-soft);
+  --ao-green: var(--dg-2);
+  --ao-green-text: var(--dg-2-ink);
+  --ao-brown-bg: var(--dg-4-soft);
+  --ao-brown: var(--dg-4);
+  --ao-brown-text: var(--dg-4-ink);
+  --ao-purple: var(--dg-3);
+  --ao-purple-text: var(--dg-3-ink);
+  --ao-accent-bg: var(--dg-1-soft);
+  --ao-accent: var(--dg-1);
+  --ao-accent-text: var(--dg-1-ink);
+  --ao-gray: var(--rule);
+  --ao-inner: var(--bg-soft);
+  --ao-title: var(--ink);
+  --ao-dim: var(--muted);
 }
 </style>
