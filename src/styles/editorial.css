@@ -138,7 +138,6 @@ body[data-theme="dark"] mark { background: rgba(217, 131, 106, 0.3); }
     padding-right: 22px;
   }
   .navbar { padding-top: 12px; }
-  .menu .menu-link { font-size: 1.15rem; }
 }
 
 /* --------------------------------------------------------------------------
@@ -162,6 +161,37 @@ body[data-theme="dark"] mark { background: rgba(217, 131, 106, 0.3); }
   color: var(--ink);
 }
 body[data-theme="dark"] .navbar .menu .menu-link { color: var(--ink); }
+
+/* 모바일에서 햄버거로 여는 전체화면 메뉴.
+   가로 메뉴용 규칙(margin-right 28px)이 그대로 상속되면
+   목록이 중앙에서 14px 밀린다. 여기서 되돌린다. */
+@media screen and (max-width: 768px) {
+  .menu.menu-open .trigger {
+    /* 100vh 는 모바일 브라우저 툴바 높이를 포함해서 세로 중앙이 아래로 처진다 */
+    height: 100dvh;
+  }
+  .menu.menu-open .trigger-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .menu.menu-open .menu-link,
+  .menu.menu-open .menu-link:not(:last-child) {
+    margin: 0;
+    padding: 12px 20px;
+    font-size: 1rem;
+    line-height: 1.4;
+    text-align: center;
+  }
+  .menu.menu-open .menu-link.rss {
+    bottom: 0;
+    margin-top: 4px;
+  }
+  .menu.menu-open .menu-link.rss svg {
+    width: 20px;
+    height: 20px;
+  }
+}
 
 /* --------------------------------------------------------------------------
    4. 글 머리(제목 · 메타)

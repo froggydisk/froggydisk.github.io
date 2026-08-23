@@ -480,15 +480,19 @@ mark,
     border-bottom: none;
   }
   .menu a#mode {
-    left: 2px;
-    top: 4px;
+    /* .menu 는 fixed라 .navbar 의 거터를 못 받는다.
+       본문 거터(22px)에 맞추려고 패딩 10px 을 뺀 값을 offset 으로 준다. */
+    left: 12px;
+    top: 6px;
     padding: 10px;
     -webkit-tap-highlight-color: transparent;
   }
   .menu .menu-icon {
     display: block;
     position: absolute;
-    right: 0;
+    /* 좌측 모드 토글과 같은 이유: 13px 패딩 + 9px = 거터 22px */
+    right: 9px;
+    top: 3px;
     width: 50px;
     height: 50px;
     line-height: 0;
