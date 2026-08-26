@@ -7,6 +7,7 @@ description: >-
   같이 좋아지지 않는지, 배치가 정확히 무엇을 사고 무엇을 파는지, KV 캐시가
   메모리 예산의 어디를 먹는지를 순서대로 정리한다.
 author: froggydisk
+cover: /img/llm-serving-cover.webp
 status: writing
 sample: true
 published: 2026-08-26

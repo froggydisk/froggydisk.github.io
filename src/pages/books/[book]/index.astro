@@ -34,8 +34,20 @@ const modified = bookModified(chapters, meta);
   modified={modified}
   showToc={false}
 >
-  {meta.data.subtitle && <p class="book-lede">{meta.data.subtitle}</p>}
-  <p>{meta.data.description}</p>
+  <div class:list={['book-front', meta.data.cover && 'book-front-covered']}>
+    {meta.data.cover && (
+      <img
+        class="book-front-cover"
+        src={meta.data.cover}
+        alt={`${meta.data.title} 표지`}
+        decoding="async"
+      />
+    )}
+    <div class="book-front-text">
+      {meta.data.subtitle && <p class="book-lede">{meta.data.subtitle}</p>}
+      <p>{meta.data.description}</p>
+    </div>
+  </div>
 
   <nav class="book-contents" slot="contents" aria-label="전체 목차">
     {toc.map((part) => (

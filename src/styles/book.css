@@ -484,10 +484,29 @@
   border-top: 1px solid var(--rule);
 }
 .shelf-item {
-  display: block;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.15rem;
   padding: 1.5rem 0;
 }
 .shelf-item:hover .shelf-title { color: var(--accent-strong); }
+.shelf-text { min-width: 0; }
+
+/* 서재 썸네일. 표지 원본의 비율이 조금씩 달라도 서재에서는 같은 책 모양으로 세운다.
+   (.page-content img 의 margin: 2.4rem auto 를 되돌려야 줄이 어긋나지 않는다) */
+.page-content .shelf-cover {
+  flex: 0 0 auto;
+  width: 66px;
+  aspect-ratio: 1 / 1.414;
+  object-fit: cover;
+  margin: 0.2rem 0 0;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+}
+@media screen and (max-width: 567px) {
+  .shelf-item { gap: 0.95rem; }
+  .page-content .shelf-cover { width: 56px; }
+}
 
 .page-content .shelf-title,
 .shelf-title {
@@ -530,6 +549,33 @@
   margin: 0.6rem 0 0;
 }
 .shelf-facts .shelf-writing { color: var(--accent-strong); }
+
+/* 표지 페이지의 머리 — 표지 이미지 + 부제 + 소개.
+   cover 가 없는 책은 예전처럼 글만 나온다 (.book-front 만 붙는다). */
+.book-front-covered {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  column-gap: 2.1rem;
+  align-items: start;
+}
+.page-content .book-front-cover {
+  width: 100%;
+  aspect-ratio: 1 / 1.414;
+  object-fit: cover;
+  margin: 0.4rem 0 0;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+}
+.book-front-text > :first-child { margin-top: 0; }
+.book-front-text > :last-child { margin-bottom: 0; }
+
+@media screen and (max-width: 567px) {
+  .book-front-covered {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 1.4rem;
+  }
+  .page-content .book-front-cover { width: 172px; }
+}
 
 /* 표지 페이지의 전체 목차 */
 .book-contents {

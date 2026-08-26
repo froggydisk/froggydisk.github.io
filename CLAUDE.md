@@ -248,6 +248,10 @@ npm run preview  # Preview built site locally
   접두사를 URL에 남기면 장을 재배치할 때마다 외부 링크가 전부 깨진다
 - **정렬**: 접두사 숫자를 자연수로 비교하므로 `10-`이 `2-` 뒤에 온다 (0 패딩 불필요)
 - **부 제목**: `book.yaml`의 `parts[].title`. 없으면 디렉터리 이름을 그대로 쓴다
+- **표지**: `book.yaml`의 `cover`에 `public/` 기준 경로(`/img/<책>-cover.webp`)를 적는다.
+  서재 썸네일 · 표지 페이지 이미지 · OG/트위터 이미지가 이 한 값을 공유한다.
+  둘 다 CSS에서 `aspect-ratio: 1 / 1.414` + `object-fit: cover` 프레임에 넣으므로
+  세로 A판 비율(예: 1054×1492)로 만들면 잘리지 않는다. `cover`가 없는 책은 글만 나온다
 - **날짜**: 장 `last_modified_at` → 책 `last_modified_at` → 책 `published` 순 폴백.
   **파일 mtime은 쓰지 않는다** — CI 체크아웃이 mtime을 전부 배포 시각으로 만든다
 - **draft: true** 인 장은 목차·라우트·sitemap에서 모두 빠진다
