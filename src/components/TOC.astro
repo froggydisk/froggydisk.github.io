@@ -1,47 +1,93 @@
-<aside class="toc-sidebar" id="toc-sidebar">
+---
+interface Props {
+  /** 헤딩을 긁어올 본문 컨테이너 */
+  selector?: string;
+  /** H2가 이 개수 미만이면 목차를 숨긴다 */
+  threshold?: number;
+  /** 'inline'이면 고정 배치를 풀고 그리드 컬럼 안에 앉는다 (책 레이아웃) */
+  variant?: 'floating' | 'inline';
+  label?: string;
+}
+
+const {
+  selector = '.post-body',
+  threshold = 5,
+  variant = 'floating',
+  label = '목차',
+} = Astro.props;
+---
+
+<aside
+  class:list={['toc-sidebar', { 'toc-inline': variant === 'inline' }]}
+  id="toc-sidebar"
+  data-target={selector}
+  data-threshold={String(threshold)}
+  data-pagefind-ignore
+>
   <nav class="toc-nav">
-    <p class="toc-title">목차</p>
+    <p class="toc-title">{label}</p>
     <ul class="toc-list" id="toc-list"></ul>
   </nav>
 </aside>
 
 <script>
-  const article = document.querySelector('.post-body');
-  const tocList = document.getElementById('toc-list');
-  if (article && tocList) {
-    const headings = article.querySelectorAll('h2, h3');
-    // anthropic 방식: 섹션이 많은 긴 글에만 목차를 노출 (H2 5개 미만이면 숨김)
-    const SECTION_THRESHOLD = 5;
-    if (article.querySelectorAll('h2').length < SECTION_THRESHOLD) {
-      document.getElementById('toc-sidebar')!.style.display = 'none';
-    } else {
-      headings.forEach((h) => {
-        const li = document.createElement('li');
-        li.className = `toc-item toc-${h.tagName.toLowerCase()}`;
-        const a = document.createElement('a');
-        a.href = `#${h.id}`;
-        a.textContent = h.textContent?.replace(/^#\s*/, '') || '';
-        a.addEventListener('click', (e) => {
-          e.preventDefault();
-          h.scrollIntoView({ behavior: 'smooth' });
-          history.pushState(null, '', `#${h.id}`);
-        });
-        li.appendChild(a);
-        tocList.appendChild(li);
-      });
+  // 뷰 트랜지션에서는 이 모듈이 한 번만 평가되고 DOM은 페이지마다 교체된다.
+  // 그래서 목차 생성은 여러 번 불려도 같은 결과가 나오도록 멱등하게 둔다.
+  let observer: IntersectionObserver | null = null;
 
-      const tocLinks = tocList.querySelectorAll('a');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            tocLinks.forEach((link) => link.classList.remove('active'));
-            const active = tocList.querySelector(`a[href="#${entry.target.id}"]`);
-            if (active) active.classList.add('active');
-          }
-        });
-      }, { rootMargin: '0px 0px -70% 0px', threshold: 0 });
+  function buildToc() {
+    const sidebar = document.getElementById('toc-sidebar');
+    const tocList = document.getElementById('toc-list');
+    if (!sidebar || !tocList) return;
 
-      headings.forEach((h) => observer.observe(h));
+    observer?.disconnect();
+    observer = null;
+    tocList.replaceChildren();
+
+    const article = document.querySelector(sidebar.dataset.target || '.post-body');
+    if (!article) {
+      sidebar.style.display = 'none';
+      return;
     }
+
+    // anthropic 방식: 섹션이 많은 긴 글에만 목차를 노출
+    const threshold = Number(sidebar.dataset.threshold ?? 5);
+    if (article.querySelectorAll('h2').length < threshold) {
+      sidebar.style.display = 'none';
+      return;
+    }
+    sidebar.style.display = '';
+
+    const headings = article.querySelectorAll<HTMLHeadingElement>('h2, h3');
+    headings.forEach((h) => {
+      const li = document.createElement('li');
+      li.className = `toc-item toc-${h.tagName.toLowerCase()}`;
+      const a = document.createElement('a');
+      a.href = `#${h.id}`;
+      a.textContent = h.textContent?.replace(/^#\s*/, '') || '';
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        h.scrollIntoView({ behavior: 'smooth' });
+        history.pushState(null, '', `#${h.id}`);
+      });
+      li.appendChild(a);
+      tocList.appendChild(li);
+    });
+
+    const tocLinks = tocList.querySelectorAll('a');
+    observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          tocLinks.forEach((link) => link.classList.remove('active'));
+          const active = tocList.querySelector(`a[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '0px 0px -70% 0px', threshold: 0 });
+
+    headings.forEach((h) => observer!.observe(h));
   }
+
+  buildToc();
+  document.addEventListener('astro:page-load', buildToc);
 </script>

@@ -1,0 +1,131 @@
+---
+import { bookHref } from '../../utils/book';
+import type { TocPart } from '../../utils/book';
+
+interface Props {
+  bookSlug: string;
+  bookTitle: string;
+  toc: TocPart[];
+  currentId?: string;
+}
+
+const { bookSlug, bookTitle, toc, currentId } = Astro.props;
+
+// 책마다 키를 다르게 준다. 키가 같으면 다른 책으로 넘어갈 때 이전 책의 목차가 그대로 남는다.
+const persistKey = `book-aside-${bookSlug}`;
+---
+
+<div class="book-aside-shell" transition:persist={persistKey} data-pagefind-ignore>
+  <button
+    class="book-aside-toggle"
+    id="book-aside-toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="book-aside"
+  >
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <line x1="4" y1="7" x2="20" y2="7" /><line x1="4" y1="12" x2="20" y2="12" /><line x1="4" y1="17" x2="14" y2="17" />
+    </svg>
+    <span>목차</span>
+  </button>
+
+  <div class="book-aside-scrim" id="book-aside-scrim"></div>
+
+  <aside class="book-aside" id="book-aside" aria-label={`${bookTitle} 목차`}>
+    <button class="book-aside-close" id="book-aside-close" type="button" aria-label="목차 닫기">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" />
+      </svg>
+    </button>
+
+    <a class="book-aside-book" href={bookHref(bookSlug)}>{bookTitle}</a>
+
+    <nav class="book-aside-nav">
+      {toc.map((part) => (
+        <div class="book-part">
+          {part.title && <p class="book-part-title">{part.title}</p>}
+          <ul class="book-part-list">
+            {part.chapters.map((ch) => (
+              <li>
+                <a
+                  class="book-ch"
+                  href={ch.href}
+                  aria-current={ch.id === currentId ? 'page' : undefined}
+                >
+                  <span class="book-ch-num">{ch.index}</span>
+                  <span class="book-ch-title">{ch.title}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </nav>
+  </aside>
+</div>
+
+<script>
+  // 이 껍데기는 transition:persist로 살아남지만, /books/ 처럼 사이드바가 없는 페이지를
+  // 거쳐 오면 새로 만들어진다. 그때 리스너가 사라진 노드에 남지 않도록 위임으로 붙인다.
+  const OPEN = 'book-aside-open';
+
+  function setOpen(open: boolean) {
+    const toggle = document.getElementById('book-aside-toggle');
+    document.body.classList.toggle(OPEN, open);
+    toggle?.setAttribute('aria-expanded', String(open));
+  }
+
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement | null;
+    if (!target) return;
+    if (target.closest('#book-aside-toggle')) {
+      setOpen(!document.body.classList.contains(OPEN));
+    } else if (
+      target.closest('#book-aside-close') ||
+      target.closest('#book-aside-scrim') ||
+      target.closest('#book-aside a')
+    ) {
+      // 장을 고르면 서랍을 닫는다
+      setOpen(false);
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && document.body.classList.contains(OPEN)) setOpen(false);
+  });
+
+  /**
+   * 목차 DOM은 유지되므로 현재 위치 표시는 직접 갱신해야 한다.
+   * 서버가 찍어준 aria-current는 이 껍데기가 처음 만들어진 페이지 기준이다.
+   */
+  function syncCurrent() {
+    const here = location.pathname.replace(/\/?$/, '/');
+    let active: HTMLAnchorElement | null = null;
+
+    document.querySelectorAll<HTMLAnchorElement>('#book-aside a.book-ch').forEach((a) => {
+      const isHere = new URL(a.href).pathname.replace(/\/?$/, '/') === here;
+      if (isHere) {
+        a.setAttribute('aria-current', 'page');
+        active = a;
+      } else {
+        a.removeAttribute('aria-current');
+      }
+    });
+
+    // 목차가 길면 현재 장이 화면 밖에 있을 수 있다. 스크롤을 유지한 채 보이게만 끌어온다.
+    const aside = document.getElementById('book-aside');
+    if (active && aside) {
+      const a = active as HTMLAnchorElement;
+      const top = a.offsetTop - aside.clientHeight / 2;
+      if (a.offsetTop < aside.scrollTop || a.offsetTop > aside.scrollTop + aside.clientHeight - 40) {
+        aside.scrollTop = Math.max(0, top);
+      }
+    }
+  }
+
+  syncCurrent();
+  document.addEventListener('astro:page-load', () => {
+    setOpen(false);
+    syncCurrent();
+  });
+</script>

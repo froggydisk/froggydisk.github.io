@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { bookHref, bookModified, bookOf, sortChapters } from '../../utils/book';
+import { formatDate } from '../../utils/seo';
+import '../../styles/book.css';
+
+const metas = await getCollection('bookMeta');
+const chapters = (await getCollection('book')).filter((c) => !c.data.draft);
+
+const books = metas
+  .map((meta) => {
+    const mine = sortChapters(chapters.filter((c) => bookOf(c.id) === meta.id));
+    return { meta, count: mine.length, modified: bookModified(mine, meta) };
+  })
+  // 장이 하나도 없는 책은 아직 책이 아니다
+  .filter((b) => b.count > 0)
+  .sort((a, b) => b.modified.getTime() - a.modified.getTime());
+
+const description = '연재 중인 온라인 책 목록. 한 주제를 처음부터 끝까지 순서대로 씁니다.';
+---
+
+<BaseLayout title="책" description={description}>
+  <header class="header">
+    <h1 class="header-title">책</h1>
+  </header>
+
+  <div class="page-content">
+    <p>{description}</p>
+
+    {books.length === 0 ? (
+      <p>아직 공개한 책이 없습니다.</p>
+    ) : (
+      <ul class="shelf">
+        {books.map(({ meta, count, modified }) => (
+          <li>
+            <a class="shelf-item" href={bookHref(meta.id)}>
+              <h2 class="shelf-title">
+                {meta.data.title}
+                {meta.data.sample && <span class="shelf-sample">샘플</span>}
+              </h2>
+              {meta.data.subtitle && <p class="shelf-sub">{meta.data.subtitle}</p>}
+              <p class="shelf-facts">
+                {meta.data.status === 'writing'
+                  ? <span class="shelf-writing">연재 중</span>
+                  : <span>완결</span>}
+                {' · '}{count}장{' · '}최근 {formatDate(modified)}
+              </p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</BaseLayout>

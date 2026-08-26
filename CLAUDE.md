@@ -57,13 +57,23 @@ froggydisk.github.io/
 │   │   ├── privacy-policy.astro # Privacy policy
 │   │   ├── 404.astro            # 404 error page
 │   │   ├── rss.xml.ts           # RSS feed endpoint
-│   │   └── tags/                # 태그별 앵커 목록 페이지 (개별 태그 라우트는 없음)
+│   │   ├── tags/                # 태그별 앵커 목록 페이지 (개별 태그 라우트는 없음)
+│   │   └── books/               # 온라인 책
+│   │       ├── index.astro     # 서재 (책 목록)
+│   │       └── [book]/
+│   │           ├── index.astro      # 표지 + 전체 목차
+│   │           └── [...chapter].astro  # 장 본문
 │   ├── content.config.ts        # Content schema & validation (여기가 실제 위치)
 │   ├── utils/
-│   │   └── seo.ts               # slug·날짜·태그·description 추출 공용 헬퍼
+│   │   ├── seo.ts               # slug·날짜·태그·description 추출 공용 헬퍼
+│   │   └── book.ts              # 책 경로 규칙·목차 트리·날짜 폴백
 │   ├── content/
-│   │   └── blog/                # 62 markdown/mdx blog posts
-│   │       └── YYYY-MM-DD-*.md  # Post naming convention
+│   │   ├── blog/                # markdown/mdx blog posts
+│   │   │   └── YYYY-MM-DD-*.md  # Post naming convention
+│   │   └── book/                # 온라인 책
+│   │       └── <책>/
+│   │           ├── book.yaml         # 책 메타 (제목·부제·부 이름·published)
+│   │           └── NN-<부>/NN-<장>.md
 │   ├── components/              # 14 Astro components
 │   │   ├── Navbar.astro        # Navigation + theme toggle
 │   │   ├── Footer.astro        # Footer
@@ -72,17 +82,20 @@ froggydisk.github.io/
 │   │   ├── PostNav.astro       # Previous/Next post links
 │   │   ├── Support.astro       # Ko-fi donation button
 │   │   ├── StarBackground.astro # Animated star background
+│   │   ├── book/               # BookSidebar · BookNav · BookProgress
 │   │   └── diagrams/           # 9 SVG diagram components
 │   │       ├── AgentNetwork.astro
 │   │       ├── SystemLayers.astro
 │   │       ├── HarnessConcentric.astro
 │   │       └── (6 more specialized diagrams)
-│   ├── layouts/                 # 2 layout templates
-│   │   ├── BaseLayout.astro    # Base HTML + meta tags
-│   │   └── PostLayout.astro    # Blog post wrapper
+│   ├── layouts/                 # 3 layout templates
+│   │   ├── BaseLayout.astro    # Base HTML + meta tags (wide·transitions prop)
+│   │   ├── PostLayout.astro    # Blog post wrapper
+│   │   └── BookLayout.astro    # 책 3단 레이아웃 (사이드바·본문·장 목차)
 │   └── styles/
 │       ├── global.css         # Klisé 유래 베이스 스타일 (팔레트는 웜 뉴트럴로 교체)
-│       └── editorial.css     # 타이포그래피·여백·레이아웃 재정의 레이어 (global.css 다음 로드)
+│       ├── editorial.css     # 타이포그래피·여백·레이아웃 재정의 레이어 (global.css 다음 로드)
+│       └── book.css          # 책 3단 레이아웃 (BookLayout에서만 로드)
 ├── public/                      # Static assets
 │   ├── img/                    # Images (profile.png, etc)
 │   ├── favicons/               # Favicon set
@@ -224,7 +237,54 @@ npm run preview  # Preview built site locally
 - **Link Rule**: 본문 링크는 `.page-content a`에서 잉크색 + 클레이 밑줄로 한 곳에서 정의.
   목록·내비게이션 링크(`.post-item-title a`, `.home-post-link`, `.posts-more` 등)는 특이도를 높여 밑줄 제외
 
-### 7. Icon System
+### 7. 온라인 책 (Books)
+
+위키독스·GitBook 형태의 다권(多卷) 책 서비스. **블로그 컬렉션과 완전히 분리돼 있다.**
+섞으면 archive·tags·rss·sitemap lastmod·prev/next가 전부 책 항목까지 끌어안는다.
+
+- **컬렉션**: `book`(장 본문) + `bookMeta`(`book.yaml`). `content.config.ts`에 정의
+- **구조**: `src/content/book/<책>/NN-<부>/NN-<장>.md`. 파일 경로가 곧 목차 순서다
+- **URL**: 세그먼트마다 숫자 접두사를 떼어낸다 → `/books/<책>/<부>/<장>/`
+  접두사를 URL에 남기면 장을 재배치할 때마다 외부 링크가 전부 깨진다
+- **정렬**: 접두사 숫자를 자연수로 비교하므로 `10-`이 `2-` 뒤에 온다 (0 패딩 불필요)
+- **부 제목**: `book.yaml`의 `parts[].title`. 없으면 디렉터리 이름을 그대로 쓴다
+- **날짜**: 장 `last_modified_at` → 책 `last_modified_at` → 책 `published` 순 폴백.
+  **파일 mtime은 쓰지 않는다** — CI 체크아웃이 mtime을 전부 배포 시각으로 만든다
+- **draft: true** 인 장은 목차·라우트·sitemap에서 모두 빠진다
+- **sample: true** (book.yaml) 인 책은 레이아웃 검증용 더미다. 서재에 `샘플` 배지,
+  본문 상단에 안내 배너가 붙고 `noindex` + sitemap 제외로 나간다.
+  `src/content/book/llm-serving/`이 그 예이며, 실제 원고를 쓸 때 지워도 코드는 안전하다
+  (책이 0권이면 서재는 빈 상태를 보여주고 `addBookLastmod`는 조용히 넘어간다)
+- **JSON-LD**: `@graph`에 `Chapter` + `Book` + `BreadcrumbList`
+- **뷰 트랜지션**: `BaseLayout`의 `transitions` prop으로 **책 라우트에만** `ClientRouter`를
+  적용한다. 사이드바는 `transition:persist`로 살아남아 스크롤 위치가 유지된다
+  (persist 키에 책 슬러그를 넣어 다른 책끼리 목차가 섞이지 않게 한다)
+
+#### 이 레이아웃에서 밟은 함정 (되풀이하지 말 것)
+
+1. **`data-pagefind-body`를 쓰면 안 된다.** 사이트에 그 속성이 한 곳이라도 있으면
+   pagefind가 "그 속성이 있는 페이지만" 색인하는 모드로 바뀌어 블로그 전편이 검색에서
+   사라진다. 대신 사이드바·목차·이동 링크에 `data-pagefind-ignore`를 건다
+   (안 걸면 사이드바 텍스트가 모든 장 페이지마다 색인돼 검색 결과가 뭉개진다)
+2. **`global.css`가 모든 `ul li::before`에 `﹣` 마커를 넣는다.** `.page-content` 안에서는
+   `•`로 바뀐다. 목차 같은 내비게이션 리스트에서는 마커가 한 줄을 따로 차지해 항목 간격까지
+   벌어진다. `.toc-list`처럼 `content: none`으로 해제해야 한다
+3. **산문이 아닌 블록은 `.page-content` 밖에 둔다.** 안에 넣으면 본문 링크 규칙(클레이 밑줄)이
+   그대로 걸린다. `BookLayout`의 `slot="contents"`가 그 용도다
+4. **`.wrapper`가 `z-index: 1`로 스택 컨텍스트를 만든다.** 형제인 `.navbar`가 `z-index: 3`이라
+   wrapper 안의 요소는 z-index를 얼마로 줘도 헤더를 못 넘는다. 모바일 서랍은 열려 있는 동안
+   `body.book-aside-open .wrapper { z-index: 80 }`으로 wrapper 자체를 올려 해결했다
+   (다이어그램 확대는 같은 문제를 `<dialog>` + `showModal()`로 풀었다 — 8cf4c2f)
+5. **이 사이트는 `border-box`가 아니다.** `max-width`는 콘텐츠 폭이고 padding이 더해진다.
+   `.book-shell`이 `.navbar`와 같은 `max-width: 1280px` + `padding: 0 40px`을 쓰는 이유가 이것이다
+6. **헤더는 `position: fixed`가 아니다.** 스크롤과 함께 올라간다. 스티키 사이드바의 `top`을
+   헤더 높이만큼 띄우면 스크롤 후 그만큼이 빈 공간이 된다 (`top: 32px`을 쓴다)
+7. **뷰 트랜지션에서 모듈 스크립트는 다시 실행되지 않는다.** 요소 참조를 모듈 최상단에
+   캡처해두면 스왑 후 죽은 노드를 붙들게 된다. `Navbar`·`BookSidebar`의 리스너는 `document`에
+   위임으로 붙이고, `TOC`는 `astro:page-load`에서 멱등하게 다시 그린다.
+   `data-theme`은 스왑이 body 속성까지 바꿔 날아가므로 `astro:after-swap`에서 다시 씌운다
+
+### 8. Icon System
 - **Library**: astro-icon (integrates Iconify)
 - **Collections**:
   - Lucide: Modern, clean icons
@@ -484,6 +544,6 @@ npm run preview
 
 ---
 
-**Last Updated**: August 22, 2026
+**Last Updated**: August 26, 2026
 **Framework**: Astro 7.2.2
 **Node**: 22

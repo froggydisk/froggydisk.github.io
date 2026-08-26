@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import BookLayout from '../../../layouts/BookLayout.astro';
+import { buildToc, bookModified, bookOf, sortChapters } from '../../../utils/book';
+
+export async function getStaticPaths() {
+  const metas = await getCollection('bookMeta');
+  const all = (await getCollection('book')).filter((c) => !c.data.draft);
+
+  return metas
+    .map((meta) => {
+      const chapters = sortChapters(all.filter((c) => bookOf(c.id) === meta.id));
+      return { params: { book: meta.id }, props: { meta, chapters } };
+    })
+    .filter((p) => p.props.chapters.length > 0);
+}
+
+const { meta, chapters } = Astro.props;
+const toc = buildToc(chapters, meta);
+const modified = bookModified(chapters, meta);
+---
+
+<BookLayout
+  bookSlug={meta.id}
+  bookTitle={meta.data.title}
+  bookAuthor={meta.data.author}
+  sample={meta.data.sample}
+  toc={toc}
+  chapter={null}
+  title={meta.data.title}
+  description={meta.data.description}
+  canonicalPath={`/books/${meta.id}/`}
+  image={meta.data.cover}
+  modified={modified}
+  showToc={false}
+>
+  {meta.data.subtitle && <p class="book-lede">{meta.data.subtitle}</p>}
+  <p>{meta.data.description}</p>
+
+  <nav class="book-contents" slot="contents" aria-label="전체 목차">
+    {toc.map((part) => (
+      <div class="book-part">
+        {part.title && <p class="book-part-title">{part.title}</p>}
+        <ul class="book-part-list">
+          {part.chapters.map((ch) => (
+            <li>
+              <a class="book-ch" href={ch.href}>
+                <span class="book-ch-num">{ch.index}</span>
+                <span class="book-ch-title">{ch.title}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </nav>
+</BookLayout>

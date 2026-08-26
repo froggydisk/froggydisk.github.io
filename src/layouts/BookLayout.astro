@@ -1,0 +1,183 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import BookSidebar from '../components/book/BookSidebar.astro';
+import BookNav from '../components/book/BookNav.astro';
+import BookProgress from '../components/book/BookProgress.astro';
+import TOC from '../components/TOC.astro';
+import { bookHref } from '../utils/book';
+import type { TocChapter, TocPart } from '../utils/book';
+import { formatDate } from '../utils/seo';
+import '../styles/book.css';
+
+interface Props {
+  bookSlug: string;
+  bookTitle: string;
+  bookAuthor: string;
+  /** 레이아웃 검증용 더미 책. 배너를 띄우고 색인에서 뺀다. */
+  sample?: boolean;
+  toc: TocPart[];
+  /** 장 페이지일 때만. 표지에서는 비운다. */
+  chapter?: {
+    id: string;
+    title: string;
+    index: number;
+    total: number;
+    partTitle: string;
+  } | null;
+  title: string;
+  description: string;
+  canonicalPath: string;
+  image?: string;
+  modified: Date;
+  showToc?: boolean;
+  prev?: TocChapter | null;
+  next?: TocChapter | null;
+}
+
+const {
+  bookSlug,
+  bookTitle,
+  bookAuthor,
+  sample = false,
+  toc,
+  chapter = null,
+  title,
+  description,
+  canonicalPath,
+  image = '/img/profile.png',
+  modified,
+  showToc = true,
+  prev = null,
+  next = null,
+} = Astro.props;
+
+const site = Astro.site!;
+const pageUrl = new URL(canonicalPath, site).href;
+const bookUrl = new URL(bookHref(bookSlug), site).href;
+
+const bookNode = {
+  '@type': 'Book',
+  '@id': bookUrl,
+  name: bookTitle,
+  url: bookUrl,
+  inLanguage: 'ko-KR',
+  author: { '@type': 'Person', name: bookAuthor, url: 'https://github.com/froggydisk' },
+};
+
+const crumbs = [
+  { name: '책', url: new URL('/books/', site).href },
+  { name: bookTitle, url: bookUrl },
+  ...(chapter ? [{ name: chapter.title, url: pageUrl }] : []),
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    chapter
+      ? {
+          '@type': 'Chapter',
+          '@id': pageUrl,
+          headline: chapter.title,
+          description,
+          position: chapter.index,
+          url: pageUrl,
+          inLanguage: 'ko-KR',
+          dateModified: modified.toISOString(),
+          isPartOf: { '@id': bookUrl },
+          author: { '@type': 'Person', name: bookAuthor },
+        }
+      : { ...bookNode, description, dateModified: modified.toISOString() },
+    ...(chapter ? [bookNode] : []),
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: crumbs.map((c, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: c.name,
+        item: c.url,
+      })),
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  image={image}
+  isPost={!!chapter}
+  showStars={false}
+  modifiedTime={modified.toISOString()}
+  jsonLd={jsonLd}
+  noindex={sample}
+  wide
+  transitions
+>
+  {chapter && <BookProgress />}
+
+  <div class="book-shell">
+    <BookSidebar
+      bookSlug={bookSlug}
+      bookTitle={bookTitle}
+      toc={toc}
+      currentId={chapter?.id}
+    />
+
+    <div class="book-col">
+      <!--
+        data-pagefind-body 는 쓰지 않는다. 사이트에 그 속성이 한 곳이라도 있으면
+        pagefind가 "그 속성이 있는 페이지만" 색인하는 모드로 바뀌어 블로그 62편이
+        전부 검색에서 빠진다. 대신 사이드바·목차·이동 링크에 ignore를 걸어 걸러낸다.
+      -->
+      <article
+        data-pagefind-filter={`책:${bookTitle}`}
+        data-pagefind-meta={`book:${bookTitle}`}
+      >
+        {sample && (
+          <p class="book-sample-note" data-pagefind-ignore>
+            <span class="book-sample-tag">샘플</span>
+            레이아웃 검증용 더미 원고입니다. 내용은 실제 글이 아니며 검색엔진 색인에서 제외됩니다.
+          </p>
+        )}
+
+        <header class="book-head">
+          <nav class="book-crumbs" aria-label="위치" data-pagefind-ignore>
+            <a href="/books/">책</a>
+            <span aria-hidden="true">/</span>
+            <a href={bookHref(bookSlug)}>{bookTitle}</a>
+            {chapter?.partTitle && (
+              <>
+                <span aria-hidden="true">/</span>
+                <span>{chapter.partTitle}</span>
+              </>
+            )}
+          </nav>
+
+          <h1 class="book-title">{title}</h1>
+
+          {chapter && (
+            <p class="book-meta" data-pagefind-ignore>
+              {chapter.index}장 · 전체 {chapter.total}장
+              <span class="book-meta-sep">·</span>
+              <time datetime={modified.toISOString()}>{formatDate(modified)}</time>
+            </p>
+          )}
+        </header>
+
+        <div class="page-content book-body">
+          <slot />
+        </div>
+
+        <!--
+          .page-content 안에 넣으면 본문 링크 규칙(클레이 밑줄)과 리스트 마커('•')가
+          그대로 걸린다. 표지의 전체 목차처럼 산문이 아닌 것은 이 슬롯으로 받는다.
+        -->
+        <slot name="contents" />
+      </article>
+
+      <BookNav prev={prev} next={next} />
+    </div>
+
+    {showToc && <TOC selector=".book-body" threshold={2} variant="inline" label="이 장에서" />}
+  </div>
+</BaseLayout>

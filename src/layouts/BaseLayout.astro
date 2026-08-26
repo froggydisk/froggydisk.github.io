@@ -2,6 +2,7 @@
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import StarBackground from '../components/StarBackground.astro';
+import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
 import '../styles/editorial.css';
 
@@ -15,6 +16,10 @@ interface Props {
   modifiedTime?: string;
   noindex?: boolean;
   jsonLd?: Record<string, unknown> | null;
+  /** 본문 폭 제한(--measure)을 풀어 다단 레이아웃을 허용한다 (책) */
+  wide?: boolean;
+  /** 이 페이지에서 나가는 이동을 뷰 트랜지션으로 처리한다 (책 섹션 전용) */
+  transitions?: boolean;
 }
 
 const SITE_NAME = 'froggydisk';
@@ -31,6 +36,8 @@ const {
   modifiedTime,
   noindex = false,
   jsonLd = null,
+  wide = false,
+  transitions = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -107,6 +114,8 @@ const jsonLdText = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : nu
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4715878791193779" crossorigin="anonymous"></script>
 
   {jsonLdText && <script type="application/ld+json" set:html={jsonLdText} />}
+
+  {transitions && <ClientRouter />}
 </head>
 
 <body>
@@ -121,9 +130,22 @@ const jsonLdText = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : nu
       themeColorMeta.setAttribute('content', '#faf9f5');
     }
   </script>
+  {transitions && (
+    <script is:inline>
+      // 뷰 트랜지션 스왑은 body 속성까지 새 문서 것으로 바꾼다.
+      // data-theme이 날아가 라이트로 번쩍이므로 페인트 전에 다시 씌운다.
+      document.addEventListener('astro:after-swap', function () {
+        if (localStorage.getItem('theme') === 'dark') {
+          document.body.setAttribute('data-theme', 'dark');
+        } else {
+          document.body.removeAttribute('data-theme');
+        }
+      });
+    </script>
+  )}
   <Navbar currentPath={Astro.url.pathname} />
-  <div class:list={['wrapper', { post: isPost }]}>
-    <main class="page-content" aria-label="Content">
+  <div class:list={['wrapper', { post: isPost, 'wrapper-wide': wide }]}>
+    <main class:list={[wide ? 'wide-main' : 'page-content']} aria-label="Content">
       <slot />
     </main>
     <Footer />

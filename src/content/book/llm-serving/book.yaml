@@ -1,0 +1,19 @@
+# 레이아웃 검증용 더미 책. 실제 원고가 아니다.
+# 실제 책을 쓸 때는 이 디렉터리를 지우거나(rm -rf) sample 을 지우면 된다.
+title: LLM 서빙 실전
+subtitle: 모델을 띄우는 것과 서비스하는 것은 다른 일이다
+description: >-
+  단일 GPU에서 모델이 도는 것을 확인한 다음부터가 서빙이다. 지연과 처리량이 왜
+  같이 좋아지지 않는지, 배치가 정확히 무엇을 사고 무엇을 파는지, KV 캐시가
+  메모리 예산의 어디를 먹는지를 순서대로 정리한다.
+author: froggydisk
+status: writing
+sample: true
+published: 2026-08-26
+parts:
+  - dir: 01-foundations
+    title: 기초
+  - dir: 02-batching
+    title: 배치
+  - dir: 03-memory
+    title: 메모리

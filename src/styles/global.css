@@ -563,9 +563,6 @@ mark,
   background-color: #fff;
   -ms-user-select: none;
   -webkit-user-select: none;
-  -webkit-animation: 0.5s ease-in forwards fadein;
-  animation: 1s ease-in-out forwards fadein;
-  opacity: 1;
 }
 .author .author-name {
   font-size: 1.7em;

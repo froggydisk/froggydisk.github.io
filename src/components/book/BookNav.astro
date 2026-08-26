@@ -1,0 +1,28 @@
+---
+import type { TocChapter } from '../../utils/book';
+
+interface Props {
+  prev?: TocChapter | null;
+  next?: TocChapter | null;
+}
+
+const { prev = null, next = null } = Astro.props;
+---
+
+{(prev || next) && (
+  <nav class="book-nav" aria-label="장 이동" data-pagefind-ignore>
+    {prev ? (
+      <a class="book-nav-item book-nav-prev" href={prev.href} rel="prev">
+        <span class="book-nav-dir">이전</span>
+        <span class="book-nav-title">{prev.title}</span>
+      </a>
+    ) : <span class="book-nav-item book-nav-empty" aria-hidden="true"></span>}
+
+    {next ? (
+      <a class="book-nav-item book-nav-next" href={next.href} rel="next">
+        <span class="book-nav-dir">다음</span>
+        <span class="book-nav-title">{next.title}</span>
+      </a>
+    ) : <span class="book-nav-item book-nav-empty" aria-hidden="true"></span>}
+  </nav>
+)}

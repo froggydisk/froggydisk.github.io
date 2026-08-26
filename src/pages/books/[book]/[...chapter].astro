@@ -1,0 +1,69 @@
+---
+import { getCollection, render } from 'astro:content';
+import BookLayout from '../../../layouts/BookLayout.astro';
+import {
+  buildToc,
+  bookOf,
+  chapterModified,
+  chapterPath,
+  neighbors,
+  sortChapters,
+} from '../../../utils/book';
+import { excerpt } from '../../../utils/seo';
+
+export async function getStaticPaths() {
+  const metas = await getCollection('bookMeta');
+  const metaById = new Map(metas.map((m) => [m.id, m]));
+  const all = (await getCollection('book')).filter((c) => !c.data.draft);
+
+  const paths = [];
+
+  for (const [bookSlug, meta] of metaById) {
+    const chapters = sortChapters(all.filter((c) => bookOf(c.id) === bookSlug));
+    if (chapters.length === 0) continue;
+
+    const toc = buildToc(chapters, meta);
+
+    for (const entry of chapters) {
+      paths.push({
+        params: { book: bookSlug, chapter: chapterPath(entry.id) },
+        props: { meta, entry, toc },
+      });
+    }
+  }
+
+  return paths;
+}
+
+const { meta, entry, toc } = Astro.props;
+const { Content } = await render(entry);
+
+const { prev, next, current, total } = neighbors(toc, entry.id);
+const part = toc.find((p) => p.chapters.some((c) => c.id === entry.id));
+const description = entry.data.description?.trim() || excerpt(entry.body ?? '');
+---
+
+<BookLayout
+  bookSlug={meta.id}
+  bookTitle={meta.data.title}
+  bookAuthor={meta.data.author}
+  sample={meta.data.sample}
+  toc={toc}
+  chapter={{
+    id: entry.id,
+    title: entry.data.title,
+    index: current?.index ?? 1,
+    total,
+    partTitle: part?.title ?? '',
+  }}
+  title={entry.data.title}
+  description={description}
+  canonicalPath={`/books/${meta.id}/${chapterPath(entry.id)}/`}
+  image={meta.data.cover}
+  modified={chapterModified(entry, meta)}
+  showToc={entry.data.toc}
+  prev={prev}
+  next={next}
+>
+  <Content />
+</BookLayout>

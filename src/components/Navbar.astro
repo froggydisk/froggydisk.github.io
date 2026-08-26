@@ -10,8 +10,13 @@ const { currentPath } = Astro.props;
 const menus = [
   { title: 'Home', url: '/', external: false },
   { title: 'Archive', url: '/archive/', external: false },
+  { title: 'Books', url: '/books/', external: false },
   { title: 'Projects', url: '/projects/', external: false },
 ];
+
+// /books/ 는 하위 경로가 있으므로 접두사로 판정한다. '/' 는 완전일치여야 한다.
+const isActive = (url: string) =>
+  url === '/' ? currentPath === '/' : currentPath.startsWith(url);
 ---
 
 <div class="navbar" role="navigation">
@@ -31,7 +36,7 @@ const menus = [
           menu.external ? (
             <a class="menu-link" href={menu.url} target="_blank" rel="noopener">{menu.title}</a>
           ) : (
-            <a class:list={['menu-link', { active: currentPath === menu.url }]} href={menu.url}>{menu.title}</a>
+            <a class:list={['menu-link', { active: isActive(menu.url) }]} href={menu.url}>{menu.title}</a>
           )
         ))}
         <a class="menu-link rss" href="https://github.com/froggydisk">
@@ -45,51 +50,58 @@ const menus = [
 </div>
 
 <script>
-  const menu = document.querySelector('.menu')!;
-  const toggle = document.getElementById('menu-toggle')!;
-  const wrapper = document.querySelector('.wrapper');
+  // 리스너는 document에 한 번만 붙인다. 요소 참조를 모듈 최상단에 캡처해두면
+  // 뷰 트랜지션(책 섹션)에서 노드가 교체된 뒤 죽은 참조를 붙들고 있게 된다.
+  let switchTimer: number | undefined;
 
-  // 메뉴 토글
-  toggle.addEventListener('click', () => {
-    const isOpen = menu.classList.toggle('menu-open');
-    if (isOpen) {
-      wrapper?.classList.add('blurry');
-    } else {
-      wrapper?.classList.remove('blurry');
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement | null;
+    if (!target) return;
+
+    // 메뉴 토글
+    if (target.closest('#menu-toggle')) {
+      const menu = document.querySelector('.menu');
+      const wrapper = document.querySelector('.wrapper');
+      const isOpen = menu?.classList.toggle('menu-open');
+      wrapper?.classList.toggle('blurry', !!isOpen);
+      return;
+    }
+
+    // 모드 전환: 리로드 없이 제자리에서 바꾼다.
+    // (예전엔 location.reload()를 했다. 속성 하나 바꾸면 되는 일에 전체 내비게이션 비용을 냈다.)
+    if (target.closest('#mode')) {
+      const next = localStorage.getItem('theme') === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', next);
+
+      // 색 전환용 트랜지션은 이 순간에만 붙인다. 단, 클래스 추가와 테마 변경이
+      // 같은 tick에 일어나면 브라우저가 "트랜지션이 있던 이전 상태"를 본 적이 없어서
+      // 애니메이션이 걸리지 않는다. offsetWidth를 읽어 스타일을 한 번 확정시킨다.
+      document.body.classList.add('theme-switching');
+      void document.body.offsetWidth;
+
+      window.clearTimeout(switchTimer);
+      switchTimer = window.setTimeout(() => {
+        document.body.classList.remove('theme-switching');
+      }, 220);
+
+      if (next === 'dark') {
+        document.body.setAttribute('data-theme', 'dark');
+      } else {
+        document.body.removeAttribute('data-theme');
+      }
+
+      document
+        .getElementById('theme-color-meta')
+        ?.setAttribute('content', next === 'dark' ? '#191816' : '#faf9f5');
+
+      // 별 배경처럼 JS로 테마에 반응해야 하는 쪽에 알린다
+      document.dispatchEvent(new CustomEvent('themechange', { detail: { theme: next } }));
     }
   });
 
-  // 모드 전환: 리로드 없이 제자리에서 바꾼다.
-  // (예전엔 location.reload()를 했다. 속성 하나 바꾸면 되는 일에 전체 내비게이션 비용을 냈다.)
-  const lamp = document.getElementById('mode');
-  let switchTimer: number | undefined;
-
-  lamp?.addEventListener('click', () => {
-    const next = localStorage.getItem('theme') === 'dark' ? 'light' : 'dark';
-    localStorage.setItem('theme', next);
-
-    // 색 전환용 트랜지션은 이 순간에만 붙인다. 단, 클래스 추가와 테마 변경이
-    // 같은 tick에 일어나면 브라우저가 "트랜지션이 있던 이전 상태"를 본 적이 없어서
-    // 애니메이션이 걸리지 않는다. offsetWidth를 읽어 스타일을 한 번 확정시킨다.
-    document.body.classList.add('theme-switching');
-    void document.body.offsetWidth;
-
-    window.clearTimeout(switchTimer);
-    switchTimer = window.setTimeout(() => {
-      document.body.classList.remove('theme-switching');
-    }, 220);
-
-    if (next === 'dark') {
-      document.body.setAttribute('data-theme', 'dark');
-    } else {
-      document.body.removeAttribute('data-theme');
-    }
-
-    document
-      .getElementById('theme-color-meta')
-      ?.setAttribute('content', next === 'dark' ? '#191816' : '#faf9f5');
-
-    // 별 배경처럼 JS로 테마에 반응해야 하는 쪽에 알린다
-    document.dispatchEvent(new CustomEvent('themechange', { detail: { theme: next } }));
+  // 페이지를 넘기면 열려 있던 메뉴는 닫는다
+  document.addEventListener('astro:page-load', () => {
+    document.querySelector('.menu')?.classList.remove('menu-open');
+    document.querySelector('.wrapper')?.classList.remove('blurry');
   });
 </script>
