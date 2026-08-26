@@ -65,7 +65,7 @@ const bookNode = {
 };
 
 const crumbs = [
-  { name: '책', url: new URL('/books/', site).href },
+  { name: 'Books', url: new URL('/books/', site).href },
   { name: bookTitle, url: bookUrl },
   ...(chapter ? [{ name: chapter.title, url: pageUrl }] : []),
 ];
@@ -130,7 +130,7 @@ const jsonLd = {
         전부 검색에서 빠진다. 대신 사이드바·목차·이동 링크에 ignore를 걸어 걸러낸다.
       -->
       <article
-        data-pagefind-filter={`책:${bookTitle}`}
+        data-pagefind-filter={`Books:${bookTitle}`}
         data-pagefind-meta={`book:${bookTitle}`}
       >
         {sample && (
@@ -142,7 +142,7 @@ const jsonLd = {
 
         <header class="book-head">
           <nav class="book-crumbs" aria-label="위치" data-pagefind-ignore>
-            <a href="/books/">책</a>
+            <a href="/books/">Books</a>
             <span aria-hidden="true">/</span>
             <a href={bookHref(bookSlug)}>{bookTitle}</a>
             {chapter?.partTitle && (
