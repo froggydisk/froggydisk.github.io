@@ -739,6 +739,34 @@ body[data-theme="dark"] .post-item .post-item-title a:hover,
 body[data-theme="dark"] .post-item .post-item-title a:focus {
   color: var(--accent-strong);
 }
+/* 목록 항목: 제목 아래 대표 태그 한 줄 */
+.post-item .post-item-main { flex: 1; min-width: 0; }
+/* 태그 줄이 붙어 두 줄이 되는 archive에서만 간격을 벌리고 헤어라인으로 끊는다 */
+.post-item.post-item-tagged {
+  padding: 0.95rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.post-item .post-item-tag,
+body[data-theme="dark"] .post-item .post-item-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.34rem;
+  margin-top: 0.34rem;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-decoration: none;
+}
+.post-item .post-item-tag:hover,
+.post-item .post-item-tag:focus,
+body[data-theme="dark"] .post-item .post-item-tag:hover,
+body[data-theme="dark"] .post-item .post-item-tag:focus {
+  color: var(--accent-strong);
+}
+.post-item .post-item-tag svg { opacity: 0.7; }
+
 @media screen and (max-width: 768px) {
   .post-item { display: block; padding: 0.5rem 0; }
   .post-item .post-item-date,

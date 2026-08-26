@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-import { postSlug, postDate, formatDate } from '../utils/seo';
+import PostItem from '../components/PostItem.astro';
 
 const posts = (await getCollection('blog'))
   .sort((a, b) => {
@@ -29,17 +29,7 @@ const posts = (await getCollection('blog'))
     </div>
   </div>
 
-  {posts.map((post) => {
-    const slug = postSlug(post.id);
-    return (
-      <div class="post-item">
-        <span class="post-item-date">{formatDate(postDate(post.id))}</span>
-        <h4 class="post-item-title">
-          <a href={`/${slug}/`}>{post.data.title}</a>
-        </h4>
-      </div>
-    );
-  })}
+  {posts.map((post) => <PostItem post={post} showTag />)}
 </BaseLayout>
 
 {import.meta.env.PROD && <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />}
@@ -49,10 +39,12 @@ const posts = (await getCollection('blog'))
     var fallback = document.getElementById('search-fallback');
     if (!fallback) return;
     fallback.addEventListener('input', function() {
-      var query = this.value.toLowerCase();
+      var query = this.value.toLowerCase().trim();
       document.querySelectorAll('.post-item').forEach(function(item) {
         var title = item.querySelector('.post-item-title').textContent.toLowerCase();
-        item.style.display = title.includes(query) ? '' : 'none';
+        var tags = (item.getAttribute('data-tags') || '').toLowerCase();
+        var hit = !query || title.includes(query) || tags.includes(query);
+        item.style.display = hit ? '' : 'none';
       });
     });
   }

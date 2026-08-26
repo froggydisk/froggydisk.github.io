@@ -1,0 +1,33 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+import { postSlug, postDate, formatDate, parseTags } from '../utils/seo';
+import { tagIcon } from '../utils/tagIcon';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  /** 대표 태그를 한 줄 노출한다. archive에서만 켠다 */
+  showTag?: boolean;
+}
+
+const { post, showTag = false } = Astro.props;
+const slug = postSlug(post.id);
+const tags = parseTags(post.data.tags);
+// 첫 태그가 그 글의 영역을 대표한다. 나머지는 검색어로만 쓰고 화면에는 안 뿌린다
+const primary = tags[0];
+---
+
+<div class:list={['post-item', showTag && 'post-item-tagged']} data-tags={tags.join(' ')}>
+  <span class="post-item-date">{formatDate(postDate(post.id))}</span>
+  <div class="post-item-main">
+    <h4 class="post-item-title">
+      <a href={`/${slug}/`}>{post.data.title}</a>
+    </h4>
+    {showTag && primary && (
+      <a class="post-item-tag" href={`/tags/#tag-${primary.toLowerCase().replace(/\s+/g, '-')}`}>
+        <Icon name={tagIcon(primary)} size={12} />
+        <span>{primary.toUpperCase()}</span>
+      </a>
+    )}
+  </div>
+</div>

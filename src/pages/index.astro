@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-import { postSlug, postDate, formatDate } from '../utils/seo';
+import PostItem from '../components/PostItem.astro';
 
 const posts = (await getCollection('blog'))
   .sort((a, b) => {
@@ -33,17 +33,7 @@ const description =
   </div>
 
   <h4 class="posts-item-note">Recent Posts</h4>
-  {recentPosts.map((post) => {
-    const slug = postSlug(post.id);
-    return (
-      <div class="post-item">
-        <span class="post-item-date">{formatDate(postDate(post.id))}</span>
-        <h4 class="post-item-title">
-          <a href={`/${slug}/`}>{post.data.title}</a>
-        </h4>
-      </div>
-    );
-  })}
+  {recentPosts.map((post) => <PostItem post={post} />)}
   <a class="posts-more" href="/archive/">전체 글 {posts.length}편 보기 →</a>
   <style>
     :global(html) {
