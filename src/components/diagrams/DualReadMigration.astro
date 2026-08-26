@@ -1,0 +1,54 @@
+---
+const S1 = 88, S2 = 154, SH = 44, SW = 376;
+---
+
+<div class="dg">
+<svg width="100%" viewBox="0 0 672 258" xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="원문이 들어오는 요청에서 새 HMAC 값으로 먼저 조회하고, 없으면 옛 SHA-256 값으로 조회해 찾은 행을 HMAC 값으로 갱신한다">
+
+<defs>
+  <marker id="drArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--rule)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">원문이 들어올 때만 옮긴다</text>
+
+<rect x="24" y="34" width="624" height="34" rx="3" fill="var(--bg-soft)" stroke="var(--ink)" stroke-width="1.6"/>
+<text class="val" x="336" y="56" text-anchor="middle" fill="var(--ink)">로그인, 본인확인, 재입력처럼 원문이 들어오는 요청</text>
+
+<line x1="60" y1="68" x2="60" y2={S1} stroke="var(--rule)" stroke-width="1"/>
+<line x1="60" y1={S1 + SH} x2="60" y2={S2} stroke="var(--rule)" stroke-width="1"/>
+<text class="cap" x="70" y={S1 + SH + 15} fill="var(--accent-strong)">없으면</text>
+
+<line x1={24 + SW} y1={S1 + 22} x2={24 + SW + 40} y2={S1 + 22} stroke="var(--rule)" stroke-width="1" marker-end="url(#drArrow)"/>
+<line x1={24 + SW} y1={S2 + 22} x2={24 + SW + 40} y2={S2 + 22} stroke="var(--rule)" stroke-width="1" marker-end="url(#drArrow)"/>
+
+<rect x="24" y={S1} width={SW} height={SH} rx="3" fill="none" stroke="var(--rule)" stroke-width="1"/>
+<text class="m code" x={24 + SW / 2} y={S1 + 27} text-anchor="middle">① WHERE phone_hash = HMAC(key, 입력)</text>
+<text class="cap" x={24 + SW + 48} y={S1 + 26} fill="var(--muted)">찾으면 그대로 쓴다</text>
+
+<rect x="24" y={S2} width={SW} height={SH} rx="3" fill="var(--accent)" fill-opacity="0.12" stroke="var(--accent)" stroke-width="1.5"/>
+<text class="m code" x={24 + SW / 2} y={S2 + 27} text-anchor="middle" fill="var(--accent-strong)">② WHERE phone_hash = SHA256(입력)</text>
+<text class="cap" x={24 + SW + 48} y={S2 + 26} fill="var(--accent-strong)">찾으면 HMAC 값으로 UPDATE</text>
+
+<line x1="24" y1="220" x2="648" y2="220" stroke="var(--rule)" stroke-width="1"/>
+<text class="cap" x="336" y="240" text-anchor="middle" fill="var(--muted)">원문이 다시 들어오지 않는 행은 끝까지 남는다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .m { font-family: var(--font-mono); }
+.dg .val { font-size: 12.5px; }
+.dg .code { font-size: 11px; }
+.dg .cap { font-size: 11px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

@@ -1,0 +1,59 @@
+---
+const CX = [124, 390];
+const CW = 258;
+const RY = [58, 158];
+const RH = 90;
+
+const cells = [
+  { col: 0, row: 0, algo: 'AES-256-GCM',        role: '컬럼 하나', ex: '상세 주소, 메모',        focus: false },
+  { col: 1, row: 0, algo: 'AES-256-GCM + HMAC', role: '컬럼 두 개', ex: '전화번호, 이메일, 이름', focus: true  },
+  { col: 0, row: 1, algo: 'bcrypt / Argon2',    role: '컬럼 하나', ex: '비밀번호',              focus: false },
+  { col: 1, row: 1, algo: 'HMAC-SHA256',        role: '컬럼 하나', ex: '중복 확인 전용 값',      focus: false },
+];
+---
+
+<div class="dg">
+<svg width="100%" viewBox="0 0 672 292" xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="복원이 필요한가와 검색이 필요한가, 두 질문의 답에 따라 컬럼 구성이 넷으로 갈리고 컬럼이 두 개가 되는 경우는 하나뿐이다">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">필드마다 두 가지를 묻는다</text>
+
+<text class="hd" x={CX[0] + CW / 2} y="46" text-anchor="middle" fill="var(--ink)">검색 불필요</text>
+<text class="hd" x={CX[1] + CW / 2} y="46" text-anchor="middle" fill="var(--ink)">검색 필요</text>
+
+<text class="hd" x="112" y="107" text-anchor="end" fill="var(--ink)">복원 필요</text>
+<text class="hd" x="112" y="207" text-anchor="end" fill="var(--ink)">복원 불필요</text>
+
+{cells.map((c) => (
+  <g>
+    <rect x={CX[c.col]} y={RY[c.row]} width={CW} height={RH} rx={3}
+          fill={c.focus ? 'var(--bg-soft)' : 'none'}
+          stroke={c.focus ? 'var(--ink)' : 'var(--rule)'}
+          stroke-width={c.focus ? 1.6 : 1}/>
+    <text class="m algo" x={CX[c.col] + CW / 2} y={RY[c.row] + 28} text-anchor="middle"
+          fill={c.focus ? 'var(--ink)' : 'var(--body)'} font-weight={c.focus ? 700 : 400}>{c.algo}</text>
+    <text class="cap" x={CX[c.col] + CW / 2} y={RY[c.row] + 50} text-anchor="middle" fill="var(--accent-strong)">{c.role}</text>
+    <text class="cap" x={CX[c.col] + CW / 2} y={RY[c.row] + 70} text-anchor="middle" fill="var(--muted)">{c.ex}</text>
+  </g>
+))}
+
+<line x1="24" y1="266" x2="648" y2="266" stroke="var(--rule)" stroke-width="1"/>
+<text class="cap" x="336" y="285" text-anchor="middle" fill="var(--muted)">컬럼이 두 개가 되는 경우는 하나뿐이다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .m { font-family: var(--font-mono); }
+.dg .algo { font-size: 12.5px; }
+.dg .cap { font-size: 11px; }
+.dg .hd { font-size: 12px; font-weight: 700; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

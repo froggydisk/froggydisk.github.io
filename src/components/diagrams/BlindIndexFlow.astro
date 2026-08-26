@@ -1,0 +1,73 @@
+---
+const cols = [
+  { x: 100, name: 'phone',      algo: 'AES-256-GCM · 랜덤 IV',  role: '복원 O · 검색 X' },
+  { x: 372, name: 'phone_bidx', algo: 'HMAC-SHA256 · 결정론',   role: '복원 X · 검색 O' },
+];
+const CW = 200;
+const steps = [
+  { x: 24,  code: 'WHERE phone_bidx = HMAC(k, 입력)', cap: '① 단방향 컬럼으로 행을 찾고' },
+  { x: 358, code: 'AES 복호화(dek, phone)',            cap: '② 양방향 컬럼에서 원문을 꺼낸다' },
+];
+const SW = 290;
+---
+
+<div class="dg">
+<svg width="100%" viewBox="0 0 672 310" xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="저장할 때는 평문 하나를 AES 컬럼과 HMAC 컬럼에 각각 계산해 넣고, 조회할 때는 HMAC 컬럼으로 행을 찾은 다음 AES 컬럼을 복호화해 원문을 꺼낸다">
+
+<defs>
+  <marker id="bidxArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--rule)"/>
+  </marker>
+  <marker id="bidxArrowInk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--ink)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">저장은 두 번, 조회는 두 단계</text>
+
+<line x1="290" y1="74" x2="212" y2="98" stroke="var(--rule)" stroke-width="1" marker-end="url(#bidxArrow)"/>
+<line x1="382" y1="74" x2="460" y2="98" stroke="var(--rule)" stroke-width="1" marker-end="url(#bidxArrow)"/>
+
+<rect x="246" y="40" width="180" height="32" rx="3" fill="var(--bg-soft)" stroke="var(--ink)" stroke-width="1.6"/>
+<text class="m val" x="336" y="61" text-anchor="middle" fill="var(--ink)">"01012345678"</text>
+
+{cols.map((c) => (
+  <g>
+    <rect x={c.x} y="104" width={CW} height="80" rx={3} fill="none" stroke="var(--rule)" stroke-width="1"/>
+    <text class="m val" x={c.x + CW / 2} y="126" text-anchor="middle" fill="var(--ink)" font-weight="700">{c.name}</text>
+    <text class="cap" x={c.x + CW / 2} y="148" text-anchor="middle" fill="var(--muted)">{c.algo}</text>
+    <text class="cap" x={c.x + CW / 2} y="170" text-anchor="middle" fill="var(--accent-strong)">{c.role}</text>
+  </g>
+))}
+
+<line x1="24" y1="206" x2="648" y2="206" stroke="var(--rule)" stroke-width="1"/>
+<text class="ttl" x="24" y="226" fill="var(--muted)">조회</text>
+
+<line x1="316" y1="255" x2="354" y2="255" stroke="var(--ink)" stroke-width="1" marker-end="url(#bidxArrowInk)"/>
+
+{steps.map((s) => (
+  <g>
+    <rect x={s.x} y="238" width={SW} height="34" rx={3} fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+    <text class="m code" x={s.x + SW / 2} y="259" text-anchor="middle">{s.code}</text>
+    <text class="cap" x={s.x + SW / 2} y="290" text-anchor="middle" fill="var(--muted)">{s.cap}</text>
+  </g>
+))}
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .m { font-family: var(--font-mono); }
+.dg .val { font-size: 12.5px; }
+.dg .code { font-size: 11px; }
+.dg .cap { font-size: 11px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>
