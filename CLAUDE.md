@@ -224,8 +224,14 @@ npm run preview  # Preview built site locally
 - **Meta Description**: 포스트마다 고유. frontmatter `description`이 있으면 그것을, 없으면
   `src/utils/seo.ts`의 `excerpt()`가 본문 첫 산문 문단에서 자동 추출 (헤딩·코드블록·JSX 제외)
 - **Sitemap lastmod**: `astro.config.mjs`가 포스트 frontmatter를 읽어 주입. 리다이렉트·404는 `filter`로 제외
-- **Sitemap**: `/sitemap-index.xml` + `/sitemap-0.xml` (`@astrojs/sitemap`은 `sitemap.xml`을 만들지 않는다)
-- **Robots.txt**: Allow all, sitemap reference
+- **Sitemap**: 제출용은 **`/sitemap.xml`** (`src/pages/sitemap.xml.ts`가 만드는 단일 `urlset`).
+  `@astrojs/sitemap`은 `sitemap.xml`을 만들지 않고 `/sitemap-index.xml` + `/sitemap-0.xml` 2단으로 낸다.
+  **서치콘솔은 이 인덱스를 "읽을 수 없음"으로 반복 실패했고 단일 파일만 통과했다.**
+  파일 자체는 정상이었다 (200, `application/xml`, BOM 없음, gzip 파싱 OK, URL 54개 전부 동일 https 호스트,
+  `lastmod` 전부 W3C 형식·과거 날짜). 인덱스를 읽고 자식을 다시 가져오는 두 번째 단계가 실패 지점이다.
+  두 경로의 URL 목록이 어긋나지 않는지 확인하는 것을 잊지 말 것 (`dist/sitemap.xml` vs `dist/sitemap-0.xml`)
+- **Robots.txt**: Allow all. **`sitemap.xml`만 알린다.** 인덱스를 다시 넣지 말 것 — 구글이 못 읽는 경로를
+  광고하면 서치콘솔에 실패 항목이 계속 남는다
 
 ### 6. Styling Approach
 - **No CSS Framework**: Pure vanilla CSS (global.css + editorial.css)
