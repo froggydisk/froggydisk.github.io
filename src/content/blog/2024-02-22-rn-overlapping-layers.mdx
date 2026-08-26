@@ -1,0 +1,226 @@
+---
+title: "[React Native] 컴포넌트를 쌓아 올릴 때 주의할 여섯 가지"
+comments: true
+categories:
+  - Blog
+tags:
+  - React Native, React, Layout, SafeAreaView, ScrollView
+last_modified_at: 2026-08-26T
+toc: true
+use_math: false
+---
+
+import RnPaintOrder from "../../components/diagrams/RnPaintOrder.astro";
+import NoteBlock from "../../components/diagrams/NoteBlock.astro";
+
+> 웹에서 쓰던 `position: fixed`가 없고, `zIndex`를 올려도 순서가 안 바뀌고, 탭을 옮길 때마다 화면 상단이 한 번 깜빡인다.
+
+React Native에서 컴포넌트를 하나 쌓아 올릴 때마다 차례로 만나는 문제들이다. 2022년 10월부터 2024년 2월까지 그때그때 적어둔 것들을 겹치는 순서대로 모았다.
+
+## ▍포지션 기본값의 차이
+
+React와 React Native를 번갈아 쓰다 보면 문법이 헷갈릴 때가 잦은데, 그중 제일 먼저 걸리는 게 `position`의 기본값이다.
+
+|                   | React / Next | React Native |
+| :---------------: | :----------: | :----------: |
+| `position` 기본값 |   `static`   |  `relative`  |
+
+`z-index`는 `position`이 `static`이면 아무 일도 하지 않는다. 처음에는 이걸 모른 채 `absolute`만 남발했는데, 모든 컴포넌트를 absolute로 배치할 수는 없으니 금방 막힌다. 웹에서 `z-index`가 안 먹으면 `position`부터 보는 게 맞다.
+
+React Native는 기본값이 `relative`라서 이 문제가 없을 것 같은데 그렇지도 않다. `zIndex`는 기본값이 따로 없어서 쓰고 싶으면 직접 선언해줘야 한다.
+
+```js
+position: 'relative',
+zIndex: 10
+```
+
+## ▍z축을 정하는 코드 순서
+
+그런데 React Native에서 `zIndex`를 쓸 일은 생각보다 적다. 순서를 정하는 다른 규칙이 먼저 작동하기 때문이다.
+
+<RnPaintOrder />
+
+2022년 10월, 화면에서 이리저리 끌고 다닐 수 있는 버튼을 붙이면서 알게 됐다. 바퀴를 다시 발명할 일은 아니라서 `react-native-draggable`을 가져다 썼다.
+
+```bash
+npm install react-native-draggable
+cd ios && pod install
+```
+
+```jsx
+import Draggable from "react-native-draggable";
+
+<Draggable>
+  <View>{/* 내용 */}</View>
+</Draggable>;
+```
+
+설치하고 쓰는 것 자체는 이렇게 간단한데, 화면의 다른 요소에 가려서 안 보이는 일이 생긴다. 이럴 때 `zIndex`를 올리기 전에 코드에서 어디에 놓았는지를 먼저 본다.
+
+```jsx
+return (
+  <View>
+    {/* 화면 내용 */}
+    <Draggable /> {/* 코드 맨 아래에 두어야 화면 맨 앞에 온다 */}
+  </View>
+);
+```
+
+## ▍화면을 덮는 레이어
+
+모달 뒤에 반투명한 막을 깔거나 화면 전체를 덮는 레이어를 만들 때는 보통 이렇게 쓴다.
+
+```js
+container: {
+  position: 'absolute',
+  top: 0,
+  bottom: 0,
+  left: 0,
+  right: 0,
+}
+```
+
+쓸 때마다 다섯 줄이 붙어서 계속 신경이 쓰였는데, 공식 문서에 한 줄짜리가 이미 있었다.
+
+```js
+container: { ...StyleSheet.absoluteFillObject }
+```
+
+아무 생각 없이 쓰던 것이라 더 좋은 방법을 찾을 생각조차 안 하고 있었다. 공식 문서를 한 번 훑어보는 것의 중요성을 다시 느낀다.
+
+## ▍스크롤에서 떼어내는 방법
+
+2023년 12월, 쇼핑 사이트의 장바구니 버튼처럼 스크롤과 상관없이 화면 측면에 계속 따라다니는 컴포넌트를 만들 일이 있었다. 웹에서 쓰던 문법을 그대로 썼더니 바로 에러가 났다.
+
+```js
+position: "fixed";
+```
+
+당시 React Native에서 `position`에 줄 수 있는 값은 `relative`와 `absolute` 둘뿐이었다. 그러면 `absolute`로 두고 스크롤을 무시하는 방법을 찾아야 하나 싶어 당황했는데, 곰곰이 생각해보면 답은 더 단순했다. **`ScrollView`나 `FlatList` 안이 아니라 같은 레벨에 두면 된다.**
+
+스크롤되는 건 `ScrollView`의 내부지 그 형제가 아니다. 처음에는 화면 위에 `absolute` 레이어를 하나 더 씌워버려서 스크롤이 아예 안 되는 상태까지 갔다가 뒤늦게 알아챘다.
+
+```jsx
+<View style={{ flex: 1 }}>
+  <ScrollView>{/* 목록 */}</ScrollView>
+  <View style={{ position: "absolute", bottom: 24, right: 16 }}>
+    {/* 스크롤과 무관하게 따라다니는 버튼 */}
+  </View>
+</View>
+```
+
+## ▍SafeAreaView의 적용 타이밍
+
+2022년 11월, `BottomTabNavigator`에서 특정 탭을 누를 때마다 화면을 다시 그리게 하려고 `unmountOnBlur`를 켰다.
+
+```jsx
+<BottomTab.Screen
+  name="NavigatorMain"
+  component={NavigatorMain}
+  options={{
+    tabBarLabel: "Main",
+    unmountOnBlur: true,
+  }}
+/>
+```
+
+리렌더링은 의도대로 되는데 탭을 옮길 때마다 화면 상단이 한 번 깜빡였다. 예민하지 않으면 눈치채지 못할 정도인데, 한 번 보이기 시작하면 계속 보인다. 원인은 `SafeAreaView`의 적용 순서에 있었다.
+
+<NoteBlock
+  label="unmountOnBlur로 화면을 다시 그릴 때"
+  text={`1. SafeAreaView 안의 요소가 먼저 그려진다
+2. status bar 높이가 뒤늦게 margin으로 내려온다
+3. 그 사이 한 프레임 동안 요소가 위로 올라붙어 있다   ← 깜빡임`}
+/>
+
+그래서 당시에는 `SafeAreaView`를 아예 쓰지 않고 `react-native-status-bar-height`로 높이를 직접 받아서 스타일을 줬다.
+
+```jsx
+import { getStatusBarHeight } from "react-native-status-bar-height";
+
+<View
+  style={{
+    height: Dimensions.get("window").height,
+    top: getStatusBarHeight(),
+  }}
+/>;
+```
+
+1년 뒤에 같은 문제를 다시 만났다. 아이폰의 다이나믹 아일랜드가 나오면서 그때까지 쓰던 높이 계산 라이브러리들이 제대로 동작하지 않았다. `react-native-iphone-x-helper` 같은 것들이 그랬는데, 안 되는 걸 깨닫기까지 시간이 꽤 걸려서 묘한 배신감이 들었다.
+
+결국 `react-native-safe-area-context`의 `useSafeAreaInsets` 하나로 통일했다. `SafeAreaView` 컴포넌트 자체는 React Navigation 문서에서도 권하지 않는다.
+
+> While React Native exports a SafeAreaView component, this component only supports iOS 10+ with no support for older iOS versions or Android. In addition, it also has some issues, i.e. if a screen containing safe area is animating, it causes jumpy behavior. So we recommend to use the useSafeAreaInsets hook from the react-native-safe-area-context library to handle safe areas in a more reliable way.
+
+애니메이션 중에 튀는 문제를 지적하고 있는데, 위에서 본 깜빡임과 원인이 같다. 화면을 전환할 때도 가끔 보인다.
+
+```jsx
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+const Demo = () => {
+  const insets = useSafeAreaInsets();
+
+  return (
+    <View style={{ flex: 1 }}>
+      <ScrollView>{/* 목록 */}</ScrollView>
+      <View
+        style={{
+          position: "absolute",
+          top: Dimensions.get("window").height - insets.bottom - BUTTON_HEIGHT,
+        }}
+      />
+    </View>
+  );
+};
+```
+
+높이 계산을 한 군데로 모으니 UI를 만들 때 훨씬 편해졌다. `SafeAreaView`는 첫 컴포넌트의 배경색을 지정할 때부터 귀찮게 만드는 편이라 아쉬울 것도 없었다.
+
+## ▍겹친 레이어의 제스처 충돌
+
+순서를 맞추고 위치도 잡았는데 마지막에 하나가 더 남는다. 겹친 레이어끼리 제스처를 알아서 나눠 갖지 않는다.
+
+`Draggable`을 `ScrollView` 안에 넣으면 iOS에서는 그럭저럭 동작하는데, 버튼을 원하는 만큼 움직이기 전에 스크롤이 먼저 먹어버린다. 두 제스처가 같은 방향으로 시작하니 어느 쪽이 이길지가 타이밍에 달린다.
+
+버튼을 누르고 있는 동안 스크롤을 끄면 해결된다.
+
+```jsx
+const [scrollable, setScrollable] = useState(true);
+
+return (
+  <View>
+    <ScrollView scrollEnabled={scrollable}>
+      {/* 화면 내용 */}
+      <Draggable
+        onPressIn={() => setScrollable(false)}
+        onPressOut={() => setScrollable(true)}
+      />
+    </ScrollView>
+  </View>
+);
+```
+
+한 화면에 제스처가 필요한 컴포넌트가 둘 이상 있으면 다 이런 식으로 풀 수 있다. 처음 개발할 때는 이벤트 리스너가 대체 어디에 쓰이는 건지 긴가민가했는데, 이제는 없으면 안 되는 것이 됐다.
+
+## ▍레이어를 올릴 때의 점검 순서
+
+정리하면 순서가 이렇다.
+
+1. 안 보이면 `zIndex`를 올리기 전에 코드상 위치를 본다. 나중에 쓴 것이 앞에 온다
+2. `zIndex`를 쓸 거면 `position`을 같이 선언한다. 웹은 `static`이면 안 먹고, RN은 `zIndex`에 기본값이 없다
+3. 화면 전체를 덮을 거면 `StyleSheet.absoluteFillObject`로 줄인다
+4. 스크롤을 무시해야 하면 `ScrollView` 안이 아니라 형제로 둔다
+5. 높이 계산은 `useSafeAreaInsets` 하나로 모은다. `SafeAreaView`는 한 프레임 늦는다
+6. 제스처가 겹치면 위에 있는 쪽을 누르는 동안 아래를 끈다
+
+위 여섯 항목은 순서 문제와 타이밍 문제로 나뉜다. 1·2·4번은 무엇이 위에 오는지를 정하고, 5·6번은 그게 언제 반영되는지에 걸린다. 레이어를 하나 올릴 때마다 둘 다 확인하면 대부분 걸러진다.
+
+참고
+
+- [StyleSheet — React Native](https://reactnative.dev/docs/stylesheet)
+- [Layout Props — React Native](https://reactnative.dev/docs/layout-props)
+- [Handling safe area — React Navigation](https://reactnavigation.org/docs/handling-safe-area/)
+- [position — CSS reference](https://cssreference.io/property/position/)
+- [react-native-draggable](https://github.com/tongyy/react-native-draggable)
+- [react-native-status-bar-height](https://github.com/ovr/react-native-status-bar-height)
+- [react-native-safe-area-context](https://github.com/th3rdwave/react-native-safe-area-context)

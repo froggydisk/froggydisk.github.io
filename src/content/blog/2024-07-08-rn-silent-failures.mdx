@@ -1,0 +1,150 @@
+---
+title: "[React Native] 에러 메시지 없이 실패할 때 확인할 다섯 가지"
+comments: true
+categories:
+  - Blog
+tags:
+  - React Native, Android, Metro, Gradle, Troubleshooting
+last_modified_at: 2026-08-26T
+toc: true
+use_math: false
+---
+
+import NoteBlock from "../../components/diagrams/NoteBlock.astro";
+
+> Run 버튼이 있어야 할 자리에 아무것도 없고, 저장해도 화면이 바뀌지 않고, 빌드는 성공했는데 화면이 하얗다. 에러 메시지는 어디에도 없다.
+
+React Native는 자바스크립트 프레임워크지만 그 아래에서 Metro가 돌고, 그 아래에 다시 Gradle과 Xcode가 있다. 각 층은 자기가 맡은 일만 보고하니 층을 넘어간 실패는 조용히 지나간다. 2022년 11월부터 2024년 7월까지 원인 분석부터 막막했던 다섯 가지를 모았다.
+
+## ▍Run 버튼이 없는 프로젝트
+
+2023년 7월, apk 파일을 건네줄 일이 있어서 오랜만에 안드로이드 스튜디오를 켰다. iOS 시뮬레이터가 너무 편해서 안드로이드를 소홀히 하고 있던 참이었다. Run 아이콘이 있어야 할 자리에는 `add configuration`만 보였다.
+
+인터넷을 찾아보니 module을 추가해주면 된다는데, 아무리 추가하려고 해도 선택지에 `No module` 말고는 아무것도 뜨지 않았다.
+
+사람은 가끔 바보가 된다. VSCode를 켜듯이 아무 생각 없이 프로젝트 루트 폴더를 열어버린 것이었다.
+
+**안드로이드 스튜디오에서는 프로젝트 폴더 안의 `android` 폴더를 열어야 한다.** Xcode에서 `ios` 폴더를 열어주는 것과 같다.
+
+에러가 없었던 것도 당연하다. 안드로이드 스튜디오 입장에서는 자기가 모르는 폴더를 열어준 것뿐이라 잘못된 게 하나도 없다.
+
+## ▍먹통이 된 Hot Reload
+
+2024년 7월, 코드를 저장할 때마다 변경 사항이 시뮬레이터에 자동으로 반영되는 편리함에 취해 있던 어느 날 `Hot Reload`가 멈췄다. 따로 설정한 적도 없어서 어떻게 살려야 할지 막막했다. 원인을 감각적으로는 알고 있었는데 정리해둔 적이 없어서 후회가 밀려왔다.
+
+이미 React Native 저장소에 이슈로 올라와 있는 내용이라 레퍼런스를 찾는 것은 어렵지 않았다.
+
+<NoteBlock label="Hot Reload가 안 될 때 확인 순서" text={`1. cmd + D 또는 디바이스를 흔들어 개발자 창 → enable fast refresh
+   → 해당 버튼을 찾을 수 없어서 실패
+
+2. 디바이스와 컴퓨터가 완전히 같은 네트워크인지 확인
+   → 이름이 같아도 2.4G와 5G는 다른 네트워크다 (시뮬레이터는 무관)
+
+3. 프로젝트 루트에서 rm -rf .git/index.lock
+   → 이걸로 해결됐다`} />
+
+세 번째는 왜 되는지가 선뜻 이해되지 않는데, 이 방법으로 해결한 사람이 의외로 많다. Metro가 파일 변경을 감시하면서 git 상태도 같이 읽는 탓이 아닐까 짐작만 하고 있다.
+
+## ▍빌드는 성공한 빈 화면
+
+2022년 11월, 어느 순간부터 빌드는 되는데 화면에 아무것도 나타나지 않았다.
+
+빌드가 성공했으니 라이브러리를 설치하면서 설정이 꼬였나 싶어 `node_modules`를 지웠다 설치하기를 몇 번이나 반복했다. 캐시 삭제 정도로는 어림도 없었다. 에러 코드조차 없으니 어디서부터 봐야 할지 감이 잡히지 않았다.
+
+새 프로젝트를 하나 팔까 하다가 우선 깃 히스토리를 거슬러 올라가 봤다. 다행히 메인 브랜치에 push해둔 버전은 빌드가 잘 됐다. 여기서부터는 달라진 부분을 찾아내는 노가다인데, 라이브러리를 새로 설치하고 코드를 하나하나 비교해 바꿔가다가 생각지도 못한 곳에서 재현했다.
+
+```js
+const example = () => {
+  const array = [];
+  for (let i = 0; i < 100; i + 2) {
+    // i += 2 에서 = 를 빼먹었다
+    array.push(i);
+  }
+  return array;
+};
+```
+
+`i + 2`는 문법적으로 틀린 코드가 아니다. 값을 계산해서 버리는 정상적인 식이라 파서가 잡을 이유가 없고, 그래서 `i`가 영원히 0에 머무르며 무한 루프가 된다. Metro는 번들링을 성공적으로 마쳤다고 보고하고, 그 뒤에 자바스크립트 스레드가 그 루프에 갇힌다. 그러니 화면에는 아무것도 그려지지 않는다.
+
+`Bundle 100%`나 `Loading from Metro...`에서 멈춘 화면을 만나면 최근에 건드린 반복문과 방금 설치한 라이브러리를 먼저 본다. 문법이 맞는 코드도 이렇게 아무 말 없이 화면을 멈출 수 있다는 걸 그때 알았다.
+
+## ▍안드로이드에서만 안 보이는 글자
+
+React Native의 `<Text>`는 스타일을 주지 않아도 기본값이 적용된다. 색은 `#000`, 크기는 14, `fontWeight`는 400이다. 그래서 기본값을 쓰는 화면은 신경 쓸 일이 없는데, 2023년 7월에 안드로이드의 다크모드가 예외라는 것을 알게 됐다.
+
+이슈가 처음 보고됐을 때 적잖이 당황했다. 안드로이드 스튜디오에서도 따로 설정하지 않으면 다크모드가 켜져 있는 경우가 드물어서 테스트해볼 생각을 아예 못 했다.
+
+고칠 파일은 `[프로젝트]/android/app/src/main/res/values/styles.xml`이다.
+
+```xml
+<style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+  <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
+  <item name="android:textColor">#000</item>       <!-- Text 태그의 폰트 색 -->
+  <item name="android:textColorHint">#999</item>   <!-- TextInput 힌트 폰트 색 -->
+  <item name="android:editTextColor">#000</item>   <!-- TextInput 폰트 색 -->
+</style>
+```
+
+폰트 문제는 이걸로 깔끔하게 해결된다. 그런데 추가 테스트를 하다 보니 이번에는 `Alert.alert`의 모달 배경에 회색 필터가 씌워졌다. 그래서 `[프로젝트]/android/app/src/main/java/com/[앱이름]/MainApplication.java`에서 안드로이드의 다크모드를 아예 막았다.
+
+```java
+import androidx.appcompat.app.AppCompatDelegate;   // 추가
+
+@Override
+public void onCreate() {
+  super.onCreate();
+  SoLoader.init(this, /* native exopackage */ false);
+  ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+  AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);   // 추가
+}
+```
+
+다크모드를 막을 거였으면 위의 폰트 색은 왜 지정했나 싶은데, 전역 폰트 색을 바꿀 수 있다는 점에서는 의미가 있다. 디자인에 따라 순수 블랙 대신 `#333` 같은 색을 쓰는 경우가 있으니 알아두면 유용한 설정이다.
+
+여기서 원인은 자바스크립트 쪽에 없었다. RN이 정한 기본 색을 안드로이드의 테마가 덮어쓰는 구조라서, 아무리 JS 코드를 뒤져도 나올 것이 없다.
+
+## ▍Gradle 업그레이드 후의 빌드 실패
+
+2022년 11월, 안드로이드 스튜디오에 들어가서 아무 생각 없이 Gradle upgrade를 눌렀더니 빌드가 안 되기 시작했다. 이건 앞의 넷과 달리 에러 메시지가 분명하게 나왔다.
+
+```text
+The Android Gradle plugin supports only kotlin-android-extensions
+Gradle plugin version 1.6.20 and higher.
+The following dependencies do not satisfy the required version:
+project ':react-native-safe-area-context' -> org.jetbrains.kotlin:
+kotlin-gradle-plugin:1.6.10
+```
+
+Gradle plugin 버전이 높아서 `react-native-safe-area-context`의 의존성과 맞지 않는다는 이야기다. 한참 고민하다가 Gradle을 업데이트한 게 생각나서 급하게 다운그레이드했다. `android/build.gradle`에서 숫자만 이전 버전으로 되돌리면 된다.
+
+```groovy
+dependencies {
+  classpath('com.android.tools.build:gradle:7.2.2')
+}
+```
+
+메시지가 친절해 보이지만 정작 내가 방금 무엇을 했는지는 알려주지 않는다. 라이브러리 이름과 버전 숫자만 나오니, 이걸 "내가 방금 Gradle을 올렸다"와 연결하는 일은 결국 사람 몫으로 남는다.
+
+## ▍증상과 원인 정리
+
+다섯 가지를 나란히 두면 이렇게 정리된다.
+
+| 증상                              | 실제 원인      | 에러 메시지 |
+| --------------------------------- | ------------------- | :---------: |
+| Run 버튼이 없다                   | 내가 연 폴더        |    없음     |
+| 저장해도 반영되지 않는다          | `.git/index.lock`   |    없음     |
+| 빌드는 되는데 빈 화면이다         | JS 코드의 무한 루프 |    없음     |
+| 안드로이드에서만 글자가 안 보인다 | `styles.xml`        |    없음     |
+| 빌드가 깨진다                     | `build.gradle` 버전 |    있음     |
+
+에러 메시지가 나온 건 다섯 중 하나뿐이었고, 그 하나마저 원인을 가리켜주지는 않았다. 자바스크립트로 앱을 만들고 있어도 그 아래에는 Metro가 있고, 그 아래에는 Gradle과 Xcode가 있다.
+
+그래서 증상만 붙들고 원인을 찾기보다 실패한 층을 먼저 정하고 그 층의 도구로 확인하는 편이 빠르다. 화면이 안 그려지면 JS를, 저장이 반영되지 않으면 Metro를, 빌드가 깨지면 네이티브 설정을 본다. 층을 잘못 짚으면 `node_modules`를 열 번 지워도 답이 나오지 않는다.
+
+참고
+
+- [Blank Screen Issue on iOS #26605](https://github.com/facebook/react-native/issues/26605)
+- [Fast Refresh not working #33102](https://github.com/facebook/react-native/issues/33102)
+- [Alert 모달 배경 이슈 #31345](https://github.com/facebook/react-native/issues/31345)
+- [Android 빌드를 위한 Gradle Version 관리](https://icat2048.tistory.com/462)
+- [Gradle Sync Issue: Android Gradle plugin supports only Kotlin Gradle plugin version ... and higher](https://daewonyoon.tistory.com/293)

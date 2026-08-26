@@ -1,0 +1,194 @@
+---
+title: "[React/RN] JSX 중괄호의 다섯 가지 함정"
+comments: true
+categories:
+  - Blog
+tags:
+  - React, React Native, Next, JSX, JavaScript
+last_modified_at: 2026-08-26T
+toc: true
+use_math: false
+---
+
+import JsxBraceRoles from "../../components/diagrams/JsxBraceRoles.astro";
+import NoteBlock from "../../components/diagrams/NoteBlock.astro";
+
+> 넣어둔 개행 문자가 화면에서 무시되고, 누르지도 않은 함수가 렌더링하면서 실행되고, 잘 돌던 화면이 `Text strings must be rendered within a <Text> component` 에러로 죽는다.
+
+2023년 8월부터 2024년 2월까지 그때그때 만나서 각각 적어둔 문제들인데, 나중에 모아놓고 보니 원인이 하나였다. 다섯 개가 모두 중괄호를 잘못 읽어서 생긴 일이라 한 편으로 정리한다.
+
+## ▍중괄호의 두 가지 뜻
+
+JSX의 중괄호는 값을 감싸는 괄호가 아니라 **여기부터 자바스크립트 표현식**이라는 경계 선언이다. 중괄호를 열면 그 안은 마크업이 아니고, 평가해서 값을 내놓아야 하는 코드가 된다.
+
+그런데 같은 중괄호여도 자리에 따라 뜻이 전혀 달라질 수 있다. 화살표 함수 뒤에 붙은 중괄호는 표현식 슬롯이 아니라 문장을 담는 블록이다.
+
+<JsxBraceRoles />
+
+아래 다섯 가지 함정은 모두 이 차이에서 나온다.
+
+## ▍따옴표 안의 개행 문자
+
+2024년 2월, 온보딩 화면 문구를 config로 빼두고 컴포넌트 속성으로 넘기던 때다. 디자인상 정해진 위치에서 줄을 바꿔야 했는데 따옴표 안에 `\n`을 넣어도 화면은 그대로 한 줄이었다.
+
+```jsx
+<OnBoardingPage subtitle="집에서 얼마나 걷고, 뛰고, 쉬었는지 등의\n정보를 실시간으로 분석해드려요." />
+```
+
+JSX 속성에 따옴표를 쓰면 그 안은 자바스크립트 문자열 리터럴이 아니라 JSX 텍스트로 처리된다. 그래서 `\n`이 개행 문자로 해석될 기회가 아예 없고, 백슬래시와 n 두 글자가 그대로 화면에 나간다.
+
+중괄호를 씌워서 자바스크립트 문자열로 만들어주면 해결된다.
+
+```jsx
+<OnBoardingPage
+  subtitle={
+    "집에서 얼마나 걷고, 뛰고, 쉬었는지 등의\n정보를 실시간으로 분석해드려요."
+  }
+/>
+```
+
+같은 따옴표를 쓰고 있는데 결과가 달라지니 헷갈리기 쉽다. 중괄호를 열었기 때문에 그 안의 따옴표는 이제 JSX 문법이 아니라 자바스크립트 문법으로 읽힌다.
+
+## ▍표현식과 블록의 갈림길
+
+개발을 처음 배울 때 `map` 안에 `return`을 꼭 써야 하는지가 계속 궁금했는데, 답은 화살표 뒤에 무엇을 여느냐에 달려 있다.
+
+소괄호를 열면 표현식이라서 평가된 값이 그대로 반환된다.
+
+```jsx
+data.map((value, key) => <View key={key}>{value.label}</View>);
+```
+
+중괄호를 열면 문장을 담는 블록이 되고, 값을 내보내려면 `return`을 써야 한다.
+
+```jsx
+data.map((value, key) => {
+  const label = `${value.name} (${value.count})`;
+  return (
+    <View key={key}>
+      <Text>{label}</Text>
+    </View>
+  );
+});
+```
+
+`return`을 쓰면 줄이 늘어나니 항상 소괄호가 나아 보이는데, 블록에서만 되는 일이 하나 있다. 중간에 변수를 정의할 수 있다. 같은 계산을 JSX 안에서 두 번 반복하게 되는 상황이면 블록으로 바꿔서 변수로 빼는 편이 낫고, 그럴 일이 없으면 `return`은 그냥 생략한다.
+
+## ▍함수 참조와 호출 결과
+
+`onPress`에 무의식적으로 `() =>`를 붙이고 있었는데, 어느 날 생략이 가능한 경우가 있다는 것을 알게 되어 조건을 찾아봤다.
+
+<NoteBlock
+  label="onPress에 들어가는 것"
+  text={`onPress={() => handlePress(value)}    함수를 새로 만들어서 넘긴다     정상
+onPress={handlePress}                함수를 그대로 넘긴다           정상
+onPress={handlePress(value)}         호출한 결과를 넘긴다           렌더링 시점에 즉시 실행`}
+/>
+
+`onPress`에 필요한 건 누를 때 실행할 함수인데, 중괄호 안은 무조건 평가되니 `handlePress(value)`라고 쓰면 렌더링하면서 그 자리에서 호출해버린다. 그리고 반환값이 `onPress`에 들어간다. 보통 `undefined`가 들어가서 눌러도 아무 일이 안 일어나고, 그 사이 함수는 이미 한 번 실행된 상태로 남는다. 상태를 바꾸는 함수였으면 렌더링이 다시 돌면서 무한 루프까지 간다.
+
+인자를 넘길 필요가 없으면 함수 이름만 넘기면 되고, 헷갈리면 전부 `() =>`로 감싸도 된다. 동작은 같고 함수 객체가 렌더링마다 새로 만들어지는 차이만 있는데, 이게 실제로 문제가 되는 건 `memo`로 감싼 자식에게 넘길 때다. 매번 다른 함수가 내려가니 `memo`가 아무것도 막아주지 못한다. React의 `onClick`도 똑같다.
+
+## ▍falsy 값이 새어 나가는 자리
+
+2023년 8월, 눈을 씻고 찾아봐도 원인을 못 찾겠는 에러를 만났다. `<View>` 안에 문자열을 잘못 넣으면 나는 에러인데 그런 곳이 없었다.
+
+```jsx
+const [count, setCount] = useState(undefined);
+
+useEffect(() => {
+  setCount(fetchedCount); // 0이 올 수 있다
+}, []);
+
+return <View>{count && <Text>{count}개</Text>}</View>;
+```
+
+`&&`는 불리언을 돌려주는 연산자가 아니다. 왼쪽이 falsy면 **왼쪽 값을 그대로 반환한다.** 그래서 `count`가 `0`이면 `0 && ...`의 결과가 `0`이 되고, 중괄호는 그 `0`을 렌더링 대상으로 넘긴다.
+
+웹의 React는 숫자 `0`을 텍스트 노드로 그려서 화면에 `0`이 뜬다. 눈에 거슬리는 정도로 끝난다. 반면 React Native는 `<View>` 안에 문자열이 올 수 없으니 그대로 터진다.
+
+```text
+Error: Text strings must be rendered within a <Text> component.
+```
+
+falsy 값은 `false`, `undefined`, `null`, `0`, `-0`, `NaN`, `''` 일곱 가지인데, 이 중 `false`와 `undefined`, `null`은 React가 아무것도 그리지 않는 값으로 정해두었으니 그냥 넘어간다. 당시 RN 0.71.6에서 재현한 건 `0`과 `-0`이고, `NaN`과 `''`는 확인해보지 않았다.
+
+고치는 방법은 왼쪽을 값이 아니라 판정으로 바꾸는 것이다.
+
+```jsx
+{
+  count > 0 && <Text>{count}개</Text>;
+}
+{
+  !!count && <Text>{count}개</Text>;
+}
+{
+  count ? <Text>{count}개</Text> : null;
+}
+```
+
+삼항연산자에서는 이 에러가 나지 않는데, 왼쪽 값이 결과로 새어 나갈 자리가 없기 때문이다.
+
+## ▍컴포넌트를 값으로 넘기는 경우
+
+중괄호 안의 값이 문자열이나 숫자일 필요는 없다. 컴포넌트여도 되고, 이걸 쓰면 문자열로는 못 하던 일이 된다.
+
+2024년 1월에 마주친 문제가 그랬다. 화면이 좁을 때만 줄을 바꾸고 넓을 때는 한 줄로 두고 싶었는데, 문자열에 `\n`을 박아넣는 방식은 개행 위치가 고정되니 화면 폭에 따라 달라지게 만들 방법이 없었다.
+
+먼저 CSS로 `br`을 무력화하는 방법을 써봤다.
+
+```css
+/* 767px 기준 */
+@media only screen and (max-width: 767px) {
+  br.ignore {
+    display: inline-block;
+    content: " ";
+    padding: 0 2px;
+  }
+}
+```
+
+`<br className="ignore" />`처럼 쓰면 모바일에서만 `br`이 무시된다. 되긴 되는데 반대 방향으로 하려면 클래스를 또 만들어야 하고, `p` 태그 안에 있어야 동작하는 제약도 붙는다.
+
+`useMediaQuery`로 `isMobile`을 만들어서 분기하는 방법도 써봤다. 코드는 나름 깔끔해지지만 페이지마다 변수를 다시 정의해야 하고, 새로고침할 때 PC에서도 모바일용 컴포넌트가 먼저 그려진 뒤 바뀌면서 깜빡였다. 서버는 화면 폭을 모르니 첫 렌더링에서는 어느 쪽이든 찍고 넘어갈 수밖에 없다.
+
+결국 돌고 돌아 tailwind로 갔다.
+
+```jsx
+<br className="hidden sm:block" />   {/* PC에서만 줄바꿈 */}
+<br className="sm:hidden" />         {/* 모바일에서만 줄바꿈 */}
+```
+
+값으로 넘기는 방식과 같이 쓰면 폭에 따라 다른 마크업을 내려보낼 수 있다.
+
+```jsx
+<CheckUpCard
+  content={
+    <>
+      질환 등의 감별을 위한
+      <br className="hidden sm:block" />
+      정밀검사
+    </>
+  }
+/>
+```
+
+두 경우를 다 그려두고 CSS가 선택하게 하니 자바스크립트가 화면 폭을 알아야 할 이유가 없어졌고, 깜빡임도 같이 사라졌다.
+
+## ▍다섯 가지의 공통점
+
+증상은 다 달랐지만 원인은 매번 중괄호였다.
+
+1. 따옴표 안은 JSX 텍스트고, 중괄호 안은 자바스크립트다
+2. 중괄호가 화살표 함수 뒤에 오면 표현식 슬롯이 아니라 블록이다
+3. 중괄호 안은 반드시 평가되니, 함수를 넘길 자리에 호출을 쓰면 그 자리에서 실행된다
+4. 평가된 값은 그대로 렌더링 대상이 되니, `0`이 새어 나가면 화면까지 간다
+5. 그 값이 컴포넌트일 수도 있으니, 문자열로는 못 하던 분기가 된다
+
+중괄호를 만나면 "여기부터 자바스크립트"라고 한 번 소리내어 읽어보는 것만으로 다섯 가지 중 넷은 미리 걸러진다.
+
+참고
+
+- [JSX에서 JavaScript 사용하기 — React](https://ko.react.dev/learn/javascript-in-jsx-with-curly-braces)
+- [조건부 렌더링 — React](https://ko.react.dev/learn/conditional-rendering)
+- [Responsive design — Tailwind CSS](https://tailwindcss.com/docs/responsive-design)

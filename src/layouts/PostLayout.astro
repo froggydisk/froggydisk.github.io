@@ -37,6 +37,8 @@ const {
 } = Astro.props;
 
 const formattedDate = formatDate(date);
+// 여러 글을 합친 정리 모음처럼 발행일 이후에 손본 글은 수정일을 함께 노출한다
+const isRevised = modified.getTime() > date.getTime();
 
 const site = Astro.site!;
 const pageUrl = new URL(canonicalPath, site).href;
@@ -95,6 +97,11 @@ const jsonLd = {
       <h1 class="header-title">{title}</h1>
       <div class="post-meta">
         <time datetime={date.toISOString()}>{formattedDate}</time>
+        {isRevised && (
+          <span class="post-updated-at">
+            Updated <time datetime={modified.toISOString()}>{formatDate(modified)}</time>
+          </span>
+        )}
         <span>./workspace</span>
       </div>
     </header>

@@ -1,0 +1,135 @@
+---
+title: "[React Native] Multer로 이미지 올리고 다시 받아오기"
+comments: true
+categories:
+  - Blog
+tags:
+  - React Native, NodeJS, Multer, FormData, Image
+last_modified_at: 2026-08-26T
+toc: true
+use_math: false
+---
+
+> `ENOENT: no such file or directory, mkdir`으로 업로드가 실패하고, 겨우 올린 다음에는 받아온 이미지가 화면에 나타나지 않는다.
+
+2022년 11월에 이틀에 걸쳐 만난 문제 둘인데, 사실 한 파이프라인의 앞과 뒤였다. 세 지점을 순서대로 적어둔다. `FormData`를 만드는 클라이언트, 파일을 저장하는 Multer, 받아온 이미지를 그리는 화면이다.
+
+## ▍FormData를 만드는 쪽
+
+React Native에서 이미지를 보낼 때는 `FormData`에 파일 정보를 객체로 담는다.
+
+```js
+const createFormData = (image, body) => {
+  const data = new FormData();
+
+  Object.keys(body).forEach((key) => {
+    data.append(key, body[key]);
+  });
+
+  data.append('profileImage', {
+    name: image.name,
+    type: 'multipart/form-data',
+    uri: image.uri,
+  });
+
+  return data;
+};
+
+const photoUpload = async () => {
+  try {
+    const response = await fetch('http://localhost:8080/user/upload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'multipart/form-data' },
+      body: createFormData(image, { userId: 'tester' }),
+    });
+    console.log('upload success', await response.text());
+  } catch (error) {
+    console.log('upload error', error);
+  }
+};
+```
+
+`'profileImage'`가 필드명인데, 서버에서 정의한 것과 정확히 같아야 한다. 여기가 어긋나면 요청은 성공하는데 서버는 파일을 못 받았다고 판단하니 원인을 찾기가 까다롭다.
+
+## ▍ENOENT가 나는 저장 경로
+
+받는 쪽은 `multer.diskStorage`로 유저별 폴더를 만들어 저장하려 했다.
+
+```js
+const multer = require('multer');
+const fs = require('fs');
+
+const storage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    const userId = JSON.parse(JSON.stringify(req.body)).userId;
+    const dir = '/upload/' + userId;   // 여기
+    try {
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    return callback(null, dir);
+  },
+  filename: (req, file, callback) => {
+    callback(null, `${Date.now()}_${file.originalname}`);
+  },
+});
+
+const save = multer({ storage }).array('profileImage');
+// 한 장만 받을 때는 .single('profileImage')를 쓴다
+```
+
+그런데 계속 이 에러가 났다.
+
+```text
+Error: ENOENT: no such file or directory, mkdir
+```
+
+디렉터리를 못 만드는 것으로 보여서 `fs` 쪽 함수를 잘못 쓰고 있나 싶어 한참 찾았지만 아무런 진전이 없었다. 오랜 시간 끝에 아무 생각 없이 마침표를 붙여 상대경로로 바꿔주니 정상적으로 동작했다.
+
+```js
+const dir = './upload/' + userId;
+```
+
+`/upload/`는 파일시스템 루트의 `/upload`를 가리킨다. 로컬에서 일반 사용자 권한으로 서버를 돌리고 있으면 루트에 디렉터리를 만들 수 없다. 반면 `./upload/`는 프로세스의 작업 디렉터리 기준이라 프로젝트 안에 만들어진다. 컨테이너에서 root로 돌 때는 앞의 것도 되니까, 되던 코드가 환경을 옮기면서 깨지는 일이 생긴다.
+
+알아채기 어려웠던 이유가 하나 더 있다. `try/catch`가 `mkdirSync`의 실패를 `console.error`로 찍고 그냥 넘어간다. 그래서 만들어지지도 않은 경로가 `callback(null, dir)`로 multer에 그대로 전달되고, multer가 그 경로에 파일을 쓰려다 실패한 것이 화면에 보이는 `ENOENT`다. 정작 원인을 담고 있는 첫 에러는 그보다 앞선 로그에 따로 찍혀 있었다.
+
+경로 확인을 선택지에 넣어두는 것만으로 무의미한 시간 낭비를 줄일 수 있다. 그리고 에러를 그냥 넘기는 `catch`는 나중에 원인을 찾기 어렵게 만든다.
+
+## ▍크기가 없는 Image 컴포넌트
+
+올리는 쪽을 고친 다음 날, 이번에는 받아온 이미지가 화면에 나타나지 않았다. 공식 문서 그대로 `fetch`를 썼고 uri도 로그에 제대로 찍히는데 아무것도 안 보여서 머리를 싸맸다. fetch 문제인 줄 알고 axios로 바꿔보기까지 했다.
+
+해결은 매우 간단했다. **원격 이미지는 `width`와 `height`를 지정해줘야 한다.**
+
+```jsx
+<Image
+  source={{ uri: URI }}
+  style={{ width: 100, height: 100 }}
+/>
+```
+
+그동안 샘플 이미지를 전부 로컬 `asset` 폴더에 두고 썼기 때문에 신경 쓸 일이 없었다. 번들러가 로컬 이미지의 크기를 빌드 시점에 알아내서 넣어주기 때문이다. 반면 `uri`로 받아오는 이미지는 그럴 방법이 없으니 크기가 0인 채로 그려지고, 화면에는 아무것도 보이지 않는다.
+
+`resizeMode`를 너무 믿고 있었던 것도 원인이다. `resizeMode`는 정해진 크기 안에서 이미지를 어떻게 맞출지 정하는 옵션이라, 크기 자체가 없으면 할 일이 없다. 한 번도 아니고 두 번이나 같은 문제로 헤맨 전적이 있다.
+
+## ▍세 지점을 끊어서 보기
+
+| 지점 | 확인할 것 |
+|---|---|
+| FormData | 필드명이 서버 정의와 같은지 |
+| Multer 저장 경로 | 절대경로인지 상대경로인지, `catch`가 에러를 삼키지 않는지 |
+| Image 렌더링 | 원격 이미지에 `width`와 `height`가 있는지 |
+
+세 지점의 공통점은 에러가 원인을 가리키지 않는다는 것이다. `ENOENT`는 권한 문제를 가리고, 안 보이는 이미지는 아무 메시지도 남기지 않는다.
+
+그래서 파이프라인을 통째로 의심하기보다 지점을 하나씩 끊어서 확인하는 편이 빠르다. 업로드된 파일이 서버 디스크에 실제로 있는지부터 보면 앞이 문제인지 뒤가 문제인지가 금방 갈린다.
+
+참고
+
+- [Image — React Native](https://reactnative.dev/docs/image)
+- [Error: ENOENT: no such file or directory, mkdir when trying to create directory](https://stackoverflow.com/questions/68254686/error-enoent-no-such-file-or-directory-mkdir-when-trying-to-create-directory)
+- [multer](https://github.com/expressjs/multer)

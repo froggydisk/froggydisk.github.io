@@ -1,0 +1,155 @@
+---
+title: "[쿠버네티스] 온프레미스 Harbor를 쓰면서 마주친 네 가지 문제"
+comments: true
+categories:
+  - Blog
+tags:
+  - Kubernetes, Harbor, Docker, Helm, Registry
+last_modified_at: 2026-08-26T
+toc: true
+use_math: false
+---
+
+import HarborStages from "../../components/diagrams/HarborStages.astro";
+
+> 파드가 `Running`으로 넘어가지 않고, 로그인은 credentials 저장에서 실패하고, push는 5초마다 재시도만 하고, 정작 파드는 `401 Unauthorized`로 이미지를 못 받아온다.
+
+사설 레지스트리를 직접 운영하면서 2023년 3월부터 2025년 1월까지 만난 문제들이다. 하나씩 겪을 때는 서로 관계가 없어 보였는데, 모아놓고 보니 Harbor를 띄우고 이미지 pull을 받아오는 모든 단계에서 문제가 있었다.
+
+<HarborStages />
+
+온프레미스 관련 에러는 레퍼런스가 늘 적어서 해결이 오래 걸린다. 네 단계를 순서대로 적어둔다.
+
+## ▍Running으로 넘어가지 않는 파드
+
+2025년 1월, 오랜만에 Helm으로 Harbor를 새로 띄웠다. 그런데 `harbor-core`와 `harbor-registry`가 `Running`으로 바뀌질 않았다. `kubectl logs`로 보니 `harbor-core`가 문제였고, Redis에 연결하지 못하고 있었다.
+
+```text
+failed to ping redis://my-harbor-redis:6379/0?idle_timeout_seconds=30...
+```
+
+`harbor-redis` 파드 안으로 들어가서 접속도 해보고 `ping`도 보내봤는데 별다른 문제가 없었다. 버전 문제인가 싶어 헬름 차트를 바꿔가며 실행했지만 `helm install`을 할 때마다 같은 문제가 반복됐다.
+
+그러다 goharbor 저장소에서 같은 증상을 겪은 이슈를 발견했다. 요는 쿠버네티스 DNS를 확인해보라는 내용이었다.
+
+```bash
+kubectl delete pod -n kube-system -l k8s-app=kube-dns
+```
+
+`kube-system` 네임스페이스의 `coredns` 파드를 전부 지워 재시작해주니 `harbor-core`가 Redis를 정상적으로 찾기 시작했다.
+
+파드 안에서 직접 `ping`이 되는데 애플리케이션은 이름을 못 찾는 상황이라 한참 헤맸다. 그전에 VPN을 설정하면서 `10.0.0.1/24` 번대 IP를 건드릴 일이 있었는데, 그때 쿠버네티스 DNS 설정과 충돌한 것이 아닐까 짐작하고 있다.
+
+## ▍로컬 도커 로그인 실패
+
+Harbor가 떴으면 로컬에서 이미지를 보낼 준비가 됐다. 로그인 자체는 간단하고, 로컬에 도커가 돌고 있으면 된다.
+
+```bash
+sudo docker login [https://하버도메인]
+```
+
+여기서 막히는 경우가 있다.
+
+```text
+Error saving credentials: error storing credentials - err: exit status 1, out: ''
+```
+
+`~/.docker/config.json`에서 `"credsStore":`의 값을 `""`로 비우거나, 파일을 아예 지워주면 된다. 이후 도커를 재시작하고 다시 로그인한다.
+
+## ▍Retrying in 5 seconds의 정체
+
+로그인에 성공했으면 push 차례다. 순서는 로그인, 태그 생성, push 세 단계다.
+
+```bash
+# push할 이미지를 찾는다. 없으면 허브에서 pull 해온다
+sudo docker images
+# 도커 이미지에 tag를 붙인다
+sudo docker tag [이미지] [하버도메인]/[프로젝트명]/[이미지]:[버전]
+# 저장소에 push
+sudo docker push [하버도메인]/[프로젝트명]/[이미지]:[버전]
+```
+
+하버 포탈에 해당 프로젝트가 미리 만들어져 있어야 한다. 버전명은 꼭 숫자가 아니어도 된다.
+
+```bash
+sudo docker tag busybox harbor.domain.io/my-project/busybox:0.1
+```
+
+여기서 push가 진행되지 않고 이런 메시지만 반복되는 경우가 있다.
+
+```text
+Retrying in 5 seconds
+```
+
+Harbor를 리버스 프록시 뒤에 두었을 때 나타난다. 레지스트리가 응답에 절대 URL을 담아 보내는데, 프록시를 거치면 그 주소가 클라이언트에서 닿지 않는 주소가 되어 업로드 세션이 이어지지 않는다. 헬름으로 받았다면 values 파일에서 한 줄만 바꿔주면 된다.
+
+```yaml
+registry:
+  relativeurls: true # false에서 true로 변경
+```
+
+```bash
+helm upgrade --install harbor harbor/harbor -f my-values.yaml -n harbor
+```
+
+## ▍401 Unauthorized와 네임스페이스
+
+2023년 3월, yaml로 파드를 만들려는데 계속 `ImagePullBackOff` 상태가 됐다. 대시보드로 보니 이런 메시지가 떠 있었다.
+
+```text
+Failed to pull image: rpc error: code = Unknown desc = failed to pull and unpack image:
+failed to resolve reference: pulling from host failed with status code [manifests latest]:
+401 Unauthorized
+```
+
+사설 저장소에서 이미지를 받아올 때는 Secret으로 인증하는데, 분명히 Secret을 등록해뒀는데도 에러가 사라지지 않아서 오랜 시간을 썼다. Nginx를 통해 들어올 때도 https로 요청하고 있으니 이상할 게 없어 보였다.
+
+구글링을 계속한 끝에 답을 찾았다. **Secret은 파드와 같은 네임스페이스에 있어야 한다.** Secret은 네임스페이스에 묶인 리소스라서, 다른 네임스페이스에 만들어둔 것은 파드 입장에서 존재하지 않는 것과 같다.
+
+```bash
+kubectl create secret docker-registry harbor \
+  --docker-server=[저장소주소] \
+  --docker-username=[저장소ID] \
+  --docker-password=[저장소비밀번호] \
+  -n [네임스페이스]
+```
+
+마지막 `-n [네임스페이스]`가 가장 중요하고, 파드를 만드는 네임스페이스와 같아야 한다. `kubectl get secrets -n [네임스페이스]`로 잘 만들어졌는지 확인해본다.
+
+```yaml
+# deployment.yaml
+template:
+  metadata:
+    labels:
+      app: test
+  spec:
+    imagePullSecrets:
+      - name: harbor
+    containers:
+      - name: test
+        image: harbor.io/testImage:latest
+```
+
+인증이 걸린 것처럼 보이는데 정작 아무것도 안 걸려 있었으니 `401`이 나올 수밖에 없었다. 개발에는 꼼꼼함이 필수라는 것을 다시금 느낀다.
+
+## ▍네 단계를 순서대로 보는 이유
+
+네 문제는 원인이 다 다른데, 막히는 단계가 순서대로 이어진다.
+
+| 단계         | 막히는 곳                   | 고치는 곳                  |
+| ------------ | --------------------------- | -------------------------- |
+| Harbor 기동  | 클러스터 DNS                | `coredns` 재시작           |
+| docker login | 로컬 자격증명 저장소        | `~/.docker/config.json`    |
+| docker push  | 리버스 프록시 뒤의 절대 URL | `registry.relativeurls`    |
+| 파드 pull    | Secret의 네임스페이스       | `kubectl create secret -n` |
+
+순서가 중요한 이유는 앞 단계에 막혀 있으면 뒤 단계의 문제가 아예 보이지 않기 때문이다. Harbor가 안 떠 있으면 `relativeurls` 설정이 틀렸는지 알 방법이 없고, push가 안 되면 Secret 네임스페이스가 맞는지 확인할 이미지 자체가 없다.
+
+그래서 어디가 막혔는지 모를 때는 증상부터 짚기보다 단계를 앞에서부터 하나씩 통과시켜 보는 편이 빠르다. 온프레미스는 관리 콘솔이 대신 짚어주는 것이 없으니, 이 순서를 밟는 것 말고는 방법이 없다.
+
+참고
+
+- [harbor-core가 Redis를 찾지 못하는 이슈 #1216](https://github.com/goharbor/harbor-helm/issues/1216)
+- [Running Harbor registry behind reverse proxy: solve docker push errors](https://www.claudiokuenzler.com/blog/958/running-harbor-registry-behind-reverse-proxy-solve-docker-push-errors)
+- [harbor 사용 시 unauthorized 에러](https://velog.io/@numerok/harbor-사용-시-unauthorized-unauthorized-to-access-repository)
+- [도커 로그인 credentials 저장 에러](https://qkqhxla1.tistory.com/1123)

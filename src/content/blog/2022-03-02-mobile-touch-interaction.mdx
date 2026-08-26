@@ -1,0 +1,156 @@
+---
+title: "[CSS] 터치 기기에는 hover가 없다"
+comments: true
+categories:
+  - Blog
+tags:
+  - CSS, Mobile, Touch, Accessibility
+last_modified_at: 2026-08-26T
+toc: true
+use_math: false
+---
+
+> 링크를 누르면 회색 사각형이 번쩍이고, 드롭다운 메뉴는 한 번 누르면 계속 열린 채로 남고, 테두리를 지워버린 탓에 키보드로는 어디에 있는지 알 수 없다.
+
+증상은 여러 가지인데 원인은 하나다. 터치 기기에는 hover라는 상태가 없다. 마우스 커서는 클릭하지 않고 요소 위에 머무를 수 있지만, 손가락은 닿는 순간이 곧 누르는 순간이라 머무는 상태가 없다. 그래서 브라우저가 탭을 hover처럼 처리해주는데, 마우스를 전제로 쓴 CSS는 여기서 엉뚱하게 동작한다.
+
+## ▍탭할 때 생기는 회색 사각형
+
+모바일에서 링크나 버튼 영역을 누르면 원하지 않는 회색 사각형이 번쩍인다. 브라우저가 "여기를 눌렀다"를 알려주려고 넣는 것이다.
+
+```css
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+```
+
+`rgba(0, 0, 0, 0)`을 써도 같다. 이 속성을 `:focus` 안에 넣으면 동작하지 않으니 요소 자체에 걸어야 한다.
+
+접두어가 붙어 있어서 사파리 전용처럼 보이지만 안드로이드 크롬에서도 동작한다.
+
+## ▍사라지지 않는 hover
+
+아이폰이나 아이패드에는 마우스가 없으니 hover 효과가 제대로 동작하지 않는다. 드롭다운 메뉴처럼 hover로 펼치는 UI가 특히 문제인데, 한 번 누르면 계속 열린 상태로 남고 화면의 다른 곳을 눌러야 겨우 닫힌다.
+
+2020년에는 이렇게 해결했다.
+
+```html
+<body ontouchstart=""></body>
+```
+
+`body`에 빈 `ontouchstart`를 붙이면 사파리가 터치를 다르게 처리하면서 hover가 풀린다. 되긴 되지만 마크업에 아무 일도 하지 않는 이벤트 핸들러를 심어두는 방식이라 지금은 권하지 않는다.
+
+지금은 미디어 쿼리로 조건을 나누는 것이 답이다.
+
+```css
+/* hover를 실제로 지원하는 포인터가 있을 때만 적용한다 */
+@media (hover: hover) {
+  .menu:hover .submenu {
+    display: block;
+  }
+}
+```
+
+`hover: hover`는 주 입력 장치가 hover를 지원할 때만 매치된다. 터치 기기에서는 이 블록이 아예 적용되지 않으니 남아 있을 hover 상태도 없다.
+
+그러면 터치에는 무엇을 줄지 정해야 한다. 버튼에 hover만 걸어두면 마우스에서는 반응이 보이는데 손가락에서는 아무 일도 일어나지 않는 것처럼 느껴진다. `:active`는 터치에서도 동작하니 눌리는 느낌은 이쪽으로 준다.
+
+```css
+.button:active {
+  transform: scale(0.98);
+}
+
+@media (hover: hover) {
+  .button:hover {
+    background: var(--hover-bg);
+  }
+}
+```
+
+hover는 "여기를 누를 수 있다"를 미리 알려주는 신호고, active는 "지금 눌렸다"를 알려주는 신호다. 마우스에서는 둘 다 쓸 수 있지만 터치에는 뒤쪽만 있으니, 앞쪽에만 의존하는 UI는 터치에서 통째로 사라진다. 드롭다운을 hover로 펼치던 메뉴가 모바일에서 못 쓰게 되는 이유도 결국 같다.
+
+기기가 두 부류로 깔끔하게 갈리지는 않는다.
+
+| 기기                      | `hover` | `pointer` |
+| ------------------------- | :-----: | :-------: |
+| 마우스를 쓰는 데스크톱    | `hover` |  `fine`   |
+| 손가락만 쓰는 폰과 태블릿 | `none`  | `coarse`  |
+| 터치스크린이 달린 노트북  | `hover` |  `fine`   |
+
+`hover`와 `pointer`는 주 입력 장치만 본다. 그래서 터치스크린 노트북은 트랙패드가 주 장치라 `hover: hover`에 걸리고, 손가락으로도 쓸 수 있다는 사실은 여기에 나타나지 않는다. 보조 장치까지 보려면 `any-hover`와 `any-pointer`를 쓰는데, 대개는 `hover: hover` 하나로 충분하다.
+
+## ▍초점 표시와 outline: none
+
+영역을 누를 때 테두리가 생기는 경우가 있어서 이렇게 지우곤 했다.
+
+```css
+a:focus {
+  outline: none;
+}
+```
+
+이렇게 하면 마우스로 눌렀을 때의 테두리는 사라지는데, 키보드로 이동할 때의 초점 표시까지 같이 사라진다. Tab 키로 페이지를 쓰는 사람은 자기가 지금 어디에 있는지 알 수 없게 된다.
+
+`:focus-visible`을 쓰면 두 경우가 갈린다.
+
+```css
+a:focus {
+  outline: none;
+}
+
+a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+```
+
+`:focus-visible`은 브라우저가 초점 표시를 보여줄 만하다고 판단할 때만 매치된다. 마우스 클릭이나 화면 탭에서는 걸리지 않고 키보드 이동에서는 걸린다. 초점 표시를 통째로 지우는 대신 필요한 곳에만 남기는 것이다.
+
+## ▍제스처와 길게 누르기
+
+터치에서만 걸리는 것이 두 개 더 있다.
+
+이미지나 버튼을 길게 누르면 텍스트가 선택되거나 컨텍스트 메뉴가 뜬다.
+
+```css
+.tappable {
+  -webkit-user-select: none;
+  user-select: none;
+}
+```
+
+그리고 스와이프로 조작하는 컴포넌트를 만들면 브라우저의 스크롤이 먼저 먹어버린다. 이때는 어느 방향을 브라우저가 가져갈지 정해준다.
+
+```css
+.carousel {
+  touch-action: pan-y; /* 세로 스크롤은 브라우저에, 가로는 내가 처리한다 */
+}
+```
+
+`touch-action: none`으로 전부 가져올 수도 있지만 페이지 스크롤까지 막히니, 필요한 방향만 남기는 편이 안전하다.
+
+`touch-action`은 다른 데에도 쓴다. 모바일 브라우저는 탭이 들어오면 더블탭 확대가 이어질지 잠깐 기다렸다가 클릭을 넘겨주던 시절이 있었고, 그래서 버튼이 한 박자 늦게 반응했다. 요즘은 `width=device-width` 뷰포트를 쓰면 대부분 사라졌지만, 확대할 이유가 없는 요소에는 걸어두면 확실하다.
+
+```css
+button,
+a {
+  touch-action: manipulation; /* 더블탭 확대를 포기하고 즉시 반응한다 */
+}
+```
+
+## ▍터치를 기준으로 다시 보기
+
+- 탭 하이라이트는 `-webkit-tap-highlight-color`로 끈다
+- hover 규칙은 `@media (hover: hover)`로 감싼다
+- 초점 표시는 지우지 말고 `:focus-visible`로 경우를 나눠준다
+- 제스처는 `touch-action`으로, 길게 누르기는 `user-select`로 처리한다
+
+미디어 쿼리로 hover 지원 여부를 먼저 확인하고, 지원하는 기기에만 hover 규칙을 적용한다. 마우스를 기준으로 만든 뒤 터치에서 어긋나는 것을 지우는 대신, 기기를 먼저 나누고 각각에 맞는 규칙을 걸어주는 것이 좋다.
+
+참고
+
+- [-webkit-tap-highlight-color](https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-tap-highlight-color)
+- [@media hover](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/hover)
+- [:focus-visible](https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible)
+- [touch-action](https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action)

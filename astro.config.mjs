@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync } from 'node:fs';
+import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
@@ -21,34 +21,58 @@ const SITE = 'https://froggydisk.github.io';
 const LEGACY_SLUGS = {
   'second-post': 'top1-top5-accuracy',
   'assignment': 'cam-class-activation-map',
-  'third-post': 'mobile-hover-remove',
+  'third-post': 'mobile-touch-interaction',
   'fourth-post': 'tensor-mutable-copy',
   'fifth-post': 'ios-review-status-discord',
-  'sixth-post': 'mobile-tap-highlight-remove',
+  'sixth-post': 'mobile-touch-interaction',
   'seventh-post': 'buy-me-a-coffee-button',
   'eighth-post': 'search-console-redirect-error',
   'nineth-post': 'rn-hide-bottom-tab-navigator',
-  'tenth-post': 'rn-draggable-button-scrollview',
-  'eleventh-post': 'rn-android-gradle-plugin-error',
-  'twelveth-post': 'multer-enoent-error',
-  'thirteenth-post': 'rn-fetched-image-not-rendering',
-  'fourteenth-post': 'rn-ios-blank-screen',
-  'fifteenth-post': 'rn-unmountonblur-safeareaview',
+  'tenth-post': 'rn-overlapping-layers',
+  'eleventh-post': 'rn-silent-failures',
+  'twelveth-post': 'rn-image-upload-pipeline',
+  'thirteenth-post': 'rn-image-upload-pipeline',
+  'fourteenth-post': 'rn-silent-failures',
+  'fifteenth-post': 'rn-overlapping-layers',
   'sixteenth-post': 'rn-ios-firebase-push-errors',
-  'seventeenth-post': 'k8s-harbor-image-push',
+  'seventeenth-post': 'harbor-registry-troubleshooting',
   'eighteenth-post': 'k8s-jenkins-credential-error',
-  'nineteenth-post': 'k8s-private-registry-pull-fail',
+  'nineteenth-post': 'harbor-registry-troubleshooting',
   '20th-post': 'ubuntu-nvidia-driver-ssh-error',
   '21th-post': 'jenkins-docker-build-issues',
   '22th-post': 'rn-calendar-implementation',
   '23th-post': 'pyqt5-m1-mac-install-error',
-  '24th-post': 'rn-android-studio-no-module',
+  '24th-post': 'rn-silent-failures',
   '25th-post': 'k8s-add-worker-node',
   '26th-post': 'rn-textinput-string-to-number',
-  '27th-post': 'rn-android-darkmode-text-color',
+  '27th-post': 'rn-silent-failures',
   '28th-post': 'rn-auth-navigation-branching',
-  '29th-post': 'rn-logical-and-text-error',
+  '29th-post': 'jsx-curly-braces',
   '30th-post': 'rn-rounded-triangle',
+
+  // 2026-08 정리: 짧은 글을 주제별로 합치면서 생긴 리다이렉트
+  'rn-logical-and-text-error': 'jsx-curly-braces',
+  'return-in-map': 'jsx-curly-braces',
+  'arrow-in-onpress': 'jsx-curly-braces',
+  'transmit-component': 'jsx-curly-braces',
+  'next-br': 'jsx-curly-braces',
+  'absolute-panel': 'rn-overlapping-layers',
+  'z-index': 'rn-overlapping-layers',
+  'fixed-position': 'rn-overlapping-layers',
+  'rn-unmountonblur-safeareaview': 'rn-overlapping-layers',
+  'rn-draggable-button-scrollview': 'rn-overlapping-layers',
+  'rn-android-studio-no-module': 'rn-silent-failures',
+  'hot-reload': 'rn-silent-failures',
+  'rn-ios-blank-screen': 'rn-silent-failures',
+  'rn-android-darkmode-text-color': 'rn-silent-failures',
+  'rn-android-gradle-plugin-error': 'rn-silent-failures',
+  'harbor-core-error': 'harbor-registry-troubleshooting',
+  'k8s-private-registry-pull-fail': 'harbor-registry-troubleshooting',
+  'k8s-harbor-image-push': 'harbor-registry-troubleshooting',
+  'multer-enoent-error': 'rn-image-upload-pipeline',
+  'rn-fetched-image-not-rendering': 'rn-image-upload-pipeline',
+  'mobile-tap-highlight-remove': 'mobile-touch-interaction',
+  'mobile-hover-remove': 'mobile-touch-interaction',
 };
 
 const redirects = Object.fromEntries(
@@ -75,8 +99,99 @@ function buildLastmodMap() {
   return map;
 }
 
+/**
+ * 책의 장 파일에서 lastmod를 읽는다. 날짜 폴백은 src/utils/book.ts와 같은 순서다:
+ * 장 last_modified_at → 책 last_modified_at → 책 published.
+ * 파일 mtime은 쓰지 않는다. CI 체크아웃이 mtime을 전부 배포 시각으로 만든다.
+ */
+function readField(raw, key) {
+  const m = raw.match(new RegExp(`^${key}:\\s*["']?([^"'\\n]+)["']?\\s*$`, 'm'));
+  return m ? m[1].trim() : null;
+}
+
+function looseDate(raw) {
+  if (!raw) return null;
+  let v = raw.replace(' ', 'T').replace(/T$/, '');
+  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) v += 'T00:00:00Z';
+  else if (!/(Z|[+-]\d{2}:?\d{2})$/.test(v)) v += 'Z';
+  const d = new Date(v);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+function walkMarkdown(dir, out = []) {
+  for (const name of readdirSync(dir)) {
+    const full = `${dir}/${name}`;
+    if (statSync(full).isDirectory()) walkMarkdown(full, out);
+    else if (/\.(md|mdx)$/.test(name)) out.push(full);
+  }
+  return out;
+}
+
+/** sample: true 인 책의 URL 접두사. 색인 대상이 아니다. */
+const sampleBookPrefixes = new Set();
+
+function addBookLastmod(map) {
+  const root = fileURLToPath(new URL('./src/content/book', import.meta.url));
+  let allDates = [];
+
+  let books;
+  try {
+    books = readdirSync(root).filter((n) => statSync(`${root}/${n}`).isDirectory());
+  } catch {
+    return; // 책이 아직 없으면 조용히 넘어간다
+  }
+
+  for (const book of books) {
+    const dir = `${root}/${book}`;
+    let meta = '';
+    try {
+      meta = readFileSync(`${dir}/book.yaml`, 'utf-8');
+    } catch {
+      continue; // book.yaml 없는 디렉터리는 책이 아니다
+    }
+
+    if (readField(meta, 'sample') === 'true') {
+      sampleBookPrefixes.add(`${SITE}/books/${book}/`);
+    }
+
+    const bookFallback =
+      looseDate(readField(meta, 'last_modified_at')) ?? looseDate(readField(meta, 'published'));
+
+    const chapterDates = [];
+    for (const file of walkMarkdown(dir)) {
+      const raw = readFileSync(file, 'utf-8');
+      if (readField(raw, 'draft') === 'true') continue;
+
+      const date = looseDate(readField(raw, 'last_modified_at')) ?? bookFallback;
+      if (!date) continue;
+
+      // 파일 경로 → URL. 세그먼트마다 숫자 접두사를 뗀다 (src/utils/book.ts와 동일)
+      const rel = file.slice(dir.length + 1).replace(/\.(md|mdx)$/, '');
+      const path = rel.split('/').map((seg) => seg.replace(/^\d+[-_.]/, '')).join('/');
+
+      map.set(`${SITE}/books/${book}/${path}/`, date.toISOString());
+      chapterDates.push(date);
+    }
+
+    if (chapterDates.length) {
+      const latest = new Date(Math.max(...chapterDates.map((d) => d.getTime())));
+      map.set(`${SITE}/books/${book}/`, latest.toISOString());
+      allDates.push(latest);
+    }
+  }
+
+  if (allDates.length) {
+    map.set(
+      `${SITE}/books/`,
+      new Date(Math.max(...allDates.map((d) => d.getTime()))).toISOString()
+    );
+  }
+}
+
 const lastmodMap = buildLastmodMap();
+// 목록 페이지의 lastmod는 블로그 최신 글을 따라간다. 책을 넣기 전에 뽑아야 한다.
 const latestPost = [...lastmodMap.values()].sort().at(-1);
+addBookLastmod(lastmodMap);
 const redirectUrls = new Set(Object.keys(redirects).map((p) => `${SITE}${p}/`));
 
 export default defineConfig({
@@ -84,8 +199,11 @@ export default defineConfig({
   redirects,
   integrations: [
     sitemap({
-      // 리다이렉트 스텁과 404는 색인 대상이 아니다
-      filter: (page) => !redirectUrls.has(page) && !page.includes('/404'),
+      // 리다이렉트 스텁·404·샘플 책은 색인 대상이 아니다
+      filter: (page) =>
+        !redirectUrls.has(page) &&
+        !page.includes('/404') &&
+        ![...sampleBookPrefixes].some((prefix) => page.startsWith(prefix)),
       serialize(item) {
         const lastmod = lastmodMap.get(item.url);
         if (lastmod) {

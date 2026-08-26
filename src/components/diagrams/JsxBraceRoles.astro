@@ -1,0 +1,52 @@
+---
+const openTag = '<Text>';
+const closeTag = '</Text>';
+const arrowHead = '(v) => ';
+const stmts = ' stmts ';
+const expr = ' expr ';
+const brace = { open: '{', close: '}' };
+---
+
+<div class="dg">
+<svg width="100%" viewBox="0 0 672 216" xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="JSX 안의 중괄호는 표현식을 평가해 값을 넣는 슬롯이고, 화살표 함수 뒤의 중괄호는 return이 필요한 문장 블록이다">
+
+<text class="m ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">같은 중괄호, 어디에 오느냐에 따라 다른 두 역할</text>
+
+<!-- ── 표현식 슬롯 ── -->
+<rect x="24" y="44" width="306" height="135" rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+<line x1="24" y1="72" x2="330" y2="72" stroke="var(--rule)" stroke-width="1"/>
+<text class="m ttl" x="40" y="62" fill="var(--muted)">JSX 안 · 표현식 슬롯</text>
+<text class="m code" x="40" y="101"><tspan fill="var(--body)">{openTag}</tspan><tspan fill="var(--accent-strong)">{brace.open}</tspan><tspan fill="var(--ink)">{expr}</tspan><tspan fill="var(--accent-strong)">{brace.close}</tspan><tspan fill="var(--body)">{closeTag}</tspan></text>
+<line x1="24" y1="122" x2="330" y2="122" stroke="var(--rule)" stroke-width="1"/>
+<text class="bd" x="40" y="146" fill="var(--body)">중괄호 안을 자바스크립트로</text>
+<text class="bd" x="40" y="164" fill="var(--body)">평가하고, 그 값을 자리에 넣는다</text>
+
+<!-- ── 문장 블록 ── -->
+<rect x="342" y="44" width="306" height="135" rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+<line x1="342" y1="72" x2="648" y2="72" stroke="var(--rule)" stroke-width="1"/>
+<text class="m ttl" x="358" y="62" fill="var(--muted)">화살표 함수 뒤 · 문장 블록</text>
+<text class="m code" x="358" y="101"><tspan fill="var(--body)">{arrowHead}</tspan><tspan fill="var(--accent-strong)">{brace.open}</tspan><tspan fill="var(--ink)">{stmts}</tspan><tspan fill="var(--accent-strong)">{brace.close}</tspan></text>
+<line x1="342" y1="122" x2="648" y2="122" stroke="var(--rule)" stroke-width="1"/>
+<text class="bd" x="358" y="146" fill="var(--body)">중괄호가 문장을 담는 블록이 되고,</text>
+<text class="bd" x="358" y="164" fill="var(--body)">값을 내보내려면 return이 필요하다</text>
+
+<text class="cap" x="336" y="200" text-anchor="middle" fill="var(--muted)">글자는 같아도 어디에 오느냐가 뜻을 정한다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .m { font-family: var(--font-mono); }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+.dg .code { font-size: 13px; }
+.dg .bd { font-size: 11.5px; }
+.dg .cap { font-size: 11px; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

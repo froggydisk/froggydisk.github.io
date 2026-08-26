@@ -1,0 +1,70 @@
+---
+const code = [
+  { text: '<View>', indent: false },
+  { text: '<Header />', indent: true },
+  { text: '<Content />', indent: true },
+  { text: '<Draggable />', indent: true },
+  { text: '</View>', indent: false },
+];
+const codeY = [72, 94, 116, 138, 160];
+
+// 코드 줄에서 화면 레이어로 잇는 선. 순서가 뒤집히는 것이 이 그림의 요지다.
+const links = [
+  { from: 90, to: 154 },  // Header    → 맨 뒤
+  { from: 112, to: 118 }, // Content   → 가운데
+  { from: 134, to: 82 },  // Draggable → 맨 앞
+];
+
+const layers = [
+  { label: 'Draggable', y: 68, front: true },
+  { label: 'Content', y: 104, front: false },
+  { label: 'Header', y: 140, front: false },
+];
+---
+
+<div class="dg">
+<svg width="100%" viewBox="0 0 672 204" xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="React Native에서는 JSX에 마지막으로 쓴 컴포넌트가 화면 z축의 맨 앞에 온다">
+
+<text class="m ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">코드에 쓴 순서가 그대로 z축이 된다</text>
+
+<text class="m ttl" x="24" y="46" fill="var(--muted)">JSX</text>
+<text class="m ttl" x="376" y="46" fill="var(--muted)">화면 z축</text>
+
+{code.map((line, i) => (
+  <text class="m code" x={line.indent ? 40 : 24} y={codeY[i]} fill="var(--body)">{line.text}</text>
+))}
+
+{links.map((l) => (
+  <line x1="196" y1={l.from} x2="368" y2={l.to} stroke="var(--rule)" stroke-width="1"/>
+))}
+
+{layers.map((la) => (
+  <>
+    <rect x="376" y={la.y} width="248" height="28" rx="3"
+          fill={la.front ? 'var(--ink)' : 'var(--bg-soft)'}
+          stroke={la.front ? 'var(--ink)' : 'var(--rule)'} stroke-width="1"/>
+    <text class="lb" x="500" y={la.y + 18} text-anchor="middle"
+          fill={la.front ? 'var(--bg)' : 'var(--body)'}>{la.label}</text>
+  </>
+))}
+
+<text class="cap" x="336" y="190" text-anchor="middle" fill="var(--muted)">마지막에 쓴 컴포넌트가 맨 앞에 온다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .m { font-family: var(--font-mono); }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+.dg .code { font-size: 12.5px; }
+.dg .lb { font-size: 12px; }
+.dg .cap { font-size: 11px; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>
