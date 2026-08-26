@@ -5,7 +5,7 @@ comments: true
 categories:
   - Blog
 tags:
-  - Google Search Console
+  - Tools, SEO
 last_modified_at: 2022-03-24T
 ---
 

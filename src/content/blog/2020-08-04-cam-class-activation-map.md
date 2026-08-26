@@ -7,7 +7,7 @@ comments: true
 categories:
   - Assignment
 tags:
-  - Pytorch
+  - Deep Learning, Pytorch
 
 last_modified_at: 2020-08-04T03:41
 ---

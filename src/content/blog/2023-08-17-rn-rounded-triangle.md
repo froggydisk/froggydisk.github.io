@@ -5,7 +5,7 @@ comments: true
 categories:
   - Blog
 tags:
-  - React Native
+  - React Native, CSS
 last_modified_at: 2023-08-17T
 ---
 

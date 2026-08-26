@@ -4,7 +4,7 @@ comments: true
 categories:
   - Blog
 tags:
-  - Next
+  - Next, DevOps
 last_modified_at: 2024-06-02T
 ---
 

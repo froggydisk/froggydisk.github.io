@@ -5,7 +5,7 @@ comments: true
 categories:
   - Blog
 tags:
-  - React Native, Firebase
+  - React Native, Mobile
 last_modified_at: 2023-02-09T
 ---
 

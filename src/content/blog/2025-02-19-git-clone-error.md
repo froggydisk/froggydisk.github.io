@@ -1,10 +1,10 @@
 ---
-title: "[Git] clone 시 Repository not found 에러"
+title: "clone 시 Repository not found 에러"
 comments: true
 categories:
   - Blog
 tags:
-  - Git, config
+  - Git
 last_modified_at: 2025-02-19T
 ---
 

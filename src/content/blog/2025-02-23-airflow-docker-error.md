@@ -1,10 +1,10 @@
 ---
-title: "[Airflow] docker compose 시 gcc permission denied 에러"
+title: "Airflow docker compose 시 gcc permission denied 에러"
 comments: true
 categories:
   - Blog
 tags:
-  - Docker, Airflow
+  - DevOps, Docker
 last_modified_at: 2025-02-23T
 ---
 

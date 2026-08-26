@@ -1,10 +1,10 @@
 ---
-title: "[H/W] Kraken ELITE RGB를 위한 Liquidctl 사용법"
+title: "Kraken ELITE RGB를 위한 Liquidctl 사용법"
 comments: true
 categories:
   - Blog
 tags:
-  - Server, Cooler
+  - Hardware, Server
 last_modified_at: 2025-03-04T
 ---
 

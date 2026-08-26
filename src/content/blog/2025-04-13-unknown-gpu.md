@@ -1,10 +1,10 @@
 ---
-title: "[ML/DL] GPU Unknown Error (Not Supported)"
+title: "GPU Unknown Error (Not Supported)"
 comments: true
 categories:
   - Blog
 tags:
-  - Deep Learning, Server, GPU, Riser Kit
+  - Deep Learning, Hardware, GPU
 last_modified_at: 2025-04-13T
 ---
 

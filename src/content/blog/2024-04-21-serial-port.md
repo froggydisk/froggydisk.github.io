@@ -1,10 +1,10 @@
 ---
-title: "[H/W] Mac에서 시리얼 통신하기"
+title: "Mac에서 시리얼 통신하기"
 comments: true
 categories:
   - Blog
 tags:
-  - Serial Port
+  - Hardware, Mac
 last_modified_at: 2024-04-21T
 ---
 

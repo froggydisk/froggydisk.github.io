@@ -1,11 +1,11 @@
 ---
-title: "[Ubuntu] Nvidia 드라이버 설치 후 ssh 접속 불가 문제"
+title: "Nvidia 드라이버 설치 후 ssh 접속 불가 문제"
 
 comments: true
 categories:
   - Blog
 tags:
-  - Linux, Ubuntu, Nvidia
+  - Linux, GPU
 last_modified_at: 2023-03-23T
 ---
 

@@ -5,7 +5,7 @@ comments: true
 categories:
   - Blog
 tags:
-  - Python, pip
+  - Python, Mac
 last_modified_at: 2023-05-09T
 ---
 

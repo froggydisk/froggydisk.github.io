@@ -1,11 +1,11 @@
 ---
-title: "[쿠버네티스] error: The connection to the server 192.168.x.x:6443 was refused - did you specify the right host or port?"
+title: "error: The connection to the server 192.168.x.x:6443 was refused - did you specify the right host or port?"
 
 comments: true
 categories:
   - Blog
 tags:
-  - Kubernetes, systemd
+  - Kubernetes, Linux
 last_modified_at: 2024-03-05T
 ---
 

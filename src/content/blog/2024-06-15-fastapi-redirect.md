@@ -4,7 +4,7 @@ comments: true
 categories:
   - Blog
 tags:
-  - Python, FastAPI
+  - Python, API
 last_modified_at: 2024-06-15T
 ---
 

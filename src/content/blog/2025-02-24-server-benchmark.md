@@ -1,10 +1,10 @@
 ---
-title: "[ML/DL] RTX 4090 2-way 딥러닝 서버 벤치마크"
+title: "RTX 4090 2-way 딥러닝 서버 벤치마크"
 comments: true
 categories:
   - Blog
 tags:
-  - Deep Learning, Server, GPU
+  - Deep Learning, Hardware, GPU
 last_modified_at: 2025-02-24T
 ---
 
