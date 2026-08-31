@@ -1,5 +1,13 @@
 import { getCollection } from 'astro:content';
 import { postSlug, modifiedDate } from '../utils/seo';
+import {
+  bookHref,
+  bookModified,
+  bookOf,
+  chapterHref,
+  chapterModified,
+  sortChapters,
+} from '../utils/book';
 
 /**
  * 인덱스를 거치지 않는 단일 sitemap.
@@ -43,9 +51,32 @@ export async function GET(context: { site: URL }) {
   // 루트는 가장 최근에 손댄 글의 날짜를 쓴다
   const latest = postEntries[0]?.lastmod;
 
+  /*
+   * 책 표지와 장. astro.config.mjs의 sitemap filter와 같은 것을 걸러낸다.
+   * 이 목록이 빠지면 제출용 sitemap.xml과 sitemap-0.xml의 URL 수가 어긋난다.
+   */
+  const metas = await getCollection('bookMeta');
+  const publishedChapters = (await getCollection('book')).filter((c) => !c.data.draft);
+  const bookEntries: { path: string; lastmod: Date }[] = [];
+
+  for (const meta of metas) {
+    if (meta.data.sample) continue; // 샘플 책은 noindex로 나간다
+    const mine = sortChapters(publishedChapters.filter((c) => bookOf(c.id) === meta.id));
+    if (mine.length === 0) continue; // 장이 하나도 없으면 라우트도 생기지 않는다
+
+    bookEntries.push({ path: bookHref(meta.id), lastmod: bookModified(mine, meta) });
+    for (const chapter of mine) {
+      bookEntries.push({
+        path: chapterHref(chapter.id),
+        lastmod: chapterModified(chapter, meta),
+      });
+    }
+  }
+
   const body = [
     ...STATIC_PATHS.map((p) => entry(site, p, p === '/' ? latest : undefined)),
     ...postEntries.map((p) => entry(site, p.path, p.lastmod)),
+    ...bookEntries.map((p) => entry(site, p.path, p.lastmod)),
   ].join('');
 
   return new Response(
