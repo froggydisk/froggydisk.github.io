@@ -72,9 +72,9 @@ froggydisk.github.io/
 │   │   │   └── YYYY-MM-DD-*.md  # Post naming convention
 │   │   └── book/                # 온라인 책
 │   │       └── <책>/
-│   │           ├── book.yaml         # 책 메타 (제목·부제·부 이름·published)
+│   │           ├── book.yaml         # 책 메타 (제목·부제·부 이름·아이콘·published)
 │   │           └── NN-<부>/NN-<장>.md
-│   ├── components/              # 14 Astro components
+│   ├── components/              # Astro components (diagrams/ 포함)
 │   │   ├── Navbar.astro        # Navigation + theme toggle
 │   │   ├── Footer.astro        # Footer
 │   │   ├── TOC.astro           # Table of Contents (scroll-spy)
@@ -83,11 +83,12 @@ froggydisk.github.io/
 │   │   ├── Support.astro       # Ko-fi donation button
 │   │   ├── StarBackground.astro # Animated star background
 │   │   ├── book/               # BookSidebar · BookNav · BookProgress
-│   │   └── diagrams/           # 9 SVG diagram components
+│   │   └── diagrams/           # 37 SVG diagram components (포스트마다 전용 그림)
 │   │       ├── AgentNetwork.astro
 │   │       ├── SystemLayers.astro
 │   │       ├── HarnessConcentric.astro
-│   │       └── (6 more specialized diagrams)
+│   │       ├── BookArchitectureMap.astro  # 생성물. scripts/gen-book-map.py
+│   │       └── (그 밖 33개. 대부분 특정 포스트 전용)
 │   ├── layouts/                 # 3 layout templates
 │   │   ├── BaseLayout.astro    # Base HTML + meta tags (wide·transitions prop)
 │   │   ├── PostLayout.astro    # Blog post wrapper
@@ -96,8 +97,11 @@ froggydisk.github.io/
 │       ├── global.css         # Klisé 유래 베이스 스타일 (팔레트는 웜 뉴트럴로 교체)
 │       ├── editorial.css     # 타이포그래피·여백·레이아웃 재정의 레이어 (global.css 다음 로드)
 │       └── book.css          # 책 3단 레이아웃 (BookLayout에서만 로드)
+├── scripts/
+│   └── gen-book-map.py         # 책 목차 지도 SVG 생성 (배선 충돌 검사 포함)
 ├── public/                      # Static assets
 │   ├── img/                    # Images (profile.png, etc)
+│   ├── favicon.ico             # 루트 사본. 브라우저가 link 태그와 무관하게 요청한다
 │   ├── favicons/               # Favicon set
 │   ├── robots.txt
 │   ├── ads.txt
@@ -227,9 +231,13 @@ npm run preview  # Preview built site locally
 - **Sitemap**: 제출용은 **`/sitemap.xml`** (`src/pages/sitemap.xml.ts`가 만드는 단일 `urlset`).
   `@astrojs/sitemap`은 `sitemap.xml`을 만들지 않고 `/sitemap-index.xml` + `/sitemap-0.xml` 2단으로 낸다.
   **서치콘솔은 이 인덱스를 "읽을 수 없음"으로 반복 실패했고 단일 파일만 통과했다.**
-  파일 자체는 정상이었다 (200, `application/xml`, BOM 없음, gzip 파싱 OK, URL 54개 전부 동일 https 호스트,
+  파일 자체는 정상이었다 (200, `application/xml`, BOM 없음, gzip 파싱 OK, URL 전부 동일 https 호스트,
   `lastmod` 전부 W3C 형식·과거 날짜). 인덱스를 읽고 자식을 다시 가져오는 두 번째 단계가 실패 지점이다.
-  두 경로의 URL 목록이 어긋나지 않는지 확인하는 것을 잊지 말 것 (`dist/sitemap.xml` vs `dist/sitemap-0.xml`)
+  두 경로의 URL 목록이 어긋나지 않는지 확인하는 것을 잊지 말 것 (`dist/sitemap.xml` vs `dist/sitemap-0.xml`).
+  **`sitemap.xml.ts`는 손으로 만드는 파일이라 새 컬렉션을 자동으로 못 줍는다.** `@astrojs/sitemap`은
+  라우트를 다 훑지만 이쪽은 STATIC_PATHS + 블로그 + 책을 직접 나열한다. 2026-08에 책 72개 URL이
+  빠져 56 vs 128로 어긋난 적이 있다 (`c200f77`). 라우트를 추가하면 여기도 함께 고칠 것.
+  현재 URL 128개
 - **Robots.txt**: Allow all. **`sitemap.xml`만 알린다.** 인덱스를 다시 넣지 말 것 — 구글이 못 읽는 경로를
   광고하면 서치콘솔에 실패 항목이 계속 남는다
 
@@ -265,10 +273,29 @@ npm run preview  # Preview built site locally
   본문 상단에 안내 배너가 붙고 `noindex` + sitemap 제외로 나간다.
   `src/content/book/llm-serving/`이 그 예이며, 실제 원고를 쓸 때 지워도 코드는 안전하다
   (책이 0권이면 서재는 빈 상태를 보여주고 `addBookLastmod`는 조용히 넘어간다)
+- **부 아이콘**: `book.yaml`의 `parts[].icon`에 astro-icon 이름(`lucide:cpu`)을 적으면
+  표지 목차의 부 제목 옆에 붙는다. `buildToc`가 실어 나르므로 라우트에 책 이름을 박지 않는다.
+  안 적은 책은 아이콘 없이 나간다
+- **목차 지도**: 표지 목차 앞에 그 책의 구조도를 붙일 수 있다. 그림이 책 내용에 묶여
+  일반화할 수 없으므로 `[book]/index.astro`의 `CONTENTS_MAPS` 레지스트리에 슬러그로 등록한다.
+  **폭은 680으로 고정한다** — 본문 열이 `minmax(0, 700px)`이라 그보다 넓으면 가로 스크롤이
+  생기고, `width:100%`로 줄이면 글자가 읽을 수 없게 작아진다.
+  `data-pagefind-ignore`를 반드시 걸 것 (아래 텍스트 목차가 같은 제목을 이미 색인한다).
+  `BookArchitectureMap.astro`는 **생성물**이다. 손으로 고치지 말고 `scripts/gen-book-map.py`를
+  다시 돌린다. 그 스크립트가 배선을 직교로만 두고 선분·라벨이 연결 대상 아닌 블록을
+  통과하는지 검사한다 — 렌더를 눈으로 못 보는 상황에서 이 검사가 유일한 확인 수단이다
+- **연재 표시**: `status: writing`이면 표지와 모든 장 상단에 배너(`.book-flag`)가 붙고
+  서재에는 클레이 상태 점이 붙는다. `sample`과 스타일을 공유하므로 클래스 이름이
+  `book-sample-note`가 아니라 `book-flag`다
 - **JSON-LD**: `@graph`에 `Chapter` + `Book` + `BreadcrumbList`
-- **뷰 트랜지션**: `BaseLayout`의 `transitions` prop으로 **책 라우트에만** `ClientRouter`를
-  적용한다. 사이드바는 `transition:persist`로 살아남아 스크롤 위치가 유지된다
-  (persist 키에 책 슬러그를 넣어 다른 책끼리 목차가 섞이지 않게 한다)
+- **뷰 트랜지션**: `BaseLayout`의 `transitions` prop으로 `ClientRouter`를 켠다.
+  처음에는 책 라우트 전용이었지만 지금은 **책 전체 + `/` + `/archive/` + `/projects/`**
+  (2026-08 `92d204d`에서 확장, 총 82개 페이지)에 걸려 있다.
+  사이드바는 `transition:persist`로 살아남아 스크롤 위치가 유지된다
+  (persist 키에 책 슬러그를 넣어 다른 책끼리 목차가 섞이지 않게 한다).
+  **애드센스 로더가 `<head>`에 있어 스왑마다 다시 실행되고, 구글의 `rum_fy2021.js`가
+  `Error: carr`를 콘솔에 던진다.** 렌더링·광고 게재에는 영향이 없다. 없애려면 광고가 붙는
+  페이지에서 `ClientRouter`를 빼는 것 말고 확실한 방법이 없다
 
 #### 이 레이아웃에서 밟은 함정 (되풀이하지 말 것)
 
@@ -554,6 +581,6 @@ npm run preview
 
 ---
 
-**Last Updated**: August 26, 2026
+**Last Updated**: August 31, 2026
 **Framework**: Astro 7.2.2
 **Node**: 22
