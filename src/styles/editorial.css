@@ -848,3 +848,48 @@ body[data-theme="dark"] .not-found .solution {
   color: var(--accent-strong);
   letter-spacing: 0.02em;
 }
+
+/* ── 뷰 트랜지션 ───────────────────────────────────────────
+   Home · Archive · Books · Projects 사이를 오갈 때만 동작한다.
+   ClientRouter가 없는 페이지로 가면 브라우저가 그냥 전체 로드를 한다. */
+
+@keyframes vt-page-out {
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes vt-page-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+::view-transition-old(root) {
+  animation: vt-page-out 150ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+::view-transition-new(root) {
+  animation: vt-page-in 260ms cubic-bezier(0, 0, 0.2, 1) both;
+}
+
+/* 헤더는 페이지가 바뀌어도 제자리에 있어야 한다.
+   root에서 따로 떼어내 애니메이션을 걸지 않으면 본문과 같이 밀려 올라간다. */
+.navbar {
+  view-transition-name: navbar;
+}
+
+::view-transition-old(navbar),
+::view-transition-new(navbar) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
