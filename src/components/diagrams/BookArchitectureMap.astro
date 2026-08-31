@@ -1,0 +1,117 @@
+---
+/**
+ * 책 목차 앞의 구조 지도.
+ *
+ * 생성물이다. 손으로 고치지 말고 scripts/gen-book-map.py 를 다시 돌린다.
+ * 그 스크립트가 배선을 직교로만 두고, 선분–사각형 교차 검사로
+ * 연결 대상이 아닌 블록을 통과하는 화살표가 없는지 확인한다.
+ *
+ * 아래 텍스트 목차가 장 제목을 담당하므로 여기서는 장을 나열하지 않고
+ * 블록마다 부 번호 배지만 붙인다. pagefind 색인에서도 뺀다.
+ */
+---
+
+<div class="bm-wrap" data-pagefind-ignore>
+  <svg class="bm" viewBox="0 0 680 692" role="img"
+    aria-label="컴퓨터 구조 지도. 메모리 계층과 MMU가 CPU에 명령어와 데이터를 넣고, 칩셋을 지나 입출력이 붙으며, 주소·데이터·제어 버스가 이들을 잇는다. 논리회로는 이 전부를 만드는 재료이고 컴퓨팅은 이 전부를 재는 척도다. 블록마다 그것을 설명하는 부 번호가 붙어 있다">
+    <defs>
+      <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path class="mk" d="M0,1 L9,5 L0,9 z"/>
+      </marker>
+      <marker id="ac" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path class="mk-accent" d="M0,1 L9,5 L0,9 z"/>
+      </marker>
+    </defs>
+    <a class="hit" href="#part-2" aria-label="메모리 계층 — 2부 목차로 이동"><rect class="blk" x="172" y="14" width="300" height="150" rx="3"/><g class="ic-accent" transform="translate(184.0,24.0) scale(0.6250)"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M12 12v-2m0 8v-2m4-4v-2m0 8v-2M2 11h1.5M20 18v-2m.5-5H22M4 18v-2m4-4v-2m0 8v-2"/><rect width="20" height="10" x="2" y="6" rx="2"/></g></g><text class="blk-t" x="205" y="35">MEMORY HIERARCHY</text><rect class="badge" x="440" y="23" width="20" height="15" rx="2"/><text class="badge-t" x="450.0" y="34" text-anchor="middle">02</text><rect class="tier t0" x="280.6" y="46" width="82.8" height="21" rx="2"/><text class="tier-t" x="322.0" y="60" text-anchor="middle">REGISTERS</text><rect class="tier t1" x="255.8" y="71" width="132.5" height="21" rx="2"/><text class="tier-t" x="322.0" y="85" text-anchor="middle">L1 · L2 · L3 CACHE</text><rect class="tier t2" x="225.4" y="96" width="193.2" height="21" rx="2"/><text class="tier-t" x="322.0" y="110" text-anchor="middle">MAIN MEMORY (DRAM)</text><rect class="tier t3" x="195.0" y="121" width="253.9" height="21" rx="2"/><text class="tier-t" x="322.0" y="135" text-anchor="middle">STORAGE (SSD / HDD)</text><text class="blk-s" x="322.0" y="156" text-anchor="middle">위로 갈수록 빠르고 작다</text></a><a class="hit" href="#part-2" aria-label="MMU와 TLB — 2부 목차로 이동"><rect class="blk" x="492" y="14" width="172" height="96" rx="3"/><g class="ic-accent" transform="translate(504.0,24.0) scale(0.6250)"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M10 2v8l3-3l3 3V2"/><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></g></g><text class="blk-t" x="525" y="35">MMU &amp; TLB</text><rect class="badge" x="632" y="23" width="20" height="15" rx="2"/><text class="badge-t" x="642.0" y="34" text-anchor="middle">02</text><text class="blk-s" x="578.0" y="66" text-anchor="middle">페이지 표를 캐시해</text><text class="blk-s" x="578.0" y="82" text-anchor="middle">주소 변환을 줄인다</text></a><a class="hit" href="#part-3" aria-label="병렬 아키텍처 — 3부 목차로 이동"><rect class="blk" x="16" y="196" width="178" height="148" rx="3"/><g class="ic-accent" transform="translate(28.0,206.0) scale(0.6250)"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3zM7 16.5l-4.74-2.85M7 16.5l5-3m-5 3v5.17m5-8.17V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5zm5 3l-5-3m5 3l4.74-2.85M17 16.5v5.17"/><path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3l5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0zM12 8L7.26 5.15M12 8l4.74-2.85M12 13.5V8"/></g></g><text class="blk-t" x="49" y="217">PARALLEL</text><rect class="badge" x="162" y="205" width="20" height="15" rx="2"/><text class="badge-t" x="172.0" y="216" text-anchor="middle">03</text><rect class="core" x="38.0" y="243.5" width="34" height="40" rx="2"/><text class="core-t" x="55.0" y="267.5" text-anchor="middle">CPU</text><line class="ln" x1="72.0" y1="263.5" x2="88.0" y2="263.5"/><rect class="core" x="88.0" y="243.5" width="34" height="40" rx="2"/><text class="core-t" x="105.0" y="267.5" text-anchor="middle">CPU</text><line class="ln" x1="122.0" y1="263.5" x2="138.0" y2="263.5"/><rect class="core" x="138.0" y="243.5" width="34" height="40" rx="2"/><text class="core-t" x="155.0" y="267.5" text-anchor="middle">CPU</text><text class="blk-s" x="105.0" y="312" text-anchor="middle">SMP · MPP · NUMA</text><text class="blk-s" x="105.0" y="330" text-anchor="middle">상호연결망으로 묶는다</text></a><a class="hit" href="#part-1" aria-label="CPU — 1부 목차로 이동"><rect class="blk-dark" x="226" y="190" width="220" height="214" rx="3"/><g class="ic-accent" transform="translate(238.0,200.0) scale(0.6250)"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M12 20v2m0-20v2m5 16v2m0-20v2M2 12h2m-2 5h2M2 7h2m16 5h2m-2 5h2M20 7h2M7 20v2M7 2v2"/><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="8" height="8" x="8" y="8" rx="1"/></g></g><text class="blk-t blk-t-inv" x="259" y="211">CPU</text><rect class="badge" x="414" y="199" width="20" height="15" rx="2"/><text class="badge-t" x="424.0" y="210" text-anchor="middle">01</text><rect class="unit-accent" x="244" y="226" width="184" height="46" rx="2"/><text class="unit-t-inv" x="336.0" y="254" text-anchor="middle">CONTROL UNIT</text><rect class="unit" x="244" y="280" width="184" height="46" rx="2"/><text class="unit-t" x="336.0" y="308" text-anchor="middle">ALU</text><rect class="unit" x="244" y="334" width="184" height="46" rx="2"/><text class="unit-t" x="336.0" y="362" text-anchor="middle">REGISTERS</text><rect class="pin" x="229" y="220" width="9" height="8" rx="1"/><rect class="pin" x="434" y="220" width="9" height="8" rx="1"/><rect class="pin" x="229" y="243" width="9" height="8" rx="1"/><rect class="pin" x="434" y="243" width="9" height="8" rx="1"/><rect class="pin" x="229" y="266" width="9" height="8" rx="1"/><rect class="pin" x="434" y="266" width="9" height="8" rx="1"/><rect class="pin" x="229" y="289" width="9" height="8" rx="1"/><rect class="pin" x="434" y="289" width="9" height="8" rx="1"/><rect class="pin" x="229" y="312" width="9" height="8" rx="1"/><rect class="pin" x="434" y="312" width="9" height="8" rx="1"/><rect class="pin" x="229" y="335" width="9" height="8" rx="1"/><rect class="pin" x="434" y="335" width="9" height="8" rx="1"/><rect class="pin" x="229" y="358" width="9" height="8" rx="1"/><rect class="pin" x="434" y="358" width="9" height="8" rx="1"/><rect class="pin" x="229" y="381" width="9" height="8" rx="1"/><rect class="pin" x="434" y="381" width="9" height="8" rx="1"/></a><a class="hit" href="#part-1" aria-label="칩셋과 버스 — 1부 목차로 이동"><rect class="blk" x="478" y="190" width="186" height="96" rx="3"/><g class="ic-accent" transform="translate(490.0,200.0) scale(0.6250)"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></g></g><text class="blk-t" x="511" y="211">CHIPSET &amp; BUS</text><rect class="badge" x="632" y="199" width="20" height="15" rx="2"/><text class="badge-t" x="642.0" y="210" text-anchor="middle">01</text><text class="blk-s" x="571.0" y="242" text-anchor="middle">North / South Bridge</text><text class="blk-s" x="571.0" y="260" text-anchor="middle">버스 컨트롤러</text></a><a class="hit" href="#part-4" aria-label="입출력 인터페이스 — 4부 목차로 이동"><rect class="blk" x="478" y="306" width="186" height="118" rx="3"/><g class="ic-accent" transform="translate(490.0,316.0) scale(0.6250)"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="10" cy="7" r="1"/><circle cx="4" cy="20" r="1"/><path d="M4.7 19.3L19 5m2-2l-3 1l2 2ZM9.26 7.68L5 12l2 5m3-3l5 2l3.5-3.5"/><path d="m18 12l1-1l1 1l-1 1Z"/></g></g><text class="blk-t" x="511" y="327">I/O INTERFACE</text><rect class="badge" x="632" y="315" width="20" height="15" rx="2"/><text class="badge-t" x="642.0" y="326" text-anchor="middle">04</text><g class="ic-accent" transform="translate(498.9,355.0) scale(0.5833)"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.268 21a2 2 0 0 0 3.464 0M22 8c0-2.3-.8-4.3-2-6M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326M4 2C2.8 3.7 2 5.7 2 8"/></g><text class="dev-t" x="517.9" y="366.0">INTERRUPT</text><g class="ic-accent" transform="translate(579.0,355.0) scale(0.5833)"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9a9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5m5 4a9 9 0 0 1-9 9a9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></g></g><text class="dev-t" x="598.0" y="366.0">DMA</text><g class="ic-accent" transform="translate(498.9,389.0) scale(0.5833)"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 16h.01m-7.798-4.423a2 2 0 0 0-.212.896V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5.527a2 2 0 0 0-.212-.896L18.55 5.11A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11zm19.734.436H2.054M6 16h.01"/></g><text class="dev-t" x="517.9" y="400.0">STORAGE</text><g class="ic-accent" transform="translate(579.0,389.0) scale(0.5833)"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="6" height="6" x="16" y="16" rx="1"/><rect width="6" height="6" x="2" y="16" rx="1"/><rect width="6" height="6" x="9" y="2" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3m-7-4V8"/></g></g><text class="dev-t" x="598.0" y="400.0">NETWORK</text></a><rect class="blk-dark" x="16" y="452" width="648" height="40" rx="3"/><text class="bus-t" x="126.2" y="477" text-anchor="middle">ADDRESS BUS</text><text class="bus-t" x="340.0" y="477" text-anchor="middle">DATA BUS</text><text class="bus-t" x="553.8" y="477" text-anchor="middle">CONTROL BUS</text><a class="hit" href="#part-6" aria-label="논리회로 — 6부 목차로 이동"><rect class="blk" x="16" y="528" width="320" height="152" rx="3"/><g class="ic-accent" transform="translate(28.0,538.0) scale(0.6250)"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M11 9h4a2 2 0 0 0 2-2V3"/><circle cx="9" cy="9" r="2"/><path d="M7 21v-4a2 2 0 0 1 2-2h4"/><circle cx="15" cy="15" r="2"/></g></g><text class="blk-t" x="49" y="549">LOGIC CIRCUIT</text><rect class="badge" x="304" y="537" width="20" height="15" rx="2"/><text class="badge-t" x="314.0" y="548" text-anchor="middle">06</text><rect class="sub" x="30" y="564" width="140" height="44" rx="2"/><g class="ic" transform="translate(40.0,579.0) scale(0.6250)"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 21V9a9 9 0 0 0 9 9"/></g></g><text class="sub-t" x="62" y="591">게이트 · 부울대수</text><rect class="sub" x="180" y="564" width="140" height="44" rx="2"/><g class="ic" transform="translate(190.0,579.0) scale(0.6250)"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="9" cy="12" r="3"/><rect width="20" height="14" x="2" y="5" rx="7"/></g></g><text class="sub-t" x="212" y="591">래치 · 플립플롭</text><rect class="sub" x="30" y="616" width="140" height="44" rx="2"/><g class="ic" transform="translate(40.0,631.0) scale(0.6250)"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18M3 15h18M9 3v18m6-18v18"/></g></g><text class="sub-t" x="62" y="643">기억장치 회로</text><rect class="sub" x="180" y="616" width="140" height="44" rx="2"/><g class="ic" transform="translate(190.0,631.0) scale(0.6250)"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></g><text class="sub-t" x="212" y="643">타이밍 · 해저드</text><text class="blk-s" x="176.0" y="672" text-anchor="middle">플립플롭 n개 = n비트 레지스터</text></a><a class="hit" href="#part-7" aria-label="컴퓨팅 — 7부 목차로 이동"><rect class="blk" x="352" y="528" width="312" height="152" rx="3"/><g class="ic-accent" transform="translate(364.0,538.0) scale(0.6250)"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m10.852 19.772l-.383.924m2.679-6.468l.383-.923m-.383 6.467a3 3 0 1 0-2.296-5.544l-.383-.923"/><path d="m13.53 20.696l-.382-.924a3 3 0 1 1-2.296-5.544m3.92 1.624l.923-.383m-.923 2.679l.923.383"/><path d="M4.2 15.1a7 7 0 1 1 9.93-9.858A7 7 0 0 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.2m-10.772-.348l-.923-.383m.923 2.679l-.923.383"/></g></g><text class="blk-t" x="385" y="549">COMPUTING</text><rect class="badge" x="632" y="537" width="20" height="15" rx="2"/><text class="badge-t" x="642.0" y="548" text-anchor="middle">07</text><rect class="sub" x="366" y="564" width="136" height="44" rx="2"/><g class="ic" transform="translate(376.0,579.0) scale(0.6250)"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12 14l4-4M3.34 19a10 10 0 1 1 17.32 0"/></g><text class="sub-t" x="398" y="591">성능 평가 · SPEC</text><rect class="sub" x="512" y="564" width="136" height="44" rx="2"/><g class="ic" transform="translate(522.0,579.0) scale(0.6250)"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M16 7h6v6"/><path d="m22 7l-8.5 8.5l-5-5L2 17"/></g></g><text class="sub-t" x="544" y="591">암달의 법칙</text><rect class="sub" x="366" y="616" width="136" height="44" rx="2"/><g class="ic" transform="translate(376.0,631.0) scale(0.6250)"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M10 12h4m-4 5h4M10 7h4m4 5h2m-2 6h2M18 6h2M4 12h2m-2 6h2M4 6h2"/><rect width="12" height="20" x="6" y="2" rx="2"/></g></g><text class="sub-t" x="398" y="643">GPU · TPU · ARM</text><rect class="sub" x="512" y="616" width="136" height="44" rx="2"/><g class="ic" transform="translate(522.0,631.0) scale(0.6250)"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="1"/><path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9c-4.54-4.52-9.87-6.54-11.9-4.5c-2.04 2.03-.02 7.36 4.5 11.9c4.54 4.52 9.87 6.54 11.9 4.5"/><path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9c-2.03-2.04-7.36-.02-11.9 4.5c-4.52 4.54-6.54 9.87-4.5 11.9c2.03 2.04 7.36.02 11.9-4.5"/></g></g><text class="sub-t" x="544" y="643">클라우드 · 엣지</text><text class="blk-s eq" x="508.0" y="672" text-anchor="middle">실행시간 = 명령어 수 × CPI × 클럭 주기</text></a><path class="ln" d="M336.0,190.0 L336.0,164.0" marker-start="url(#a)" marker-end="url(#a)"/><text class="wire-t" x="343.0" y="178" text-anchor="start">명령어 · 데이터</text><path class="ln" d="M472.0,62.0 L492.0,62.0" marker-start="url(#a)" marker-end="url(#a)"/><path class="ln" d="M578.0,110.0 L578.0,176.0 L462.0,176.0 L462.0,224.0 L446.0,224.0" marker-end="url(#a)"/><text class="wire-t" x="585.0" y="133" text-anchor="start">가상 → 실주소</text><path class="ln" d="M226.0,268.0 L194.0,268.0" marker-start="url(#a)" marker-end="url(#a)"/><path class="ln" d="M446.0,238.0 L478.0,238.0" marker-start="url(#a)" marker-end="url(#a)"/><path class="ln" d="M571.0,286.0 L571.0,306.0" marker-start="url(#a)" marker-end="url(#a)"/><path class="ln" d="M105.0,344.0 L105.0,452.0" marker-start="url(#a)" marker-end="url(#a)"/><path class="ln" d="M336.0,404.0 L336.0,452.0" marker-start="url(#a)" marker-end="url(#a)"/><path class="ln" d="M571.0,424.0 L571.0,452.0" marker-start="url(#a)" marker-end="url(#a)"/><path class="ln-accent" d="M176.0,528.0 L176.0,492.0" marker-end="url(#ac)"/><text class="wire-t wire-t-accent" x="183.0" y="514" text-anchor="start">이 위 전부의 재료</text><path class="ln-accent" d="M508.0,528.0 L508.0,492.0" marker-end="url(#ac)"/><text class="wire-t wire-t-accent" x="515.0" y="514" text-anchor="start">이 위 전부를 측정</text>
+  </svg>
+</div>
+
+
+<style>
+/* 목차 앞의 구조 지도.
+   생성물이다. 손으로 고치지 말고 scripts/gen-book-map.py 를 다시 돌린다.
+
+   폭 680 고정 — 본문 열이 최대 700px 이라 가로 스크롤이 생기지 않는다.
+   색은 editorial.css 토큰만 쓴다. 토큰이 테마를 따라가므로 다크 전용 재정의가 없다.
+   CPU·버스는 --ink 로 칠하고 그 위 글자를 --bg 로 둔다. 다크에서 두 값이 뒤집혀도
+   명암 관계가 그대로 유지된다. */
+
+.bm-wrap {
+  --bm-line: color-mix(in srgb, var(--ink) 34%, transparent);
+  --bm-tier: color-mix(in srgb, var(--accent) 22%, var(--bg));
+
+  /* 표지·소개와 떨어뜨린다. 원래 .book-contents 가 갖고 있던 간격(3.2rem)을
+     지도가 맨 앞으로 오면서 대신 받는다. */
+  /* 아래 목차와의 간격은 .book-contents 의 margin-top(3.2rem)과 상쇄돼 그 값이 남는다 */
+  margin: 3.2rem 0 0.9rem;
+  padding: 4px 0;
+  background: var(--bg-soft);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+.bm {
+  display: block;
+  width: 100%;
+  height: auto;
+  color: var(--ink);
+}
+
+.bm .blk { fill: var(--bg); stroke: var(--bm-line); stroke-width: 1.1; }
+.bm .blk-dark { fill: var(--ink); stroke: var(--ink); stroke-width: 1.1; }
+.bm .blk-t { font-family: var(--font-sans); font-size: 11.5px; font-weight: 600; fill: var(--ink); letter-spacing: 0.05em; }
+.bm .blk-t-inv { fill: var(--bg); }
+.bm .blk-s { font-family: var(--font-sans); font-size: 9.5px; fill: var(--muted); }
+.bm .eq { font-family: var(--font-mono); font-size: 9.5px; fill: var(--accent-strong); }
+
+.bm .badge { fill: none; stroke: var(--accent); stroke-width: 1; }
+.bm .badge-t { font-family: var(--font-mono); font-size: 9.5px; fill: var(--accent-strong); }
+
+.bm .tier { stroke: var(--bm-line); stroke-width: 0.9; }
+.bm .t0 { fill: var(--bg); }
+.bm .t1 { fill: var(--bm-tier); }
+.bm .t2 { fill: var(--accent); }
+.bm .t3 { fill: var(--accent); opacity: 0.72; }
+.bm .tier-t { font-family: var(--font-mono); font-size: 8px; fill: var(--ink); letter-spacing: 0.03em; }
+
+.bm .core { fill: var(--bg-soft); stroke: var(--bm-line); stroke-width: 0.9; }
+.bm .core-t { font-family: var(--font-mono); font-size: 8.5px; fill: var(--muted); }
+
+.bm .unit { fill: var(--bg); stroke: none; }
+.bm .unit-accent { fill: var(--accent); stroke: none; }
+.bm .unit-t { font-family: var(--font-sans); font-size: 10.5px; font-weight: 600; fill: var(--ink); letter-spacing: 0.04em; }
+.bm .unit-t-inv { font-family: var(--font-sans); font-size: 10.5px; font-weight: 600; fill: #fff; letter-spacing: 0.04em; }
+.bm .pin { fill: var(--muted); }
+.bm .bus-t { font-family: var(--font-mono); font-size: 9.5px; fill: var(--bg); letter-spacing: 0.09em; }
+
+.bm .sub { fill: var(--bg-soft); stroke: var(--rule); stroke-width: 0.9; }
+.bm .sub-t { font-family: var(--font-sans); font-size: 10px; fill: var(--body); }
+.bm .dev-t { font-family: var(--font-mono); font-size: 8.5px; fill: var(--muted); letter-spacing: 0.04em; }
+
+/* 회색은 실제로 오가는 것, 클레이는 재료·측정 관계 */
+.bm .ln { stroke: currentColor; stroke-width: 1.2; fill: none; }
+.bm .ln-accent { stroke: var(--accent); stroke-width: 1.4; fill: none; }
+.bm .mk { fill: currentColor; }
+.bm .mk-accent { fill: var(--accent); }
+.bm .ic { color: var(--ink); }
+.bm .ic-accent { color: var(--accent-strong); }
+.bm .wire-t { font-family: var(--font-mono); font-size: 9px; fill: var(--muted); }
+.bm .wire-t-accent { fill: var(--accent-strong); }
+
+/* 블록을 누르면 아래 텍스트 목차의 해당 부로 이동한다. */
+.bm .hit { cursor: pointer; }
+.bm .hit .blk,
+.bm .hit .blk-dark { transition: stroke 0.16s ease, stroke-width 0.16s ease; }
+.bm .hit:hover .blk { stroke: var(--accent); stroke-width: 1.8; }
+.bm .hit:hover .blk-dark { stroke: var(--accent); stroke-width: 2.2; }
+.bm .hit:hover .blk-t { fill: var(--accent-strong); }
+.bm .hit:hover .blk-t-inv { fill: var(--bg); }
+.bm .hit:hover .badge { stroke-width: 1.6; }
+/* 키보드 이동에서도 어느 블록인지 보이게 */
+.bm .hit:focus-visible { outline: none; }
+.bm .hit:focus-visible .blk,
+.bm .hit:focus-visible .blk-dark { stroke: var(--accent); stroke-width: 2.2; }
+@media (prefers-reduced-motion: reduce) {
+  .bm .hit .blk,
+  .bm .hit .blk-dark { transition: none; }
+}
+</style>

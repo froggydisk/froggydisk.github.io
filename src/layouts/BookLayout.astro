@@ -15,6 +15,8 @@ interface Props {
   bookAuthor: string;
   /** 레이아웃 검증용 더미 책. 배너를 띄우고 색인에서 뺀다. */
   sample?: boolean;
+  /** 연재 중인 책. 아직 채워지지 않은 장이 있을 수 있다는 배너를 띄운다. */
+  writing?: boolean;
   toc: TocPart[];
   /** 장 페이지일 때만. 표지에서는 비운다. */
   chapter?: {
@@ -39,6 +41,7 @@ const {
   bookTitle,
   bookAuthor,
   sample = false,
+  writing = false,
   toc,
   chapter = null,
   title,
@@ -133,10 +136,15 @@ const jsonLd = {
         data-pagefind-filter={`Books:${bookTitle}`}
         data-pagefind-meta={`book:${bookTitle}`}
       >
-        {sample && (
-          <p class="book-sample-note" data-pagefind-ignore>
-            <span class="book-sample-tag">샘플</span>
+        {sample ? (
+          <p class="book-flag" data-pagefind-ignore>
+            <span class="book-flag-tag">샘플</span>
             레이아웃 검증용 더미 원고입니다. 내용은 실제 글이 아니며 검색엔진 색인에서 제외됩니다.
+          </p>
+        ) : writing && (
+          <p class="book-flag" data-pagefind-ignore>
+            <span class="book-flag-tag">연재 중</span>
+            집필 중인 책입니다. 아직 본문이 비어 있거나 채워지는 중인 장이 있습니다.
           </p>
         )}
 

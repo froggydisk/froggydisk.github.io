@@ -71,7 +71,16 @@ const bookMeta = defineCollection({
     published: looseDate,
     last_modified_at: looseDate.optional(),
     // 디렉터리 이름(접두사 포함)에 붙일 부(部) 제목. 없으면 디렉터리 이름을 그대로 쓴다.
-    parts: z.array(z.object({ dir: z.string(), title: z.string() })).default([]),
+    parts: z
+      .array(
+        z.object({
+          dir: z.string(),
+          title: z.string(),
+          /** 목차의 부 제목 옆 아이콘. astro-icon 이름 (예: 'lucide:cpu') */
+          icon: z.string().optional(),
+        })
+      )
+      .default([]),
   }),
 });
 

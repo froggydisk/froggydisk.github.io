@@ -1,6 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
 import BookLayout from '../../../layouts/BookLayout.astro';
+import BookArchitectureMap from '../../../components/diagrams/BookArchitectureMap.astro';
 import { buildToc, bookModified, bookOf, sortChapters } from '../../../utils/book';
 
 export async function getStaticPaths() {
@@ -15,7 +17,16 @@ export async function getStaticPaths() {
     .filter((p) => p.props.chapters.length > 0);
 }
 
+/*
+ * 목차 앞에 붙는 지도. 그림이 그 책의 내용에 묶여 있어 일반화할 수 없으므로
+ * 책 슬러그로 고른다. 새 책에 지도를 붙일 때 여기 한 줄을 더한다.
+ */
+const CONTENTS_MAPS: Record<string, typeof BookArchitectureMap> = {
+  'computer-architecture': BookArchitectureMap,
+};
+
 const { meta, chapters } = Astro.props;
+const ContentsMap = CONTENTS_MAPS[meta.id];
 const toc = buildToc(chapters, meta);
 const modified = bookModified(chapters, meta);
 ---
@@ -25,6 +36,7 @@ const modified = bookModified(chapters, meta);
   bookTitle={meta.data.title}
   bookAuthor={meta.data.author}
   sample={meta.data.sample}
+  writing={meta.data.status === 'writing'}
   toc={toc}
   chapter={null}
   title={meta.data.title}
@@ -49,21 +61,34 @@ const modified = bookModified(chapters, meta);
     </div>
   </div>
 
-  <nav class="book-contents" slot="contents" aria-label="전체 목차">
-    {toc.map((part) => (
-      <div class="book-part">
-        {part.title && <p class="book-part-title">{part.title}</p>}
+  <Fragment slot="contents">
+    {ContentsMap && <ContentsMap />}
+
+    <nav class="book-contents" aria-label="전체 목차">
+    {toc.map((part, pi) => (
+      <div class="book-part" id={`part-${pi + 1}`}>
+        <div class="book-part-head">
+          <span class="book-part-no">Part {pi + 1}</span>
+          {part.title && (
+            <h2 class="book-part-name">
+              {part.title}
+              {part.icon && <Icon class="book-part-icon" name={part.icon} />}
+            </h2>
+          )}
+          <span class="book-part-count">{part.chapters.length}장</span>
+        </div>
         <ul class="book-part-list">
-          {part.chapters.map((ch) => (
+          {part.chapters.map((ch, ci) => (
             <li>
               <a class="book-ch" href={ch.href}>
-                <span class="book-ch-num">{ch.index}</span>
+                <span class="book-ch-num">{pi + 1}.{String(ci + 1).padStart(2, '0')}</span>
                 <span class="book-ch-title">{ch.title}</span>
               </a>
             </li>
           ))}
         </ul>
       </div>
-    ))}
-  </nav>
+      ))}
+    </nav>
+  </Fragment>
 </BookLayout>

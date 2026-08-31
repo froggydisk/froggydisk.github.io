@@ -102,6 +102,8 @@ export interface TocPart {
   /** 디렉터리 이름 (접두사 포함). 부가 없는 평면 구성이면 빈 문자열 */
   dir: string;
   title: string;
+  /** book.yaml 의 parts[].icon. 없으면 아이콘 없이 나간다 */
+  icon?: string;
   chapters: TocChapter[];
 }
 
@@ -110,7 +112,7 @@ export interface TocPart {
  * 없으면 디렉터리 이름에서 접두사와 하이픈을 걷어내 쓴다.
  */
 export function buildToc(chapters: BookEntry[], meta?: BookMeta): TocPart[] {
-  const titles = new Map((meta?.data.parts ?? []).map((p) => [p.dir, p.title]));
+  const declared = new Map((meta?.data.parts ?? []).map((p) => [p.dir, p]));
   const parts: TocPart[] = [];
   let index = 0;
 
@@ -121,9 +123,11 @@ export function buildToc(chapters: BookEntry[], meta?: BookMeta): TocPart[] {
 
     let part = parts.at(-1);
     if (!part || part.dir !== dir) {
+      const declaredPart = declared.get(dir);
       part = {
         dir,
-        title: titles.get(dir) ?? dir.replace(PREFIX, '').replace(/[-_]/g, ' '),
+        title: declaredPart?.title ?? dir.replace(PREFIX, '').replace(/[-_]/g, ' '),
+        icon: declaredPart?.icon,
         chapters: [],
       };
       parts.push(part);

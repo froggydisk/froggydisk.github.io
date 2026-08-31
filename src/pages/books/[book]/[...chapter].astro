@@ -48,6 +48,7 @@ const description = entry.data.description?.trim() || excerpt(entry.body ?? '');
   bookTitle={meta.data.title}
   bookAuthor={meta.data.author}
   sample={meta.data.sample}
+  writing={meta.data.status === 'writing'}
   toc={toc}
   chapter={{
     id: entry.id,
