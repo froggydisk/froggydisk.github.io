@@ -868,20 +868,30 @@ body[data-theme="dark"] .not-found .solution {
 }
 
 ::view-transition-old(root) {
-  animation: vt-page-out 150ms cubic-bezier(0.4, 0, 1, 1) both;
+  animation: vt-page-out 120ms cubic-bezier(0.4, 0, 1, 1) both;
 }
 
+/* new를 old가 끝난 뒤에 시작시킨다. 겹치면 두 화면의 글자가 함께 보인다. */
 ::view-transition-new(root) {
-  animation: vt-page-in 260ms cubic-bezier(0, 0, 0.2, 1) both;
+  animation: vt-page-in 220ms cubic-bezier(0, 0, 0.2, 1) 110ms both;
 }
 
 /* 헤더는 페이지가 바뀌어도 제자리에 있어야 한다.
-   root에서 따로 떼어내 애니메이션을 걸지 않으면 본문과 같이 밀려 올라간다. */
+   root에서 따로 떼어내지 않으면 본문과 같이 밀려 올라간다.
+   다만 old와 new에 animation:none만 걸면 두 스냅샷이 동시에 남아
+   메뉴 글자가 겹쳐 보인다. old를 아예 지워야 한다. */
 .navbar {
   view-transition-name: navbar;
 }
 
-::view-transition-old(navbar),
+::view-transition-group(navbar) {
+  animation: none;
+}
+
+::view-transition-old(navbar) {
+  display: none;
+}
+
 ::view-transition-new(navbar) {
   animation: none;
   mix-blend-mode: normal;
