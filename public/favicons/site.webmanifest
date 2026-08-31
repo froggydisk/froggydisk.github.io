@@ -1,19 +1,23 @@
 {
-    "name": "",
-    "short_name": "",
+    "name": "froggydisk",
+    "short_name": "froggydisk",
+    "description": "Frontend, DevOps, ML/DL 관련 기술 블로그. 개발 과정에서의 문제 해결과 새로운 기술을 기록합니다.",
+    "lang": "ko-KR",
+    "start_url": "/",
+    "scope": "/",
     "icons": [
         {
-            "src": "/android-chrome-192x192.png",
+            "src": "/favicons/android-chrome-192x192.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "/android-chrome-384x384.png",
+            "src": "/favicons/android-chrome-384x384.png",
             "sizes": "384x384",
             "type": "image/png"
         }
     ],
-    "theme_color": "#ffffff",
-    "background_color": "#ffffff",
+    "theme_color": "#faf9f5",
+    "background_color": "#faf9f5",
     "display": "standalone"
 }
