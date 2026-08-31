@@ -1,0 +1,103 @@
+---
+// 소스와 산출물의 경계가 한 칸 올라가는 것을 두 열로 비교한다.
+const M = 24;                                   // 좌우 여백
+const GAP = 44;                                 // 두 열 사이
+const COL_W = (672 - M * 2 - GAP) / 2;          // 290
+const COL_X = [M, M + COL_W + GAP];             // [24, 358]
+const ROW_H = 44;
+const ROW_GAP = 16;
+const TOP = 60;
+const rowY = (i: number) => TOP + i * (ROW_H + ROW_GAP);
+const edgeY = (i: number) => rowY(i) + ROW_H + ROW_GAP / 2;   // i번 행 아래 경계선
+
+const L1 = 18;   // 제목 베이스라인 (박스 상단 기준)
+const L2 = 33;   // 부제 베이스라인
+
+type Kind = 'outside' | 'source' | 'output' | 'changed';
+type Row = { name: string; sub: string; kind: Kind; tag?: string };
+
+const now: Row[] = [
+  { name: '요구사항',      sub: '문서 · 이슈 · 머릿속',          kind: 'outside', tag: '버전 관리 밖' },
+  { name: '고수준 언어',   sub: 'Kotlin · Python · TypeScript', kind: 'source' },
+  { name: 'IR · 바이트코드', sub: 'LLVM IR · JVM bytecode',     kind: 'output' },
+  { name: '어셈블리',      sub: 'x86-64 · ARM64',              kind: 'output' },
+  { name: '기계어',        sub: 'CPU instruction',             kind: 'output' },
+];
+
+const next: Row[] = [
+  { name: '스펙',          sub: '구조화된 인간 언어',            kind: 'source' },
+  { name: '고수준 언어',   sub: 'Kotlin · Python · TypeScript', kind: 'changed' },
+  { name: 'IR · 바이트코드', sub: 'LLVM IR · JVM bytecode',     kind: 'output' },
+  { name: '어셈블리',      sub: 'x86-64 · ARM64',              kind: 'output' },
+  { name: '기계어',        sub: 'CPU instruction',             kind: 'output' },
+];
+
+const box = (k: Kind) => ({
+  outside: { fill: 'none',            op: 1,   stroke: 'var(--rule)',   sw: 1,   dash: '4 4' },
+  source:  { fill: 'var(--bg-soft)',  op: 1,   stroke: 'var(--ink)',    sw: 1.6, dash: 'none' },
+  output:  { fill: 'var(--bg-soft)',  op: 1,   stroke: 'var(--rule)',   sw: 1,   dash: 'none' },
+  changed: { fill: 'var(--accent)',   op: 0.1, stroke: 'var(--accent)', sw: 1.5, dash: 'none' },
+}[k]);
+
+const ink = (k: Kind) =>
+  k === 'source' ? 'var(--ink)' : k === 'changed' ? 'var(--accent-strong)' : 'var(--muted)';
+
+const cols = [
+  { title: '현재',  rows: now,  edge: 1 },   // 고수준 언어 아래에 경계
+  { title: '미래',  rows: next, edge: 0 },   // 스펙 아래로 경계가 올라간다
+];
+
+const EDGE_LABEL = '여기부터 산출물';
+const EDGE_W = 92;
+---
+
+<div class="dg">
+<svg width="100%" viewBox="0 0 672 404" xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="사람이 소스로 쓰는 층이 고수준 언어에서 스펙으로 한 칸 올라가고, 고수준 언어는 어셈블리처럼 빌드 산출물이 된다">
+
+{cols.map((col, c) => (
+  <g>
+    <text class="hd" x={COL_X[c] + COL_W / 2} y={32} text-anchor="middle" fill="var(--ink)">{col.title}</text>
+
+    {col.rows.map((r, i) => (
+      <g>
+        <rect x={COL_X[c]} y={rowY(i)} width={COL_W} height={ROW_H} rx={3}
+              fill={box(r.kind).fill} fill-opacity={box(r.kind).op}
+              stroke={box(r.kind).stroke} stroke-width={box(r.kind).sw}
+              stroke-dasharray={box(r.kind).dash}/>
+        <text class="nm" x={COL_X[c] + 14} y={rowY(i) + L1} fill={ink(r.kind)}>{r.name}</text>
+        <text class={i === 0 ? 'cap' : 'cap m'} x={COL_X[c] + 14} y={rowY(i) + L2} fill="var(--muted)">{r.sub}</text>
+        {r.tag && (
+          <text class="cap" x={COL_X[c] + COL_W - 14} y={rowY(i) + L1} text-anchor="end" fill="var(--muted)">{r.tag}</text>
+        )}
+      </g>
+    ))}
+
+    <line x1={COL_X[c]} y1={edgeY(col.edge)} x2={COL_X[c] + COL_W} y2={edgeY(col.edge)}
+          stroke="var(--accent)" stroke-width="1.5"/>
+    <rect x={COL_X[c] + (COL_W - EDGE_W) / 2} y={edgeY(col.edge) - 7} width={EDGE_W} height={14} fill="var(--bg)"/>
+    <text class="edge" x={COL_X[c] + COL_W / 2} y={edgeY(col.edge) + 3.7} text-anchor="middle"
+          fill="var(--accent-strong)">{EDGE_LABEL}</text>
+  </g>
+))}
+
+<line x1={M} y1={370} x2={672 - M} y2={370} stroke="var(--rule)" stroke-width="1"/>
+<text class="cap" x={336} y={389} text-anchor="middle" fill="var(--muted)">경계가 한 칸 올라가면 고수준 언어는 어셈블리와 같은 자리에 놓인다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .m { font-family: var(--font-mono); }
+.dg .nm { font-size: 12px; font-weight: 600; }
+.dg .cap { font-size: 10px; }
+.dg .edge { font-size: 10.5px; font-weight: 600; }
+.dg .hd { font-size: 12px; font-weight: 600; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>
