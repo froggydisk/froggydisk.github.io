@@ -38,6 +38,14 @@ const persistKey = `book-aside-${bookSlug}`;
       </svg>
     </button>
 
+    <a class="book-aside-back" href="/books/">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" />
+      </svg>
+      서재
+    </a>
+
     <a class="book-aside-book" href={bookHref(bookSlug)}>{bookTitle}</a>
 
     <nav class="book-aside-nav">
