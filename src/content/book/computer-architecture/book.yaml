@@ -1,0 +1,32 @@
+title: 정보관리기술사를 위한 컴퓨터 구조
+subtitle: 답안으로 쓸 수 있는 만큼만, 순서대로
+description: >-
+  정보관리기술사 컴퓨터 구조 과목을 CPU·메모리·병렬 컴퓨터·입출력·신기술·논리회로·컴퓨팅
+  일곱 갈래로 나눠 정리한다. 개념을 설명하는 장과 계산·설계 문제를 푸는 장을 같은 흐름에
+  두어, 한 장을 읽으면 그 주제의 답안 한 편을 쓸 수 있게 하는 것이 목표다.
+author: froggydisk
+cover: /img/computer-architecture-cover.webp
+status: writing
+published: 2026-08-31
+parts:
+  - dir: 01-cpu
+    title: CPU
+    icon: lucide:cpu
+  - dir: 02-memory
+    title: Memory
+    icon: lucide:memory-stick
+  - dir: 03-parallel
+    title: 병렬 컴퓨터
+    icon: lucide:boxes
+  - dir: 04-io
+    title: Interrupt 및 I/O Interface
+    icon: lucide:usb
+  - dir: 05-emerging
+    title: 신기술
+    icon: lucide:sparkles
+  - dir: 06-logic
+    title: 논리회로
+    icon: lucide:circuit-board
+  - dir: 07-computing
+    title: 컴퓨팅
+    icon: lucide:cloud-cog
