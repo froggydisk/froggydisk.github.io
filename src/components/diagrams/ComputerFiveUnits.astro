@@ -1,0 +1,126 @@
+---
+/**
+ * 컴퓨터의 5대 구성요소와 그 사이의 자료·제어 흐름.
+ * 산술논리연산장치와 제어장치를 한 틀로 묶어 CPU임을 보인다.
+ */
+const CPU = { x: 208, y: 140, w: 256, h: 160 };
+const MEM = { x: 232, y: 54, w: 208, h: 44 };
+const IN = { x: 68, y: 170, w: 112, h: 44 };
+const OUT = { x: 492, y: 170, w: 112, h: 44 };
+const ALU = { x: 224, y: 170, w: 224, h: 44 };
+const CU = { x: 224, y: 240, w: 224, h: 44 };
+
+const ROW = IN.y + IN.h / 2; // 192 — 입력·연산·출력이 같은 줄에 온다
+const LANE_L = 44;
+const LANE_R = 628;
+const CTL_Y = CU.y + CU.h / 2; // 262
+---
+
+<div class="dg">
+<svg width="100%" viewBox="0 0 672 368" xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="입력장치가 보낸 자료는 연산장치와 기억장치를 오가며 처리된 뒤 출력장치로 나가고, 제어장치는 나머지 네 장치에 제어 신호를 보낸다">
+
+<defs>
+  <marker id="fuData" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--ink)"/>
+  </marker>
+  <marker id="fuCtl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">5대 구성요소와 자료 · 제어의 흐름</text>
+
+<!-- CPU 틀 -->
+<rect x={CPU.x} y={CPU.y} width={CPU.w} height={CPU.h} rx="3" fill="none" stroke="var(--rule)" stroke-width="1"/>
+<text class="ttl" x="336" y="157" text-anchor="middle" fill="var(--muted)">CPU · 중앙처리장치</text>
+
+<!-- 장치 다섯 -->
+<rect x={MEM.x} y={MEM.y} width={MEM.w} height={MEM.h} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+<text class="box" x={MEM.x + MEM.w / 2} y={MEM.y + 28} text-anchor="middle" fill="var(--ink)">② 기억장치</text>
+
+<rect x={IN.x} y={IN.y} width={IN.w} height={IN.h} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+<text class="box" x={IN.x + IN.w / 2} y={IN.y + 28} text-anchor="middle" fill="var(--ink)">① 입력장치</text>
+
+<rect x={OUT.x} y={OUT.y} width={OUT.w} height={OUT.h} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+<text class="box" x={OUT.x + OUT.w / 2} y={OUT.y + 28} text-anchor="middle" fill="var(--ink)">⑤ 출력장치</text>
+
+<rect x={ALU.x} y={ALU.y} width={ALU.w} height={ALU.h} rx="3" fill="var(--bg-soft)" stroke="var(--ink)" stroke-width="1.5"/>
+<text class="box" x={ALU.x + ALU.w / 2} y={ALU.y + 28} text-anchor="middle" fill="var(--ink)">③ 산술논리연산장치</text>
+
+<rect x={CU.x} y={CU.y} width={CU.w} height={CU.h} rx="3" fill="var(--bg-soft)" stroke="var(--ink)" stroke-width="1.5"/>
+<text class="box" x={CU.x + CU.w / 2} y={CU.y + 28} text-anchor="middle" fill="var(--ink)">④ 제어장치</text>
+
+<!-- 자료의 흐름 -->
+<path d={`M ${IN.x + IN.w} ${ROW} H ${ALU.x - 4}`} fill="none" stroke="var(--ink)" stroke-width="1.3" marker-end="url(#fuData)"/>
+<path d={`M ${ALU.x + ALU.w} ${ROW} H ${OUT.x - 4}`} fill="none" stroke="var(--ink)" stroke-width="1.3" marker-end="url(#fuData)"/>
+<path d={`M 264 ${MEM.y + MEM.h} V ${ALU.y - 4}`} fill="none" stroke="var(--ink)" stroke-width="1.3" marker-end="url(#fuData)"/>
+<path d={`M 408 ${ALU.y} V ${MEM.y + MEM.h + 4}`} fill="none" stroke="var(--ink)" stroke-width="1.3" marker-end="url(#fuData)"/>
+<text class="cap" x="256" y="126" text-anchor="end" fill="var(--muted)">명령과 자료</text>
+<text class="cap" x="416" y="126" fill="var(--muted)">연산 결과</text>
+
+<!-- 제어 신호 -->
+<path d={`M 336 ${CU.y} V ${ALU.y + ALU.h + 4}`} fill="none" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#fuCtl)" class="ctl"/>
+<path d={`M ${CU.x} ${CTL_Y} H ${LANE_L} V ${ROW} H ${IN.x - 4}`} fill="none" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#fuCtl)" class="ctl"/>
+<path d={`M ${CU.x + CU.w} ${CTL_Y} H ${LANE_R} V ${MEM.y + MEM.h / 2} H ${MEM.x + MEM.w + 4}`} fill="none" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#fuCtl)" class="ctl"/>
+<path d={`M ${LANE_R} ${ROW} H ${OUT.x + OUT.w + 4}`} fill="none" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#fuCtl)" class="ctl"/>
+
+<!-- 자료의 흐름 위를 순서대로 지나가는 펄스. 화살표와 같은 경로다. -->
+<circle class="pulse p1" r="3" fill="var(--ink)"/>
+<circle class="pulse p2" r="3" fill="var(--ink)"/>
+<circle class="pulse p3" r="3" fill="var(--ink)"/>
+<circle class="pulse p4" r="3" fill="var(--ink)"/>
+
+<!-- 범례 -->
+<line x1="24" y1="328" x2="648" y2="328" stroke="var(--rule)" stroke-width="1"/>
+<line x1="24" y1="350" x2="52" y2="350" stroke="var(--ink)" stroke-width="1.3" marker-end="url(#fuData)"/>
+<text class="cap" x="64" y="354" fill="var(--muted)">자료의 흐름</text>
+<line x1="172" y1="350" x2="200" y2="350" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#fuCtl)"/>
+<text class="cap" x="212" y="354" fill="var(--muted)">제어 신호</text>
+<text class="cap" x="648" y="354" text-anchor="end" fill="var(--muted)">③ + ④ = CPU</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 13px; font-weight: 550; }
+.dg .cap { font-size: 11px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+
+/* 방향은 정지 화면으로 못 보여준다. 자료는 입력 → 연산 → 기억 → 연산 → 출력 순서로 흐르고,
+   제어 신호는 제어장치에서 바깥으로만 나간다. 그 둘을 펄스와 점선 행진으로 각각 보인다.
+   기본값은 '안 움직임'이다 — 펄스의 opacity: 0 을 미디어 쿼리 밖에 둬서,
+   동작 줄이기를 켠 사람에게는 점이 아예 안 보이게 한다. */
+.dg .pulse { opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  /* 점선 행진. dasharray 가 "4 3" 이라 주기가 7 이고, -7 까지 밀면 이음매 없이 반복된다.
+     경로가 제어장치에서 시작하므로 음수 방향이 곧 바깥으로 나가는 방향이다. */
+  .dg .ctl { animation: fu-ctl-flow 1.15s linear infinite; }
+
+  .dg .pulse {
+    animation: fu-pulse 3.8s linear infinite;
+    offset-rotate: 0deg;
+  }
+  .dg .p1 { offset-path: path("M 180 192 L 224 192"); animation-delay: 0s; }
+  .dg .p2 { offset-path: path("M 264 98 L 264 166"); animation-delay: 0.62s; }
+  .dg .p3 { offset-path: path("M 408 170 L 408 102"); animation-delay: 1.24s; }
+  .dg .p4 { offset-path: path("M 448 192 L 492 192"); animation-delay: 1.86s; }
+}
+@keyframes fu-ctl-flow {
+  to { stroke-dashoffset: -7; }
+}
+@keyframes fu-pulse {
+  0%   { offset-distance: 0%;   opacity: 0; }
+  4%   { offset-distance: 8%;   opacity: 1; }
+  17%  { offset-distance: 100%; opacity: 1; }
+  21%  { offset-distance: 100%; opacity: 0; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>
