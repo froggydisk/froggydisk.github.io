@@ -250,6 +250,44 @@ npm run preview  # Preview built site locally
 - **Design Pattern**: 편집체(editorial) 지향 — 헤어라인 구분선, 넓은 여백, 박스·그림자 최소화
 - **Link Rule**: 본문 링크는 `.page-content a`에서 잉크색 + 클레이 밑줄로 한 곳에서 정의.
   목록·내비게이션 링크(`.post-item-title a`, `.home-post-link`, `.posts-more` 등)는 특이도를 높여 밑줄 제외
+- **그림 등장 애니메이션**: 본문 다이어그램은 화면에 들어오면 그 자리에서 한 번 재생된다
+  (0.86 → 1 배율 + 페이드, 720ms, `cubic-bezier(0.16, 1, 0.3, 1)`).
+  `editorial.css`의 `dg-reveal-in` + `BaseLayout.astro` 끝의 인라인 스크립트.
+  IntersectionObserver가 `.dg-reveal`이 붙은 요소에 `.dg-in`을 더하면 재생되고, 그 뒤 `unobserve`한다.
+  선택자는 클래스가 아니라 `.page-content div:has(> svg)`다 (다이어그램 38개가 래퍼 클래스를
+  제각각 쓴다). `rootMargin: '0px 0px -18%'`로 화면 아래를 잘라내, 그림이 화면 맨 아래에
+  걸친 순간이 아니라 읽는 자리로 올라왔을 때 시작한다
+  - **초기 상태(`opacity: 0`)를 CSS에 직접 두지 말 것.** JS나 IntersectionObserver가 없으면
+    그림이 영구히 안 보인다. `.dg-reveal` 클래스를 JS가 붙이고, 못 붙이면 정적으로 보이게 둔다
+  - **스크립트는 `scan()`을 즉시 한 번 돌리고 `astro:page-load`에도 건다.** ClientRouter가 없는
+    페이지에서는 `astro:page-load`가 아예 안 온다. `scan()`은 `dataset`으로 멱등하게 만든다
+  - `translateY`는 26px을 넘기지 않는다 — `.dg`의 위아래 여백(2.4rem)을 넘으면 앞뒤 문단을 침범한다
+
+#### 스크롤 기반 애니메이션(`animation-timeline: view()`)을 안 쓰는 이유
+
+먼저 그 방식으로 만들었다가 버렸다. 되살리려는 사람이 같은 길을 다시 걷지 않도록 남긴다.
+
+1. **근본 문제 — 눈이 도달하기 전에 끝난다.** `view()`의 기본 구간(`cover`)은 그림이 화면 아래에서
+   *들어오기 시작할 때*가 0%다. 그림 381px · 뷰포트 813px이면 `30%`가 완전히 들어온 시점(화면 맨 아래),
+   `50%`가 세로 가운데, `70%`가 위끝이 화면 위끝이다. 성장을 어디에 몰아넣어도 상당 부분이
+   화면 아래쪽에서 소모돼, 읽는 자리로 올라왔을 때는 이미 100%다. 키프레임을 56% · 64%까지
+   미뤄봐도 마찬가지였다. **시간 기반은 도달한 순간부터 시작하므로 이 문제가 없다**
+2. **`html`·`body`에 `overflow-x: hidden`이 있으면 통째로 멈춘다.** `overflow-x: hidden` +
+   `overflow-y: visible`은 허용되지 않는 짝이라 브라우저가 `overflow-y`를 `auto`로 바꾸고,
+   그 순간 `body`가 스크롤 컨테이너가 된다. `view()`는 가장 가까운 스크롤 조상에 붙으므로
+   타임라인이 뷰포트가 아니라 `body`에 붙는데 `body`는 자기 안에서 스크롤될 일이 없어
+   진행도가 영원히 `null`이다. 지금은 `clip`으로 바꿔놨다 (`global.css`)
+3. **`animation` 축약형과 `animation-timeline`을 한 규칙에 같이 쓰면 안 된다.**
+   lightningcss(Astro 기본 CSS 미니파이어)가 둘을 접어 `animation: linear both X view()`를 만드는데,
+   `animation-timeline`은 축약형에 속하지 않아 브라우저가 선언 전체를 버린다
+
+**셋 다 콘솔에 아무 말이 없다.** 그리고 `a.currentTime = CSS.percent(n)`으로 진행도를 넣어 재는
+검증은 키프레임이 있다는 증명일 뿐, 스크롤이 타임라인을 움직인다는 증명이 아니다.
+이걸로 통과시켜서 2번을 두 번 놓쳤다. 애니메이션을 검증할 때는 `el.getAnimations()`로
+**실제로 붙었는지 · timeline이 무엇인지 · playState가 무엇인지**를 본다.
+헤드리스 크롬에서는 `scrollTo`·`scrollTop`이 먹지 않으므로 **URL 프래그먼트로 이동**해서 잰다.
+dist를 임시 폴더에 복사해 측정 스크립트를 `</body>` 앞에 끼우고 `python3 -m http.server` +
+`--dump-dom`으로 뽑는다 (`file://`는 절대 경로 자산을 못 찾는다).
 
 ### 7. 온라인 책 (Books)
 
@@ -276,6 +314,18 @@ npm run preview  # Preview built site locally
 - **부 아이콘**: `book.yaml`의 `parts[].icon`에 astro-icon 이름(`lucide:cpu`)을 적으면
   표지 목차의 부 제목 옆에 붙는다. `buildToc`가 실어 나르므로 라우트에 책 이름을 박지 않는다.
   안 적은 책은 아이콘 없이 나간다
+- **표 첫 열**: 이 책의 표는 거의 다 `항목 | 설명` 꼴이라 첫 열이 장치·용어 이름이다.
+  자동 배분에 맡기면 이름이 두 줄로 접히고 설명 열만 넓어지므로 `book.css`에서
+  `.book-body table` 첫 열에 `min-width: 9.5em`(모바일 6.5em)을 준다.
+  `③ 산술논리연산장치`가 한 줄에 들어가는 최소치이니 이보다 줄이면 다시 접힌다
+- **장 안의 그림**: 장 파일을 `.mdx`로 두면 다이어그램 컴포넌트를 쓸 수 있다.
+  `generateId`가 `.md`/`.mdx`를 똑같이 떼므로 확장자를 바꿔도 id와 URL은 그대로다
+  (`git mv`로 바꾸고 sitemap 개수만 확인하면 된다). import 경로는 네 단계 위다 →
+  `../../../../components/diagrams/<이름>.astro`. 규격은 블로그와 같다
+  (`.claude/skills/blog-post/references/diagrams.md`). 본문 열이 700px이므로 viewBox 폭 672가 안전하다.
+  렌더를 눈으로 볼 수 없으면 헤드리스 크롬으로 확인한다 — dist(또는 dev 서버)의 HTML에서
+  `<svg>`를 뽑아 `editorial.css` 토큰 값을 인라인한 임시 HTML에 넣고 `--screenshot`으로 찍는다.
+  이때 첫 `<svg>`는 네비게이션 아이콘이니 aria-label로 골라야 한다
 - **목차 지도**: 표지 목차 앞에 그 책의 구조도를 붙일 수 있다. 그림이 책 내용에 묶여
   일반화할 수 없으므로 `[book]/index.astro`의 `CONTENTS_MAPS` 레지스트리에 슬러그로 등록한다.
   **폭은 680으로 고정한다** — 본문 열이 `minmax(0, 700px)`이라 그보다 넓으면 가로 스크롤이
@@ -314,8 +364,12 @@ npm run preview  # Preview built site locally
    (다이어그램 확대는 같은 문제를 `<dialog>` + `showModal()`로 풀었다 — 8cf4c2f)
 5. **이 사이트는 `border-box`가 아니다.** `max-width`는 콘텐츠 폭이고 padding이 더해진다.
    `.book-shell`이 `.navbar`와 같은 `max-width: 1280px` + `padding: 0 40px`을 쓰는 이유가 이것이다
-6. **헤더는 `position: fixed`가 아니다.** 스크롤과 함께 올라간다. 스티키 사이드바의 `top`을
-   헤더 높이만큼 띄우면 스크롤 후 그만큼이 빈 공간이 된다 (`top: 32px`을 쓴다)
+6. **헤더는 `position: fixed`가 아니다.** 스크롤과 함께 올라간다. 스티키 요소의 `top`을
+   헤더 높이만큼 띄우면 스크롤 후 그만큼이 빈 공간이 된다 (오른쪽 목차 `.toc-sidebar.toc-inline`이
+   `top: 32px`을 쓴다). **왼쪽 챕터 트리는 이제 스티키가 아니다** — 장이 71개라 목차가 화면보다
+   길어서, 높이 제한 없이 스티키로 두면 아래쪽 장에 영영 닿지 못한다. 안쪽 스크롤 상자도 없애고
+   본문과 함께 흐르게 했다. 스크롤은 `height: 100vh`에 갇히는 모바일 서랍에만 켜져 있다
+   (거기서 `overflow-y`를 빼면 목차가 잘려 스크롤이 안 된다)
 7. **뷰 트랜지션에서 모듈 스크립트는 다시 실행되지 않는다.** 요소 참조를 모듈 최상단에
    캡처해두면 스왑 후 죽은 노드를 붙들게 된다. `Navbar`·`BookSidebar`의 리스너는 `document`에
    위임으로 붙이고, `TOC`는 `astro:page-load`에서 멱등하게 다시 그린다.
@@ -581,6 +635,6 @@ npm run preview
 
 ---
 
-**Last Updated**: August 31, 2026
+**Last Updated**: September 2, 2026
 **Framework**: Astro 7.2.2
 **Node**: 22
