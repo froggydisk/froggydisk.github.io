@@ -26,7 +26,13 @@ body.theme-switching *::after {
 }
 
 html {
-  overflow-x: hidden;
+  /* hidden 이 아니라 clip 이다. overflow-x: hidden 은 overflow-y: visible 과 짝이 안 맞아
+     브라우저가 overflow-y 를 말없이 auto 로 바꾸고, 그러면 html/body 가 스크롤 컨테이너가 된다.
+     그 상태에서는 스크롤 컨테이너를 기준으로 동작하는 것들(스크롤 기반 애니메이션,
+     position: sticky 의 기준 스크롤러)이 뷰포트가 아니라 body 를 보게 돼 조용히 어긋난다.
+     clip 은 visible 과 짝이 맞아 스크롤 컨테이너를 만들지 않으면서 가로 넘침만 잘라낸다.
+     잘라내는 동작은 hidden 과 같다. */
+  overflow-x: clip;
   width: 100%;
 }
 
@@ -52,7 +58,8 @@ figure {
 
 body {
   min-height: 100vh;
-  overflow-x: hidden;
+  /* 위 html 의 주석 참고. */
+  overflow-x: clip;
   position: relative;
   color: #2b2a26;
   color-scheme: light;

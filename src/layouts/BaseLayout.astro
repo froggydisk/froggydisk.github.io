@@ -151,5 +151,42 @@ const jsonLdText = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : nu
     </main>
     <Footer />
   </div>
+  <script is:inline>
+    // 본문 그림이 화면에 들어오면 그 자리에서 등장 애니메이션을 한 번 재생한다.
+    // 초기 상태(opacity:0)를 CSS 가 아니라 여기서 붙이는 이유: JS 나 IntersectionObserver 가
+    // 없으면 그림이 영구히 안 보이게 된다. 클래스를 못 붙이면 그냥 정적으로 보이는 편이 낫다.
+    (function () {
+      // 뷰 트랜지션 스왑 때 이 인라인 스크립트가 다시 실행돼도 리스너를 겹치지 않는다.
+      if (window.__dgReveal) return;
+      window.__dgReveal = true;
+      if (!('IntersectionObserver' in window)) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      // rootMargin 으로 화면 아래를 18% 잘라내, 그림이 화면 맨 아래에 걸친 순간이 아니라
+      // 읽는 자리로 올라왔을 때 시작하게 한다.
+      var io = new IntersectionObserver(function (entries) {
+        for (var i = 0; i < entries.length; i++) {
+          if (!entries[i].isIntersecting) continue;
+          entries[i].target.classList.add('dg-in');
+          io.unobserve(entries[i].target);
+        }
+      }, { threshold: 0.25, rootMargin: '0px 0px -18% 0px' });
+
+      function scan() {
+        var els = document.querySelectorAll(
+          '.page-content div:has(> svg):not(.diagram-zoom__zoomed)'
+        );
+        for (var i = 0; i < els.length; i++) {
+          if (els[i].dataset.dgReveal) continue;   // 멱등
+          els[i].dataset.dgReveal = '1';
+          els[i].classList.add('dg-reveal');
+          io.observe(els[i]);
+        }
+      }
+      scan();
+      // ClientRouter 가 없는 페이지에서는 astro:page-load 가 안 오므로 위에서 이미 한 번 돌았다.
+      document.addEventListener('astro:page-load', scan);
+    })();
+  </script>
 </body>
 </html>
