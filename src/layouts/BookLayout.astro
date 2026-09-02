@@ -6,7 +6,6 @@ import BookProgress from '../components/book/BookProgress.astro';
 import TOC from '../components/TOC.astro';
 import { bookHref } from '../utils/book';
 import type { TocChapter, TocPart } from '../utils/book';
-import { formatDate } from '../utils/seo';
 import '../styles/book.css';
 
 interface Props {
@@ -161,18 +160,14 @@ const jsonLd = {
             )}
           </nav>
 
-          <h1 class="book-title">{title}</h1>
-
           {chapter && (
-            <p class="book-meta" data-pagefind-ignore>
-              {chapter.index}장 · 전체 {chapter.total}장
-              <span class="book-meta-sep">·</span>
-              <time datetime={modified.toISOString()}>{formatDate(modified)}</time>
-            </p>
+            <p class="book-kicker" data-pagefind-ignore>제 {chapter.index} 장</p>
           )}
+
+          <h1 class="book-title">{title}</h1>
         </header>
 
-        <div class="page-content book-body">
+        <div class:list={['page-content', 'book-body', chapter && 'book-chapter-body']}>
           <slot />
         </div>
 
@@ -182,6 +177,14 @@ const jsonLd = {
         -->
         <slot name="contents" />
       </article>
+
+      <!-- 폴리오(러닝풋). 지면 아래 가장자리에 부 이름과 쪽 번호를 둔다. -->
+      {chapter && (
+        <p class="book-folio" data-pagefind-ignore>
+          <span class="book-folio-part">{chapter.partTitle}</span>
+          <span class="book-folio-no">{chapter.index} / {chapter.total}</span>
+        </p>
+      )}
 
       <BookNav prev={prev} next={next} />
     </div>
