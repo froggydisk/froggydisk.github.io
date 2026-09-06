@@ -20,6 +20,9 @@ description: "froggydisk.github.io에 한국어 기술 블로그 글을 쓰거�
 - `SKILL.md` (이 파일) — 문체·문장·구성·형식 규칙과 작업 절차
 - `references/diagrams.md` — SVG 다이어그램 규격. `src/components/diagrams/`를 건드리기 전에 읽는다
 - `references/merging-posts.md` — 여러 글을 한 편으로 합칠 때의 축 잡기와 리다이렉트 절차
+- `../book-chapter/references/korean.md` — 어색한 한국어 교정 목록. 책 원고에서 나온 것이지만
+  §1의 규칙과 같은 뿌리라 블로그 글에도 그대로 쓴다 (`~를 가진다` · `~에 위치하다` · 수사 + 명사 어순 ·
+  만들어 쓴 연어 · `센다` · 흐린 지시어). 원고를 넘기기 전에 훑는다
 
 ---
 
