@@ -14,17 +14,17 @@
 ## Tech Stack
 
 ### Core Framework
-- **Astro 7.2.2** - Static site generator optimized for performance
+- **Astro 7.3.1** - Static site generator optimized for performance
 - **TypeScript (strict mode)** - Type-safe configuration and components
 - **MDX** - Enhanced markdown with component support
 
 ### Key Dependencies
 ```json
 {
-  "@astrojs/markdown-remark": "^7.2.2", // unified() markdown processor factory
-  "@astrojs/mdx": "^7.0.5",        // Markdown + React component rendering
+  "@astrojs/markdown-remark": "^7.3.0", // unified() markdown processor factory
+  "@astrojs/mdx": "^8.0.0",        // Markdown + React component rendering
   "@astrojs/rss": "^4.0.19",       // RSS feed generation
-  "@astrojs/sitemap": "^3.7.3",    // Sitemap auto-generation
+  "@astrojs/sitemap": "^3.7.4",    // Sitemap auto-generation
   "astro-icon": "^1.1.5",          // Icon system (Lucide, Phosphor)
   "@iconify-json/lucide": "^1.2.99",
   "@iconify-json/ph": "^1.2.2",
@@ -635,6 +635,6 @@ npm run preview
 
 ---
 
-**Last Updated**: September 2, 2026
-**Framework**: Astro 7.2.2
+**Last Updated**: September 8, 2026
+**Framework**: Astro 7.3.1
 **Node**: 22
