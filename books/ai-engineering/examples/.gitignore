@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+.model-cache/
+fixtures/media/*.png
+fixtures/media/*.wav
+fixtures/media/*.aiff

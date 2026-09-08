@@ -1,0 +1,63 @@
+---
+/**
+ * 삭제 표시(tombstone)가 필요한 이유. 순번 12로 삭제한 뒤 순번 11이 늦게 도착하면 거부되고,
+ * 순번 13의 명시적 복원은 청크만 되살리며 ACL은 다시 부여해야 한다.
+ */
+const W = 136;
+const GAP = 26; // 4 × 136 + 3 × 26 = 622
+const Y = 60;
+const H_BOX = 84;
+const steps = [
+  { title: '순번 12 · 삭제', lines: ['빈 리비전 목록', '청크 · ACL 삭제'], strong: true },
+  { title: 'heads에 남는 것', lines: ['마지막 순번 12', '삭제 표시 (tombstone)'], mono: false },
+  { title: '순번 11 · 늦게 도착', lines: ['12보다 오래됐다', '→ 거부'], bad: true },
+  { title: '순번 13 · 복원', lines: ['청크 다시 생성', 'ACL은 자동 복원 없음'] },
+].map((s, i) => ({ ...s, x: 24 + i * (W + GAP) }));
+const MID = Y + H_BOX / 2;
+const H = 196;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="순번 12로 문서를 삭제하면 청크와 ACL은 지우고 heads에 마지막 순번과 삭제 표시를 남긴다. 그래서 순번 11이 늦게 도착해도 오래된 순번으로 거부된다. 순번 13의 명시적 복원은 청크를 다시 만들지만 삭제 전 ACL은 자동으로 돌아오지 않는다">
+
+<defs>
+  <marker id="ttEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">삭제 표시가 막는 것 · 도착 순서대로</text>
+
+{steps.map((s) => (
+  <>
+    <rect x={s.x} y={Y} width={W} height={H_BOX} rx="3" fill={s.bad ? 'none' : 'var(--bg-soft)'}
+          stroke={s.strong ? 'var(--ink)' : s.bad ? 'var(--accent-strong)' : 'var(--rule)'} stroke-width={s.strong || s.bad ? 1.5 : 1} stroke-dasharray={s.bad ? '4 3' : undefined}/>
+    <text class="box" x={s.x + 12} y={Y + 22} fill={s.bad ? 'var(--accent-strong)' : 'var(--ink)'}>{s.title}</text>
+    {s.lines.map((l, k) => (
+      <text class="line" x={s.x + 12} y={Y + 46 + k * 18} fill="var(--body)">{l}</text>
+    ))}
+  </>
+))}
+{steps.slice(0, -1).map((s, i) => (
+  <path d={`M ${s.x + W + 2} ${MID} H ${steps[i + 1].x - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#ttEnd)"/>
+))}
+
+<text class="cap" x="24" y={H - 12} fill="var(--muted)">행을 지웠다고 디스크·백업·캐시의 흔적까지 사라진 것은 아니다. 이 실습이 확인하는 것은 검색용 활성 행과 권한의 제거다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12px; font-weight: 550; }
+.dg .line { font-size: 10.5px; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

@@ -1,0 +1,56 @@
+---
+/**
+ * 생성 코드를 검토하는 네 단계. 순서대로 본다. 앞 단계가 깨지면 뒤 단계의 통과는 뜻이 없다.
+ */
+const BX = 24; const BW = 200; const BH = 44; const TOP = 44; const STEP = 62;
+const steps = [
+  { label: 'API가 실제로 있나', l1: '패키지 이름 · 버전 · 호출 인자 · 응답 구조를', l2: '설치 환경과 공식 문서로 확인한다' },
+  { label: '신뢰 경계', l1: '주체를 요청 본문에서 받나 · SQL·셸에 그대로 넣나', l2: '권한 검사가 모델 호출 뒤에 오면 자료는 이미 나갔다', strong: true },
+  { label: '실패 경로', l1: '예외 종류별로 허용된 상태에 매핑하고 내부 원인은 기록', l2: '시간 초과·인증 실패를 not_found로 뭉개지 않는다', strong: true },
+  { label: '테스트의 독립성', l1: '구현과 테스트가 같은 오해를 나눠 가질 수 있다', l2: '실패하는 구현에 테스트가 반응하는지 본다' },
+].map((s, i) => ({ ...s, y: TOP + i * STEP }));
+const H = steps[steps.length - 1].y + BH + 40;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="생성 코드 검토 순서 네 단계. 첫째 API가 실제로 있는지 패키지 이름과 버전, 호출 인자, 응답 구조를 설치 환경과 공식 문서로 확인한다. 둘째 신뢰 경계, 주체를 요청 본문에서 받는지, SQL이나 셸에 그대로 넣는지, 권한 검사가 모델 호출 뒤에 오는지 본다. 셋째 실패 경로, 예외 종류별로 허용된 상태에 매핑하고 시간 초과와 인증 실패를 not_found로 뭉개지 않는다. 넷째 테스트의 독립성, 구현과 테스트가 같은 오해를 공유할 수 있으니 실패하는 구현에 테스트가 반응하는지 본다">
+
+<defs>
+  <marker id="roEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">생성 코드를 보는 순서</text>
+
+{steps.map((s, i) => (
+  <>
+    <rect x={BX} y={s.y} width={BW} height={BH} rx="3" fill="var(--bg-soft)" stroke={s.strong ? 'var(--ink)' : 'var(--rule)'} stroke-width={s.strong ? 1.6 : 1}/>
+    <text class="num" x={BX + 14} y={s.y + 28} fill="var(--muted)">{i + 1}</text>
+    <text class="box" x={BX + 34} y={s.y + 28} fill="var(--ink)">{s.label}</text>
+    <text class="note" x={BX + BW + 24} y={s.y + 18} fill="var(--body)">{s.l1}</text>
+    <text class="note" x={BX + BW + 24} y={s.y + 34} fill="var(--muted)">{s.l2}</text>
+    {i < steps.length - 1 && <path d={`M ${BX + BW / 2} ${s.y + BH + 2} V ${s.y + STEP - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#roEnd)"/>}
+  </>
+))}
+
+<text class="cap" x="24" y={H - 12} fill="var(--muted)">순서대로 본다. 앞 단계가 깨지면 뒤 단계의 통과는 뜻이 없다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12px; font-weight: 550; }
+.dg .num { font-family: var(--font-mono); font-size: 11px; }
+.dg .note { font-size: 10.5px; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

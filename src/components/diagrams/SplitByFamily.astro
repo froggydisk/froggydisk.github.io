@@ -1,0 +1,64 @@
+---
+/**
+ * 학습·개발·시험 분할을 행이 아니라 문서 계열 단위로 나눈다. 같은 규정에서 파생된
+ * 원문 질문·바꿔 쓴 질문·금액만 바꾼 질문은 한 분할에 함께 둔다.
+ */
+const COLS = [
+  { title: 'train · 파라미터 조정', x: 24, w: 200, fams: ['교육비 (3행)', '휴가 (1행)'] },
+  { title: 'dev · 프롬프트·체크포인트 선택', x: 236, w: 200, fams: ['장비 (2행)'] },
+  { title: 'test · 최종 판단', x: 448, w: 200, fams: ['도서 (2행)', '회의실 (1행)'], strong: true },
+];
+const Y = 50;
+const H_BOX = 110;
+const NOTE_Y = 196;
+const H = 262;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="아홉 행을 문서 계열 단위로 나눈다. 교육비와 휴가 계열은 train, 장비 계열은 dev, 도서와 회의실 계열은 test다. 같은 규정에서 파생된 원문 질문과 바꿔 쓴 질문과 금액만 바꾼 질문은 한 분할에 함께 두어 사실상 같은 사례가 분할을 넘지 않게 한다">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">행이 아니라 계열로 나눈다 · 9행 · 5계열</text>
+
+{COLS.map((c) => (
+  <>
+    <rect x={c.x} y={Y} width={c.w} height={H_BOX} rx="3" fill={c.strong ? 'none' : 'var(--bg-soft)'} stroke={c.strong ? 'var(--ink)' : 'var(--rule)'} stroke-width={c.strong ? 1.6 : 1} stroke-dasharray={c.strong ? '4 3' : undefined}/>
+    <text class="box" x={c.x + 12} y={Y + 22} fill="var(--ink)">{c.title}</text>
+    <path d={`M ${c.x + 12} ${Y + 32} H ${c.x + c.w - 12}`} fill="none" stroke="var(--rule)" stroke-width="1"/>
+    {c.fams.map((f, k) => (
+      <>
+        <rect x={c.x + 12} y={Y + 44 + k * 30} width={c.w - 24} height="24" rx="3" fill="var(--bg)" stroke="var(--rule)" stroke-width="1"/>
+        <text class="fam" x={c.x + c.w / 2} y={Y + 44 + k * 30 + 16} text-anchor="middle" fill="var(--ink)">{f}</text>
+      </>
+    ))}
+  </>
+))}
+
+<text class="cap" x="24" y={Y + H_BOX + 20} fill="var(--muted)">시험 결과를 보고 다시 조정했다면 그 결과는 더 이상 독립적인 최종 확인이 아니다</text>
+
+<circle cx="31" cy={NOTE_Y - 4} r="7" fill="var(--accent-strong)"/>
+<text class="ic" x="31" y={NOTE_Y - 0.5} text-anchor="middle" fill="var(--bg)">✕</text>
+<text class="note" x="46" y={NOTE_Y} fill="var(--body)">행을 무작위로 섞으면 교육비 원문 질문이 train에, 같은 규정을 바꿔 쓴 질문이 test에 들어가 사실상 같은 사례가 반복된다</text>
+<circle cx="31" cy={NOTE_Y + 20} r="7" fill="var(--ink)"/>
+<text class="ic" x="31" y={NOTE_Y + 23.5} text-anchor="middle" fill="var(--bg)">✓</text>
+<text class="note" x="46" y={NOTE_Y + 24} fill="var(--body)">처음 보는 주제(도서·회의실)에서도 제공된 근거를 따르는 행동을 보려는 설계다</text>
+<text class="cap" x="46" y={NOTE_Y + 46} fill="var(--muted)">미래 개정을 보려면 시간으로, 새 조직 적용을 보려면 조직으로 나눈다. 출처를 모르는 행은 안전하다고 치지 않는다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 11.5px; font-weight: 550; }
+.dg .fam { font-size: 11.5px; font-weight: 550; }
+.dg .note { font-size: 10.5px; }
+.dg .ic { font-size: 9px; font-weight: 700; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

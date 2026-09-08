@@ -1,0 +1,61 @@
+---
+/**
+ * 원본 문서 하나에서 파생된 복사본들. 삭제 요청은 원본 한 곳에서 끝나지 않는다.
+ * 저장소의 삭제 표시가 덮는 것은 색인 안의 청크·임베딩·ACL까지고, 나머지는 별도 정책이 필요하다.
+ */
+const ROOT = { x: 24, y: 118, w: 130, h: 44 };
+const items = [
+  { label: '청크 · 임베딩 · ACL (색인)', covered: true },
+  { label: '검색 캐시 · 응답 캐시' },
+  { label: '평가 표본 · 학습 데이터' },
+  { label: '진단 로그 · 추적' },
+  { label: '백업' },
+].map((it, i) => ({ ...it, x: 240, y: 46 + i * 46, w: 250, h: 34 }));
+const H = 316;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="원본 문서 하나에서 색인의 청크와 임베딩과 ACL, 검색 캐시와 응답 캐시, 평가 표본과 학습 데이터, 진단 로그, 백업이 파생된다. 저장소의 삭제 표시가 덮는 것은 색인까지고, 나머지 복사본에는 삭제 책임자와 완료 확인 방법을 따로 정한다. 백업을 복구한 뒤 삭제 이벤트가 다시 적용되는지도 확인한다">
+
+<defs>
+  <marker id="dgEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">삭제 요청이 닿아야 하는 곳</text>
+
+<rect x={ROOT.x} y={ROOT.y} width={ROOT.w} height={ROOT.h} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+<text class="box" x={ROOT.x + ROOT.w / 2} y={ROOT.y + 27} text-anchor="middle" fill="var(--ink)">원본 문서</text>
+
+<path d={`M ${ROOT.x + ROOT.w + 2} ${ROOT.y + ROOT.h / 2} H ${items[0].x - 30}`} fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+<path d={`M ${items[0].x - 30} ${items[0].y + 17} V ${items[4].y + 17}`} fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+{items.map((it) => (
+  <>
+    <path d={`M ${it.x - 30} ${it.y + 17} H ${it.x - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#dgEnd)"/>
+    <rect x={it.x} y={it.y} width={it.w} height={it.h} rx="3" fill={it.covered ? 'var(--bg-soft)' : 'none'} stroke={it.covered ? 'var(--ink)' : 'var(--rule)'} stroke-width={it.covered ? 1.6 : 1} stroke-dasharray={it.covered ? undefined : '4 3'}/>
+    <text class="line" x={it.x + 12} y={it.y + 22} fill="var(--ink)">{it.label}</text>
+    <text class="cap" x={it.x + it.w + 12} y={it.y + 22} fill={it.covered ? 'var(--ink)' : 'var(--muted)'}>{it.covered ? '삭제 표시가 덮는 범위' : '별도 정책 · 책임자 · 완료 확인'}</text>
+  </>
+))}
+
+<text class="cap" x="24" y={H - 30} fill="var(--body)">삭제 표시는 오래된 갱신 이벤트가 자료를 되살리지 못하게 한다. 백업 보관이나 학습된 파라미터에서의 제거는 다른 일이다</text>
+<text class="cap" x="24" y={H - 12} fill="var(--muted)">확인할 것: 저장소의 행이 사라졌나 · 캐시가 무효화됐나 · 백업을 복구한 뒤 삭제 이벤트가 다시 적용되나</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12px; font-weight: 550; }
+.dg .line { font-size: 11.5px; font-weight: 550; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

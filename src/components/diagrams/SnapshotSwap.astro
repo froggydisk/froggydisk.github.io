@@ -1,0 +1,82 @@
+---
+/**
+ * 문서 갱신을 트랜잭션 밖(느린 준비)과 안(짧은 교체)으로 나눈 순서.
+ * 순번 재확인이 트랜잭션 안에 있고, 삽입 실패는 롤백된다는 것을 아래에 적는다.
+ */
+const BW = 250;
+const BH = 36;
+const TOP = 66;
+const STEP = 48;
+const left = ['원문 검증', '청킹', '임베딩 (느리다)', '벡터 공간·차원·유효성 검사'].map((l, i) => ({ l, y: TOP + i * STEP }));
+const right = ['마지막 원본 순번 재확인', '해당 문서의 기존 청크 삭제', '새 청크 · 문서 상태 저장', 'COMMIT'].map((l, i) => ({ l, y: TOP + i * STEP }));
+const LX = 24;
+const RX = 398;
+const BOTTOM = TOP + 4 * STEP; // 258
+
+const notes = [
+  { ok: false, text: '임베딩 중에 순번 3이 먼저 커밋되면, 뒤늦게 끝난 순번 2는 재확인에서 거부된다' },
+  { ok: false, text: '새 청크 삽입이 실패하면 롤백. 기존 청크만 지워진 상태로 남지 않는다' },
+  { ok: true, text: '느린 임베딩은 트랜잭션 밖에서. 쓰기 구간은 짧게 유지한다' },
+].map((n, i) => ({ ...n, y: BOTTOM + 26 + i * 24 }));
+const H = notes[2].y + 22; // 354
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="문서 갱신은 트랜잭션 밖에서 원문 검증, 청킹, 임베딩, 벡터 검사를 마친 뒤 BEGIN IMMEDIATE로 짧은 쓰기 트랜잭션을 열어 마지막 순번을 재확인하고 기존 청크를 지우고 새 청크와 상태를 저장하고 커밋한다. 임베딩 중 더 새로운 순번이 커밋되면 거부되고, 삽입이 실패하면 롤백된다">
+
+<defs>
+  <marker id="ssEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">문서 스냅샷 교체의 순서</text>
+
+<text class="cap" x={LX} y={TOP - 12} fill="var(--muted)">트랜잭션 밖 · 실패해도 DB는 그대로</text>
+<text class="cap" x={RX} y={TOP - 12} fill="var(--ink)">트랜잭션 안 · BEGIN IMMEDIATE</text>
+<rect x={RX - 10} y={TOP - 26} width={BW + 20} height={BOTTOM - TOP + 24} rx="3" fill="none" stroke="var(--ink)" stroke-width="1.2"/>
+
+{left.map((s, i) => (
+  <>
+    <rect x={LX} y={s.y} width={BW} height={BH} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+    <text class="box" x={LX + BW / 2} y={s.y + 23} text-anchor="middle" fill="var(--ink)">{s.l}</text>
+    {i < 3 && <path d={`M ${LX + BW / 2} ${s.y + BH + 2} V ${s.y + STEP - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#ssEnd)"/>}
+  </>
+))}
+{right.map((s, i) => (
+  <>
+    <rect x={RX} y={s.y} width={BW} height={BH} rx="3" fill="var(--bg-soft)" stroke={i === 0 ? 'var(--ink)' : 'var(--rule)'} stroke-width={i === 0 ? 1.6 : 1}/>
+    <text class="box" x={RX + BW / 2} y={s.y + 23} text-anchor="middle" fill="var(--ink)">{s.l}</text>
+    {i < 3 && <path d={`M ${RX + BW / 2} ${s.y + BH + 2} V ${s.y + STEP - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#ssEnd)"/>}
+  </>
+))}
+
+<!-- 밖 → 안 -->
+<path d={`M ${LX + BW + 2} ${left[3].y + BH / 2} H ${LX + BW + 40} V ${right[0].y + BH / 2} H ${RX - 13}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#ssEnd)"/>
+
+{notes.map((n) => (
+  <>
+    <circle cx="31" cy={n.y - 4} r="7" fill={n.ok ? 'var(--ink)' : 'var(--accent-strong)'}/>
+    <text class="ic" x="31" y={n.y - 0.5} text-anchor="middle" fill="var(--bg)">{n.ok ? '✓' : '✕'}</text>
+    <text class="note" x="46" y={n.y} fill="var(--body)">{n.text}</text>
+  </>
+))}
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12px; font-weight: 550; }
+.dg .note { font-size: 11px; }
+.dg .ic { font-size: 9px; font-weight: 700; }
+.dg .cap { font-size: 11px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

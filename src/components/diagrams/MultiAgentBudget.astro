@@ -1,0 +1,62 @@
+---
+/**
+ * 여러 에이전트로 나눌 때 예산·도구·격리를 어떻게 다루는지. 상위 요청이 전체 예산을 쥐고,
+ * 위임 메시지에 허용 도구와 배분 예산과 반환 형식을 적고, 하위 결과는 검증한 뒤 상위 문맥에 넣는다.
+ */
+const TOP = { x: 24, y: 46, w: 624, h: 44 };
+const SUBS = [
+  { x: 24, title: '하위 A · 문서 검색', tool: '도구: search만', budget: '예산 4 · 조직 A 자료만' },
+  { x: 348, title: '하위 B · 티켓 조회', tool: '도구: get_ticket만', budget: '예산 4 · 조직 A 티켓만' },
+].map((s) => ({ ...s, y: 138, w: 300, h: 64 }));
+const MERGE = { x: 186, y: 232, w: 300, h: 34 };
+const H = 296;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="상위 요청이 전체 예산 12와 시간 30초를 쥐고, 위임 메시지에 하위 작업과 자료와 허용 도구와 배분 예산과 반환 형식을 적어 하위 에이전트 둘에 넘긴다. 문서 검색 담당은 search만, 티켓 조회 담당은 get_ticket만 쓰고 각각 예산 4를 받는다. 하위 결과는 검증한 뒤 상위 문맥에 넣고, 하위의 출력으로 권한을 넓힐 수 없다">
+
+<defs>
+  <marker id="mabEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">위임 · 예산 · 격리</text>
+
+<rect x={TOP.x} y={TOP.y} width={TOP.w} height={TOP.h} rx="3" fill="var(--bg-soft)" stroke="var(--ink)" stroke-width="1.6"/>
+<text class="box" x={TOP.x + 14} y={TOP.y + 27} fill="var(--ink)">상위 요청 · 전체 예산 12 · 시간 30초 · 조직 A</text>
+
+<text class="cap" x="336" y="114" text-anchor="middle" fill="var(--muted)">위임 메시지: 하위 작업 · 필요한 자료 · 허용 도구 · 배분 예산 · 반환 형식</text>
+{SUBS.map((s) => (
+  <>
+    <path d={`M ${s.x + s.w / 2} ${TOP.y + TOP.h + 2} V ${s.y - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#mabEnd)"/>
+    <rect x={s.x} y={s.y} width={s.w} height={s.h} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+    <text class="box" x={s.x + 14} y={s.y + 22} fill="var(--ink)">{s.title}</text>
+    <text class="sub" x={s.x + 14} y={s.y + 40} fill="var(--body)">{s.tool}</text>
+    <text class="sub" x={s.x + 14} y={s.y + 55} fill="var(--muted)">{s.budget}</text>
+    <path d={`M ${s.x + s.w / 2} ${s.y + s.h + 2} V ${MERGE.y - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#mabEnd)"/>
+  </>
+))}
+
+<rect x={MERGE.x} y={MERGE.y} width={MERGE.w} height={MERGE.h} rx="3" fill="var(--bg-soft)" stroke="var(--ink)" stroke-width="1.4"/>
+<text class="box" x={MERGE.x + MERGE.w / 2} y={MERGE.y + 22} text-anchor="middle" fill="var(--ink)">결과 검증 → 상위 문맥</text>
+
+<text class="cap" x="24" y={H - 12} fill="var(--muted)">하위마다 10단계씩 개수 제한 없이 주면 전체 한도가 사라진다 · 하위의 출력으로 권한을 넓힐 수 없다 · 조직 B의 캐시·초안은 보이지 않는다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12px; font-weight: 550; }
+.dg .sub { font-size: 10.5px; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

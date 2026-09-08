@@ -1,0 +1,67 @@
+---
+/**
+ * AI 개발 도구 세 단계. 오른쪽으로 갈수록 읽는 문맥과 실행 권한이 늘고 검토 단위도 커진다.
+ */
+const LX = 24;
+const COLS = ['인라인 완성', '대화형 편집', '개발 에이전트'].map((t, i) => ({ t, x: 140 + i * 172, w: 164 }));
+const ROWS = [
+  { label: '읽는 문맥', cells: ['현재 파일의 몇 줄', '여러 줄 · 여러 파일', '저장소 + 명령 결과'] },
+  { label: '할 수 있는 일', cells: ['다음 줄 제안', '변경안 제안', '파일 탐색 · 명령 실행'] },
+  { label: '검토 단위', cells: ['한 줄', 'diff 한 덩어리', '단계별 변경과 로그'] },
+].map((r, i) => ({ ...r, y: 80 + i * 44, h: 36 }));
+const HEAD_Y = 40;
+const ARROW_Y = 222;
+const H = 250;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="AI 개발 도구 세 단계 비교. 인라인 완성은 현재 파일의 몇 줄을 읽고 다음 줄을 제안하며 한 줄 단위로 검토한다. 대화형 편집은 여러 파일을 읽고 변경안을 제안하며 diff 단위로 검토한다. 개발 에이전트는 저장소와 명령 결과를 읽고 파일 탐색과 명령 실행을 하며 단계별 변경과 로그로 검토한다. 오른쪽으로 갈수록 위험과 검토 범위가 커진다">
+
+<defs>
+  <marker id="ttEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">같은 모델, 다른 문맥과 권한</text>
+
+{COLS.map((c, i) => (
+  <>
+    <rect x={c.x} y={HEAD_Y} width={c.w} height="28" rx="3" fill={i === 2 ? 'var(--ink)' : 'var(--bg-soft)'} stroke={i === 2 ? 'var(--ink)' : 'var(--rule)'} stroke-width="1"/>
+    <text class="head" x={c.x + c.w / 2} y={HEAD_Y + 19} text-anchor="middle" fill={i === 2 ? 'var(--bg)' : 'var(--ink)'}>{c.t}</text>
+  </>
+))}
+
+{ROWS.map((r) => (
+  <>
+    <text class="label" x={LX} y={r.y + 23} fill="var(--muted)">{r.label}</text>
+    {r.cells.map((c, i) => (
+      <>
+        <rect x={COLS[i].x} y={r.y} width={COLS[i].w} height={r.h} rx="3" fill="none" stroke="var(--rule)" stroke-width="1"/>
+        <text class="cell" x={COLS[i].x + COLS[i].w / 2} y={r.y + 23} text-anchor="middle" fill="var(--body)">{c}</text>
+      </>
+    ))}
+  </>
+))}
+
+<path d={`M 140 ${ARROW_Y} H 640`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#ttEnd)"/>
+<text class="cap" x="140" y={ARROW_Y + 18} fill="var(--muted)">위험과 검토 범위가 커진다 · 저장소 접근 범위 · 실행 격리 · 비밀 노출 경로를 기준으로 고른다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .head { font-size: 11.5px; font-weight: 600; }
+.dg .label { font-size: 10.5px; }
+.dg .cell { font-size: 11px; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

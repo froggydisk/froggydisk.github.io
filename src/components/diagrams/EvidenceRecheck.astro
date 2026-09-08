@@ -1,0 +1,76 @@
+---
+/**
+ * 한 요청 안에서 근거의 현재 상태를 세 번 다시 확인하는 자리와, 생성 중 권한이 회수됐을 때
+ * 셋째 확인이 잡아 evidence_changed로 끝나는 흐름을 시간축 위에 보인다.
+ */
+const AXIS_Y = 104;
+const X0 = 40;
+const X1 = 640;
+const stages = [
+  { label: '검색', x: 60, w: 90 },
+  { label: '문맥 구성', x: 180, w: 100 },
+  { label: '생성 (오래 걸린다)', x: 320, w: 170 },
+  { label: '검증', x: 520, w: 60 },
+  { label: '반환', x: 600, w: 40 },
+];
+const checks = [
+  { x: 160, label: '① 청크 현재 상태' },
+  { x: 300, label: '② 선택 근거 재확인' },
+  { x: 500, label: '③ 근거 재확인' },
+];
+const EVENT_X = 410;
+const H = 214;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="한 요청 안에서 근거의 현재 상태를 검색 뒤, 생성 직전, 생성 뒤 세 번 다시 확인한다. 생성 중에 권한이 회수되면 셋째 확인이 잡아 evidence_changed로 답변과 출처를 버린다. 셋째 확인 직후의 변경은 잡지 못한다">
+
+<defs>
+  <marker id="erEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">한 요청 안의 근거 재확인 세 번</text>
+
+<path d={`M ${X0} ${AXIS_Y} H ${X1}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#erEnd)"/>
+{stages.map((s) => (
+  <>
+    <rect x={s.x} y={AXIS_Y - 14} width={s.w} height="28" rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+    <text class="stage" x={s.x + s.w / 2} y={AXIS_Y + 4} text-anchor="middle" fill="var(--ink)">{s.label}</text>
+  </>
+))}
+
+{checks.map((c) => (
+  <>
+    <circle cx={c.x} cy={AXIS_Y} r="6" fill="var(--ink)"/>
+    <path d={`M ${c.x} ${AXIS_Y + 8} V ${AXIS_Y + 30}`} fill="none" stroke="var(--ink)" stroke-width="1"/>
+    <text class="cap" x={c.x} y={AXIS_Y + 44} text-anchor="middle" fill="var(--ink)">{c.label}</text>
+  </>
+))}
+
+<!-- 생성 중 권한 회수 -->
+<path d={`M ${EVENT_X} ${AXIS_Y - 20} V 52`} fill="none" stroke="var(--accent-strong)" stroke-width="1.2" stroke-dasharray="3 3"/>
+<circle cx={EVENT_X} cy="52" r="6" fill="var(--accent-strong)"/>
+<text class="cap" x={EVENT_X} y="40" text-anchor="middle" fill="var(--accent-strong)">권한 회수 · 문서 개정</text>
+<path d={`M ${EVENT_X + 8} 58 Q 460 70 ${checks[2].x - 4} ${AXIS_Y - 10}`} fill="none" stroke="var(--accent-strong)" stroke-width="1.2" marker-end="url(#erEnd)"/>
+<text class="cap" x={checks[2].x + 12} y="66" fill="var(--accent-strong)">③이 잡는다 → evidence_changed</text>
+
+<text class="cap" x="24" y={H - 12} fill="var(--muted)">③ 직후의 변경은 잡지 못하고, 이미 보낸 자료는 되돌릴 수 없다. 허용할 변경 시점과 취소·재시도 규칙은 따로 정한다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .stage { font-size: 11.5px; font-weight: 550; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

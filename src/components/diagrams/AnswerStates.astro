@@ -1,0 +1,75 @@
+---
+/**
+ * 응답의 다섯 상태를 결정 순서로 보인다. 네 가지 질문을 위에서 아래로 내려가며
+ * '아니오'면 오른쪽 상태로 빠지고, 넷을 다 통과한 경우만 answered다.
+ */
+const QX = 24;
+const QW = 250;
+const QH = 44;
+const SX = 330;
+const SW = 318;
+const TOP = 44;
+const STEP = 70;
+
+const rows = [
+  { q: '이 사용자에게 허용된 요청인가', state: 'forbidden', tell: '접근이 제한됐다고만 알린다' },
+  { q: '질문에 대상과 조건이 다 있나', state: 'needs_clarification', tell: '빠진 정보를 되묻는다' },
+  { q: '조회·등록 도구가 정상 동작했나', state: 'unavailable', tell: '실패했다고 알리고 재시도 가능 여부를 말한다' },
+  { q: '허용된 문서·결과로 답을 확인했나', state: 'insufficient_evidence', tell: '확인할 근거가 없다고 알린다' },
+].map((r, i) => ({ ...r, y: TOP + i * STEP }));
+
+const FINAL_Y = TOP + rows.length * STEP; // 324
+const QMID = QX + QW / 2;
+const H = FINAL_Y + QH + 24; // 392
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="응답은 다섯 상태 중 하나다. 허용되지 않은 요청이면 forbidden, 질문에 대상이나 조건이 빠졌으면 needs_clarification, 도구가 실패했으면 unavailable, 허용된 근거로 답을 확인할 수 없으면 insufficient_evidence, 넷을 다 통과하면 answered다">
+
+<defs>
+  <marker id="asEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">응답의 다섯 상태</text>
+
+{rows.map((r, i) => (
+  <>
+    <rect x={QX} y={r.y} width={QW} height={QH} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+    <text class="q" x={QMID} y={r.y + 27} text-anchor="middle" fill="var(--ink)">{r.q}</text>
+
+    <text class="cap" x={(QX + QW + SX) / 2} y={r.y + QH / 2 - 7} text-anchor="middle" fill="var(--muted)">아니오</text>
+    <path d={`M ${QX + QW + 2} ${r.y + QH / 2} H ${SX - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#asEnd)"/>
+
+    <rect x={SX} y={r.y} width={SW} height={QH} rx="3" fill="none" stroke="var(--rule)" stroke-width="1"/>
+    <text class="m" x={SX + 12} y={r.y + 18} fill="var(--ink)">{r.state}</text>
+    <text class="tell" x={SX + 12} y={r.y + 34} fill="var(--body)">{r.tell}</text>
+
+    <text class="cap" x={QMID + 9} y={r.y + QH + 18} fill="var(--muted)">예</text>
+    <path d={`M ${QMID} ${r.y + QH + 2} V ${r.y + STEP - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#asEnd)"/>
+  </>
+))}
+
+<rect x={QX} y={FINAL_Y} width={QW} height={QH} rx="3" fill="var(--bg-soft)" stroke="var(--ink)" stroke-width="1.6"/>
+<text class="m" x={QX + 12} y={FINAL_Y + 18} fill="var(--ink)">answered</text>
+<text class="tell" x={QX + 12} y={FINAL_Y + 34} fill="var(--body)">답변과 근거를 보여 준다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .q { font-size: 12.5px; font-weight: 550; }
+.dg .m { font-family: var(--font-mono); font-size: 12px; font-weight: 600; }
+.dg .tell { font-size: 11px; }
+.dg .cap { font-size: 11px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

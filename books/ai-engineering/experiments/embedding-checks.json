@@ -1,0 +1,10 @@
+{
+  "dimension": 384,
+  "unit_norm": 1.0,
+  "single_batch_max_delta": 8.998064301296571e-08,
+  "rejected": [
+    "empty",
+    "role",
+    "over_tokens"
+  ]
+}

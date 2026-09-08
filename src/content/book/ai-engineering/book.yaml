@@ -1,0 +1,26 @@
+title: 개발자를 위한 AI 엔지니어링
+subtitle: 모델 호출에서 신뢰할 수 있는 서비스까지
+description: >-
+  사전 학습 모델을 활용해 문서에 근거한 답변과 업무 도구 실행을 제공하는 서비스를 만든다.
+  모델 선택과 API 호출에서 시작해 컨텍스트, 검색, 에이전트, 평가, 보안과 운영까지
+  구현 원리와 실패 조건, 설계 대안을 연결해 설명한다.
+author: froggydisk
+status: done
+published: 2026-09-08
+last_modified_at: 2026-09-08
+parts:
+  - dir: 01-foundations
+    title: 문제와 모델의 경계
+    icon: lucide:compass
+  - dir: 02-model-interface
+    title: 모델 호출을 애플리케이션으로 만들기
+  - dir: 03-retrieval
+    title: 문서를 지식으로 연결하기
+  - dir: 04-actions
+    title: 답변에서 업무 실행으로
+  - dir: 05-trust
+    title: 입력 매체와 신뢰의 확장
+  - dir: 06-operations
+    title: 측정하고 배포하고 유지하기
+  - dir: 07-appendices
+    title: 부록

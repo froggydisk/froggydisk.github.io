@@ -1,0 +1,79 @@
+---
+/**
+ * 영상에서 프레임을 뽑는 두 방식. 고정 간격은 가까운 두 사건을 한 표본으로 뭉개고,
+ * 장면 변화 기반은 사건마다 후보를 남긴다. 답변의 시각을 채점하기 전에 후보에 사건이 있었는지부터 본다.
+ */
+const X0 = 60;
+const X1 = 640;
+const DUR = 10;
+const tx = (t: number) => X0 + (t / DUR) * (X1 - X0);
+const events = [
+  { t: 2.1, label: '사건 A' },
+  { t: 5.8, label: '사건 B' },
+  { t: 6.2, label: '사건 C' },
+];
+const fixed = [0, 2, 4, 6, 8, 10];
+const scene = [2.1, 5.8, 6.2];
+const AXIS_Y = 120;
+const H = 230;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="10초 영상에 사건 A가 2.1초, B가 5.8초, C가 6.2초에 있다. 2초 고정 간격 추출은 0, 2, 4, 6, 8, 10초 표본을 남겨 0.4초 차이인 B와 C가 6초 표본 하나로 뭉개진다. 장면 변화 기반 추출은 사건마다 후보 프레임을 남긴다. 생성 답변의 시각을 채점하기 전에 후보 프레임에 사건이 있었는지부터 채점한다">
+
+<defs>
+  <marker id="fsEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">프레임을 뽑는 두 방식 · 10초 영상</text>
+
+<!-- 고정 간격 -->
+<text class="cap" x="24" y="62" fill="var(--muted)">고정 간격 2초</text>
+{fixed.map((t) => (
+  <rect x={tx(t) - 6} y="70" width="12" height="12" rx="2" fill="var(--ink)"/>
+))}
+<text class="cap" x={tx(6) + 12} y="66" fill="var(--accent-strong)">6초 표본 하나에 B·C(0.4초 차이)가 뭉개진다</text>
+
+<!-- 축과 사건 -->
+<path d={`M ${X0} ${AXIS_Y} H ${X1 + 8}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#fsEnd)"/>
+{[0, 2, 4, 6, 8, 10].map((t) => (
+  <>
+    <path d={`M ${tx(t)} ${AXIS_Y - 4} V ${AXIS_Y + 4}`} fill="none" stroke="var(--muted)" stroke-width="1"/>
+    <text class="tick" x={tx(t)} y={AXIS_Y + 18} text-anchor="middle" fill="var(--muted)">{`${t}s`}</text>
+  </>
+))}
+{events.map((e, i) => (
+  <>
+    <circle cx={tx(e.t)} cy={AXIS_Y} r="6" fill="var(--accent-strong)"/>
+    <text class="cap" x={tx(e.t) + (i === 1 ? -10 : i === 2 ? 10 : 0)} y={AXIS_Y - 12} text-anchor={i === 1 ? 'end' : i === 2 ? 'start' : 'middle'} fill="var(--accent-strong)">{`${e.label} ${e.t}s`}</text>
+  </>
+))}
+
+<!-- 장면 변화 기반 -->
+<text class="cap" x="24" y="160" fill="var(--muted)">장면 변화 기반</text>
+{scene.map((t) => (
+  <rect x={tx(t) - 6} y="150" width="12" height="12" rx="2" fill="none" stroke="var(--ink)" stroke-width="1.4"/>
+))}
+<text class="cap" x={tx(6.2) + 14} y="160" fill="var(--ink)">사건마다 후보 프레임이 남는다</text>
+
+<text class="cap" x="24" y={H - 30} fill="var(--body)">답변의 시각을 채점하기 전에 후보 프레임에 사건이 있었는지부터 채점한다. 관찰 자료의 누락과 생성 오류를 나눈다</text>
+<text class="cap" x="24" y={H - 12} fill="var(--muted)">시각은 프레임 번호 ÷ FPS가 아니라 매체의 타임스탬프로 잡는다. 가변 프레임률에서는 나눗셈이 틀린다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .tick { font-family: var(--font-mono); font-size: 10px; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

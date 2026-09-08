@@ -1,0 +1,67 @@
+---
+/**
+ * 로짓 [2.0, 1.0, 0.0]에 온도 0.5 · 1.0 · 2.0을 적용한 소프트맥스 확률을 막대로 보인다.
+ * 값은 본문 sampling.py의 실행 결과다. 온도 1.0 묶음에는 top-k 2 · top-p 0.8이 남기는 범위를 표시한다.
+ */
+const BASE = 168;
+const SCALE = 120; // 확률 1.0 = 120px
+const BAR_W = 32;
+const BAR_GAP = 14;
+const groups = [
+  { t: '0.5', p: [0.867, 0.117, 0.016], cx: 130 },
+  { t: '1.0', p: [0.665, 0.245, 0.09], cx: 336, cut: true },
+  { t: '2.0', p: [0.506, 0.307, 0.186], cx: 542 },
+].map((g) => ({
+  ...g,
+  bars: g.p.map((p, k) => ({ p, x: g.cx - 55 + k * (BAR_W + BAR_GAP), h: p * SCALE })),
+}));
+
+const g1 = groups[1];
+// 값 라벨(막대 위 6px, 글자 높이 약 9px)까지 감싸도록 위로 24px 여유를 둔다
+const CUT = { x: g1.bars[0].x - 6, y: BASE - g1.bars[0].h - 24, w: g1.bars[1].x + BAR_W + 6 - (g1.bars[0].x - 6), h: g1.bars[0].h + 30 };
+
+const H = 232;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="로짓 2.0, 1.0, 0.0인 세 후보의 확률은 온도 0.5에서 0.867, 0.117, 0.016, 온도 1.0에서 0.665, 0.245, 0.09, 온도 2.0에서 0.506, 0.307, 0.186이다. 온도를 낮추면 첫 후보로 몰리고 높이면 평평해진다. 온도 1.0에서 top-k 2와 top-p 0.8은 모두 앞의 두 후보를 남긴다">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">온도에 따른 세 후보의 확률 · 로짓 2.0 · 1.0 · 0.0</text>
+
+{groups.map((g) => (
+  <>
+    <path d={`M ${g.bars[0].x - 10} ${BASE} H ${g.bars[2].x + BAR_W + 10}`} fill="none" stroke="var(--rule)" stroke-width="1"/>
+    {g.bars.map((b, k) => (
+      <>
+        <rect x={b.x} y={BASE - b.h} width={BAR_W} height={b.h} rx="2"
+              fill={k === 0 ? 'var(--ink)' : 'var(--bg-soft)'} stroke={k === 0 ? 'var(--ink)' : 'var(--rule)'} stroke-width="1"/>
+        <text class="val" x={b.x + BAR_W / 2} y={BASE - b.h - 6} text-anchor="middle" fill={k === 0 ? 'var(--ink)' : 'var(--muted)'}>{b.p}</text>
+      </>
+    ))}
+    <text class="grp" x={g.cx + 7} y={BASE + 20} text-anchor="middle" fill="var(--ink)">{`T = ${g.t}`}</text>
+  </>
+))}
+
+<!-- 온도 1.0에서 top-k 2 · top-p 0.8이 남기는 범위 -->
+<rect x={CUT.x} y={CUT.y} width={CUT.w} height={CUT.h} rx="3" fill="none" stroke="var(--accent-strong)" stroke-width="1.2" stroke-dasharray="4 3"/>
+<text class="cap" x={CUT.x + CUT.w / 2} y={CUT.y - 8} text-anchor="middle" fill="var(--accent-strong)">top-k 2 · top-p 0.8 → 앞의 둘만 남는다</text>
+
+<text class="cap" x="336" y={H - 10} text-anchor="middle" fill="var(--muted)">막대 순서는 로짓 2.0 · 1.0 · 0.0. 낮은 온도는 첫 후보로 몰리고, 높은 온도는 평평해진다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .val { font-family: var(--font-mono); font-size: 10.5px; }
+.dg .grp { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

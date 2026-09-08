@@ -1,0 +1,404 @@
+{
+  "scope": "in_process_synthetic_wait_not_model_load",
+  "runs": [
+    {
+      "version": "release-a",
+      "requests": 20,
+      "queue_capacity": 4,
+      "workers": 2,
+      "statuses": {
+        "overloaded": 16,
+        "ok": 4
+      },
+      "admitted_p95_seconds": 0.02227229200070724,
+      "rows": [
+        {
+          "trace_id": "7605ba3e115b4b449b1649a686994ccb",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 1.2909877113997936e-06
+        },
+        {
+          "trace_id": "499f5210fff04ae9801d9c4424c1bdf2",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 6.67001586407423e-07
+        },
+        {
+          "trace_id": "7f3c79413be141cfad5851877ad4efc9",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 4.169996827840805e-07
+        },
+        {
+          "trace_id": "38fdd634531d4d70bc92f232a2d4ec3b",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 2.9199873097240925e-07
+        },
+        {
+          "trace_id": "e3ddbf8da69245109b6fd7242696ea10",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 3.3300602808594704e-07
+        },
+        {
+          "trace_id": "74bb307677c340148fbf78e1ff9e327b",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 2.9199873097240925e-07
+        },
+        {
+          "trace_id": "d340d22a16c746518ce9fa42c92551f5",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 2.9098009690642357e-07
+        },
+        {
+          "trace_id": "65482cf30da14171b4428f6bfac13a11",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 2.910092007368803e-07
+        },
+        {
+          "trace_id": "7322a10f821c485aaac6990dc12e11bd",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 2.9199873097240925e-07
+        },
+        {
+          "trace_id": "f5094307c8ba4f819523910ea9d95d8c",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 2.500019036233425e-07
+        },
+        {
+          "trace_id": "56a025229db54e32ae08ec449a65ee14",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 2.910092007368803e-07
+        },
+        {
+          "trace_id": "939cd732db5848f48264838b1e4489b2",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 2.9199873097240925e-07
+        },
+        {
+          "trace_id": "ee897093bf234a97b932d540a58e82c8",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 2.500019036233425e-07
+        },
+        {
+          "trace_id": "15470eff24a947d7bee4158e86a7f588",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 2.500019036233425e-07
+        },
+        {
+          "trace_id": "45ec7afa9dcb420f90b7990e2b65cd67",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 2.9098009690642357e-07
+        },
+        {
+          "trace_id": "9d48e47bf46b497b8def2e49b5c3e178",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 2.910092007368803e-07
+        },
+        {
+          "trace_id": "acd964066fb24c66b48dbfaf8b2de502",
+          "version": "release-a",
+          "status": "ok",
+          "seconds": 0.011179499997524545
+        },
+        {
+          "trace_id": "380a4d7c286546c1b25273d53914b72c",
+          "version": "release-a",
+          "status": "ok",
+          "seconds": 0.011187875003088266
+        },
+        {
+          "trace_id": "814ce1d2b9b44eafab61c150bcc769bd",
+          "version": "release-a",
+          "status": "ok",
+          "seconds": 0.022255082993069664
+        },
+        {
+          "trace_id": "2f84012d58674d368ad56c87f2112f67",
+          "version": "release-a",
+          "status": "ok",
+          "seconds": 0.02227229200070724
+        }
+      ]
+    },
+    {
+      "version": "release-b",
+      "requests": 20,
+      "queue_capacity": 4,
+      "workers": 2,
+      "statuses": {
+        "overloaded": 16,
+        "deadline_exceeded": 4
+      },
+      "admitted_p95_seconds": 0.05115275000571273,
+      "rows": [
+        {
+          "trace_id": "de52aed6a6af480583579728366da035",
+          "version": "release-b",
+          "status": "overloaded",
+          "seconds": 8.33999365568161e-07
+        },
+        {
+          "trace_id": "599ba445d9124a79b3eced87e0455464",
+          "version": "release-b",
+          "status": "overloaded",
+          "seconds": 5.00003807246685e-07
+        },
+        {
+          "trace_id": "07312a314403443bbddd15621f469061",
+          "version": "release-b",
+          "status": "overloaded",
+          "seconds": 3.7500285543501377e-07
+        },
+        {
+          "trace_id": "3925090510c84783a1ea78e475023ac3",
+          "version": "release-b",
+          "status": "overloaded",
+          "seconds": 3.7500285543501377e-07
+        },
+        {
+          "trace_id": "0963d6dfb0be4e128040fd6f570e4f24",
+          "version": "release-b",
+          "status": "overloaded",
+          "seconds": 3.7500285543501377e-07
+        },
+        {
+          "trace_id": "8ecb13071b4c43819dd7449805cad896",
+          "version": "release-b",
+          "status": "overloaded",
+          "seconds": 3.3300602808594704e-07
+        },
+        {
+          "trace_id": "25330c5a1fa34dfbba0a9faad20c735d",
+          "version": "release-b",
+          "status": "overloaded",
+          "seconds": 3.7500285543501377e-07
+        },
+        {
+          "trace_id": "6b5ce3a21ff04c22ae80d43a34b29156",
+          "version": "release-b",
+          "status": "overloaded",
+          "seconds": 3.7500285543501377e-07
+        },
+        {
+          "trace_id": "ba3842c2096048f2ac3481a202bdb684",
+          "version": "release-b",
+          "status": "overloaded",
+          "seconds": 4.169996827840805e-07
+        },
+        {
+          "trace_id": "cec60d4c510d4c97a929b00ba8aa557d",
+          "version": "release-b",
+          "status": "overloaded",
+          "seconds": 2.9199873097240925e-07
+        },
+        {
+          "trace_id": "3295045b724c45758b1d852d8a3ddf76",
+          "version": "release-b",
+          "status": "overloaded",
+          "seconds": 3.7500285543501377e-07
+        },
+        {
+          "trace_id": "1f41b5952dc74de7807c40755a4cf39d",
+          "version": "release-b",
+          "status": "overloaded",
+          "seconds": 3.3300602808594704e-07
+        },
+        {
+          "trace_id": "0cd92295e15543199481b01bf5d88ed5",
+          "version": "release-b",
+          "status": "overloaded",
+          "seconds": 2.910092007368803e-07
+        },
+        {
+          "trace_id": "f604f4b79d164c63addc95b10bd790a9",
+          "version": "release-b",
+          "status": "overloaded",
+          "seconds": 3.329769242554903e-07
+        },
+        {
+          "trace_id": "38bcd9bce7c945ef98deaa7d40f436cf",
+          "version": "release-b",
+          "status": "overloaded",
+          "seconds": 3.7500285543501377e-07
+        },
+        {
+          "trace_id": "5c937f4be3f742fcbd8f8cb4c12db508",
+          "version": "release-b",
+          "status": "overloaded",
+          "seconds": 3.329769242554903e-07
+        },
+        {
+          "trace_id": "80c1cc271e1d4036bdb07504bd2176cf",
+          "version": "release-b",
+          "status": "deadline_exceeded",
+          "seconds": 0.05109812499722466
+        },
+        {
+          "trace_id": "c43d33b0ac024c2dae7d8d0389bdf90a",
+          "version": "release-b",
+          "status": "deadline_exceeded",
+          "seconds": 0.05111550001311116
+        },
+        {
+          "trace_id": "36166dcdf67d49189ac3e5c3ca90f72e",
+          "version": "release-b",
+          "status": "deadline_exceeded",
+          "seconds": 0.05114962501102127
+        },
+        {
+          "trace_id": "8ca42ba5f23c4ba79e538bc9fc47067a",
+          "version": "release-b",
+          "status": "deadline_exceeded",
+          "seconds": 0.05115275000571273
+        }
+      ]
+    },
+    {
+      "version": "release-a",
+      "requests": 20,
+      "queue_capacity": 4,
+      "workers": 2,
+      "statuses": {
+        "overloaded": 16,
+        "ok": 4
+      },
+      "admitted_p95_seconds": 0.022207750007510185,
+      "rows": [
+        {
+          "trace_id": "1ce56cf52dce482cb1419601f5636859",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 1.00000761449337e-06
+        },
+        {
+          "trace_id": "7d5a461573e34bef8e6a0e48fb583873",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 5.00003807246685e-07
+        },
+        {
+          "trace_id": "9696b3e6a2244b0b862eaec745314a3e",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 5.00003807246685e-07
+        },
+        {
+          "trace_id": "456cb9e5c5aa487fad3d1ec0b8db5c10",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 4.1601015254855156e-07
+        },
+        {
+          "trace_id": "e0188c8a15854762a5ab296ecc31876a",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 3.7500285543501377e-07
+        },
+        {
+          "trace_id": "490f6bf0f943405392c42c8dd2e02044",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 4.169996827840805e-07
+        },
+        {
+          "trace_id": "2ecc938c76e343239b507f19c20604d6",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 4.1601015254855156e-07
+        },
+        {
+          "trace_id": "caf7934e960647d881ef053e94c4a28e",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 4.169996827840805e-07
+        },
+        {
+          "trace_id": "8831ba2550ea4322b33ae38d4800d244",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 3.7500285543501377e-07
+        },
+        {
+          "trace_id": "f85c998d0ea647eeb0e130f8d2e74ae5",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 3.7500285543501377e-07
+        },
+        {
+          "trace_id": "7a869517e8a94e009ef4eeb584fd20c5",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 4.1601015254855156e-07
+        },
+        {
+          "trace_id": "3f221ad3dc9a41a09e5a72d964b6377f",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 4.169996827840805e-07
+        },
+        {
+          "trace_id": "53bd8073e03a4fff8c898b20bcadf14f",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 3.7500285543501377e-07
+        },
+        {
+          "trace_id": "40af3999e35f4822ad813d7a7be841d4",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 4.159810487180948e-07
+        },
+        {
+          "trace_id": "d2ac8ac12f3d48238b50b9750fb0d450",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 3.7500285543501377e-07
+        },
+        {
+          "trace_id": "fbd4be52e072438aacf87a50ae39335e",
+          "version": "release-a",
+          "status": "overloaded",
+          "seconds": 4.159810487180948e-07
+        },
+        {
+          "trace_id": "977b6fd2c9c048e4a4a2e6f8fd412997",
+          "version": "release-a",
+          "status": "ok",
+          "seconds": 0.011135541019029915
+        },
+        {
+          "trace_id": "a076588f94b44216a609068839ae5df3",
+          "version": "release-a",
+          "status": "ok",
+          "seconds": 0.01114458401571028
+        },
+        {
+          "trace_id": "1d4b8b64fad44a96970f6a61084bbf09",
+          "version": "release-a",
+          "status": "ok",
+          "seconds": 0.022203750006156042
+        },
+        {
+          "trace_id": "5d1939732bc54ae89eecb7d2ea5e9884",
+          "version": "release-a",
+          "status": "ok",
+          "seconds": 0.022207750007510185
+        }
+      ]
+    }
+  ]
+}

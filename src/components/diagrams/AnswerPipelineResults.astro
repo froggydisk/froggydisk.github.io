@@ -1,0 +1,86 @@
+---
+/**
+ * answer_question의 순서와 세 가지 상위 결과. 생성 단계에서 빠지면 generation_failed,
+ * 검사 두 겹에서 빠지면 contract_failed, 다 통과하면 contract_valid고 그 안의 status를 그다음 읽는다.
+ */
+const BX = 24;
+const BW = 280;
+const BH = 40;
+const TOP = 44;
+const STEP = 60;
+const EX_X = 380;
+const EX_W = 268;
+const steps = [
+  { label: '문맥 구성 · 계수', exit: '계수 실패 → 예외를 호출자에게', code: false },
+  { label: '구조화 생성', exit: 'generation_failed', sub: '실패 · 거절 · 미완료', code: true },
+  { label: 'JSON · 스키마 검사', exit: 'contract_failed', sub: '깨진 JSON · 중복 키 · 필드·타입', code: true },
+  { label: '상태 · 인용 검사', exit: 'contract_failed', sub: 'unknown_source · quote_not_found · …', code: true },
+  { label: 'contract_valid', mono: true, strong: true },
+].map((s, i) => ({ ...s, y: TOP + i * STEP }));
+const MIDX = BX + BW / 2;
+
+const FIN_Y = steps[4].y + BH + 26; // 350
+const finals = ['answered', 'needs_clarification', 'insufficient_evidence'];
+const FW = 150;
+const FGAP = 12;
+const H = FIN_Y + 30 + 24; // 404
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="문맥 구성과 계수 뒤 구조화 생성을 하고, 실패·거절·미완료면 generation_failed다. JSON과 스키마 검사, 상태와 인용 검사에서 걸리면 contract_failed다. 다 통과하면 contract_valid고, 그 안의 status가 answered, needs_clarification, insufficient_evidence 중 하나다">
+
+<defs>
+  <marker id="aprEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">answer_question의 순서와 세 가지 결과</text>
+
+{steps.map((s, i) => (
+  <>
+    <rect x={BX} y={s.y} width={BW} height={BH} rx="3" fill="var(--bg-soft)"
+          stroke={s.strong ? 'var(--ink)' : 'var(--rule)'} stroke-width={s.strong ? 1.6 : 1}/>
+    <text class={s.mono ? 'mb' : 'box'} x={MIDX} y={s.y + 25} text-anchor="middle" fill="var(--ink)">{s.label}</text>
+    {i < steps.length - 1 && (
+      <path d={`M ${MIDX} ${s.y + BH + 2} V ${s.y + STEP - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#aprEnd)"/>
+    )}
+    {s.exit && (
+      <>
+        <path d={`M ${BX + BW + 2} ${s.y + BH / 2} H ${EX_X - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#aprEnd)"/>
+        <rect x={EX_X} y={s.y} width={EX_W} height={BH} rx="3" fill="none" stroke="var(--rule)" stroke-width="1"/>
+        <text class={s.code ? 'm' : 'sub'} x={EX_X + 12} y={s.sub ? s.y + 17 : s.y + 25} fill="var(--ink)">{s.exit}</text>
+        {s.sub && <text class="sub" x={EX_X + 12} y={s.y + 32} fill="var(--muted)">{s.sub}</text>}
+      </>
+    )}
+  </>
+))}
+
+<!-- 통과한 뒤 읽는 status -->
+<path d={`M ${MIDX} ${steps[4].y + BH + 2} V ${FIN_Y - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#aprEnd)"/>
+{finals.map((f, k) => (
+  <>
+    <rect x={BX + k * (FW + FGAP)} y={FIN_Y} width={FW} height="30" rx="3" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.2"/>
+    <text class="m" x={BX + k * (FW + FGAP) + FW / 2} y={FIN_Y + 19} text-anchor="middle" fill="var(--ink)">{f}</text>
+  </>
+))}
+<text class="sub" x={BX + 3 * (FW + FGAP)} y={FIN_Y + 19} fill="var(--muted)">그다음에 status를 읽는다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12.5px; font-weight: 550; }
+.dg .mb { font-family: var(--font-mono); font-size: 12px; font-weight: 600; }
+.dg .m { font-family: var(--font-mono); font-size: 11px; font-weight: 600; }
+.dg .sub { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

@@ -1,0 +1,64 @@
+---
+/**
+ * 프로젝트의 다음 순서 두 줄. 품질은 독립 자료부터, 운영은 인증부터. 파인튜닝은 맨 뒤다.
+ */
+const LX = 24;
+const SX = 130;
+const ROWS = [
+  { y: 50, label: '품질', boxes: ['독립 평가 자료 준비', '출력 제약 · 대체 모델 비교', '파인튜닝 검토'], w: 158, gap: 22, lastDashed: true },
+  { y: 130, label: '운영', boxes: ['다중 사용자 인증', '확인 UI · 승인 만료·취소', '외부 결과 불명 처리', '워커 격리 · 실제 부하'], w: 116, gap: 18 },
+];
+const BH = 38;
+const H = 246;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="다음 개선 순서. 품질은 독립 평가 자료 준비, 출력 제약과 대체 모델 비교, 그 뒤에야 파인튜닝 검토 순서다. 파인튜닝은 반복되는 행동 문제가 남고 검토 데이터가 충분할 때만 본다. 운영은 다중 사용자 인증, 확인 UI와 승인 만료·취소, 외부 결과 불명 처리, 워커 격리와 실제 부하 순서다. 자료가 늘어 검색이 병목이 될 때 하이브리드 색인과 근사 검색을 비교한다">
+
+<defs>
+  <marker id="nsEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">프레임워크를 더 설치하는 일이 아니다</text>
+
+{ROWS.map((r) => (
+  <>
+    <text class="label" x={LX} y={r.y + 24} fill="var(--ink)">{r.label}</text>
+    {r.boxes.map((b, i) => {
+      const x = SX + i * (r.w + r.gap);
+      const last = r.lastDashed && i === r.boxes.length - 1;
+      return (
+        <>
+          <rect x={x} y={r.y} width={r.w} height={BH} rx="3" fill={last ? 'none' : 'var(--bg-soft)'} stroke={last ? 'var(--muted)' : i === 0 ? 'var(--ink)' : 'var(--rule)'} stroke-width={i === 0 ? 1.6 : 1} stroke-dasharray={last ? '4 3' : undefined}/>
+          <text class="box" x={x + r.w / 2} y={r.y + 23} text-anchor="middle" fill={last ? 'var(--muted)' : 'var(--ink)'}>{b}</text>
+          {i < r.boxes.length - 1 && <path d={`M ${x + r.w + 2} ${r.y + BH / 2} H ${x + r.w + r.gap - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#nsEnd)"/>}
+        </>
+      );
+    })}
+  </>
+))}
+<text class="sub" x="648" y={ROWS[0].y + BH + 16} text-anchor="end" fill="var(--muted)">반복되는 행동 문제가 남고 검토 데이터가 충분할 때</text>
+
+<text class="cap" x={SX} y={ROWS[1].y + BH + 22} fill="var(--muted)">자료가 늘어 검색이 병목이 될 때 → 하이브리드 색인 · 근사 검색 비교</text>
+<text class="cap" x="24" y={H - 12} fill="var(--body)">구조가 좋아져도 잘못된 금액을 자신 있게 말하면 채택하지 않는다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .label { font-size: 12px; font-weight: 600; }
+.dg .box { font-size: 10.5px; font-weight: 550; }
+.dg .sub { font-size: 10px; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

@@ -1,0 +1,187 @@
+{
+  "recorded_at": "2026-09-07T16:16:04.483606+00:00",
+  "model": "intfloat/multilingual-e5-small",
+  "revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3",
+  "space": "intfloat/multilingual-e5-small@614241f622f53c4eeff9890bdc4f31cfecc418b3:mean-mask:l2:query-passage:v1",
+  "dimension": 384,
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "python": "3.14.6",
+  "packages": {
+    "torch": "2.14.0",
+    "transformers": "5.16.1",
+    "huggingface-hub": "1.30.0"
+  },
+  "device": "cpu",
+  "dtype": "float32",
+  "threads": 4,
+  "offline": false,
+  "load_seconds": 41.21837124999729,
+  "document_embedding_seconds": 0.03570233299979009,
+  "documents": [
+    {
+      "id": "edu-v2",
+      "text": "직원 교육비 한도는 분기당 30만 원이다. 구매 전에 팀장의 승인을 받고 지원 포털에서 신청한다."
+    },
+    {
+      "id": "leave-v1",
+      "text": "연차 휴가는 근태 시스템에서 신청한다. 팀장의 승인을 받아야 한다."
+    },
+    {
+      "id": "travel-v1",
+      "text": "국내 출장 교통비는 영수증을 첨부해 비용 정산 시스템에서 신청한다."
+    },
+    {
+      "id": "account-v1",
+      "text": "계정 비밀번호를 잊었다면 로그인 화면의 비밀번호 재설정을 선택한다."
+    },
+    {
+      "id": "equipment-v1",
+      "text": "노트북 고장은 IT 지원 티켓으로 접수한다. 자산 번호와 증상을 함께 적는다."
+    }
+  ],
+  "rows": [
+    {
+      "id": "E01",
+      "question": "업무 관련 강의를 결제하려는데 얼마까지 지원되나요?",
+      "relevant": [
+        "edu-v2"
+      ],
+      "embedding_seconds": 0.00661100001889281,
+      "search_seconds": 0.00070112498360686,
+      "hits": [
+        {
+          "id": "edu-v2",
+          "doc_id": "edu-v2",
+          "text": "직원 교육비 한도는 분기당 30만 원이다. 구매 전에 팀장의 승인을 받고 지원 포털에서 신청한다.",
+          "score": 0.8750265227378252
+        },
+        {
+          "id": "equipment-v1",
+          "doc_id": "equipment-v1",
+          "text": "노트북 고장은 IT 지원 티켓으로 접수한다. 자산 번호와 증상을 함께 적는다.",
+          "score": 0.8161964576503333
+        },
+        {
+          "id": "travel-v1",
+          "doc_id": "travel-v1",
+          "text": "국내 출장 교통비는 영수증을 첨부해 비용 정산 시스템에서 신청한다.",
+          "score": 0.8132639479578873
+        }
+      ]
+    },
+    {
+      "id": "E02",
+      "question": "휴가를 쓰려면 어디서 허락받아야 하나요?",
+      "relevant": [
+        "leave-v1"
+      ],
+      "embedding_seconds": 0.005304332997184247,
+      "search_seconds": 0.0007128749857656658,
+      "hits": [
+        {
+          "id": "leave-v1",
+          "doc_id": "leave-v1",
+          "text": "연차 휴가는 근태 시스템에서 신청한다. 팀장의 승인을 받아야 한다.",
+          "score": 0.8382986193030799
+        },
+        {
+          "id": "travel-v1",
+          "doc_id": "travel-v1",
+          "text": "국내 출장 교통비는 영수증을 첨부해 비용 정산 시스템에서 신청한다.",
+          "score": 0.7863158083884144
+        },
+        {
+          "id": "edu-v2",
+          "doc_id": "edu-v2",
+          "text": "직원 교육비 한도는 분기당 30만 원이다. 구매 전에 팀장의 승인을 받고 지원 포털에서 신청한다.",
+          "score": 0.7806044432991588
+        }
+      ]
+    },
+    {
+      "id": "E03",
+      "question": "로그인이 안 돼요. 암호를 기억하지 못하겠어요.",
+      "relevant": [
+        "account-v1"
+      ],
+      "embedding_seconds": 0.005732416000682861,
+      "search_seconds": 0.0006786250160075724,
+      "hits": [
+        {
+          "id": "account-v1",
+          "doc_id": "account-v1",
+          "text": "계정 비밀번호를 잊었다면 로그인 화면의 비밀번호 재설정을 선택한다.",
+          "score": 0.8703228284160743
+        },
+        {
+          "id": "equipment-v1",
+          "doc_id": "equipment-v1",
+          "text": "노트북 고장은 IT 지원 티켓으로 접수한다. 자산 번호와 증상을 함께 적는다.",
+          "score": 0.8325295823345842
+        },
+        {
+          "id": "leave-v1",
+          "doc_id": "leave-v1",
+          "text": "연차 휴가는 근태 시스템에서 신청한다. 팀장의 승인을 받아야 한다.",
+          "score": 0.7923862208924632
+        }
+      ]
+    },
+    {
+      "id": "E04",
+      "question": "교육비는 팀장 승인 없이 먼저 결제해도 되나요?",
+      "relevant": [
+        "edu-v2"
+      ],
+      "embedding_seconds": 0.005880832992261276,
+      "search_seconds": 0.0006851250072941184,
+      "hits": [
+        {
+          "id": "edu-v2",
+          "doc_id": "edu-v2",
+          "text": "직원 교육비 한도는 분기당 30만 원이다. 구매 전에 팀장의 승인을 받고 지원 포털에서 신청한다.",
+          "score": 0.8964207938893065
+        },
+        {
+          "id": "leave-v1",
+          "doc_id": "leave-v1",
+          "text": "연차 휴가는 근태 시스템에서 신청한다. 팀장의 승인을 받아야 한다.",
+          "score": 0.8105276416211771
+        },
+        {
+          "id": "equipment-v1",
+          "doc_id": "equipment-v1",
+          "text": "노트북 고장은 IT 지원 티켓으로 접수한다. 자산 번호와 증상을 함께 적는다.",
+          "score": 0.800430056542495
+        }
+      ]
+    },
+    {
+      "id": "E05",
+      "question": "해외 출장 호텔 숙박비 한도는 얼마인가요?",
+      "relevant": [],
+      "embedding_seconds": 0.0051875839999411255,
+      "search_seconds": 0.0006827079923823476,
+      "hits": [
+        {
+          "id": "travel-v1",
+          "doc_id": "travel-v1",
+          "text": "국내 출장 교통비는 영수증을 첨부해 비용 정산 시스템에서 신청한다.",
+          "score": 0.8455085877137248
+        },
+        {
+          "id": "edu-v2",
+          "doc_id": "edu-v2",
+          "text": "직원 교육비 한도는 분기당 30만 원이다. 구매 전에 팀장의 승인을 받고 지원 포털에서 신청한다.",
+          "score": 0.8248049633029878
+        },
+        {
+          "id": "equipment-v1",
+          "doc_id": "equipment-v1",
+          "text": "노트북 고장은 IT 지원 티켓으로 접수한다. 자산 번호와 증상을 함께 적는다.",
+          "score": 0.7926684503475112
+        }
+      ]
+    }
+  ]
+}

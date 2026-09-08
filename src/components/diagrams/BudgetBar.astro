@@ -1,0 +1,80 @@
+---
+/**
+ * 문맥 한도 W를 지시문·질문, 문서·이력, 출력 예약 O, 여유 M으로 나눈 예산 막대.
+ * 아래 줄은 문서·이력 자리를 우선순위대로 채우는 과정이다. 큰 후보가 안 들어가면
+ * 건너뛰고 다음 후보를 시도한다.
+ */
+const X0 = 24;
+const X1 = 648;
+const BAR_Y = 62;
+const BAR_H = 34;
+const parts = [
+  { label: '지시문 + 질문', x: X0, w: 150, note: '먼저 넣는다', strong: true },
+  { label: '문서 · 이력', x: 174, w: 296, note: '우선순위대로 채운다' },
+  { label: '출력 예약 O', x: 470, w: 130, note: '입력을 고르기 전에 뺀다' },
+  { label: 'M', x: 600, w: 48, note: '여유' },
+];
+
+const FILL_Y = 138;
+const FILL_H = 30;
+const chips = [
+  { label: '정책 v2', x: 174, w: 120, ok: true },
+  { label: '티켓 결과', x: 298, w: 96, ok: true },
+];
+const SKIP = { label: '긴 대화 이력', x: 470, w: 150 }; // 문서·이력 자리를 넘어선 후보
+
+const H = 236;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="문맥 한도 W 안에서 지시문과 질문을 먼저 넣고, 출력 예약과 여유를 뺀 나머지를 문서와 이력으로 우선순위대로 채운다. 정책 v2와 티켓 결과는 들어가고, 긴 대화 이력은 자리에 맞지 않아 건너뛰며 omitted_for_budget에 기록된다">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">토큰 예산 I + O + M ≤ W</text>
+
+<!-- W 브래킷 -->
+<path d={`M ${X0} ${BAR_Y - 16} V ${BAR_Y - 10} H ${X1} V ${BAR_Y - 16}`} fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+<text class="cap" x={(X0 + X1) / 2} y={BAR_Y - 20} text-anchor="middle" fill="var(--muted)">W · 모델의 문맥 한도</text>
+
+{parts.map((p) => (
+  <>
+    <rect x={p.x} y={BAR_Y} width={p.w} height={BAR_H} fill={p.strong ? 'var(--ink)' : 'var(--bg-soft)'} stroke={p.strong ? 'var(--ink)' : 'var(--rule)'} stroke-width="1"/>
+    <text class="seg" x={p.x + p.w / 2} y={BAR_Y + 21} text-anchor="middle" fill={p.strong ? 'var(--bg)' : 'var(--ink)'}>{p.label}</text>
+    <text class="cap" x={p.x + p.w / 2} y={BAR_Y + BAR_H + 16} text-anchor="middle" fill="var(--muted)">{p.note}</text>
+  </>
+))}
+
+<!-- 문서·이력 자리를 채우는 과정 -->
+<text class="cap" x="174" y={FILL_Y - 8} fill="var(--muted)">문서 · 이력 자리를 채우는 순서</text>
+<rect x="174" y={FILL_Y} width="296" height={FILL_H} rx="3" fill="none" stroke="var(--rule)" stroke-width="1" stroke-dasharray="4 3"/>
+{chips.map((c) => (
+  <>
+    <rect x={c.x + 3} y={FILL_Y + 4} width={c.w} height={FILL_H - 8} rx="3" fill="var(--bg)" stroke="var(--ink)" stroke-width="1.2"/>
+    <text class="chip" x={c.x + 3 + c.w / 2} y={FILL_Y + 19} text-anchor="middle" fill="var(--ink)">{c.label}</text>
+  </>
+))}
+<rect x={SKIP.x} y={FILL_Y + 4} width={SKIP.w} height={FILL_H - 8} rx="3" fill="none" stroke="var(--rule)" stroke-width="1" stroke-dasharray="3 3"/>
+<text class="chip" x={SKIP.x + SKIP.w / 2} y={FILL_Y + 19} text-anchor="middle" fill="var(--muted)">{SKIP.label}</text>
+<circle cx={SKIP.x + SKIP.w} cy={FILL_Y + 4} r="7" fill="var(--accent-strong)"/>
+<text class="ic" x={SKIP.x + SKIP.w} y={FILL_Y + 7.5} text-anchor="middle" fill="var(--bg)">✕</text>
+
+<text class="cap" x="174" y={FILL_Y + FILL_H + 22} fill="var(--body)">① 정책 v2 채택 → ② 긴 대화 이력은 자리에 안 맞아 건너뜀 (omitted_for_budget) → ③ 티켓 결과 채택</text>
+<text class="cap" x="174" y={FILL_Y + FILL_H + 42} fill="var(--muted)">질문과 지시문이 예산을 넘으면 자르지 않고 생성을 중단한다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .seg { font-size: 12px; font-weight: 550; }
+.dg .chip { font-size: 11px; font-weight: 550; }
+.dg .ic { font-size: 9px; font-weight: 700; }
+.dg .cap { font-size: 11px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

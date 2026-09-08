@@ -1,0 +1,28 @@
+{
+  "model": "openai/whisper-tiny",
+  "revision": "169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
+  "device": "cpu",
+  "dtype": "float32",
+  "threads": 4,
+  "pillow": "12.3.0",
+  "tessdata_revision": "87416418657359cb625c412a48b6e1d6d41c29bd",
+  "tessdata_sha256": "6b85e11d9bbf07863b97b3523b1b112844c43e713df8b66418a081fd1060b3b2",
+  "tesseract": "tesseract 5.5.3",
+  "ocr": {
+    "reference": "교육비는 분기당 30만 원이다.\n수강 전에 팀장의 승인을 받아야 한다.",
+    "text": "교육비는 분기당 30만 원이다.\n수강 전에 팀장의 승인을 받아야 한다.",
+    "seconds": 0.11077983301947825,
+    "cer": 0.0
+  },
+  "speech": {
+    "reference": "교육비 한도는 얼마인가요?",
+    "text": "주유기 한 돈인 얼마인가요?",
+    "duration_seconds": 1.749125,
+    "tts_seconds": 0.787147583992919,
+    "load_seconds": 17.334769042005064,
+    "asr_seconds": 0.21715124999172986,
+    "cer": 0.45454545454545453
+  },
+  "scope": "synthetic_clean_media_not_real_user_quality",
+  "usage": "OCR text and transcript require review before indexing or tool confirmation"
+}

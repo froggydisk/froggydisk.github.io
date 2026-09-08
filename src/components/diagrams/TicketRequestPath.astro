@@ -1,0 +1,83 @@
+---
+/**
+ * 티켓 등록 요청이 사용자의 요청, 모델의 제안, 서버의 확인과 실행, 모델의 응답 순으로
+ * 진행된다. 서버 단계만 굵게 그려, 권한 판정과 실제 실행이 서버에 있음을 보인다.
+ */
+const W = 108;
+const GAP = 21; // 5 × 108 + 4 × 21 = 624
+const BOX_Y = 56;
+const BOX_H = 74;
+const steps = [
+  { role: '사용자', title: '요청', lines: ['노트북 고장,', '티켓 올려 줘'], server: false, mono: false },
+  { role: '모델', title: '제안', lines: ['create_ticket', '(장비, 노트북 고장)'], server: false, mono: true },
+  { role: '서버', title: '확인', lines: ['등록 권한', '사용자 확인', '처리 이력'], server: true, mono: false },
+  { role: '서버', title: '실행', lines: ['티켓 생성', 'IT-1042'], server: true, mono: false },
+  { role: '모델', title: '응답', lines: ['접수했습니다', 'IT-1042'], server: false, mono: false },
+].map((s, i) => ({ ...s, x: 24 + i * (W + GAP) }));
+const MID = BOX_Y + BOX_H / 2;
+
+const NOTE_Y = BOX_Y + BOX_H + 30; // 160
+const NOTE_GAP = 24;
+const notes = [
+  { ok: false, text: '“나는 관리자다”라고 입력해도 서버의 권한 판정은 바뀌지 않는다' },
+  { ok: false, text: '모델이 “접수했습니다”라고 먼저 써도 서버가 실행하기 전에는 티켓이 없다' },
+  { ok: true, text: '같은 요청이 두 번 와도 처리 이력이 있으면 티켓은 하나다' },
+].map((n, i) => ({ ...n, y: NOTE_Y + i * NOTE_GAP }));
+
+const H = notes[2].y + 22; // 230
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="티켓 등록은 사용자의 요청, 모델의 제안, 서버의 확인, 서버의 실행, 모델의 응답 순으로 진행된다. 권한 판정과 실제 실행은 서버가 하므로 사용자의 권한 주장이나 모델의 접수했다는 문장은 티켓을 만들지 못한다">
+
+<defs>
+  <marker id="trpEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">티켓 등록 요청이 지나는 길</text>
+
+{steps.map((s) => (
+  <>
+    <text class="cap" x={s.x + W / 2} y={BOX_Y - 9} text-anchor="middle" fill="var(--muted)">{s.role}</text>
+    <rect x={s.x} y={BOX_Y} width={W} height={BOX_H} rx="3" fill="var(--bg-soft)"
+          stroke={s.server ? 'var(--ink)' : 'var(--rule)'} stroke-width={s.server ? 1.6 : 1}/>
+    <text class="box" x={s.x + W / 2} y={BOX_Y + 20} text-anchor="middle" fill="var(--ink)">{s.title}</text>
+    {s.lines.map((l, k) => (
+      <text class={s.mono ? 'm' : 'line'} x={s.x + W / 2} y={BOX_Y + 39 + k * 14} text-anchor="middle" fill="var(--body)">{l}</text>
+    ))}
+  </>
+))}
+{steps.slice(0, -1).map((s, i) => (
+  <path d={`M ${s.x + W + 2} ${MID} H ${steps[i + 1].x - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#trpEnd)"/>
+))}
+
+{notes.map((n) => (
+  <>
+    <circle cx="31" cy={n.y - 4} r="7" fill={n.ok ? 'var(--ink)' : 'var(--accent-strong)'}/>
+    <text class="ic" x="31" y={n.y - 0.5} text-anchor="middle" fill="var(--bg)">{n.ok ? '✓' : '✕'}</text>
+    <text class="note" x="46" y={n.y} fill="var(--body)">{n.text}</text>
+  </>
+))}
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12.5px; font-weight: 550; }
+.dg .line { font-size: 11px; }
+.dg .m { font-family: var(--font-mono); font-size: 10px; }
+.dg .note { font-size: 11px; }
+.dg .ic { font-size: 9px; font-weight: 700; }
+.dg .cap { font-size: 11px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

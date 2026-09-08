@@ -1,0 +1,27 @@
+{
+  "recorded_at": "2026-09-07T16:25:32.886592+00:00",
+  "sqlite": "3.53.2",
+  "model": "intfloat/multilingual-e5-small",
+  "revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3",
+  "initial": "replaced",
+  "before_effective_date": [
+    {
+      "id": "3ca1569f2fc01dd5ef6b980e5095b77bf63f76f3b5b6c8acebaea7ec5732cc85",
+      "doc_id": "edu",
+      "text": "교육비 한도는 분기당 20만 원이다. 구매 전 팀장의 승인을 받는다.",
+      "score": 0.9045769999192649
+    }
+  ],
+  "current": [
+    {
+      "id": "61502d9a06ead8828c611b470ca3d5eeb305587213a1aedf28c66b3dc9d6fa7e",
+      "doc_id": "edu",
+      "text": "교육비 한도는 분기당 30만 원이다. 구매 전 팀장의 승인을 받고 지원 포털에서 신청한다.",
+      "score": 0.8996672327674057
+    }
+  ],
+  "reopened_equal": true,
+  "revoked_results": [],
+  "delete": "deleted",
+  "stale_error": "오래된 이벤트 또는 같은 순번의 다른 내용"
+}

@@ -1,0 +1,161 @@
+---
+title: 첫 호출과 신뢰할 수 있는 응답 처리
+description: Python으로 첫 모델 호출을 만들고, 전송·생성·업무 세 단계의 성공을 구분하고, 시간 초과·재시도·스트림 중단을 모의 전송으로 검증한다.
+last_modified_at: 2026-09-08
+---
+
+import ThreeSuccesses from "../../../../components/diagrams/ThreeSuccesses.astro";
+import ResultStates from "../../../../components/diagrams/ResultStates.astro";
+import TimeoutPhases from "../../../../components/diagrams/TimeoutPhases.astro";
+import StreamLifecycle from "../../../../components/diagrams/StreamLifecycle.astro";
+import MockTransport from "../../../../components/diagrams/MockTransport.astro";
+
+“교육비 한도와 신청 순서를 알려 줘.” 문서 한 장을 붙여 모델에 보내는 코드는 열 줄이면 된다. 돌아온 문자열을 그대로 화면에 보내면 어떻게 될까. 응답이 중간에 끊겼을 수도, 모델이 답을 거절했을 수도, 문장 대신 도구 호출 요청이 들어 있을 수도 있다. HTTP 200은 이 셋을 구분해 주지 않는다.
+
+CLI는 교육비 안내 문서 한 장을 코드에 고정해 두고 질문만 바꿔 넘긴다. 검색도 티켓 도구도 아직 없다.
+
+## 예제 환경
+
+예제는 `books/ai-engineering/examples/`에 있고, 사이트 빌드와 의존성이 달라 Python 가상 환경을 따로 만든다.
+
+```sh
+python3 -m venv books/ai-engineering/examples/.venv
+source books/ai-engineering/examples/.venv/bin/activate
+python -m pip install -r books/ai-engineering/examples/requirements.txt
+```
+
+패키지 버전은 `requirements.txt`에 고정해 뒀다. 이 SDK 버전은 HTTP 클라이언트로 `httpx2`를 받으므로, 다른 예제에서 가져온 `httpx.Client`를 넘기면 타입이 맞지 않는다.
+
+API 키는 환경 변수 `OPENAI_API_KEY`, 모델 식별자는 `OPENAI_MODEL`로 받는다. 키를 소스나 로그에 남기지 않고, `.env` 자동 로딩도 넣지 않았다. 변수가 없으면 CLI는 외부 요청을 보내기 전에 종료 코드 2로 끝난다. 설정이 없는 상태는 재시도해도 성공하지 않으니 네트워크 오류와 구분한다. 안내 문구에는 변수 이름만 넣는다.
+
+## 세 단계의 성공
+
+<ThreeSuccesses />
+
+대표 구현은 OpenAI Responses API다. 요청에는 다음 가상 문서를 넣는다.
+
+```text
+[교육용 가상 문서 edu-v2; 시행일 2026-09-01]
+한울연구소의 직원 교육비 한도는 분기당 30만 원이다.
+구매 전에 팀장의 승인을 받고 지원 포털에서 신청한다.
+```
+
+```python
+response = client.responses.create(
+    model=model,
+    instructions=INSTRUCTIONS,
+    input=f"{DOCUMENT}\n\n[사용자 질문]\n{question}",
+    max_output_tokens=512,
+    store=False,
+)
+```
+
+`max_output_tokens=512`는 짧은 문서 질의용 초기값이다. 모델이 이 한도에서 어떤 조건으로 미완료를 돌려주는지 보고 조정한다. `store=False`는 응답 저장에 관한 요청 설정 하나일 뿐이라, 제공자의 데이터 처리 정책은 따로 확인한다. 응답의 출력 배열이 항상 “첫 메시지 하나”라고 가정하지 말고 항목의 타입을 확인한다. [Responses API 생성 참조](https://developers.openai.com/api/reference/python/resources/responses/methods/create)
+
+`GenerationResult.status == "ok"`는 둘째 단계까지다. 모델이 문서의 한도를 잘못 읽어도 문법이 완전한 문장이 나오므로, `ok`가 곧 `answered`는 아니다.
+
+## 결과의 여섯 상태
+
+```python
+@dataclass(frozen=True)
+class GenerationResult:
+    status: str
+    text: str = ""
+    response_id: str | None = None
+    request_id: str | None = None
+    input_tokens: int | None = None
+    output_tokens: int | None = None
+    error_code: str | None = None
+```
+
+`response_id`는 생성 응답의 식별자, `request_id`는 요청 추적용 식별자다. 스트리밍의 최종 객체에는 요청 식별자가 실리지 않을 수 있어서 없는 값은 `null`로 둔다. 사용량도 마찬가지다. 연결이 끊긴 요청은 서버가 계산을 했는지 알 수 없는데, `null`을 0으로 바꾸면 실패가 많을수록 비용이 적게 기록된다.
+
+<ResultStates />
+
+도구 호출이 돌아오면 `unexpected_output`이다. 도구 이름을 보고 함수를 실행하는 일도, reasoning 항목을 사용자 답변으로 내보내는 일도 여기서는 하지 않는다. 모델의 거절과 서버의 권한 거부는 다른 일이다. 모델이 거절했다고 조직이 그 사용자를 거부한 것이 아니고, 서버가 금지한 요청은 모델이 허용해도 실행되지 않는다.
+
+```sh
+python books/ai-engineering/examples/model_client.py "교육비 한도와 신청 순서를 알려 줘"
+```
+
+정상이면 JSON 하나를 출력하고 종료 코드 0, 생성 실패나 지원하지 않는 출력은 1, 설정 오류는 2다.
+
+## 시간 초과와 재시도
+
+```python
+with OpenAI(
+    api_key=api_key,
+    max_retries=0,
+    timeout=httpx2.Timeout(30.0, connect=5.0),
+) as client:
+    result = generate(client, model, question)
+```
+
+<TimeoutPhases />
+
+연결 5초, 읽기 30초는 교육용 초기값이다. 읽기 한도는 기다림 한 번마다 다시 재므로 스트리밍이 작은 조각을 계속 보내면 전체 시간을 제한하지 못한다. 전체 마감이 필요하면 상위 요청 처리에서 마감 시각을 관리하고 취소를 전달해야 하는데, 이 동기 CLI에는 그 기능이 없다.
+
+SDK의 기본 재시도는 2회지만 예제는 0으로 둔다. 요청을 한 번만 보내면 호출 횟수와 결과를 연결해서 볼 수 있다. 재시도를 넣을 때는 다시 시도하면 회복되는 실패인지, 서버가 이미 처리했을 가능성이 있는지, 추가 비용과 대기가 허용되는지를 본다. 틀린 키를 같은 키로 반복해도 소용없고, 일시적인 연결 장애에는 제한된 재시도가 도움이 된다.
+
+| 관측 | 먼저 확인할 것 | 기본 처리 |
+|---|---|---|
+| 인증 실패 | 키와 프로젝트 설정 | 자동 반복 없이 오류 반환 |
+| 권한 실패 | 모델·프로젝트 접근 권한 | 설정 확인 |
+| 잘못된 요청 | 인자·지원 기능·입력 | 요청 수정 |
+| 429 | 요청 속도 제한인지 사용 한도 문제인지 | 원인을 구분할 기록을 남기고 중단 |
+| 서버 오류 | 일시적인 실패인지 | 실패 반환, 정책을 정한 뒤 재시도 도입 |
+| 시간 초과 | 어느 단계에서 기다렸는지 | 완료 여부를 추정하지 않음 |
+
+429는 요청 속도 제한과 사용 한도 초과가 다른 조치를 요구하므로 상태 코드 하나로 묶어 재시도하지 않는다. 재시도를 넣는다면 횟수를 제한하고 간격을 늘리고 지터를 섞되, SDK와 애플리케이션 양쪽에 두면 총 호출 횟수가 곱해지니 한 계층에만 둔다. 서버가 생성을 마친 뒤 응답만 잃었다면 다시 생성하는 비용이 든다. [OpenAI 오류 안내](https://developers.openai.com/api/docs/guides/error-codes)
+
+원본 예외 메시지에는 요청 내용이나 내부 경로가 들어 있을 수 있어 사용자에게 돌려주지 않는다. 예제는 `timeout`, `authentication`, `rate_or_quota`처럼 자체 분류한 코드만 반환하고, 상세 기록은 접근을 제한한 진단 로그에 둔다.
+
+## 스트리밍의 완료와 중단
+
+스트리밍은 생성 중인 결과를 이벤트로 받는다. 부분 텍스트를 받았다고 최종 응답이 완성된 것은 아니어서, 예제는 `response.completed`를 받은 뒤에만 최종 응답을 정규화한다. [스트리밍 응답 안내](https://developers.openai.com/api/docs/guides/streaming-responses)
+
+<StreamLifecycle />
+
+CLI는 델타를 stdout에 바로 쓰지 않고 최종 응답을 확인한 뒤 JSON 하나만 출력한다. 다음 프로그램이 stdout을 읽을 때 임시 문장과 최종 결과가 섞이지 않는다. 화면에 델타를 보여 주는 기능은 ‘생성 중’ 상태와 함께 별도 계층으로 만든다.
+
+연결이 정상적으로 닫혔더라도 완료 이벤트를 못 봤으면 성공의 증거가 없다. 예제는 이를 `missing_terminal_event`로, 전송 라이브러리의 읽기 오류는 `transport`로 기록하고 둘 다 불완전한 텍스트를 돌려주지 않는다. 끊긴 부분에 새 요청의 결과를 이어 붙이지도 않는다. 새 생성은 앞선 텍스트와 다른 방향으로 갈 수 있다. `with` 문으로 스트림과 클라이언트를 닫는다. 단발 CLI에서는 티가 안 나지만 반복 호출하는 서버의 연결 풀에서는 새는 연결이 쌓인다.
+
+```sh
+python books/ai-engineering/examples/model_client.py --stream "교육비 신청 순서는?"
+```
+
+## 모의 전송 테스트
+
+실제 모델에 질문을 반복해도 시간 초과나 스트림 중단을 원할 때 만들 수는 없다. 예제는 실제 SDK에 가짜 HTTP 전송을 끼운다.
+
+<MockTransport />
+
+테스트의 키와 모델 식별자는 가짜 값이고 모든 요청은 모의 전송에서 끝나므로 외부 사용량이 생기지 않는다.
+
+```sh
+python -m unittest discover \
+  -s books/ai-engineering/examples -p 'test_*.py' -v
+```
+
+| 검증 상황 | 기대 결과 |
+|---|---|
+| 완료 텍스트와 정상 사용량 | `ok`, 텍스트와 사용량 보존 |
+| 텍스트가 있지만 미완료 | `incomplete`, 텍스트 비움 |
+| 거절 콘텐츠 | `refused` |
+| 출력 없음 · 미지원 도구 요청 | `unexpected_output` |
+| 인증·권한·제한·서버 오류 | 분류 코드, 원본 오류 문구 미노출 |
+| 연결 실패 · 시간 초과 | 실패 분류 |
+| 완료 이벤트가 있는 스트림 | 최종 응답 검증 |
+| 델타만 받은 뒤 스트림 종료 | `interrupted` |
+| 델타 뒤 읽기 오류 | `interrupted` |
+| 사용량 없음 | 미상인 값을 `null`로 유지 |
+| 잘못된 JSON | `unexpected_output` |
+
+재시도 0인 조건에서 모의 호출이 한 번만 일어나는지도 확인한다. 테스트가 통과해도 실제 모델의 한국어 품질, 계정 권한, 비용, 외부 네트워크 지연은 그대로 남는다. 접근 가능한 모델로 같은 CLI를 실행해 모델·설정·질문·응답·시간·사용량을 따로 기록한다.
+
+## 실습: 성공·미완료·장애 구별하기
+
+1. 가상 환경에서 전체 테스트를 실행한다. 실패하면 모델을 의심하기 전에 설치 버전과 Python 환경을 본다.
+2. 테스트의 `response_body` 상태를 `incomplete`로 바꾸고 텍스트는 정상 문장으로 남긴다. 어댑터가 그 문장을 `ok`로 돌려주면 안 된다.
+3. 스트림의 완료 이벤트를 지운다. 델타가 있었더라도 `interrupted`여야 한다. 스트림 종료를 성공으로 바꾸면 이 테스트가 실패해야 한다.
+4. 외부 호출 환경이 있으면 문서에 답이 있는 질문과 없는 질문을 보낸다. 둘 다 `ok`일 수 있다. 그 차이를 본 뒤 `ok`와 `answered`를 어떻게 연결할지 써 둔다.

@@ -1,0 +1,68 @@
+---
+/**
+ * 재귀 분할 청킹. 예산을 넘는 문서를 가운데 근처 문단 경계에서 나누고, 나뉜 부분에도
+ * 같은 검사를 다시 한다. 마지막 청크에 예외 조항만 떨어져 남는 위험을 표시한다.
+ */
+const X0 = 24;
+const X1 = 648;
+const H_BAR = 26;
+const rows = [
+  { y: 50, label: '규정 전문 · 1,200 토큰 (예) > 예산 480', parts: [[X0, X1]], full: true },
+  { y: 112, label: '가운데 근처 문단 경계에서 둘로 → 각각 다시 검사', parts: [[X0, 330], [342, X1]] },
+  { y: 174, label: '모두 480 이하 · 겹침 없음', parts: [[X0, 176], [188, 330], [342, 494], [506, X1]] },
+];
+const H = 250;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="예산 480토큰을 넘는 규정 전문을 가운데 근처 문단 경계에서 둘로 나누고, 나뉜 부분에 같은 검사를 다시 해서 모두 480 이하가 될 때까지 나눈다. 겹침은 없다. 마지막 청크에 예외 조항만 떨어져 남으면 본문과 조건이 분리되므로 확인이 필요하다">
+
+<defs>
+  <marker id="csEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">예산을 넘는 문서를 나누는 순서</text>
+
+{rows.map((r, i) => (
+  <>
+    <text class="cap" x={X0} y={r.y - 8} fill="var(--muted)">{r.label}</text>
+    {r.parts.map(([a, b], k) => {
+      const last = i === 2 && k === 3;
+      return (
+        <>
+          <rect x={a} y={r.y} width={b - a} height={H_BAR} rx="3" fill={last ? 'none' : 'var(--bg-soft)'}
+                stroke={last ? 'var(--accent-strong)' : r.full ? 'var(--accent-strong)' : 'var(--rule)'} stroke-width={last || r.full ? 1.4 : 1} stroke-dasharray={last ? '4 3' : undefined}/>
+          {i === 2 && <text class="seg" x={(a + b) / 2} y={r.y + 17} text-anchor="middle" fill={last ? 'var(--accent-strong)' : 'var(--ink)'}>{last ? '“단, 사전 승인된 경우에 한한다”' : `청크 ${k + 1}`}</text>}
+        </>
+      );
+    })}
+    {i < 2 && <path d={`M 336 ${r.y + H_BAR + 2} V ${rows[i + 1].y - 16}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#csEnd)"/>}
+  </>
+))}
+
+<!-- 문단 경계 표시 (1행) -->
+{[200, 330, 494].map((x) => (
+  <path d={`M ${x} ${rows[0].y - 2} V ${rows[0].y + H_BAR + 2}`} fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="2 2"/>
+))}
+<text class="cap" x={X1} y={rows[0].y + 17} text-anchor="end" fill="var(--muted)">점선 = 문단 경계</text>
+
+<text class="cap" x={X0} y={H - 12} fill="var(--body)">예외 조항이 본문과 다른 청크에 떨어지면 근거 해석이 어긋난다. 제목·문장 경계·겹침을 붙일지는 같은 질의로 다시 재서 정한다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .seg { font-size: 10.5px; font-weight: 550; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

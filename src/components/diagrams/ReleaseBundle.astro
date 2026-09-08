@@ -1,0 +1,77 @@
+---
+/**
+ * 답변을 결정하는 버전 묶음 여덟 가지와 롤백의 두 갈래. 코드·모델·프롬프트는 되돌리지만
+ * 문서 개정과 권한 상태는 최신을 유지한다. 아래는 service_smoke.py의 전환 순서다.
+ */
+const BUNDLE = { x: 24, y: 50, w: 300, h: 130 };
+const items = ['모델 · 리비전', '프롬프트 버전', '채팅 템플릿', '출력 스키마', '임베딩 공간', '청킹 규칙', '문서 개정 · 순번', '권한 상태'];
+const CODE_IDX = [0, 1, 2, 3, 4, 5];
+const SMOKE = ['init', 'v2 serve', '/ask 확인', '종료', 'v1 serve', '/ask 확인'];
+const SW = 88;
+const SG = 18; // 6 × 88 + 5 × 18 = 618
+const SY = 222;
+const H = 280;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="답변은 모델과 리비전, 프롬프트 버전, 채팅 템플릿, 출력 스키마, 임베딩 공간, 청킹 규칙, 문서 개정과 순번, 권한 상태의 조합으로 정해진다. 롤백은 앞의 여섯을 이전 조합으로 되돌리지만 문서 개정과 권한은 최신을 유지한다. service_smoke.py는 init, v2 서버, 확인, 종료, v1 서버, 확인 순서로 프롬프트 전환을 검증한다">
+
+<defs>
+  <marker id="rbEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">배포 기록에 남길 조합과 롤백의 범위</text>
+
+<rect x={BUNDLE.x} y={BUNDLE.y} width={BUNDLE.w} height={BUNDLE.h} rx="3" fill="none" stroke="var(--ink)" stroke-width="1.4"/>
+<text class="box" x={BUNDLE.x + 12} y={BUNDLE.y + 20} fill="var(--ink)">한 배포의 조합 · release-a</text>
+{items.map((it, i) => {
+  const col = i % 2; const row = Math.floor(i / 2);
+  const data = !CODE_IDX.includes(i);
+  return (
+    <>
+      <rect x={BUNDLE.x + 12 + col * 140} y={BUNDLE.y + 32 + row * 24} width="130" height="20" rx="2" fill={data ? 'none' : 'var(--bg-soft)'} stroke={data ? 'var(--accent-strong)' : 'var(--rule)'} stroke-width="1" stroke-dasharray={data ? '3 3' : undefined}/>
+      <text class="item" x={BUNDLE.x + 12 + col * 140 + 8} y={BUNDLE.y + 32 + row * 24 + 14} fill={data ? 'var(--accent-strong)' : 'var(--body)'}>{it}</text>
+    </>
+  );
+})}
+
+<path d={`M ${BUNDLE.x + BUNDLE.w + 2} ${BUNDLE.y + 50} H 352`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#rbEnd)"/>
+<text class="box" x="362" y={BUNDLE.y + 40} fill="var(--ink)">롤백: 코드 · 모델 · 프롬프트 · 스키마 · 색인 설정</text>
+<text class="sub" x="362" y={BUNDLE.y + 56} fill="var(--muted)">이전 프롬프트가 새 스키마와 맞는지,</text>
+<text class="sub" x="362" y={BUNDLE.y + 70} fill="var(--muted)">이전 검색기가 새 색인을 읽는지 확인</text>
+<path d={`M ${BUNDLE.x + BUNDLE.w + 2} ${BUNDLE.y + 108} H 352`} fill="none" stroke="var(--accent-strong)" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#rbEnd)"/>
+<text class="box" x="362" y={BUNDLE.y + 98} fill="var(--accent-strong)">되돌리지 않음: 문서 개정 · 권한 상태</text>
+<text class="sub" x="362" y={BUNDLE.y + 114} fill="var(--muted)">무조건 되돌리면 폐기된 정책과</text>
+<text class="sub" x="362" y={BUNDLE.y + 128} fill="var(--muted)">회수된 권한이 되살아난다</text>
+
+<text class="cap" x="24" y={SY - 10} fill="var(--muted)">service_smoke.py · 실제 E5·Qwen을 올린 서버로 프롬프트 v2 → v1 전환</text>
+{SMOKE.map((s, i) => (
+  <>
+    <rect x={24 + i * (SW + SG)} y={SY} width={SW} height="30" rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+    <text class="m" x={24 + i * (SW + SG) + SW / 2} y={SY + 20} text-anchor="middle" fill="var(--ink)">{s}</text>
+    {i < 5 && <path d={`M ${24 + i * (SW + SG) + SW + 2} ${SY + 15} H ${24 + (i + 1) * (SW + SG) - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#rbEnd)"/>}
+  </>
+))}
+<text class="cap" x="24" y={H - 12} fill="var(--muted)">복귀 대상은 이전 프롬프트다. DB 스키마 마이그레이션이나 전체 색인 롤백은 하지 않는다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 11.5px; font-weight: 550; }
+.dg .item { font-size: 10.5px; }
+.dg .sub { font-size: 10px; }
+.dg .m { font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

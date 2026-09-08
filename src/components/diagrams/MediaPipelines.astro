@@ -1,0 +1,63 @@
+---
+/**
+ * 이미지·음성이 텍스트 파이프라인 앞뒤에 붙는 자리. 인식 결과는 사람의 확인을 거친 뒤에야
+ * 색인·검색으로 들어가고, 답변 텍스트가 확정된 뒤에야 음성으로 합성한다.
+ */
+const W = 130;
+const GAP = 34; // 4 × 130 + 3 × 34 = 622
+const H_BOX = 44;
+const lanes = [
+  { label: '문서 입력', y: 56, steps: ['정책 이미지', 'OCR', '원문 대조 · 메타데이터', '색인'], check: 2 },
+  { label: '질문 입력', y: 128, steps: ['음성 질문', '전사', '사용자 확인', '검색 · 답변'], check: 2 },
+  { label: '답변 출력', y: 200, steps: ['답변 텍스트', '내용 확정', '음성 합성', '재생'], check: 1 },
+];
+const H = 286;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="정책 이미지는 OCR을 거쳐 원문 대조와 메타데이터 확인 뒤에 색인된다. 음성 질문은 전사 뒤 사용자가 확인해야 검색과 답변으로 간다. 답변 텍스트는 내용이 확정된 뒤에 음성으로 합성해 재생한다. 굵은 칸이 사람의 확인 자리다">
+
+<defs>
+  <marker id="mpEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">변환 단계가 붙는 자리 · 굵은 칸은 사람의 확인</text>
+
+{lanes.map((l) => (
+  <>
+    <text class="cap" x="24" y={l.y - 10} fill="var(--muted)">{l.label}</text>
+    {l.steps.map((s, i) => {
+      const x = 24 + i * (W + GAP);
+      const strong = i === l.check;
+      return (
+        <>
+          <rect x={x} y={l.y} width={W} height={H_BOX} rx="3" fill="var(--bg-soft)" stroke={strong ? 'var(--ink)' : 'var(--rule)'} stroke-width={strong ? 1.6 : 1}/>
+          <text class="box" x={x + W / 2} y={l.y + 27} text-anchor="middle" fill="var(--ink)">{s}</text>
+          {i < 3 && <path d={`M ${x + W + 2} ${l.y + H_BOX / 2} H ${x + W + GAP - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#mpEnd)"/>}
+        </>
+      );
+    })}
+  </>
+))}
+
+<text class="cap" x="24" y={H - 30} fill="var(--body)">인식 결과가 자연스러운 문장이어도 검토 전 자료다. 정책이나 업무 승인으로 승격하지 않는다</text>
+<text class="cap" x="24" y={H - 12} fill="var(--muted)">이미지 속 “이전 규칙을 무시하라”는 외부 자료다. 어떤 인코더를 지났는지가 지시 권한을 정하지 않는다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 11.5px; font-weight: 550; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

@@ -1,0 +1,69 @@
+---
+/**
+ * RAG 요청 경로 열 단계를 두 줄로 놓는다. 근거의 현재 상태를 다시 확인하는 세 자리를 굵게 표시한다.
+ * 이 경로에는 문서 수정도 티켓 등록도 없다.
+ */
+const W = 110;
+const GAP = 18; // 5 × 110 + 4 × 18 = 622
+const H_BOX = 48;
+const row1 = [
+  { lines: ['질문 검사'] },
+  { lines: ['질문 임베딩'] },
+  { lines: ['허용·유효', '문서 검색'] },
+  { lines: ['청크 현재', '상태 확인'], strong: true },
+  { lines: ['문맥 예산'] },
+].map((s, i) => ({ ...s, x: 24 + i * (W + GAP), y: 52 }));
+const row2 = [
+  { lines: ['선택 근거', '재확인'], strong: true },
+  { lines: ['생성'] },
+  { lines: ['구조·인용', '검사'] },
+  { lines: ['근거 현재', '상태 재확인'], strong: true },
+  { lines: ['상태·출처', '반환'] },
+].map((s, i) => ({ ...s, x: 24 + i * (W + GAP), y: 140 }));
+const H = 232;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="RAG 요청은 질문 검사, 질문 임베딩, 허용되고 유효한 문서 검색, 청크 현재 상태 확인, 문맥 예산, 선택 근거 재확인, 생성, 구조와 인용 검사, 근거 현재 상태 재확인, 상태와 출처 반환 순서다. 근거의 현재 상태를 세 번 확인하고, 문서 수정이나 티켓 등록은 없다">
+
+<defs>
+  <marker id="rrpEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">respond의 요청 경로</text>
+
+{[...row1, ...row2].map((s) => (
+  <>
+    <rect x={s.x} y={s.y} width={W} height={H_BOX} rx="3" fill="var(--bg-soft)"
+          stroke={s.strong ? 'var(--ink)' : 'var(--rule)'} stroke-width={s.strong ? 1.6 : 1}/>
+    {s.lines.map((l, k) => (
+      <text class="box" x={s.x + W / 2} y={s.lines.length === 1 ? s.y + 29 : s.y + 20 + k * 17} text-anchor="middle" fill="var(--ink)">{l}</text>
+    ))}
+  </>
+))}
+{[row1, row2].map((row) => row.slice(0, -1).map((s, i) => (
+  <path d={`M ${s.x + W + 2} ${s.y + H_BOX / 2} H ${row[i + 1].x - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#rrpEnd)"/>
+)))}
+<path d={`M ${row1[4].x + W / 2} ${row1[4].y + H_BOX + 2} V ${row1[4].y + H_BOX + 22} H ${row2[0].x + W / 2} V ${row2[0].y - 3}`}
+      fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#rrpEnd)"/>
+
+<text class="cap" x="336" y={H - 12} text-anchor="middle" fill="var(--muted)">굵은 칸은 근거의 현재 상태를 다시 보는 자리다. 이 경로에는 문서 수정도 티켓 등록도 없다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12px; font-weight: 550; }
+.dg .cap { font-size: 11px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

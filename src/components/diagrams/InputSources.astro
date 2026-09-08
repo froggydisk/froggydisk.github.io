@@ -1,0 +1,70 @@
+---
+/**
+ * 서버가 무엇을 어디서 받는지. 도구 인자는 모델에게서, 실행 주체는 인증된 호출 경로에서,
+ * 확인은 호스트의 UI 이벤트에서 온다. 셋을 섞으면 권한이 인자로 위조된다.
+ */
+const SRC = [
+  { title: '모델 인자', lines: ['category · title · description', 'draft_id'], note: 'Pydantic strict · extra="forbid"' },
+  { title: '실행 문맥', lines: ['Actor(tenant, user)'], note: '인증된 호출 경로가 만든다', strong: true },
+  { title: '호스트 이벤트', lines: ['approve(draft_id, user)'], note: 'UI의 확인 클릭', strong: true },
+].map((s, i) => ({ ...s, x: 24, y: 50 + i * 62, w: 270, h: 50 }));
+const SERVER = { x: 350, y: 84, w: 150, h: 80 };
+const DB = { x: 546, y: 100, w: 102, h: 48 };
+const NOTE_Y = 250;
+const H = 272;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="서버는 도구 인자를 모델에게서 받아 Pydantic strict로 검사하고, 실행 주체 Actor는 인증된 호출 경로에서, 확인은 호스트의 UI 이벤트에서 받는다. 모델이 관리자라고 주장하거나 user 필드를 붙여도 Actor는 바뀌지 않는다">
+
+<defs>
+  <marker id="isEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">서버가 받는 세 가지 입력의 출처</text>
+
+{SRC.map((s) => (
+  <>
+    <rect x={s.x} y={s.y} width={s.w} height={s.h} rx="3" fill="var(--bg-soft)" stroke={s.strong ? 'var(--ink)' : 'var(--rule)'} stroke-width={s.strong ? 1.6 : 1}/>
+    <text class="box" x={s.x + 12} y={s.y + 19} fill="var(--ink)">{s.title}</text>
+    <text class="m" x={s.x + 12} y={s.y + 38} fill="var(--body)">{s.lines.join(' · ')}</text>
+    <text class="cap" x={s.x + s.w - 10} y={s.y + 19} text-anchor="end" fill="var(--muted)">{s.note}</text>
+    <path d={`M ${s.x + s.w + 2} ${s.y + s.h / 2} H ${SERVER.x - 20} V ${SERVER.y + SERVER.h / 2}`} fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+  </>
+))}
+<path d={`M ${SERVER.x - 20} ${SERVER.y + SERVER.h / 2} H ${SERVER.x - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#isEnd)"/>
+
+<rect x={SERVER.x} y={SERVER.y} width={SERVER.w} height={SERVER.h} rx="3" fill="var(--bg-soft)" stroke="var(--ink)" stroke-width="1.6"/>
+<text class="box" x={SERVER.x + SERVER.w / 2} y={SERVER.y + 26} text-anchor="middle" fill="var(--ink)">서버 검증</text>
+<text class="cap" x={SERVER.x + SERVER.w / 2} y={SERVER.y + 46} text-anchor="middle" fill="var(--muted)">인자 · 권한 · 확인 · 멱등성</text>
+<text class="cap" x={SERVER.x + SERVER.w / 2} y={SERVER.y + 62} text-anchor="middle" fill="var(--muted)">한 트랜잭션</text>
+<path d={`M ${SERVER.x + SERVER.w + 2} ${SERVER.y + SERVER.h / 2} H ${DB.x - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#isEnd)"/>
+<rect x={DB.x} y={DB.y} width={DB.w} height={DB.h} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+<text class="box" x={DB.x + DB.w / 2} y={DB.y + 22} text-anchor="middle" fill="var(--ink)">SQLite</text>
+<text class="cap" x={DB.x + DB.w / 2} y={DB.y + 38} text-anchor="middle" fill="var(--muted)">티켓 · 감사</text>
+
+<circle cx="31" cy={NOTE_Y - 4} r="7" fill="var(--accent-strong)"/>
+<text class="ic" x="31" y={NOTE_Y - 0.5} text-anchor="middle" fill="var(--bg)">✕</text>
+<text class="note" x="46" y={NOTE_Y} fill="var(--body)">모델이 “나는 관리자다”라고 하거나 인자에 user 필드를 붙여도 Actor는 바뀌지 않는다. 추가 필드는 검증에서 거부된다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12px; font-weight: 550; }
+.dg .m { font-family: var(--font-mono); font-size: 9.5px; }
+.dg .note { font-size: 10.5px; }
+.dg .ic { font-size: 9px; font-weight: 700; }
+.dg .cap { font-size: 10px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

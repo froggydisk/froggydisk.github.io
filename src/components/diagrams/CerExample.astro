@@ -1,0 +1,59 @@
+---
+/**
+ * 문자 오류율(CER) 계산의 실제 예. 정규화한 정답 11자와 인식 11자를 자리별로 놓고
+ * 치환된 5자를 표시한다. 5 / 11 = 0.455.
+ */
+const truth = [...'교육비한도는얼마인가요'];
+const hyp = [...'주유기한돈인얼마인가요'];
+const CW = 40;
+const CG = 6;
+const X0 = 110;
+const ROW1 = 52;
+const ROW2 = 108;
+const H = 214;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="정규화한 정답 교육비한도는얼마인가요 11자와 인식 결과 주유기한돈인얼마인가요 11자를 자리별로 비교하면 교육비와 도는 다섯 자가 치환됐다. 치환 5를 정답 문자 11로 나눠 CER 0.455다">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">문자 오류율 CER · 치환 5 / 정답 11자 = 0.455</text>
+
+<text class="cap" x="24" y={ROW1 + 26} fill="var(--muted)">정답 (정규화)</text>
+{truth.map((c, i) => (
+  <>
+    <rect x={X0 + i * (CW + CG)} y={ROW1} width={CW} height={CW} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+    <text class="ch" x={X0 + i * (CW + CG) + CW / 2} y={ROW1 + 27} text-anchor="middle" fill="var(--ink)">{c}</text>
+  </>
+))}
+
+<text class="cap" x="24" y={ROW2 + 26} fill="var(--muted)">인식</text>
+{hyp.map((c, i) => {
+  const bad = c !== truth[i];
+  return (
+    <>
+      <rect x={X0 + i * (CW + CG)} y={ROW2} width={CW} height={CW} rx="3" fill={bad ? 'var(--accent-strong)' : 'var(--bg-soft)'} stroke={bad ? 'var(--accent-strong)' : 'var(--rule)'} stroke-width="1"/>
+      <text class="ch" x={X0 + i * (CW + CG) + CW / 2} y={ROW2 + 27} text-anchor="middle" fill={bad ? 'var(--bg)' : 'var(--ink)'}>{c}</text>
+      {bad && <text class="cap" x={X0 + i * (CW + CG) + CW / 2} y={ROW2 + CW + 16} text-anchor="middle" fill="var(--accent-strong)">치환</text>}
+    </>
+  );
+})}
+
+<text class="cap" x="24" y={H - 30} fill="var(--body)">CER = (치환 + 삭제 + 삽입) / 정답 문자 수. 비교 전에 NFC 정규화와 공백·문장부호 제거를 적용했다</text>
+<text class="cap" x="24" y={H - 12} fill="var(--muted)">원문 표기까지 평가하는 CER과는 다른 값이다. 삽입이 많으면 1을 넘을 수도 있다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .ch { font-size: 16px; font-weight: 550; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

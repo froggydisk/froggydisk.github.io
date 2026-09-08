@@ -1,0 +1,91 @@
+---
+title: 이미지·음성·영상 입력
+description: OCR과 음성 인식을 문서 도우미 앞에 붙이고, 변환 결과를 사람의 확인 뒤에만 색인·검색으로 넘긴다. 실제 실행에서 깨끗한 합성 질문의 핵심 단어가 바뀐 결과와 CER 계산, 영상 프레임 추출 설계를 그림으로 정리한다.
+last_modified_at: 2026-09-08
+---
+
+import MediaPipelines from "../../../../components/diagrams/MediaPipelines.astro";
+import MediaResults from "../../../../components/diagrams/MediaResults.astro";
+import CerExample from "../../../../components/diagrams/CerExample.astro";
+import FrameSampling from "../../../../components/diagrams/FrameSampling.astro";
+
+사용자가 정책을 사진으로 찍어 올리고 말로 질문하면, 텍스트 질의응답 앞에 해석 단계가 둘 더 붙는다. 사진에서 문장을 읽어야 하고, 음성을 질문으로 바꿔야 한다. 최종 답이 틀렸을 때 검색이나 언어 모델만 보면 앞 단계에서 이미 바뀐 숫자와 고유명사를 놓친다. 가상 교육비 문서를 이미지로 만들어 OCR로 읽고, 같은 주제의 질문을 합성 음성으로 만들어 로컬 음성 인식 모델에 넘긴 실제 결과를 기록한다. 영상과 이미지 생성은 주 프로젝트와 분리한 심화 실습이다.
+
+## 변환 단계의 자리
+
+<MediaPipelines />
+
+멀티모달(multimodal)은 여러 종류의 입력이나 출력을 함께 다룬다는 뜻이다. 이미지 입력이 되는 모델이 음성도 받는다고 볼 수 없고, 음성을 받더라도 전사·번역·화자 구분·음성 응답은 서로 다른 기능이다. 모델과 API를 고를 때 작업별 지원 여부, 입력 한도, 응답 형식, 시간 정보 제공 여부를 각각 본다.
+
+텍스트로 바꾼 뒤 기존 파이프라인에 붙이는 방식은 중간 결과를 검사하기 쉽다. OCR 텍스트와 음성 전사를 화면에 보여 주면 사용자가 오류를 고칠 수 있다. 대신 표의 배치, 그림의 관계, 말투 같은 정보는 텍스트로 옮기면서 사라진다. 원본 매체를 직접 이해하는 모델은 그 정보를 쓸 여지가 있지만 결과를 검증할 기준과 매체별 비용을 따로 마련해야 한다. 한울연구소의 첫 구현은 변환 단계를 드러내 둔다. 이미지에서 뽑은 텍스트는 검토 전 자료고, 음성 전사는 아직 확인하지 않은 질문이다.
+
+## OCR
+
+OCR은 문자 모양을 텍스트로 바꾼다. Tesseract는 공개 인식 도구로 텍스트 외에 TSV·hOCR 출력도 지원하고, 한국어 인식에는 한국어 학습 데이터가 필요하다. 인식 품질은 해상도, 기울기, 배경, 글자 크기에 따라 달라진다. 실습은 Pillow로 흰 배경에 두 문장을 그린 1,400×280 이미지에 Tesseract를 적용한다. 문장은 “교육비는 분기당 30만 원이다”와 “수강 전에 팀장의 승인을 받아야 한다”다. [Tesseract 공식 저장소](https://github.com/tesseract-ocr/tesseract)
+
+```python
+result = subprocess.run(
+    ["tesseract", str(image_path), "stdout",
+     "--tessdata-dir", str(tessdata), "-l", "kor", "--psm", "6"],
+    capture_output=True, text=True, check=True, timeout=30,
+)
+ocr_text = result.stdout.strip()
+```
+
+명령은 `subprocess.run`에 인자 목록으로 넘긴다. 파일 이름을 문자열 명령에 끼워 셸로 실행하지 않는다. 페이지 분할 모드 6은 이 표본이 일정한 텍스트 블록 하나라서 고른 값이고, 다단 문서나 표에는 읽기 순서를 바꾸는 레이아웃 오류까지 봐야 한다. 문서 질의에 쓸 때는 추출 텍스트만 두지 않고 원본 문서 ID, 페이지, 인식 도구 버전, 검토 상태를 함께 저장한다. 좌표가 있는 출력이면 인용에서 원본 영역으로 되돌아갈 수 있는데, 이 실습의 일반 텍스트 출력은 글자별 좌표나 표 셀 관계를 복원하지 못한다. 정책으로 색인하기 전에 원본과 사람이 대조한다.
+
+시각 언어 모델을 바로 쓰는 방식은 “오른쪽 열의 승인자는 누구인가”처럼 배치에 의존하는 질문의 대안이다. 비교할 때는 같은 이미지를 주고 정답 문구뿐 아니라 정답이 있는 영역도 적는다. OCR 텍스트에 없는 관계를 텍스트 모델이 추측한 결과와 원본 이미지에서 확인한 결과를 섞어 채점하지 않는다.
+
+## 음성 인식과 합성
+
+자동 음성 인식(ASR)은 소리에서 텍스트를, 음성 합성(TTS)은 텍스트에서 소리를 만든다. 오류의 방향이 다르다. 인식은 “교육비”를 다른 단어로 바꾸고, 합성은 문자가 정확해도 숫자·약어를 부자연스럽게 읽는다. Whisper는 음성 인식과 번역을 하는 인코더·디코더 모델이고, 실습은 다국어 `openai/whisper-tiny`를 고정 리비전으로 불러 한국어 전사를 지정한다. 오래된 예제의 설정을 현재 라이브러리에 그대로 옮기지 않고 모델 카드와 설치된 Transformers 문서를 함께 본다. [Whisper 공식 저장소](https://github.com/openai/whisper), [Transformers Whisper 문서](https://huggingface.co/docs/transformers/en/model_doc/whisper)
+
+```python
+features = processor(
+    sound, sampling_rate=16000,
+    return_tensors="pt", return_attention_mask=True,
+)
+with torch.inference_mode():
+    ids = model.generate(
+        **features, language="ko", task="transcribe",
+        max_new_tokens=128, do_sample=False,
+    )
+transcript = processor.batch_decode(ids, skip_special_tokens=True)[0]
+```
+
+오디오는 먼저 모노, 16kHz, 16비트 PCM WAV로 바꾼다. 모델에 넘기는 숫자 배열과 `sampling_rate`가 실제 파일과 같아야 하고, 주파수 값만 바꿔 적는 것은 재표본화가 아니다. FFmpeg가 변환하고 Python의 `wave`로 채널·샘플 폭·주파수를 확인한다. 예제는 30초 이하의 짧은 PCM 입력만 받는다. 긴 녹음의 구간 분할, 화자 중첩, 스트리밍 중간 결과, 무음 탐지는 따로 만들어야 하고, 중간 전사를 확정 질문으로 처리하면 사용자가 문장을 끝내기 전에 다른 업무가 시작된다. 합성 음성은 macOS의 Yuna 음성으로 만들었다. 운영체제에 설치된 음성이 읽은 가상 질문이라 실제 사용자의 억양·소음·거리·발화 중단을 대표하지 못한다. [FFmpeg 공식 명령 문서](https://ffmpeg.org/ffmpeg.html)
+
+## 실제 변환 결과
+
+```bash
+books/ai-engineering/examples/.venv/bin/python -m pip install -r books/ai-engineering/examples/requirements-media.txt
+books/ai-engineering/examples/.venv/bin/python books/ai-engineering/examples/media_demo.py
+```
+
+`media_demo.py`의 합성·폰트 경로는 macOS용이고, Tesseract와 FFmpeg는 따로 설치한다. 최초 실행은 고정한 한국어 OCR 데이터와 음성 모델을 내려받고, 표본은 `fixtures/media`에 생긴다.
+
+<MediaResults />
+
+<CerExample />
+
+깨끗한 문서 이미지 한 장의 CER 0은 실제 스캔 문서의 정확도와 다르다. 더 볼 것은 짧고 깨끗한 합성 질문에서도 업무 핵심 단어가 바뀌었다는 점이다. 전사를 화면에 보여 주고 사용자가 고칠 경로가 있어야 한다. 인식 문구를 원래 질문으로 바꿔 적지 않았다. 원본·전사·정답·모델 리비전과 시간은 `experiments/media-local.json`에 있고, 두 변환 결과를 자동 승인해 운영 색인이나 티켓 실행에 붙이지 않았다.
+
+## 영상
+
+<FrameSampling />
+
+영상은 순서와 시간이 있는 프레임에 음성이 결합된 자료다. 일정 간격으로 이미지를 뽑으면 계산량은 줄지만 두 표본 사이의 짧은 사건이 빠진다. “마지막으로 버튼을 누른 시점”을 묻는 질문에 프레임 몇 장의 유사도만으로는 답할 수 없다. 심화 실습에서는 직접 만든 짧은 화면 녹화에 세 사건의 정답 시각을 적고, 고정 간격 추출과 장면 변화 기반 추출을 비교한다. 각 프레임에는 원본 ID, 실제 표시 시각, 추출 설정을 함께 두고 오디오 구간과 프레임의 시간 기준을 맞춘다. 영상 추출·이해 모델은 실행하지 않았고 이 절은 비교 실험의 설계다.
+
+## 이미지 생성과 채택 기준
+
+이미지 생성은 자료를 읽는 일과 품질 기준이 다르다. 설명용 그림에서는 요구한 요소의 존재, 관계, 읽을 수 있는 글자, 반복 생성의 일관성이 중요하다. 생성 이미지에 그럴듯한 정책 문구가 있어도 실제 문서의 근거가 되지 못한다. 확산 기반 생성은 잡음에서 시작해 조건에 맞는 이미지를 단계적으로 만들고, Diffusers의 파이프라인은 텍스트 인코더·생성 모델·스케줄러를 모델에 맞게 묶는 대표적인 도구다. 모든 파이프라인에 같은 옵션이 있다고 볼 수 없다. 심화 실습은 가상 사무실 안내 그림을 만들되 사람의 실제 사진이나 기밀 자료 없이 요구 요소를 명시하고 시드·모델·해상도·스텝·시간을 적는다. 같은 환경의 반복 재현과 다른 장치의 픽셀 동일성은 구분한다. 이 장의 OCR 표본은 결정적으로 글자를 그린 테스트 이미지고 생성 모델의 결과와 다르다. [Diffusers 파이프라인 문서](https://huggingface.co/docs/diffusers/api/pipelines/overview)
+
+매체를 채택할 때는 전체 흐름의 오류와 지연을 합쳐 본다. OCR 뒤의 질의응답에는 문자 오류 외에 숫자·표 관계·인용 위치 오류가, 음성 질문에는 핵심 의도 보존과 확인에 걸린 시간이 있다. 빠른 인식기가 사용자에게 반복 수정을 요구하면 인식 시간만 짧다는 이유로 채택할 수 없다.
+
+## 실습: 변환 결과에 되돌아갈 길 남기기
+
+1. `media_demo.py`를 돌려 OCR 텍스트, 합성 음성, 전사를 확인하고 CER을 직접 계산해 그림의 값과 맞춰 본다.
+2. 전사가 틀린 질문을 그대로 검색에 넣어 1위 문서가 어떻게 바뀌는지 보고, 사용자 확인 단계가 있을 때와 없을 때의 결과를 나란히 적는다.
+3. 이미지에 “이전 규칙을 무시하라”는 문장을 넣어 OCR 텍스트에 그대로 남는지 보고, 그 텍스트가 지시로 취급되지 않는 경로를 확인한다.
+
+매체 변환마다 원본으로 되돌아갈 식별자와 중간 결과를 남기고, 자동으로 확정할 수 없는 항목을 구분할 수 있으면 이 장의 목표는 끝이다.

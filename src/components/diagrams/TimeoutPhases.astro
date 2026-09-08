@@ -1,0 +1,67 @@
+---
+/**
+ * httpx2.Timeout(30.0, connect=5.0)이 요청의 어느 구간을 재는지 시간축 위에 보인다.
+ * 연결 5초, 기다림마다 읽기 30초. 전체 경과 시간에는 한도가 없다.
+ */
+const Y = 96;
+const H_SEG = 36;
+const segs = [
+  { label: '연결', w: 90, limit: 'connect 5초' },
+  { label: '요청 쓰기', w: 70 },
+  { label: '첫 바이트 대기', w: 130, limit: 'read 30초' },
+  { label: '청크', w: 60 },
+  { label: '대기', w: 100, limit: 'read 30초' },
+  { label: '청크', w: 60 },
+  { label: '완료', w: 60 },
+];
+let x = 51;
+const placed = segs.map((s) => {
+  const p = { ...s, x };
+  x += s.w;
+  return p;
+});
+const X0 = placed[0].x;
+const X1 = x; // 621
+
+const BR_Y = Y + H_SEG + 18; // 150
+const H = 200;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="연결 5초와 읽기 30초는 요청의 구간마다 따로 재는 한도다. 읽기 한도는 기다림 한 번마다 다시 재므로 청크가 계속 오면 전체 시간을 제한하지 못한다. 전체 경과 시간에는 한도가 없다">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">시간 초과 설정이 재는 구간</text>
+
+{placed.map((s) => (
+  <>
+    <rect x={s.x} y={Y} width={s.w} height={H_SEG} fill={s.limit ? 'var(--bg-soft)' : 'none'} stroke="var(--rule)" stroke-width="1"/>
+    <text class="seg" x={s.x + s.w / 2} y={Y + 22} text-anchor="middle" fill={s.limit ? 'var(--ink)' : 'var(--muted)'}>{s.label}</text>
+    {s.limit && (
+      <>
+        <path d={`M ${s.x + 2} ${Y - 14} V ${Y - 8} H ${s.x + s.w - 2} V ${Y - 14}`} fill="none" stroke="var(--accent-strong)" stroke-width="1.2"/>
+        <text class="cap" x={s.x + s.w / 2} y={Y - 20} text-anchor="middle" fill="var(--accent-strong)">{s.limit}</text>
+      </>
+    )}
+  </>
+))}
+
+<!-- 전체 경과 시간 -->
+<path d={`M ${X0} ${BR_Y} V ${BR_Y + 8} H ${X1} V ${BR_Y}`} fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+<text class="cap" x={(X0 + X1) / 2} y={BR_Y + 26} text-anchor="middle" fill="var(--body)">전체 경과 시간에는 한도가 없다. 마감은 상위 요청 처리에서 관리한다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .seg { font-size: 11.5px; font-weight: 550; }
+.dg .cap { font-size: 11px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

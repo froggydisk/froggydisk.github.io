@@ -1,0 +1,63 @@
+---
+/**
+ * E5 어댑터가 텍스트를 384차원 벡터로 만드는 순서. 역할 접두사, 512토큰 한도, 마스크 평균 풀링,
+ * L2 정규화, 공간 식별자를 단계마다 적는다.
+ */
+const BX = 24;
+const BW = 250;
+const BH = 40;
+const TOP = 44;
+const STEP = 56;
+const steps = [
+  { label: '텍스트 + 역할 (kind)', note: '어댑터가 query: 또는 passage: 접두사를 붙인다', strong: true },
+  { label: '토큰화', note: '접두사·특수 토큰 포함 512를 넘으면 거부. 조용히 자르지 않는다' },
+  { label: '모델 → 토큰별 표현', mono: false, note: 'last_hidden_state. 텍스트 답은 만들지 않는다' },
+  { label: '마스크 평균 풀링', note: 'attention_mask로 패딩 자리를 평균에서 뺀다', strong: true },
+  { label: 'L2 정규화', note: '길이 1로. 그러면 코사인 = 내적' },
+  { label: 'Vector(space, values) · 384차원', mono: true, note: 'space = 모델 리비전·풀링·정규화·접두사 조합. 다르면 재색인', strong: true },
+].map((s, i) => ({ ...s, y: TOP + i * STEP }));
+const MIDX = BX + BW / 2;
+const NOTE_X = BX + BW + 22;
+const H = steps[5].y + BH + 24; // 388
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="임베딩 어댑터는 텍스트에 역할 접두사를 붙이고, 512토큰을 넘으면 거부하며 토큰화하고, 모델의 토큰별 표현을 패딩을 뺀 평균으로 모으고, L2 정규화한 뒤, 공간 식별자를 붙인 384차원 벡터를 돌려준다">
+
+<defs>
+  <marker id="epEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">텍스트에서 벡터까지</text>
+
+{steps.map((s, i) => (
+  <>
+    <rect x={BX} y={s.y} width={BW} height={BH} rx="3" fill="var(--bg-soft)"
+          stroke={s.strong ? 'var(--ink)' : 'var(--rule)'} stroke-width={s.strong ? 1.6 : 1}/>
+    <text class={s.mono ? 'm' : 'box'} x={MIDX} y={s.y + 25} text-anchor="middle" fill="var(--ink)">{s.label}</text>
+    <text class="note" x={NOTE_X} y={s.y + 25} fill="var(--muted)">{s.note}</text>
+    {i < steps.length - 1 && (
+      <path d={`M ${MIDX} ${s.y + BH + 2} V ${s.y + STEP - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#epEnd)"/>
+    )}
+  </>
+))}
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12px; font-weight: 550; }
+.dg .m { font-family: var(--font-mono); font-size: 11px; font-weight: 600; }
+.dg .note { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

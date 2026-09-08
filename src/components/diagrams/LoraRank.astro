@@ -1,0 +1,63 @@
+---
+/**
+ * LoRA가 학습 파라미터를 줄이는 방식. m×n 가중치 W는 고정하고, 변화량을 m×r인 B와 r×n인 A의
+ * 곱으로 학습한다. m = n = 4096, r = 8이면 16,777,216개 대신 65,536개다.
+ */
+const S = 150; // W 한 변
+const WX = 60;
+const WY = 60;
+const R = 10; // r의 두께
+const BX = 300;
+const AX = 340;
+const H = 300;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="LoRA는 m 곱하기 n 크기의 가중치 W를 고정하고 변화량을 m 곱하기 r인 B와 r 곱하기 n인 A의 곱으로 학습한다. m과 n이 4096이고 r이 8이면 원래 행렬은 16,777,216개, 두 어댑터 행렬은 합쳐 65,536개의 파라미터다. 이 수는 한 행렬의 수이고 모델 전체 메모리나 속도와는 다르다">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">W′ = W + BA · 학습하는 것은 B와 A뿐</text>
+
+<!-- W -->
+<rect x={WX} y={WY} width={S} height={S} rx="2" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+<text class="m" x={WX + S / 2} y={WY + S / 2 - 4} text-anchor="middle" fill="var(--ink)">W</text>
+<text class="cap" x={WX + S / 2} y={WY + S / 2 + 14} text-anchor="middle" fill="var(--muted)">고정 · 4096 × 4096</text>
+<text class="cap" x={WX + S / 2} y={WY + S + 18} text-anchor="middle" fill="var(--muted)">16,777,216개</text>
+
+<text class="op" x={WX + S + 24} y={WY + S / 2 + 6} text-anchor="middle" fill="var(--ink)">+</text>
+
+<!-- B (m×r) -->
+<rect x={BX} y={WY} width={R} height={S} rx="1" fill="var(--ink)"/>
+<text class="m" x={BX + R / 2} y={WY - 8} text-anchor="middle" fill="var(--ink)">B</text>
+<text class="cap" x={BX + R / 2} y={WY + S + 18} text-anchor="middle" fill="var(--muted)">4096 × 8</text>
+
+<text class="op" x={BX + R + 14} y={WY + S / 2 + 6} text-anchor="middle" fill="var(--ink)">×</text>
+
+<!-- A (r×n) -->
+<rect x={AX} y={WY + S / 2 - R / 2} width={S} height={R} rx="1" fill="var(--ink)"/>
+<text class="m" x={AX + S + 12} y={WY + S / 2 + 4} fill="var(--ink)">A</text>
+<text class="cap" x={AX + S / 2} y={WY + S / 2 + 26} text-anchor="middle" fill="var(--muted)">8 × 4096</text>
+
+<path d={`M ${AX + S + 30} ${WY + 10} V ${WY + S} `} fill="none" stroke="var(--rule)" stroke-width="1"/>
+<text class="cap" x={AX + S + 42} y={WY + S / 2 - 8} fill="var(--ink)">B + A = 65,536개</text>
+<text class="cap" x={AX + S + 42} y={WY + S / 2 + 8} fill="var(--muted)">원래의 0.39%</text>
+
+<text class="cap" x="24" y={H - 30} fill="var(--body)">r이 작으면 학습 파라미터가 mn에서 r(m+n)으로 준다. 이 수는 한 행렬의 수이고 모델 전체 메모리나 속도와는 다르다</text>
+<text class="cap" x="24" y={H - 12} fill="var(--muted)">QLoRA는 고정된 W를 4비트로 두고 어댑터를 학습한다. 저장 정밀도와 연산·어댑터·옵티마이저의 정밀도는 별개다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .m { font-family: var(--font-mono); font-size: 16px; font-weight: 600; }
+.dg .op { font-size: 18px; font-weight: 500; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

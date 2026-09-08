@@ -1,0 +1,60 @@
+---
+/**
+ * 후보를 찾는 예산과 생성에 넣는 문맥 예산은 다른 숫자다. 두 검색기에서 20개씩 가져와
+ * 융합한 뒤 문맥 예산에 맞는 5개만 생성에 넣는 흐름을 보인다.
+ */
+const A = { x: 24, y: 46, w: 150, h: 40, label: '의미 검색 상위 20' };
+const B = { x: 24, y: 108, w: 150, h: 40, label: '키워드 검색 상위 20' };
+const F = { x: 232, y: 77, w: 160, h: 40, label: 'RRF · 합집합 ≤ 40' };
+const C = { x: 440, y: 77, w: 120, h: 40, label: '문맥 예산 → 상위 5' };
+const G = { x: 600, y: 77, w: 48, h: 40, label: '생성' };
+const H = 214;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="의미 검색과 키워드 검색에서 각각 상위 20개를 가져와 RRF로 합치면 합집합은 최대 40개고, 문맥 예산이 그중 상위 5개만 생성에 넣는다. 20은 후보를 찾는 예산이고 5는 최종 문맥의 예산이다. 두 값을 동시에 바꾸면 개선이 어느 단계에서 났는지 알 수 없다">
+
+<defs>
+  <marker id="cbEnd2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">후보 발견 예산과 최종 문맥 예산</text>
+
+{[A, B, F, C, G].map((b, i) => (
+  <>
+    <rect x={b.x} y={b.y} width={b.w} height={b.h} rx="3" fill="var(--bg-soft)" stroke={i === 3 ? 'var(--ink)' : 'var(--rule)'} stroke-width={i === 3 ? 1.6 : 1}/>
+    <text class="box" x={b.x + b.w / 2} y={b.y + 25} text-anchor="middle" fill="var(--ink)">{b.label}</text>
+  </>
+))}
+
+<path d={`M ${A.x + A.w + 2} ${A.y + A.h / 2} H ${F.x - 24} V ${F.y + F.h / 2 - 6}`} fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+<path d={`M ${B.x + B.w + 2} ${B.y + B.h / 2} H ${F.x - 24} V ${F.y + F.h / 2 + 6}`} fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+<path d={`M ${F.x - 24} ${F.y + F.h / 2} H ${F.x - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#cbEnd2)"/>
+<path d={`M ${F.x + F.w + 2} ${F.y + F.h / 2} H ${C.x - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#cbEnd2)"/>
+<path d={`M ${C.x + C.w + 2} ${C.y + C.h / 2} H ${G.x - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#cbEnd2)"/>
+
+<path d={`M ${A.x} ${B.y + B.h + 14} V ${B.y + B.h + 20} H ${A.x + A.w} V ${B.y + B.h + 14}`} fill="none" stroke="var(--muted)" stroke-width="1"/>
+<text class="cap" x={A.x + A.w / 2} y={B.y + B.h + 36} text-anchor="middle" fill="var(--muted)">후보 발견 예산 · 20</text>
+<path d={`M ${C.x} ${C.y + C.h + 14} V ${C.y + C.h + 20} H ${C.x + C.w} V ${C.y + C.h + 14}`} fill="none" stroke="var(--ink)" stroke-width="1"/>
+<text class="cap" x={C.x + C.w / 2} y={C.y + C.h + 36} text-anchor="middle" fill="var(--ink)">최종 문맥 예산 · 5</text>
+
+<text class="cap" x="24" y={H - 12} fill="var(--body)">두 값을 동시에 바꾸면 개선이 어느 단계에서 났는지 알 수 없다. 후보 수 → 정렬 방법 → 문맥 예산 순으로 하나씩 바꾼다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12px; font-weight: 550; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

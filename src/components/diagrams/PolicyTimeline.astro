@@ -1,0 +1,100 @@
+---
+/**
+ * 교육비 안내 v1·v2의 유효 구간을 시간축 위에 놓고, 질문 시점 두 개를 세로 점선으로
+ * 내려 어느 판이 유효한지 보인다. v2는 등록일과 시행일이 달라서 '최신'과 '유효'가 갈린다.
+ */
+const X0 = 80; // 1/1 · v1 시행
+const X_REG = 320; // 8/20 · v2 등록
+const X_EFF = 430; // 9/1 · v2 시행
+const X_END = 640;
+const X_Q1 = 400; // 8/25 질문
+const X_Q2 = 465; // 9/5 질문
+
+const V1_Y = 44;
+const V2_Y = 76;
+const BAR_H = 22;
+const AXIS_Y = 122;
+
+const ticks = [
+  { x: X0, label: '1/1 · v1 시행' },
+  { x: X_REG, label: '8/20 · v2 등록' },
+  { x: X_EFF, label: '9/1 · v2 시행' },
+];
+const questions = [
+  { x: X_Q1, label: '8/25 질문' },
+  { x: X_Q2, label: '9/5 질문' },
+];
+
+const RES_Y = 182;
+const RES_GAP = 22;
+const results = [
+  { when: '8/25', q: '지금 한도는?', ans: 'v1 · 20만 원', note: '최신 문서는 v2, 유효한 문서는 v1' },
+  { when: '9/5', q: '지금 한도는?', ans: 'v2 · 30만 원', note: '' },
+  { when: '9/5', q: '개정 전 한도는?', ans: 'v1 · 20만 원', note: '질문에 시점 조건이 있다' },
+].map((r, i) => ({ ...r, y: RES_Y + i * RES_GAP }));
+
+const H = results[2].y + 24; // 250
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="교육비 안내 v2는 8월 20일에 등록됐지만 9월 1일부터 시행된다. 8월 25일 질문에는 최신 문서가 v2라도 유효한 문서는 v1이고, 9월 5일 질문에는 v2가 유효하다. 개정 전 한도를 묻는 질문은 시점 조건을 따로 받아 v1로 답한다">
+
+<defs>
+  <marker id="ptEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">최신 문서와 유효한 문서</text>
+
+<!-- v1 · v2 유효 구간 -->
+<rect x={X0} y={V1_Y} width={X_EFF - X0} height={BAR_H} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+<text class="bar" x={(X0 + X_EFF) / 2} y={V1_Y + 15} text-anchor="middle" fill="var(--ink)">v1 · 한도 20만 원</text>
+
+<rect x={X_REG} y={V2_Y} width={X_EFF - X_REG} height={BAR_H} rx="3" fill="none" stroke="var(--rule)" stroke-width="1" stroke-dasharray="4 3"/>
+<text class="cap" x={(X_REG + X_EFF) / 2 - 20} y={V2_Y + 15} text-anchor="middle" fill="var(--muted)">시행 전</text>
+<rect x={X_EFF} y={V2_Y} width={X_END - X_EFF} height={BAR_H} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+<text class="bar" x={(X_EFF + X_END) / 2} y={V2_Y + 15} text-anchor="middle" fill="var(--ink)">v2 · 한도 30만 원</text>
+
+<!-- 시간축 -->
+<path d={`M 60 ${AXIS_Y} H 648`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#ptEnd)"/>
+{ticks.map((t) => (
+  <>
+    <path d={`M ${t.x} ${AXIS_Y - 4} V ${AXIS_Y + 4}`} fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+    <text class="cap" x={t.x} y={AXIS_Y + 18} text-anchor="middle" fill="var(--muted)">{t.label}</text>
+  </>
+))}
+
+<!-- 질문 시점 -->
+{questions.map((q) => (
+  <>
+    <path d={`M ${q.x} ${AXIS_Y} V ${V1_Y}`} fill="none" stroke="var(--accent-strong)" stroke-width="1.2" stroke-dasharray="3 3"/>
+    <circle cx={q.x} cy={AXIS_Y} r="4" fill="var(--accent-strong)"/>
+    <text class="cap" x={q.x} y={AXIS_Y + 38} text-anchor="middle" fill="var(--accent-strong)">{q.label}</text>
+  </>
+))}
+
+<!-- 결과 -->
+{results.map((r) => (
+  <text class="res" x={X0} y={r.y} fill="var(--body)">
+    <tspan fill="var(--accent-strong)">{r.when}</tspan>{' 「' + r.q + '」 → '}<tspan fill="var(--ink)" font-weight="550">{r.ans}</tspan>{r.note && <tspan fill="var(--muted)">{' (' + r.note + ')'}</tspan>}
+  </text>
+))}
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .bar { font-size: 11px; font-weight: 550; }
+.dg .res { font-size: 11px; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

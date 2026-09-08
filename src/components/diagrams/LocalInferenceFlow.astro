@@ -1,0 +1,63 @@
+---
+/**
+ * 로컬 어댑터가 메시지에서 GenerationResult까지 가는 순서. 채팅 템플릿이 토큰을 만들고,
+ * generate의 출력에서 입력 길이 뒤만 잘라 디코딩하고, 종료 토큰으로 상태를 정한다.
+ */
+const BX = 24;
+const BW = 256;
+const BH = 40;
+const TOP = 44;
+const STEP = 56;
+const steps = [
+  { label: 'messages (system · user)', mono: true, note: 'role과 content. 모델은 이걸 직접 읽지 않는다' },
+  { label: 'apply_chat_template', mono: true, note: '역할·경계를 그 모델의 특수 토큰으로 · enable_thinking=False', strong: true },
+  { label: '토큰 ID 텐서', note: '입력 길이 = size' },
+  { label: 'model.generate', mono: true, note: 'max_new_tokens · do_sample=False' },
+  { label: '출력 = 입력 토큰 + 새 토큰', note: 'size 뒤만 잘라 낸다. 전부 디코딩하면 문서까지 답처럼 보인다', strong: true },
+  { label: 'decode → 종료 토큰 확인', note: 'EOS면 ok · 한도 도달이면 incomplete · 빈 텍스트면 unexpected_output', strong: true },
+].map((s, i) => ({ ...s, y: TOP + i * STEP }));
+const MIDX = BX + BW / 2;
+const NOTE_X = BX + BW + 22;
+const H = steps[5].y + BH + 24; // 388
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="로컬 추론은 role과 content가 있는 메시지를 채팅 템플릿으로 토큰 ID로 바꾸고, generate를 부른 뒤, 출력에서 입력 길이 뒤의 새 토큰만 잘라 디코딩한다. 마지막 토큰이 종료 토큰이면 ok, 한도에 닿았으면 incomplete, 빈 텍스트면 unexpected_output이다">
+
+<defs>
+  <marker id="lifEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">메시지에서 결과 상태까지</text>
+
+{steps.map((s, i) => (
+  <>
+    <rect x={BX} y={s.y} width={BW} height={BH} rx="3" fill="var(--bg-soft)"
+          stroke={s.strong ? 'var(--ink)' : 'var(--rule)'} stroke-width={s.strong ? 1.6 : 1}/>
+    <text class={s.mono ? 'm' : 'box'} x={MIDX} y={s.y + 25} text-anchor="middle" fill="var(--ink)">{s.label}</text>
+    <text class="note" x={NOTE_X} y={s.y + 25} fill="var(--muted)">{s.note}</text>
+    {i < steps.length - 1 && (
+      <path d={`M ${MIDX} ${s.y + BH + 2} V ${s.y + STEP - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#lifEnd)"/>
+    )}
+  </>
+))}
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12px; font-weight: 550; }
+.dg .m { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; }
+.dg .note { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

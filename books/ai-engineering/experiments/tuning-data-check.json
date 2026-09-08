@@ -1,0 +1,10 @@
+{
+  "samples": 9,
+  "families": 5,
+  "splits": {
+    "dev": 2,
+    "test": 3,
+    "train": 4
+  },
+  "scope": "structure_and_exact_input_leakage_only"
+}

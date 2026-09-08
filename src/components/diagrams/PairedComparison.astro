@@ -1,0 +1,63 @@
+---
+/**
+ * 후보 A·B를 같은 질문으로 짝 비교한 2×2 표. 평균 차이는 'A만 성공'과 'B만 성공' 칸에서
+ * 나오므로 그 사례를 읽어야 원인이 보인다. 숫자는 설명용 예시다.
+ */
+const GX = 130;
+const GY = 70;
+const CW = 170;
+const CH = 64;
+const cells = [
+  { r: 0, c: 0, label: '둘 다 성공', n: 60, tone: 'muted' },
+  { r: 0, c: 1, label: 'A만 성공', n: 8, tone: 'ink' },
+  { r: 1, c: 0, label: 'B만 성공', n: 4, tone: 'ink' },
+  { r: 1, c: 1, label: '둘 다 실패', n: 28, tone: 'muted' },
+];
+const H = 270;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="후보 A와 B를 같은 질문 100개로 짝 비교한 예시. 둘 다 성공 60, A만 성공 8, B만 성공 4, 둘 다 실패 28이다. A 68퍼센트와 B 64퍼센트의 평균 차이 4퍼센트포인트는 A만 성공과 B만 성공 열두 사례에서 나오므로 그 사례를 읽어야 원인이 보인다. 100건 중 90건과 10건 중 9건은 점 추정치가 같아도 정보량이 다르다">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">같은 질문으로 짝 비교 · 100문항 예시</text>
+
+<text class="cap" x={GX + CW / 2} y={GY - 10} text-anchor="middle" fill="var(--muted)">B 성공</text>
+<text class="cap" x={GX + CW + CW / 2} y={GY - 10} text-anchor="middle" fill="var(--muted)">B 실패</text>
+<text class="cap" x={GX - 10} y={GY + CH / 2 + 4} text-anchor="end" fill="var(--muted)">A 성공</text>
+<text class="cap" x={GX - 10} y={GY + CH + CH / 2 + 4} text-anchor="end" fill="var(--muted)">A 실패</text>
+
+{cells.map((c) => (
+  <>
+    <rect x={GX + c.c * CW} y={GY + c.r * CH} width={CW} height={CH} fill={c.tone === 'ink' ? 'var(--bg-soft)' : 'none'} stroke={c.tone === 'ink' ? 'var(--ink)' : 'var(--rule)'} stroke-width={c.tone === 'ink' ? 1.6 : 1}/>
+    <text class="box" x={GX + c.c * CW + 14} y={GY + c.r * CH + 26} fill={c.tone === 'ink' ? 'var(--ink)' : 'var(--muted)'}>{c.label}</text>
+    <text class="val" x={GX + c.c * CW + CW - 14} y={GY + c.r * CH + 44} text-anchor="end" fill={c.tone === 'ink' ? 'var(--ink)' : 'var(--muted)'}>{c.n}</text>
+  </>
+))}
+
+<text class="line" x="500" y={GY + 22} fill="var(--body)">A 68% · B 64%</text>
+<text class="line" x="500" y={GY + 42} fill="var(--body)">차이 4%p는</text>
+<text class="line" x="500" y={GY + 62} fill="var(--ink)">A만 8 · B만 4</text>
+<text class="line" x="500" y={GY + 82} fill="var(--body)">열두 사례에서 나온다</text>
+<text class="cap" x="500" y={GY + 104} fill="var(--muted)">그 열두 개를 읽는다</text>
+
+<text class="cap" x="24" y={H - 30} fill="var(--body)">90/100과 9/10은 점 추정치가 같아도 확인한 정보량이 다르다. 같은 정책에서 파생된 질문 수는 독립 증거 수와 다르다</text>
+<text class="cap" x="24" y={H - 12} fill="var(--muted)">그림자 실행은 읽기 전용 비교에 쓴다. 티켓 등록 후보는 제안만 비교하거나 분리된 가상 저장소를 쓴다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12px; font-weight: 550; }
+.dg .val { font-family: var(--font-mono); font-size: 16px; font-weight: 600; }
+.dg .line { font-size: 11.5px; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

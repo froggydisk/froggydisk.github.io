@@ -1,0 +1,69 @@
+---
+/**
+ * 여섯 질문에서 의미·키워드·RRF 검색이 정답 문서를 1위에 놓았는지 표로 보인다.
+ * 정답이 있는 다섯 건은 의미 검색이 이미 1위였고, RRF의 추가 이득은 없었다.
+ */
+const COLS = { case: 24, sem: 400, kw: 480, rrf: 560 };
+const TOP = 70;
+const ROW = 32;
+type M = 'ok' | 'none' | 'fix' | 'bad';
+const rows: { id: string; q: string; need: string; m: M[] }[] = [
+  { id: 'H01', q: '강의 결제 지원', need: 'edu-v2', m: ['ok', 'none', 'ok'] },
+  { id: 'H02', q: '암호를 잊음', need: 'account-v1', m: ['ok', 'none', 'ok'] },
+  { id: 'H03', q: 'IT-1042', need: 'ticket-1042', m: ['ok', 'fix', 'ok'] },
+  { id: 'H04', q: 'IT-1043 상태', need: 'ticket-1043', m: ['ok', 'fix', 'ok'] },
+  { id: 'H05', q: '교육비 한도', need: 'edu-v2', m: ['ok', 'ok', 'ok'] },
+  { id: 'H06', q: '해외 호텔 숙박비', need: '근거 없음', m: ['bad', 'bad', 'bad'] },
+].map((r, i) => ({ ...r, y: TOP + i * ROW }));
+const mark = (m: M) => ({ ok: { f: 'var(--ink)', c: '✓' }, none: { f: 'var(--muted)', c: '–' }, fix: { f: 'var(--accent-strong)', c: '△' }, bad: { f: 'var(--accent-strong)', c: '✕' } }[m]);
+const H = TOP + 6 * ROW + 66; // 328
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="여섯 질문 중 정답 문서가 있는 다섯 건은 의미 검색이 모두 1위에 놓았다. 키워드 검색은 어휘가 다른 두 건에서 결과가 없었고, 티켓 번호 두 건은 숫자와 한글 경계를 수정한 뒤에 찾았다. RRF는 의미 검색과 같은 결과라 추가 이득이 없었고, 근거가 없는 여섯째 질문은 세 방법 모두 답이 없는 국내 교통비 문서를 돌려줬다">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">여섯 질문에서 정답 문서가 1위였나 · 검색기별 상한 3</text>
+
+<text class="cap" x={COLS.case} y="56" fill="var(--muted)">질문 → 필요한 문서</text>
+<text class="cap" x={COLS.sem} y="56" text-anchor="middle" fill="var(--muted)">의미</text>
+<text class="cap" x={COLS.kw} y="56" text-anchor="middle" fill="var(--muted)">키워드</text>
+<text class="cap" x={COLS.rrf} y="56" text-anchor="middle" fill="var(--muted)">RRF</text>
+<path d="M 24 62 H 648" fill="none" stroke="var(--rule)" stroke-width="1"/>
+
+{rows.map((r) => (
+  <>
+    <text class="id" x={COLS.case} y={r.y + 17} fill="var(--ink)">{r.id}</text>
+    <text class="line" x={COLS.case + 42} y={r.y + 17} fill="var(--body)">{r.q}</text>
+    <text class="m" x={COLS.case + 190} y={r.y + 17} fill={r.need === '근거 없음' ? 'var(--accent-strong)' : 'var(--muted)'}>{`→ ${r.need}`}</text>
+    {[COLS.sem, COLS.kw, COLS.rrf].map((x, k) => (
+      <>
+        <circle cx={x} cy={r.y + 13} r="7" fill={mark(r.m[k]).f}/>
+        <text class="ic" x={x} y={r.y + 16.5} text-anchor="middle" fill="var(--bg)">{mark(r.m[k]).c}</text>
+      </>
+    ))}
+    <path d={`M 24 ${r.y + ROW - 5} H 648`} fill="none" stroke="var(--rule)" stroke-width="1"/>
+  </>
+))}
+
+<text class="cap" x="24" y={H - 34} fill="var(--body)">– = 결과 없음 (어휘 불일치) · △ = 숫자·한글 경계를 고친 뒤 찾음 · ✕ = 근거가 없는데 travel-v1을 돌려줌</text>
+<text class="cap" x="24" y={H - 14} fill="var(--muted)">정답이 있는 다섯 건은 의미 검색이 이미 1위. 이 자료에서 RRF의 추가 이득은 없었고, 목록 간 합의가 정답의 존재를 증명하지도 않는다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .id { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; }
+.dg .line { font-size: 11.5px; }
+.dg .m { font-family: var(--font-mono); font-size: 10.5px; }
+.dg .ic { font-size: 9px; font-weight: 700; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

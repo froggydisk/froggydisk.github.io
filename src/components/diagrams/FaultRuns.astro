@@ -1,0 +1,58 @@
+---
+/**
+ * 장애 주입 실험 세 번의 결과를 요청 20개 단위로 보인다. 정상은 4 완료·16 거부, 장애 주입은
+ * 받아들인 4가 모두 마감 초과, 이전 버전 복귀는 다시 4 완료다.
+ */
+const CELL = 24;
+const CG = 2;
+const X0 = 150;
+const runs = [
+  { label: '정상 · 의존성 0.01초', y: 56, done: 4, late: 0 },
+  { label: '장애 주입 · 의존성 0.2초', y: 100, done: 0, late: 4 },
+  { label: '이전 버전 복귀', y: 144, done: 4, late: 0 },
+];
+const H = 236;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="요청 20개 실험 세 번. 정상 의존성 0.01초에서는 4개 완료, 16개 과부하 거부. 장애를 주입해 의존성이 0.2초가 되면 받아들인 4개가 모두 접수 기준 마감 0.05초를 넘긴다. 이전 버전으로 복귀하면 다시 4개가 완료된다. 거부된 16개는 세 실행 모두 같다">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">operations_demo.py · 요청 20개 · 접수 기준 마감 0.05초</text>
+
+{runs.map((r) => (
+  <>
+    <text class="label" x="24" y={r.y + 16} fill="var(--ink)">{r.label}</text>
+    {Array.from({ length: 20 }).map((_, k) => {
+      const kind = k < r.done ? 'done' : k < r.done + r.late ? 'late' : 'rej';
+      return (
+        <rect x={X0 + k * (CELL + CG)} y={r.y} width={CELL} height={CELL} rx="2"
+              fill={kind === 'done' ? 'var(--ink)' : kind === 'late' ? 'var(--accent-strong)' : 'none'}
+              stroke={kind === 'rej' ? 'var(--rule)' : kind === 'done' ? 'var(--ink)' : 'var(--accent-strong)'} stroke-width="1" stroke-dasharray={kind === 'rej' ? '2 2' : undefined}/>
+      );
+    })}
+  </>
+))}
+
+<rect x={X0} y="186" width="12" height="10" fill="var(--ink)"/><text class="sub" x={X0 + 16} y="195" fill="var(--muted)">완료</text>
+<rect x={X0 + 70} y="186" width="12" height="10" fill="var(--accent-strong)"/><text class="sub" x={X0 + 86} y="195" fill="var(--muted)">마감 초과 (deadline_exceeded)</text>
+<rect x={X0 + 290} y="186" width="12" height="10" fill="none" stroke="var(--rule)" stroke-dasharray="2 2"/><text class="sub" x={X0 + 306} y="195" fill="var(--muted)">과부하 거부 · 큐 크기 4 밖</text>
+
+<text class="cap" x="24" y={H - 12} fill="var(--muted)">교육용 값이다. 실제 모델 지연과 다르고, 대역 대기 시간으로 얻은 처리량을 모델의 처리량으로 보고하지 않는다 · experiments/operations-local.json</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .label { font-size: 11px; font-weight: 550; }
+.dg .sub { font-size: 10.5px; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

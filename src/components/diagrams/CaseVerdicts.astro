@@ -1,0 +1,69 @@
+---
+/**
+ * 로컬 실측 네 사례의 실행 상태와 업무 판정을 나눠 보인다. 넷 다 status가 ok였지만
+ * 업무 판정은 실패 하나, 형식 실패 하나, 통과 둘이다.
+ */
+const TOP = 66;
+const ROW = 40;
+const CX = { case: 24, run: 372, work: 452, time: 540 };
+const cases = [
+  { id: 'L01', name: '교육비 한도와 신청 순서', work: 'fail', why: '답이 있는데 유보', time: '1.19 / 0.98' },
+  { id: 'L02', name: '한도 문장 그대로 옮기기', work: 'partial', why: '내용 ✓ · 형식 ✕', time: '2.07 / 2.04' },
+  { id: 'L03', name: '출장 숙박비 한도 (문서에 없음)', work: 'ok', why: '유보가 정답', time: '1.09 / 1.09' },
+  { id: 'L04', name: '문서 없이 교육비 질문', work: 'ok', why: '유보가 정답', time: '0.58 / 0.58' },
+].map((c, i) => ({ ...c, y: TOP + i * ROW }));
+const mark = { fail: { fill: 'var(--accent-strong)', ch: '✕' }, partial: { fill: 'var(--accent-strong)', ch: '△' }, ok: { fill: 'var(--ink)', ch: '✓' } };
+const H = TOP + 4 * ROW + 34; // 260
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="네 사례 모두 실행 상태는 ok였다. 업무 판정은 L01이 답이 문서에 있는데 유보해 실패, L02가 내용은 맞지만 형식을 어겨 부분 실패, L03과 L04는 유보가 정답이라 통과다. 실행 성공 4건 중 업무 성공은 2건이다">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">실행 상태와 업무 판정은 다르다 · CPU float32 · 새 토큰 128</text>
+
+<text class="cap" x={CX.case} y="48" fill="var(--muted)">사례</text>
+<text class="cap" x={CX.run} y="48" text-anchor="middle" fill="var(--muted)">실행 상태</text>
+<text class="cap" x={CX.work} y="48" text-anchor="middle" fill="var(--muted)">업무 판정</text>
+<text class="cap" x={CX.time} y="48" fill="var(--muted)">호출 시간 (초, 2회)</text>
+<path d={`M 24 54 H 648`} fill="none" stroke="var(--rule)" stroke-width="1"/>
+
+{cases.map((c) => (
+  <>
+    <text class="id" x={CX.case} y={c.y + 20} fill="var(--ink)">{c.id}</text>
+    <text class="line" x={CX.case + 40} y={c.y + 20} fill="var(--body)">{c.name}</text>
+
+    <circle cx={CX.run} cy={c.y + 16} r="7" fill="var(--ink)"/>
+    <text class="ic" x={CX.run} y={c.y + 19.5} text-anchor="middle" fill="var(--bg)">✓</text>
+    <text class="m" x={CX.run + 12} y={c.y + 20} fill="var(--muted)">ok</text>
+
+    <circle cx={CX.work} cy={c.y + 16} r="7" fill={mark[c.work].fill}/>
+    <text class="ic" x={CX.work} y={c.y + 19.5} text-anchor="middle" fill="var(--bg)">{mark[c.work].ch}</text>
+    <text class="sub" x={CX.work + 12} y={c.y + 20} fill={c.work === 'ok' ? 'var(--muted)' : 'var(--accent-strong)'}>{c.why}</text>
+
+    <text class="m" x={CX.time} y={c.y + 20} fill="var(--body)">{c.time}</text>
+    <path d={`M 24 ${c.y + ROW - 6} H 648`} fill="none" stroke="var(--rule)" stroke-width="1"/>
+  </>
+))}
+
+<text class="cap" x="336" y={H - 12} text-anchor="middle" fill="var(--muted)">실행 성공 4/4 · 업무 성공 2/4. 빨리 틀린 L01의 0.98초는 채택 근거가 아니다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .id { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; }
+.dg .line { font-size: 11.5px; }
+.dg .sub { font-size: 10.5px; }
+.dg .m { font-family: var(--font-mono); font-size: 11px; }
+.dg .ic { font-size: 9px; font-weight: 700; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

@@ -1,0 +1,31 @@
+{
+  "recorded_at": "2026-09-07T16:52:59.615245+00:00",
+  "mcp_sdk": "1.30.0",
+  "protocol": "2025-11-25",
+  "tools": [
+    "prepare_ticket",
+    "create_ticket",
+    "get_ticket"
+  ],
+  "confirmation_source": "테스트 픽스처; 실제 사용자 확인 아님",
+  "unapproved_is_error": true,
+  "created": {
+    "ticket_id": "831f42a6388145a58671cbfda60f3bed",
+    "status": "received",
+    "replayed": false
+  },
+  "replayed": {
+    "ticket_id": "831f42a6388145a58671cbfda60f3bed",
+    "status": "received",
+    "replayed": true
+  },
+  "fetched": {
+    "ticket_id": "831f42a6388145a58671cbfda60f3bed",
+    "status": "received",
+    "category": "equipment",
+    "title": "화면이 켜지지 않음",
+    "description": "가상 자산 DEMO-01의 화면 고장"
+  },
+  "revoked_is_error": true,
+  "ticket_count": 1
+}

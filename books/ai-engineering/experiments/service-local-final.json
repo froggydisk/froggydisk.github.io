@@ -1,0 +1,148 @@
+{
+  "initialized": {
+    "status": "initialized"
+  },
+  "ticket": {
+    "prepared": {
+      "draft_id": "9261dc11b9b044f2b4c64b32c685f39d",
+      "preview": {
+        "category": "equipment",
+        "title": "노트북 점검",
+        "description": "화면이 깜박인다."
+      },
+      "status": "awaiting_confirmation"
+    },
+    "created": {
+      "ticket_id": "23e52de5899d4f2088ea06f1e5e2b441",
+      "status": "received",
+      "replayed": false
+    },
+    "replay": {
+      "ticket_id": "23e52de5899d4f2088ea06f1e5e2b441",
+      "status": "received",
+      "replayed": true
+    },
+    "viewed": {
+      "ticket_id": "23e52de5899d4f2088ea06f1e5e2b441",
+      "status": "received",
+      "category": "equipment",
+      "title": "노트북 점검",
+      "description": "화면이 깜박인다."
+    }
+  },
+  "http": [
+    {
+      "version": "rag-local-v2",
+      "unauthorized": {
+        "http": 401,
+        "body": {
+          "status": "unauthorized"
+        },
+        "seconds": 0.030959959025494754
+      },
+      "invalid_fields": {
+        "http": 400,
+        "body": {
+          "trace_id": "ebc8234a58fa4edba05bb62569030f8d",
+          "status": "invalid_request"
+        },
+        "seconds": 0.0004009589902125299
+      },
+      "answer": {
+        "http": 200,
+        "body": {
+          "trace_id": "2a862b9ac9af4775ae8381b516954248",
+          "release": "rag-local-v2",
+          "result": {
+            "status": "contract_failed",
+            "answer": null,
+            "sources": [],
+            "error_code": "invalid_structure",
+            "usage": {
+              "input_tokens": 784,
+              "output_tokens": 80
+            }
+          }
+        },
+        "seconds": 5.554899332986679
+      },
+      "events": [
+        {
+          "trace_id": "5d4367a9d35d4ba7b11037d196c949e2",
+          "status": "unauthorized",
+          "prompt_version": "rag-local-v2",
+          "elapsed_ms": 0.09
+        },
+        {
+          "trace_id": "ebc8234a58fa4edba05bb62569030f8d",
+          "status": "invalid_request",
+          "prompt_version": "rag-local-v2",
+          "elapsed_ms": 0.08
+        },
+        {
+          "trace_id": "2a862b9ac9af4775ae8381b516954248",
+          "status": "contract_failed",
+          "prompt_version": "rag-local-v2",
+          "elapsed_ms": 5554.53
+        }
+      ]
+    },
+    {
+      "version": "rag-local-v1",
+      "unauthorized": {
+        "http": 401,
+        "body": {
+          "status": "unauthorized"
+        },
+        "seconds": 0.0006332909979391843
+      },
+      "invalid_fields": {
+        "http": 400,
+        "body": {
+          "trace_id": "0beabb5c42544b62bf74644ef7142564",
+          "status": "invalid_request"
+        },
+        "seconds": 0.0002744999947026372
+      },
+      "answer": {
+        "http": 200,
+        "body": {
+          "trace_id": "95be23823442493a888fa1db5e8a9fc3",
+          "release": "rag-local-v1",
+          "result": {
+            "status": "contract_failed",
+            "answer": null,
+            "sources": [],
+            "error_code": "invalid_structure",
+            "usage": {
+              "input_tokens": 574,
+              "output_tokens": 117
+            }
+          }
+        },
+        "seconds": 7.129561250010738
+      },
+      "events": [
+        {
+          "trace_id": "8e399f87c5444b369011a9b3f88cb6bb",
+          "status": "unauthorized",
+          "prompt_version": "rag-local-v1",
+          "elapsed_ms": 0.05
+        },
+        {
+          "trace_id": "0beabb5c42544b62bf74644ef7142564",
+          "status": "invalid_request",
+          "prompt_version": "rag-local-v1",
+          "elapsed_ms": 0.05
+        },
+        {
+          "trace_id": "95be23823442493a888fa1db5e8a9fc3",
+          "status": "contract_failed",
+          "prompt_version": "rag-local-v1",
+          "elapsed_ms": 7129.06
+        }
+      ]
+    }
+  ],
+  "scope": "real_local_models_loopback_single_user_not_production"
+}

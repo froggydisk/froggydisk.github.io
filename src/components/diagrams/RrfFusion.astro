@@ -1,0 +1,79 @@
+---
+/**
+ * Reciprocal Rank Fusion의 계산. 두 순위 목록 [a, b]와 [b, c]를 상수 0으로 합치면
+ * b가 1/2 + 1/1 = 1.5로 1위가 된다. 합집합을 재정렬할 뿐 새 문서는 못 찾는다.
+ */
+const CHIP_W = 64;
+const CHIP_H = 26;
+const listA = ['a', 'b'];
+const listB = ['b', 'c'];
+const LA_X = 40;
+const LB_X = 150;
+const LIST_Y = 66;
+const scores = [
+  { id: 'b', calc: '1/2 + 1/1 = 1.5', rank: 1, from: 'A 2위 · B 1위' },
+  { id: 'a', calc: '1/1 = 1', rank: 2, from: 'A 1위' },
+  { id: 'c', calc: '1/2 = 0.5', rank: 3, from: 'B 2위' },
+].map((s, i) => ({ ...s, y: 60 + i * 42 }));
+const SX = 360;
+const SW = 288;
+const H = 236;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="두 순위 목록 a b와 b c를 상수 0의 RRF로 합치면 각 목록에서 순위 r인 문서에 1을 r로 나눈 값을 더한다. b는 1/2 더하기 1/1로 1.5, a는 1, c는 0.5가 되어 b a c 순이다. 어느 목록에도 없는 문서는 새로 찾지 못한다">
+
+<defs>
+  <marker id="rrfEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">순위 융합 RRF · 상수 c = 0인 예</text>
+
+<text class="cap" x={LA_X + CHIP_W / 2} y={LIST_Y - 12} text-anchor="middle" fill="var(--muted)">목록 A · 의미</text>
+<text class="cap" x={LB_X + CHIP_W / 2} y={LIST_Y - 12} text-anchor="middle" fill="var(--muted)">목록 B · 키워드</text>
+{listA.map((d, i) => (
+  <>
+    <rect x={LA_X} y={LIST_Y + i * 36} width={CHIP_W} height={CHIP_H} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+    <text class="m" x={LA_X + CHIP_W / 2} y={LIST_Y + i * 36 + 17} text-anchor="middle" fill="var(--ink)">{`${i + 1}위  ${d}`}</text>
+  </>
+))}
+{listB.map((d, i) => (
+  <>
+    <rect x={LB_X} y={LIST_Y + i * 36} width={CHIP_W} height={CHIP_H} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+    <text class="m" x={LB_X + CHIP_W / 2} y={LIST_Y + i * 36 + 17} text-anchor="middle" fill="var(--ink)">{`${i + 1}위  ${d}`}</text>
+  </>
+))}
+
+<path d={`M ${LB_X + CHIP_W + 14} ${LIST_Y + 30} H ${SX - 40}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#rrfEnd)"/>
+<text class="cap" x={(LB_X + CHIP_W + 14 + SX - 40) / 2} y={LIST_Y + 22} text-anchor="middle" fill="var(--muted)">1/(c+순위)를 더한다</text>
+
+<text class="cap" x={SX} y="44" fill="var(--muted)">최종 순위</text>
+{scores.map((s) => (
+  <>
+    <rect x={SX} y={s.y} width={SW} height="30" rx="3" fill={s.rank === 1 ? 'var(--bg-soft)' : 'none'} stroke={s.rank === 1 ? 'var(--ink)' : 'var(--rule)'} stroke-width={s.rank === 1 ? 1.5 : 1}/>
+    <text class="m" x={SX + 12} y={s.y + 20} fill="var(--ink)">{`${s.rank}위  ${s.id}`}</text>
+    <text class="m" x={SX + 96} y={s.y + 20} fill="var(--body)">{s.calc}</text>
+    <text class="cap" x={SX + SW - 10} y={s.y + 20} text-anchor="end" fill="var(--muted)">{s.from}</text>
+  </>
+))}
+
+<text class="cap" x="24" y={H - 12} fill="var(--muted)">합집합을 재정렬할 뿐이다. 어느 목록에도 없는 문서는 새로 못 찾고, 둘이 같은 오답을 높게 보면 그 오답을 더 밀어 올린다. 실험 상수는 60</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .m { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

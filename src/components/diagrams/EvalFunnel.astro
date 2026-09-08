@@ -1,0 +1,55 @@
+---
+/**
+ * 평가 실행기가 rag-local-v2.json을 읽은 결과. 사례 4, 모델 호출 3, 생성 완료 3, 형식 통과 0,
+ * 상태 일치 1. 같은 실행인데 분모가 달라 숫자가 다르다.
+ */
+const LABEL_X = 24;
+const BAR_X = 230;
+const BAR_MAX = 300; // 4건 = 300px
+const BAR_H = 22;
+const rows = [
+  { k: 'cases', n: 4, note: 'R01~R04' },
+  { k: 'model_calls', n: 3, note: 'R04는 권한이 없어 부르지 않음' },
+  { k: 'complete_generations', n: 3, note: '셋 다 종료 토큰까지 생성' },
+  { k: 'contract_passed', n: 0, note: '필수 필드 누락으로 셋 다 contract_failed', bad: true },
+  { k: 'status_matches', n: 1, note: 'R04만 · 생성 없이 insufficient_evidence', ok: true },
+].map((r, i) => ({ ...r, y: 52 + i * 32, w: (r.n / 4) * BAR_MAX }));
+const H = 258;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="평가 실행기 결과. 사례 4건 중 모델 호출 3건, 생성 완료 3건, 형식 통과 0건, 기대 상태 일치 1건이다. 생성 완료 3/3과 상태 일치 1/4은 같은 실행이고 분모가 다르다. 의미 검토는 not_scored로 남기고 채택 판단은 hold다">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">evaluation.py · rag-local-v2.json · adoption: hold</text>
+
+{rows.map((r) => (
+  <>
+    <text class="m" x={LABEL_X} y={r.y + 16} fill="var(--ink)">{r.k}</text>
+    <rect x={BAR_X} y={r.y} width={Math.max(r.w, 2)} height={BAR_H} rx="2"
+          fill={r.bad ? 'var(--accent-strong)' : r.ok ? 'var(--ink)' : 'var(--bg-soft)'} stroke={r.bad ? 'var(--accent-strong)' : r.ok ? 'var(--ink)' : 'var(--rule)'} stroke-width="1"/>
+    <text class="val" x={BAR_X + Math.max(r.w, 2) + 8} y={r.y + 16} fill={r.bad ? 'var(--accent-strong)' : 'var(--ink)'}>{r.n}</text>
+    <text class="note" x={BAR_X + Math.max(r.w, 2) + 28} y={r.y + 16} fill="var(--muted)">{r.note}</text>
+  </>
+))}
+
+<text class="cap" x="24" y={H - 30} fill="var(--body)">생성 완료 3/3과 상태 일치 1/4은 같은 실행이다. 무엇을 분모로 삼느냐가 숫자를 정한다</text>
+<text class="cap" x="24" y={H - 12} fill="var(--muted)">의미 검토는 not_scored로 남긴다. 미채점을 0점이나 통과로 바꾸지 않는다 · 입력 파일 SHA-256과 평가기 버전을 함께 기록</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .m { font-family: var(--font-mono); font-size: 11px; font-weight: 600; }
+.dg .val { font-family: var(--font-mono); font-size: 12px; font-weight: 600; }
+.dg .note { font-size: 10px; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

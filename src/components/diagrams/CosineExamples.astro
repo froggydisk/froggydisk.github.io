@@ -1,0 +1,63 @@
+---
+/**
+ * 코사인 유사도 네 가지 예를 화살표로 보인다. 길이가 달라도 방향이 같으면 1,
+ * 직교면 0, 반대 방향이면 -1, 45도면 약 0.7071이다.
+ */
+const W = 140;
+const GAP = 16;
+const CY = 104;
+const UNIT = 22;
+const panels = [
+  { a: [1, 0], b: [3, 0], cos: '1', cap: '방향 같음 · 길이는 무관' },
+  { a: [1, 0], b: [0, 1], cos: '0', cap: '직교' },
+  { a: [1, 0], b: [-1, 0], cos: '-1', cap: '반대 방향' },
+  { a: [1, 1], b: [1, 0], cos: '0.7071', cap: '45도' },
+].map((p, i) => ({ ...p, cx: 24 + i * (W + GAP) + W / 2 }));
+const vec = (cx: number, v: number[]) => `M ${cx} ${CY} L ${cx + v[0] * UNIT} ${CY - v[1] * UNIT}`;
+const H = 206;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="코사인 유사도는 두 벡터의 방향만 본다. (1,0)과 (3,0)은 길이가 달라도 1, (1,0)과 (0,1)은 직교라 0, (1,0)과 (-1,0)은 반대 방향이라 -1, (1,1)과 (1,0)은 45도라 약 0.7071이다">
+
+<defs>
+  <marker id="ceA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--ink)"/>
+  </marker>
+  <marker id="ceB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent-strong)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">코사인 유사도는 방향만 본다</text>
+
+{panels.map((p) => (
+  <>
+    <path d={`M ${p.cx - 66} ${CY} H ${p.cx + 66}`} fill="none" stroke="var(--rule)" stroke-width="1"/>
+    <path d={`M ${p.cx} ${CY + 40} V ${CY - 46}`} fill="none" stroke="var(--rule)" stroke-width="1"/>
+    <path d={vec(p.cx, p.b)} fill="none" stroke="var(--accent-strong)" stroke-width="2" marker-end="url(#ceB)"/>
+    <path d={vec(p.cx, p.a)} fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#ceA)"/>
+    <text class="m" x={p.cx} y={CY + 62} text-anchor="middle" fill="var(--ink)">{`cos = ${p.cos}`}</text>
+    <text class="cap" x={p.cx} y={CY + 80} text-anchor="middle" fill="var(--muted)">{p.cap}</text>
+  </>
+))}
+
+<text class="cap" x="24" y="44" fill="var(--ink)">— a</text>
+<text class="cap" x="60" y="44" fill="var(--accent-strong)">— b</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .m { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; }
+.dg .cap { font-size: 11px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

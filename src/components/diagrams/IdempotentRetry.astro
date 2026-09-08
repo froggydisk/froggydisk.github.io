@@ -1,0 +1,71 @@
+---
+/**
+ * 등록 커밋 직후 응답이 유실됐을 때 두 가지 재시도. 같은 draft_id로 다시 부르면
+ * UNIQUE 제약이 기존 티켓을 돌려주고(replayed=True), 새 초안을 만들면 티켓이 둘이 된다.
+ */
+const W = 130;
+const GAP = 34; // 4 × 130 + 3 × 34 = 622
+const lanes = [
+  { label: '같은 초안으로 재시도', y: 60, ok: true, steps: [['등록 요청', 'draft d1'], ['서버 커밋', '응답 유실'], ['재시도', '같은 d1'], ['같은 티켓 IT-1042', 'replayed=True · 1개']] },
+  { label: '새 초안으로 재시도', y: 156, ok: false, steps: [['등록 요청', 'draft d1'], ['서버 커밋', '응답 유실'], ['새 초안 d2', '다시 등록'], ['티켓 IT-1042 + 1043', '2개']] },
+];
+const H_BOX = 52;
+const H = 246;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="서버가 티켓을 커밋한 직후 응답이 유실되면 클라이언트는 오류를 보지만 티켓은 있다. 같은 draft_id로 재시도하면 UNIQUE 제약이 기존 티켓 IT-1042를 replayed=True로 돌려줘 티켓이 하나다. 새 초안을 만들어 다시 등록하면 티켓이 둘이 된다">
+
+<defs>
+  <marker id="irEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">응답이 유실된 뒤의 두 가지 재시도</text>
+
+{lanes.map((l) => (
+  <>
+    <text class="cap" x="24" y={l.y - 10} fill={l.ok ? 'var(--ink)' : 'var(--accent-strong)'}>{l.label}</text>
+    {l.steps.map((s, i) => {
+      const x = 24 + i * (W + GAP);
+      const last = i === 3;
+      return (
+        <>
+          <rect x={x} y={l.y} width={W} height={H_BOX} rx="3" fill={last && !l.ok ? 'none' : 'var(--bg-soft)'}
+                stroke={last ? (l.ok ? 'var(--ink)' : 'var(--accent-strong)') : 'var(--rule)'} stroke-width={last ? 1.5 : 1} stroke-dasharray={last && !l.ok ? '4 3' : undefined}/>
+          <text class="box" x={x + W / 2} y={l.y + 21} text-anchor="middle" fill={last && !l.ok ? 'var(--accent-strong)' : 'var(--ink)'}>{s[0]}</text>
+          <text class="sub" x={x + W / 2} y={l.y + 39} text-anchor="middle" fill="var(--muted)">{s[1]}</text>
+          {i < 3 && <path d={`M ${x + W + 2} ${l.y + H_BOX / 2} H ${x + W + GAP - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#irEnd)"/>}
+          {i === 1 && (
+            <>
+              <circle cx={x + W} cy={l.y} r="7" fill="var(--accent-strong)"/>
+              <text class="ic" x={x + W} y={l.y + 3.5} text-anchor="middle" fill="var(--bg)">✕</text>
+            </>
+          )}
+        </>
+      );
+    })}
+  </>
+))}
+
+<text class="cap" x="24" y={H - 12} fill="var(--muted)">tickets.draft에 UNIQUE 제약을 두고 쓰기 트랜잭션 안에서 기존 티켓을 찾는다. 초안 ID가 멱등성의 단위다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 11.5px; font-weight: 550; }
+.dg .sub { font-size: 10px; }
+.dg .ic { font-size: 9px; font-weight: 700; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

@@ -1,0 +1,70 @@
+---
+/**
+ * 다섯 질의의 1위 코사인 점수를 막대로 놓고, 정답 문서가 있는 사례와 없는 사례를 색으로 나눈다.
+ * 정답이 없는 E05(0.8455)가 정답이 있는 E02(0.8383)보다 높아서 단일 임계값이 둘을 가르지 못한다.
+ */
+const LABEL_X = 24;
+const BAR_X = 236;
+const BAR_W = 320; // 0.80 → 0.90 구간. 오른쪽에 값 라벨 자리를 남긴다
+const LO = 0.8;
+const HI = 0.9;
+const BAR_H = 18;
+const rows = [
+  { id: 'E01', q: '업무 강의 결제 지원액', doc: 'edu-v2', cos: 0.875, has: true },
+  { id: 'E02', q: '휴가 신청과 승인', doc: 'leave-v1', cos: 0.8383, has: true },
+  { id: 'E03', q: '암호를 기억하지 못함', doc: 'account-v1', cos: 0.8703, has: true },
+  { id: 'E04', q: '승인 없이 교육비 선결제?', doc: 'edu-v2', cos: 0.8964, has: true },
+  { id: 'E05', q: '해외 출장 호텔 숙박비 한도', doc: 'travel-v1', cos: 0.8455, has: false },
+].map((r, i) => ({ ...r, y: 56 + i * 30, w: ((r.cos - LO) / (HI - LO)) * BAR_W }));
+const AXIS_Y = rows[4].y + BAR_H + 12; // 206
+const CUT = 0.84;
+const CUT_X = BAR_X + ((CUT - LO) / (HI - LO)) * BAR_W;
+const H = AXIS_Y + 58; // 264
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="다섯 질의의 1위 코사인은 E01 0.875, E02 0.8383, E03 0.8703, E04 0.8964, E05 0.8455다. 정답 문서가 없는 E05가 정답 문서를 찾은 E02보다 높아서, 0.84 같은 단일 임계값은 정답 있는 E02를 버리고 정답 없는 E05를 통과시킨다">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">1위 코사인과 정답 문서의 유무 · 축은 0.80~0.90 확대</text>
+
+<rect x="236" y="30" width="12" height="10" fill="var(--ink)"/>
+<text class="cap" x="254" y="39" fill="var(--muted)">정답 문서가 있고 1위로 찾음</text>
+<rect x="430" y="30" width="12" height="10" fill="var(--accent-strong)"/>
+<text class="cap" x="448" y="39" fill="var(--muted)">정답 문서가 없음</text>
+
+{rows.map((r) => (
+  <>
+    <text class="id" x={LABEL_X} y={r.y + 13} fill="var(--ink)">{r.id}</text>
+    <text class="q" x={LABEL_X + 34} y={r.y + 13} fill="var(--body)">{r.q}</text>
+    <rect x={BAR_X} y={r.y} width={r.w} height={BAR_H} rx="2" fill={r.has ? 'var(--ink)' : 'var(--accent-strong)'}/>
+    <text class="val" x={BAR_X + r.w + 8} y={r.y + 13} fill={r.has ? 'var(--ink)' : 'var(--accent-strong)'}>{`${r.cos.toFixed(4)} · ${r.doc}`}</text>
+  </>
+))}
+
+<!-- 축과 임계값 -->
+<path d={`M ${BAR_X} ${AXIS_Y} H ${BAR_X + BAR_W}`} fill="none" stroke="var(--rule)" stroke-width="1"/>
+{[0.8, 0.82, 0.84, 0.86, 0.88, 0.9].map((v) => (
+  <text class="tick" x={BAR_X + ((v - LO) / (HI - LO)) * BAR_W} y={AXIS_Y + 14} text-anchor="middle" fill="var(--muted)">{v.toFixed(2)}</text>
+))}
+<path d={`M ${CUT_X} ${rows[0].y - 6} V ${AXIS_Y}`} fill="none" stroke="var(--accent-strong)" stroke-width="1.2" stroke-dasharray="3 3"/>
+<text class="cap" x={BAR_X} y={AXIS_Y + 36} fill="var(--body)">0.84로 자르면 정답이 있는 E02는 버리고 정답이 없는 E05는 통과한다. 코사인은 정답 확률이 아니다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .id { font-family: var(--font-mono); font-size: 11px; font-weight: 600; }
+.dg .q { font-size: 11px; }
+.dg .val { font-family: var(--font-mono); font-size: 10.5px; }
+.dg .tick { font-family: var(--font-mono); font-size: 10px; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

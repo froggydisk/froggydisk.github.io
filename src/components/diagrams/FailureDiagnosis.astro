@@ -1,0 +1,71 @@
+---
+/**
+ * 틀린 답 하나를 입력에서 출력까지 되짚는 순서. 앞의 세 질문에서 걸리면 데이터·권한·검색의
+ * 문제라 학습으로 풀 일이 아니고, 마지막 질문에서 걸릴 때만 행동 적응(프롬프트·제약 생성·모델 교체·SFT)을 검토한다.
+ */
+const QX = 24;
+const QW = 260;
+const QH = 44;
+const SX = 340;
+const SW = 308;
+const TOP = 44;
+const STEP = 66;
+const rows = [
+  { q: '필요한 정책이 저장소에 있나', fix: '데이터 갱신 · 수집', note: '학습으로 풀 일이 아니다' },
+  { q: '이 사용자가 그 정책을 읽을 수 있나', fix: '권한 정책', note: '서버의 일' },
+  { q: '검색 결과와 최종 문맥에 들어왔나', fix: '청킹 · 검색 · 문맥 예산', note: '학습으로 풀 일이 아니다' },
+  { q: '모델이 그 문맥으로 답했나', fix: '행동 적응 검토', note: '프롬프트 · 제약 생성 · 모델 교체 · SFT', strong: true },
+].map((r, i) => ({ ...r, y: TOP + i * STEP }));
+const QMID = QX + QW / 2;
+const H = rows[3].y + QH + 30; // 316
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="틀린 답을 되짚는 순서. 정책이 저장소에 없으면 데이터 갱신, 사용자가 읽을 수 없으면 권한 정책, 검색과 문맥에 들어오지 않았으면 청킹과 검색과 문맥 예산의 문제다. 문맥에 있었는데도 모델이 그 문맥으로 답하지 않았을 때만 프롬프트, 제약 생성, 모델 교체, SFT 같은 행동 적응을 검토한다">
+
+<defs>
+  <marker id="fdEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">틀린 답 하나를 되짚는 순서</text>
+
+{rows.map((r, i) => (
+  <>
+    <rect x={QX} y={r.y} width={QW} height={QH} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+    <text class="q" x={QMID} y={r.y + 27} text-anchor="middle" fill="var(--ink)">{r.q}</text>
+    <text class="cap" x={(QX + QW + SX) / 2} y={r.y + QH / 2 - 7} text-anchor="middle" fill="var(--muted)">아니오</text>
+    <path d={`M ${QX + QW + 2} ${r.y + QH / 2} H ${SX - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#fdEnd)"/>
+    <rect x={SX} y={r.y} width={SW} height={QH} rx="3" fill={r.strong ? 'var(--bg-soft)' : 'none'} stroke={r.strong ? 'var(--ink)' : 'var(--rule)'} stroke-width={r.strong ? 1.6 : 1}/>
+    <text class="fix" x={SX + 12} y={r.y + 18} fill="var(--ink)">{r.fix}</text>
+    <text class="note" x={SX + 12} y={r.y + 34} fill={r.strong ? 'var(--body)' : 'var(--muted)'}>{r.note}</text>
+    {i < rows.length - 1 && (
+      <>
+        <text class="cap" x={QMID + 9} y={r.y + QH + 16} fill="var(--muted)">예</text>
+        <path d={`M ${QMID} ${r.y + QH + 2} V ${r.y + STEP - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#fdEnd)"/>
+      </>
+    )}
+  </>
+))}
+
+<text class="cap" x="24" y={H - 12} fill="var(--muted)">교육비 한도가 바뀔 때마다 모델을 다시 학습하지 않는다. 갱신은 시행일 검색이, 권한은 서버가 맡는다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .q { font-size: 12px; font-weight: 550; }
+.dg .fix { font-size: 12px; font-weight: 550; }
+.dg .note { font-size: 10.5px; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

@@ -1,0 +1,2 @@
+-r requirements-local.txt
+Pillow==12.3.0

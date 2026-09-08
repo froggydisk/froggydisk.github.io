@@ -1,0 +1,76 @@
+---
+/**
+ * 전수 검색 함수의 순서. 권한 필터가 점수 계산보다 앞에 있고, 결과에 임계값이 없다는 것을
+ * 아래 두 줄로 강조한다.
+ */
+const BX = 24;
+const BW = 300;
+const BH = 40;
+const TOP = 44;
+const STEP = 56;
+const steps = [
+  { label: '질문 벡터 · k 검사', note: '빈 벡터·NaN·잘못된 k는 여기서 오류' },
+  { label: '조직 · 문서 권한으로 후보 제한', note: '점수 계산 전에. 권한 밖 문서는 벡터도 보지 않는다', strong: true },
+  { label: '공간 · 차원 · 식별자 검사 → 코사인', note: 'space가 다르면 “재색인 필요” 오류' },
+  { label: '점수 내림차순 · 상위 k', note: '동점은 청크 식별자순. 관련성이 낮아도 k개를 돌려준다' },
+].map((s, i) => ({ ...s, y: TOP + i * STEP }));
+const MIDX = BX + BW / 2;
+const NOTE_X = BX + BW + 22;
+
+const NOTE_Y = steps[3].y + BH + 32; // 300
+const notes = [
+  '권한을 점수 뒤에 걸면 상위가 권한 밖 문서로 채워지고, 제목과 점수가 밖으로 샌다',
+  '임계값이 없다. 1위 문서가 있다는 것은 답변 가능의 증거가 아니다',
+].map((t, i) => ({ t, y: NOTE_Y + i * 24 }));
+const H = notes[1].y + 22; // 346
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="전수 검색은 질문 벡터와 k를 검사하고, 조직과 문서 권한으로 후보를 먼저 제한하고, 공간과 차원을 검사한 뒤 코사인을 계산하고, 점수 내림차순으로 상위 k개를 돌려준다. 권한을 점수 뒤에 걸면 권한 밖 문서가 상위를 차지하고 메타데이터가 새며, 임계값이 없어 1위 문서가 답변 가능의 증거는 아니다">
+
+<defs>
+  <marker id="soEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">전수 검색의 순서</text>
+
+{steps.map((s, i) => (
+  <>
+    <rect x={BX} y={s.y} width={BW} height={BH} rx="3" fill="var(--bg-soft)"
+          stroke={s.strong ? 'var(--ink)' : 'var(--rule)'} stroke-width={s.strong ? 1.6 : 1}/>
+    <text class="box" x={MIDX} y={s.y + 25} text-anchor="middle" fill="var(--ink)">{`${i + 1}. ${s.label}`}</text>
+    <text class="note" x={NOTE_X} y={s.y + 25} fill="var(--muted)">{s.note}</text>
+    {i < steps.length - 1 && (
+      <path d={`M ${MIDX} ${s.y + BH + 2} V ${s.y + STEP - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#soEnd)"/>
+    )}
+  </>
+))}
+
+{notes.map((n) => (
+  <>
+    <circle cx="31" cy={n.y - 4} r="7" fill="var(--accent-strong)"/>
+    <text class="ic" x="31" y={n.y - 0.5} text-anchor="middle" fill="var(--bg)">✕</text>
+    <text class="line" x="46" y={n.y} fill="var(--body)">{n.t}</text>
+  </>
+))}
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12px; font-weight: 550; }
+.dg .note { font-size: 10.5px; }
+.dg .line { font-size: 11px; }
+.dg .ic { font-size: 9px; font-weight: 700; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

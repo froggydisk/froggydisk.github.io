@@ -1,0 +1,560 @@
+{
+  "browser": "149.0.7827.55",
+  "playwright": "1.62.1",
+  "pages": [
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/foundations/document-assistant/",
+      "title": "한울연구소의 문서 업무 도우미",
+      "overflow": false,
+      "current": "/books/ai-engineering/foundations/document-assistant/",
+      "toc": 8,
+      "next": "/books/ai-engineering/foundations/model-selection/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/foundations/model-selection/",
+      "title": "모델이 할 수 있는 일과 선택 기준",
+      "overflow": false,
+      "current": "/books/ai-engineering/foundations/model-selection/",
+      "toc": 12,
+      "prev": "/books/ai-engineering/foundations/document-assistant/",
+      "next": "/books/ai-engineering/model-interface/api-contract/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/model-interface/api-contract/",
+      "title": "첫 호출과 신뢰할 수 있는 응답 처리",
+      "overflow": false,
+      "current": "/books/ai-engineering/model-interface/api-contract/",
+      "toc": 9,
+      "prev": "/books/ai-engineering/foundations/model-selection/",
+      "next": "/books/ai-engineering/model-interface/context-budget/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/model-interface/context-budget/",
+      "title": "토큰 예산과 컨텍스트 엔지니어링",
+      "overflow": false,
+      "current": "/books/ai-engineering/model-interface/context-budget/",
+      "toc": 13,
+      "prev": "/books/ai-engineering/model-interface/api-contract/",
+      "next": "/books/ai-engineering/model-interface/structured-output/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/model-interface/structured-output/",
+      "title": "프롬프트와 구조화된 출력",
+      "overflow": false,
+      "current": "/books/ai-engineering/model-interface/structured-output/",
+      "toc": 14,
+      "prev": "/books/ai-engineering/model-interface/context-budget/",
+      "next": "/books/ai-engineering/model-interface/local-models/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/model-interface/local-models/",
+      "title": "공개 모델을 탐색하고 로컬에서 실행하기",
+      "overflow": false,
+      "current": "/books/ai-engineering/model-interface/local-models/",
+      "toc": 12,
+      "prev": "/books/ai-engineering/model-interface/structured-output/",
+      "next": "/books/ai-engineering/retrieval/embeddings/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/retrieval/embeddings/",
+      "title": "임베딩과 의미 검색",
+      "overflow": false,
+      "current": "/books/ai-engineering/retrieval/embeddings/",
+      "toc": 13,
+      "prev": "/books/ai-engineering/model-interface/local-models/",
+      "next": "/books/ai-engineering/retrieval/document-store/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/retrieval/document-store/",
+      "title": "데이터 준비와 벡터 저장소",
+      "overflow": false,
+      "current": "/books/ai-engineering/retrieval/document-store/",
+      "toc": 15,
+      "prev": "/books/ai-engineering/retrieval/embeddings/",
+      "next": "/books/ai-engineering/retrieval/rag/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/retrieval/rag/",
+      "title": "근거를 제시하는 RAG",
+      "overflow": false,
+      "current": "/books/ai-engineering/retrieval/rag/",
+      "toc": 14,
+      "prev": "/books/ai-engineering/retrieval/document-store/",
+      "next": "/books/ai-engineering/retrieval/retrieval-quality/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/retrieval/retrieval-quality/",
+      "title": "검색 품질 개선과 구현 대안",
+      "overflow": false,
+      "current": "/books/ai-engineering/retrieval/retrieval-quality/",
+      "toc": 8,
+      "prev": "/books/ai-engineering/retrieval/rag/",
+      "next": "/books/ai-engineering/actions/tools-mcp/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/actions/tools-mcp/",
+      "title": "도구 호출·MCP·업무 규칙",
+      "overflow": false,
+      "current": "/books/ai-engineering/actions/tools-mcp/",
+      "toc": 10,
+      "prev": "/books/ai-engineering/retrieval/retrieval-quality/",
+      "next": "/books/ai-engineering/actions/workflows-agents/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/actions/workflows-agents/",
+      "title": "워크플로와 에이전트의 제어",
+      "overflow": false,
+      "current": "/books/ai-engineering/actions/workflows-agents/",
+      "toc": 10,
+      "prev": "/books/ai-engineering/actions/tools-mcp/",
+      "next": "/books/ai-engineering/actions/fine-tuning/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/actions/fine-tuning/",
+      "title": "파인튜닝을 선택할 때",
+      "overflow": false,
+      "current": "/books/ai-engineering/actions/fine-tuning/",
+      "toc": 8,
+      "prev": "/books/ai-engineering/actions/workflows-agents/",
+      "next": "/books/ai-engineering/trust/multimodal/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/trust/multimodal/",
+      "title": "이미지·음성·영상 다루기",
+      "overflow": false,
+      "current": "/books/ai-engineering/trust/multimodal/",
+      "toc": 6,
+      "prev": "/books/ai-engineering/actions/fine-tuning/",
+      "next": "/books/ai-engineering/trust/security/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/trust/security/",
+      "title": "보안·개인정보·안전성",
+      "overflow": false,
+      "current": "/books/ai-engineering/trust/security/",
+      "toc": 6,
+      "prev": "/books/ai-engineering/trust/multimodal/",
+      "next": "/books/ai-engineering/operations/evaluation/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/operations/evaluation/",
+      "title": "평가 체계와 회귀 관리",
+      "overflow": false,
+      "current": "/books/ai-engineering/operations/evaluation/",
+      "toc": 6,
+      "prev": "/books/ai-engineering/trust/security/",
+      "next": "/books/ai-engineering/operations/operations/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/operations/operations/",
+      "title": "배포·관측 가능성·장애 대응",
+      "overflow": false,
+      "current": "/books/ai-engineering/operations/operations/",
+      "toc": 8,
+      "prev": "/books/ai-engineering/operations/evaluation/",
+      "next": "/books/ai-engineering/operations/final-project/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/operations/final-project/",
+      "title": "개발 도구와 최종 프로젝트 검토",
+      "overflow": false,
+      "current": "/books/ai-engineering/operations/final-project/",
+      "toc": 6,
+      "prev": "/books/ai-engineering/operations/operations/",
+      "next": "/books/ai-engineering/appendices/python/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/appendices/python/",
+      "title": "부록 A. Python 환경과 명령 실행",
+      "overflow": false,
+      "current": "/books/ai-engineering/appendices/python/",
+      "toc": 4,
+      "prev": "/books/ai-engineering/operations/final-project/",
+      "next": "/books/ai-engineering/appendices/glossary/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/appendices/glossary/",
+      "title": "부록 B. 용어와 표기",
+      "overflow": false,
+      "current": "/books/ai-engineering/appendices/glossary/",
+      "toc": 4,
+      "prev": "/books/ai-engineering/appendices/python/",
+      "next": "/books/ai-engineering/appendices/data/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/appendices/data/",
+      "title": "부록 C. 예제 데이터와 사용 범위",
+      "overflow": false,
+      "current": "/books/ai-engineering/appendices/data/",
+      "toc": 4,
+      "prev": "/books/ai-engineering/appendices/glossary/",
+      "next": "/books/ai-engineering/appendices/reproduction/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/appendices/reproduction/",
+      "title": "부록 D. 실행 환경과 재현 명령",
+      "overflow": false,
+      "current": "/books/ai-engineering/appendices/reproduction/",
+      "toc": 5,
+      "prev": "/books/ai-engineering/appendices/data/",
+      "next": "/books/ai-engineering/appendices/references/"
+    },
+    {
+      "width": 1440,
+      "url": "/books/ai-engineering/appendices/references/",
+      "title": "부록 E. 참고 자료와 후속 학습",
+      "overflow": false,
+      "current": "/books/ai-engineering/appendices/references/",
+      "toc": 5,
+      "prev": "/books/ai-engineering/appendices/reproduction/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/foundations/document-assistant/",
+      "title": "한울연구소의 문서 업무 도우미",
+      "overflow": false,
+      "current": "/books/ai-engineering/foundations/document-assistant/",
+      "toc": 8,
+      "next": "/books/ai-engineering/foundations/model-selection/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/foundations/model-selection/",
+      "title": "모델이 할 수 있는 일과 선택 기준",
+      "overflow": false,
+      "current": "/books/ai-engineering/foundations/model-selection/",
+      "toc": 12,
+      "prev": "/books/ai-engineering/foundations/document-assistant/",
+      "next": "/books/ai-engineering/model-interface/api-contract/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/model-interface/api-contract/",
+      "title": "첫 호출과 신뢰할 수 있는 응답 처리",
+      "overflow": false,
+      "current": "/books/ai-engineering/model-interface/api-contract/",
+      "toc": 9,
+      "prev": "/books/ai-engineering/foundations/model-selection/",
+      "next": "/books/ai-engineering/model-interface/context-budget/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/model-interface/context-budget/",
+      "title": "토큰 예산과 컨텍스트 엔지니어링",
+      "overflow": false,
+      "current": "/books/ai-engineering/model-interface/context-budget/",
+      "toc": 13,
+      "prev": "/books/ai-engineering/model-interface/api-contract/",
+      "next": "/books/ai-engineering/model-interface/structured-output/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/model-interface/structured-output/",
+      "title": "프롬프트와 구조화된 출력",
+      "overflow": false,
+      "current": "/books/ai-engineering/model-interface/structured-output/",
+      "toc": 14,
+      "prev": "/books/ai-engineering/model-interface/context-budget/",
+      "next": "/books/ai-engineering/model-interface/local-models/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/model-interface/local-models/",
+      "title": "공개 모델을 탐색하고 로컬에서 실행하기",
+      "overflow": false,
+      "current": "/books/ai-engineering/model-interface/local-models/",
+      "toc": 12,
+      "prev": "/books/ai-engineering/model-interface/structured-output/",
+      "next": "/books/ai-engineering/retrieval/embeddings/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/retrieval/embeddings/",
+      "title": "임베딩과 의미 검색",
+      "overflow": false,
+      "current": "/books/ai-engineering/retrieval/embeddings/",
+      "toc": 13,
+      "prev": "/books/ai-engineering/model-interface/local-models/",
+      "next": "/books/ai-engineering/retrieval/document-store/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/retrieval/document-store/",
+      "title": "데이터 준비와 벡터 저장소",
+      "overflow": false,
+      "current": "/books/ai-engineering/retrieval/document-store/",
+      "toc": 15,
+      "prev": "/books/ai-engineering/retrieval/embeddings/",
+      "next": "/books/ai-engineering/retrieval/rag/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/retrieval/rag/",
+      "title": "근거를 제시하는 RAG",
+      "overflow": false,
+      "current": "/books/ai-engineering/retrieval/rag/",
+      "toc": 14,
+      "prev": "/books/ai-engineering/retrieval/document-store/",
+      "next": "/books/ai-engineering/retrieval/retrieval-quality/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/retrieval/retrieval-quality/",
+      "title": "검색 품질 개선과 구현 대안",
+      "overflow": false,
+      "current": "/books/ai-engineering/retrieval/retrieval-quality/",
+      "toc": 8,
+      "prev": "/books/ai-engineering/retrieval/rag/",
+      "next": "/books/ai-engineering/actions/tools-mcp/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/actions/tools-mcp/",
+      "title": "도구 호출·MCP·업무 규칙",
+      "overflow": false,
+      "current": "/books/ai-engineering/actions/tools-mcp/",
+      "toc": 10,
+      "prev": "/books/ai-engineering/retrieval/retrieval-quality/",
+      "next": "/books/ai-engineering/actions/workflows-agents/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/actions/workflows-agents/",
+      "title": "워크플로와 에이전트의 제어",
+      "overflow": false,
+      "current": "/books/ai-engineering/actions/workflows-agents/",
+      "toc": 10,
+      "prev": "/books/ai-engineering/actions/tools-mcp/",
+      "next": "/books/ai-engineering/actions/fine-tuning/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/actions/fine-tuning/",
+      "title": "파인튜닝을 선택할 때",
+      "overflow": false,
+      "current": "/books/ai-engineering/actions/fine-tuning/",
+      "toc": 8,
+      "prev": "/books/ai-engineering/actions/workflows-agents/",
+      "next": "/books/ai-engineering/trust/multimodal/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/trust/multimodal/",
+      "title": "이미지·음성·영상 다루기",
+      "overflow": false,
+      "current": "/books/ai-engineering/trust/multimodal/",
+      "toc": 6,
+      "prev": "/books/ai-engineering/actions/fine-tuning/",
+      "next": "/books/ai-engineering/trust/security/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/trust/security/",
+      "title": "보안·개인정보·안전성",
+      "overflow": false,
+      "current": "/books/ai-engineering/trust/security/",
+      "toc": 6,
+      "prev": "/books/ai-engineering/trust/multimodal/",
+      "next": "/books/ai-engineering/operations/evaluation/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/operations/evaluation/",
+      "title": "평가 체계와 회귀 관리",
+      "overflow": false,
+      "current": "/books/ai-engineering/operations/evaluation/",
+      "toc": 6,
+      "prev": "/books/ai-engineering/trust/security/",
+      "next": "/books/ai-engineering/operations/operations/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/operations/operations/",
+      "title": "배포·관측 가능성·장애 대응",
+      "overflow": false,
+      "current": "/books/ai-engineering/operations/operations/",
+      "toc": 8,
+      "prev": "/books/ai-engineering/operations/evaluation/",
+      "next": "/books/ai-engineering/operations/final-project/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/operations/final-project/",
+      "title": "개발 도구와 최종 프로젝트 검토",
+      "overflow": false,
+      "current": "/books/ai-engineering/operations/final-project/",
+      "toc": 6,
+      "prev": "/books/ai-engineering/operations/operations/",
+      "next": "/books/ai-engineering/appendices/python/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/appendices/python/",
+      "title": "부록 A. Python 환경과 명령 실행",
+      "overflow": false,
+      "current": "/books/ai-engineering/appendices/python/",
+      "toc": 4,
+      "prev": "/books/ai-engineering/operations/final-project/",
+      "next": "/books/ai-engineering/appendices/glossary/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/appendices/glossary/",
+      "title": "부록 B. 용어와 표기",
+      "overflow": false,
+      "current": "/books/ai-engineering/appendices/glossary/",
+      "toc": 4,
+      "prev": "/books/ai-engineering/appendices/python/",
+      "next": "/books/ai-engineering/appendices/data/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/appendices/data/",
+      "title": "부록 C. 예제 데이터와 사용 범위",
+      "overflow": false,
+      "current": "/books/ai-engineering/appendices/data/",
+      "toc": 4,
+      "prev": "/books/ai-engineering/appendices/glossary/",
+      "next": "/books/ai-engineering/appendices/reproduction/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/appendices/reproduction/",
+      "title": "부록 D. 실행 환경과 재현 명령",
+      "overflow": false,
+      "current": "/books/ai-engineering/appendices/reproduction/",
+      "toc": 5,
+      "prev": "/books/ai-engineering/appendices/data/",
+      "next": "/books/ai-engineering/appendices/references/"
+    },
+    {
+      "width": 390,
+      "url": "/books/ai-engineering/appendices/references/",
+      "title": "부록 E. 참고 자료와 후속 학습",
+      "overflow": false,
+      "current": "/books/ai-engineering/appendices/references/",
+      "toc": 5,
+      "prev": "/books/ai-engineering/appendices/reproduction/"
+    }
+  ],
+  "search": [
+    {
+      "q": "파인튜닝",
+      "total": 7,
+      "book": [
+        {
+          "url": "/books/ai-engineering/actions/fine-tuning/",
+          "title": "파인튜닝을 선택할 때"
+        },
+        {
+          "url": "/books/ai-engineering/appendices/data/",
+          "title": "부록 C. 예제 데이터와 사용 범위"
+        },
+        {
+          "url": "/books/ai-engineering/appendices/reproduction/",
+          "title": "부록 D. 실행 환경과 재현 명령"
+        },
+        {
+          "url": "/books/ai-engineering/appendices/glossary/",
+          "title": "부록 B. 용어와 표기"
+        },
+        {
+          "url": "/books/ai-engineering/actions/workflows-agents/",
+          "title": "워크플로와 에이전트의 제어"
+        },
+        {
+          "url": "/books/ai-engineering/operations/final-project/",
+          "title": "개발 도구와 최종 프로젝트 검토"
+        }
+      ]
+    },
+    {
+      "q": "음성",
+      "total": 7,
+      "book": [
+        {
+          "url": "/books/ai-engineering/trust/multimodal/",
+          "title": "이미지·음성·영상 다루기"
+        },
+        {
+          "url": "/books/ai-engineering/appendices/data/",
+          "title": "부록 C. 예제 데이터와 사용 범위"
+        },
+        {
+          "url": "/books/ai-engineering/appendices/reproduction/",
+          "title": "부록 D. 실행 환경과 재현 명령"
+        },
+        {
+          "url": "/books/ai-engineering/trust/security/",
+          "title": "보안·개인정보·안전성"
+        },
+        {
+          "url": "/books/ai-engineering/actions/fine-tuning/",
+          "title": "파인튜닝을 선택할 때"
+        }
+      ]
+    },
+    {
+      "q": "멱등성",
+      "total": 8,
+      "book": [
+        {
+          "url": "/books/ai-engineering/actions/workflows-agents/",
+          "title": "워크플로와 에이전트의 제어"
+        },
+        {
+          "url": "/books/ai-engineering/actions/tools-mcp/",
+          "title": "도구 호출·MCP·업무 규칙"
+        },
+        {
+          "url": "/books/ai-engineering/appendices/python/",
+          "title": "부록 A. Python 환경과 명령 실행"
+        },
+        {
+          "url": "/books/ai-engineering/appendices/glossary/",
+          "title": "부록 B. 용어와 표기"
+        },
+        {
+          "url": "/books/ai-engineering/operations/final-project/",
+          "title": "개발 도구와 최종 프로젝트 검토"
+        },
+        {
+          "url": "/books/ai-engineering/operations/operations/",
+          "title": "배포·관측 가능성·장애 대응"
+        },
+        {
+          "url": "/books/ai-engineering/actions/fine-tuning/",
+          "title": "파인튜닝을 선택할 때"
+        },
+        {
+          "url": "/books/ai-engineering/model-interface/api-contract/",
+          "title": "첫 호출과 신뢰할 수 있는 응답 처리"
+        }
+      ]
+    }
+  ],
+  "mobile_drawer": true,
+  "next_navigation": true
+}

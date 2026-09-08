@@ -1,0 +1,293 @@
+{
+  "recorded_at": "2026-09-07T16:40:33.475232+00:00",
+  "embedding_space": "intfloat/multilingual-e5-small@614241f622f53c4eeff9890bdc4f31cfecc418b3:mean-mask:l2:query-passage:v1",
+  "sqlite": "3.53.2",
+  "documents": [
+    [
+      "edu-v2",
+      "직원 교육비 한도는 분기당 30만 원이다. 구매 전에 팀장의 승인을 받고 지원 포털에서 신청한다."
+    ],
+    [
+      "leave-v1",
+      "연차 휴가는 근태 시스템에서 신청한다. 팀장의 승인을 받아야 한다."
+    ],
+    [
+      "travel-v1",
+      "국내 출장 교통비는 영수증을 첨부해 비용 정산 시스템에서 신청한다."
+    ],
+    [
+      "account-v1",
+      "계정 비밀번호를 잊었다면 로그인 화면의 비밀번호 재설정을 선택한다."
+    ],
+    [
+      "equipment-v1",
+      "노트북 고장은 IT 지원 티켓으로 접수한다. 자산 번호와 증상을 함께 적는다."
+    ],
+    [
+      "ticket-1042",
+      "티켓 IT-1042는 노트북 화면 고장이다. 상태는 접수다."
+    ],
+    [
+      "ticket-1043",
+      "티켓 IT-1043은 계정 로그인 오류다. 상태는 처리 중이다."
+    ]
+  ],
+  "rrf_constant": 60,
+  "candidate_limit": 3,
+  "rows": [
+    {
+      "id": "H01",
+      "question": "업무 관련 강의를 결제하려는데 얼마까지 지원되나요?",
+      "relevant": [
+        "edu-v2"
+      ],
+      "dense": [
+        [
+          "edu-v2",
+          0.8750265227378252
+        ],
+        [
+          "equipment-v1",
+          0.8161964576503333
+        ],
+        [
+          "travel-v1",
+          0.8132639479578873
+        ]
+      ],
+      "keyword": [],
+      "rrf": [
+        [
+          "edu-v2",
+          0.01639344262295082
+        ],
+        [
+          "equipment-v1",
+          0.016129032258064516
+        ],
+        [
+          "travel-v1",
+          0.015873015873015872
+        ]
+      ],
+      "seconds": {
+        "dense_including_query_embedding": 0.008924666995881125,
+        "keyword_including_index_build": 0.000991416978649795,
+        "fusion_only": 1.579101081006229e-05
+      }
+    },
+    {
+      "id": "H02",
+      "question": "암호가 생각나지 않아서 접속하지 못해요.",
+      "relevant": [
+        "account-v1"
+      ],
+      "dense": [
+        [
+          "account-v1",
+          0.8365945117123574
+        ],
+        [
+          "ticket-1043",
+          0.834069047094448
+        ],
+        [
+          "equipment-v1",
+          0.8155992585892228
+        ]
+      ],
+      "keyword": [],
+      "rrf": [
+        [
+          "account-v1",
+          0.01639344262295082
+        ],
+        [
+          "ticket-1043",
+          0.016129032258064516
+        ],
+        [
+          "equipment-v1",
+          0.015873015873015872
+        ]
+      ],
+      "seconds": {
+        "dense_including_query_embedding": 0.008713999995961785,
+        "keyword_including_index_build": 0.00028716601082123816,
+        "fusion_only": 6.167014362290502e-06
+      }
+    },
+    {
+      "id": "H03",
+      "question": "IT-1042",
+      "relevant": [
+        "ticket-1042"
+      ],
+      "dense": [
+        [
+          "ticket-1042",
+          0.8550923269935167
+        ],
+        [
+          "ticket-1043",
+          0.825924747772065
+        ],
+        [
+          "equipment-v1",
+          0.7863163683866052
+        ]
+      ],
+      "keyword": [],
+      "rrf": [
+        [
+          "ticket-1042",
+          0.01639344262295082
+        ],
+        [
+          "ticket-1043",
+          0.016129032258064516
+        ],
+        [
+          "equipment-v1",
+          0.015873015873015872
+        ]
+      ],
+      "seconds": {
+        "dense_including_query_embedding": 0.005932875006692484,
+        "keyword_including_index_build": 0.0002965829917229712,
+        "fusion_only": 5.583016900345683e-06
+      }
+    },
+    {
+      "id": "H04",
+      "question": "IT-1043 상태",
+      "relevant": [
+        "ticket-1043"
+      ],
+      "dense": [
+        [
+          "ticket-1043",
+          0.9142626925504965
+        ],
+        [
+          "ticket-1042",
+          0.8815574794048168
+        ],
+        [
+          "equipment-v1",
+          0.8360126536753748
+        ]
+      ],
+      "keyword": [],
+      "rrf": [
+        [
+          "ticket-1043",
+          0.01639344262295082
+        ],
+        [
+          "ticket-1042",
+          0.016129032258064516
+        ],
+        [
+          "equipment-v1",
+          0.015873015873015872
+        ]
+      ],
+      "seconds": {
+        "dense_including_query_embedding": 0.007019709009910002,
+        "keyword_including_index_build": 0.0002531249774619937,
+        "fusion_only": 5.790992872789502e-06
+      }
+    },
+    {
+      "id": "H05",
+      "question": "교육비 한도",
+      "relevant": [
+        "edu-v2"
+      ],
+      "dense": [
+        [
+          "edu-v2",
+          0.8922221330573938
+        ],
+        [
+          "travel-v1",
+          0.8040562314856158
+        ],
+        [
+          "equipment-v1",
+          0.8005625429255493
+        ]
+      ],
+      "keyword": [
+        [
+          "edu-v2",
+          -1.2421518997253493
+        ]
+      ],
+      "rrf": [
+        [
+          "edu-v2",
+          0.03278688524590164
+        ],
+        [
+          "travel-v1",
+          0.016129032258064516
+        ],
+        [
+          "equipment-v1",
+          0.015873015873015872
+        ]
+      ],
+      "seconds": {
+        "dense_including_query_embedding": 0.006066542002372444,
+        "keyword_including_index_build": 0.0002777920162770897,
+        "fusion_only": 5.874986527487636e-06
+      }
+    },
+    {
+      "id": "H06",
+      "question": "해외 출장 호텔 숙박비 한도",
+      "relevant": [],
+      "dense": [
+        [
+          "travel-v1",
+          0.8547994678089548
+        ],
+        [
+          "edu-v2",
+          0.8236645437439059
+        ],
+        [
+          "equipment-v1",
+          0.8043455029897694
+        ]
+      ],
+      "keyword": [
+        [
+          "travel-v1",
+          -1.5118127187560073
+        ]
+      ],
+      "rrf": [
+        [
+          "travel-v1",
+          0.03278688524590164
+        ],
+        [
+          "edu-v2",
+          0.016129032258064516
+        ],
+        [
+          "equipment-v1",
+          0.015873015873015872
+        ]
+      ],
+      "seconds": {
+        "dense_including_query_embedding": 0.006655874982243404,
+        "keyword_including_index_build": 0.00034504200448282063,
+        "fusion_only": 7.124996045604348e-06
+      }
+    }
+  ]
+}

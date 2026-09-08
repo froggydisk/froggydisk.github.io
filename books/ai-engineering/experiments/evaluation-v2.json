@@ -1,0 +1,45 @@
+{
+  "cases": 4,
+  "status_matches": 1,
+  "statuses": {
+    "contract_failed": 3,
+    "insufficient_evidence": 1
+  },
+  "model_calls": 3,
+  "complete_generations": 3,
+  "adoption": "hold",
+  "reason": "status_matching_does_not_establish_semantic_quality",
+  "details": [
+    {
+      "id": "R01",
+      "expected": "answered",
+      "actual": "contract_failed",
+      "status_match": false,
+      "semantic_review": "not_scored"
+    },
+    {
+      "id": "R02",
+      "expected": "insufficient_evidence",
+      "actual": "contract_failed",
+      "status_match": false,
+      "semantic_review": "not_scored"
+    },
+    {
+      "id": "R03",
+      "expected": "insufficient_evidence",
+      "actual": "contract_failed",
+      "status_match": false,
+      "semantic_review": "not_scored"
+    },
+    {
+      "id": "R04",
+      "expected": "insufficient_evidence",
+      "actual": "insufficient_evidence",
+      "status_match": true,
+      "semantic_review": "not_scored"
+    }
+  ],
+  "input_sha256": "47941101ad744ff1e6b200eb92c11095ffee3ba6d3f4a06d4870c0a91269d3be",
+  "evaluator_version": "status-eval-v1",
+  "dataset": "R01-R04-development"
+}

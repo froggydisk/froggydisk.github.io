@@ -1,0 +1,85 @@
+{
+  "planner": "대역 규칙 함수; 모델 추론 아님",
+  "confirmation": "테스트 픽스처",
+  "draft": {
+    "status": "awaiting_confirmation",
+    "steps": 1,
+    "units": 3,
+    "events": [
+      {
+        "step": 1,
+        "stage": "tool",
+        "tool": "prepare_ticket",
+        "status": "started"
+      },
+      {
+        "step": 1,
+        "stage": "tool",
+        "tool": "prepare_ticket",
+        "status": "returned"
+      }
+    ],
+    "result": {
+      "draft_id": "c4bccee8171e4f9a8e8e7c4074708273",
+      "preview": {
+        "category": "equipment",
+        "title": "화면 고장",
+        "description": "가상 노트북의 화면이 켜지지 않는다."
+      },
+      "status": "awaiting_confirmation"
+    }
+  },
+  "read": {
+    "status": "completed",
+    "steps": 2,
+    "units": 4,
+    "events": [
+      {
+        "step": 1,
+        "stage": "tool",
+        "tool": "get_ticket",
+        "status": "started"
+      },
+      {
+        "step": 1,
+        "stage": "tool",
+        "tool": "get_ticket",
+        "status": "returned"
+      }
+    ],
+    "result": {
+      "category": "equipment",
+      "title": "화면 고장",
+      "description": "가상 노트북의 화면이 켜지지 않는다.",
+      "ticket_id": "09a06d5335df40a7a410738626acbfba",
+      "status": "received"
+    }
+  },
+  "repeated": {
+    "status": "repeated_action",
+    "steps": 2,
+    "units": 4,
+    "events": [
+      {
+        "step": 1,
+        "stage": "tool",
+        "tool": "get_ticket",
+        "status": "started"
+      },
+      {
+        "step": 1,
+        "stage": "tool",
+        "tool": "get_ticket",
+        "status": "returned"
+      }
+    ],
+    "result": null
+  },
+  "budget": {
+    "status": "budget",
+    "steps": 1,
+    "units": 1,
+    "events": [],
+    "result": null
+  }
+}

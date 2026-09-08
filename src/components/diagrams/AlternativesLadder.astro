@@ -1,0 +1,63 @@
+---
+/**
+ * 행동을 바꾸는 다섯 가지 수단을 되돌리기 쉬운 순서로 놓는다. 왼쪽이 싸고 빠르며,
+ * 오른쏙으로 갈수록 데이터·학습·회귀·버전 관리 비용이 붙는다. 현재 결정은 파인튜닝 보류다.
+ */
+const W = 116;
+const GAP = 11; // 5 × 116 + 4 × 11 = 624
+const Y = 56;
+const H_BOX = 104;
+const steps = [
+  { title: '프롬프트 · 예시', pro: '바꾸고 되돌리기 쉽다', con: '입력 비용 · 문맥 점유' },
+  { title: '검색', pro: '질문마다 바뀌는 사실 공급', con: '사용하는 건 모델 몫' },
+  { title: '제약 생성', pro: '형식을 구조 안에 가둔다', con: '틀린 금액은 못 잡는다' },
+  { title: '모델 교체', pro: '데이터 없이 능력 비교', con: '자원 · 지연 · 비용 변화' },
+  { title: '파인튜닝', pro: '반복되는 행동을 가중치에', con: '데이터 · 학습 · 회귀 · 버전', dashed: true },
+].map((s, i) => ({ ...s, x: 24 + i * (W + GAP) }));
+const H = 224;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="행동을 바꾸는 수단은 되돌리기 쉬운 순서로 프롬프트와 예시, 검색, 제약 생성, 모델 교체, 파인튜닝이다. 오른쪽으로 갈수록 데이터 작성과 학습과 회귀 평가와 버전 관리 비용이 붙는다. 이 프로젝트의 현재 결정은 파인튜닝 보류다">
+
+<defs>
+  <marker id="alEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">되돌리기 쉬운 순서</text>
+<path d="M 24 38 H 640" fill="none" stroke="var(--rule)" stroke-width="1.2" marker-end="url(#alEnd)"/>
+<text class="cap" x="24" y="34" fill="var(--muted)">싸고 빠르다</text>
+<text class="cap" x="648" y="34" text-anchor="end" fill="var(--muted)">비용과 관리 부담이 붙는다</text>
+
+{steps.map((s) => (
+  <>
+    <rect x={s.x} y={Y} width={W} height={H_BOX} rx="3" fill={s.dashed ? 'none' : 'var(--bg-soft)'} stroke="var(--rule)" stroke-width="1" stroke-dasharray={s.dashed ? '4 3' : undefined}/>
+    <text class="box" x={s.x + W / 2} y={Y + 22} text-anchor="middle" fill="var(--ink)">{s.title}</text>
+    <path d={`M ${s.x + 10} ${Y + 32} H ${s.x + W - 10}`} fill="none" stroke="var(--rule)" stroke-width="1"/>
+    <text class="sub" x={s.x + 10} y={Y + 52} fill="var(--body)">{s.pro}</text>
+    <text class="sub" x={s.x + 10} y={Y + 82} fill="var(--accent-strong)">{s.con}</text>
+  </>
+))}
+
+<text class="cap" x="24" y={H - 30} fill="var(--body)">바꾸려는 행동을 한 문장으로 적고 시작한다. “근거가 없으면 금액을 추정하지 않고 필수 필드를 채운 insufficient_evidence를 돌려준다”</text>
+<text class="cap" x="24" y={H - 12} fill="var(--muted)">현재 결정은 파인튜닝 보류. 관찰이 작고 정답 데이터가 없고 제약 생성·다른 모델 비교가 남아 있다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12px; font-weight: 550; }
+.dg .sub { font-size: 9.5px; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

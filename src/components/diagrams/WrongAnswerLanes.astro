@@ -1,0 +1,108 @@
+---
+/**
+ * '현재 한도 20만 원'이라는 같은 오답이 세 가지 다른 원인에서 나온다.
+ * 검색 결과 → 모델 입력 → 답변 세 단계에서 v2가 어디서 사라졌는지 ✕로 표시한다.
+ */
+const LX = 24;
+const CW = 150;
+const CGAP = 30;
+const cx = (i: number) => 116 + i * (CW + CGAP); // 116 · 296 · 476, 마지막 오른쪽 끝 626
+const stages = ['검색 결과', '모델 입력', '답변'];
+
+const HEAD_Y = 40;
+const LANE_Y0 = 56;
+const LANE_H = 44;
+const LANE_GAP = 20;
+
+const CHIP_W = 44;
+const CHIP_H = 22;
+const CHIP_GAP = 8;
+
+type Chip = { label: string; missing?: boolean };
+const lanes: { no: string; where: string; cells: Chip[][]; lostAt: number }[] = [
+  { no: '①', where: '검색', cells: [[{ label: 'v1' }, { label: 'v2', missing: true }], [{ label: 'v1' }]], lostAt: 0 },
+  { no: '②', where: '문맥', cells: [[{ label: 'v1' }, { label: 'v2' }], [{ label: 'v1' }, { label: 'v2', missing: true }]], lostAt: 1 },
+  { no: '③', where: '모델', cells: [[{ label: 'v2' }], [{ label: 'v2' }]], lostAt: 2 },
+].map((l, i) => ({ ...l, y: LANE_Y0 + i * (LANE_H + LANE_GAP) }));
+
+const chipX = (stage: number, k: number) => cx(stage) + 12 + k * (CHIP_W + CHIP_GAP);
+const chipY = (laneY: number) => laneY + (LANE_H - CHIP_H) / 2;
+
+const LAST_BOTTOM = lanes[2].y + LANE_H; // 228
+const H = LAST_BOTTOM + 44; // 272
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="현재 한도를 20만 원이라고 답한 오답의 원인은 세 곳 중 하나다. 검색 결과에 v2가 없었거나, 검색은 됐지만 모델 입력에서 v2가 잘렸거나, v2를 넘겼는데도 모델이 틀렸다. 화면의 답만 보면 셋을 구별할 수 없다">
+
+<defs>
+  <marker id="walEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">같은 오답, 세 가지 원인</text>
+
+<text class="cap" x={LX} y={HEAD_Y} fill="var(--muted)">틀린 곳</text>
+{stages.map((s, i) => (
+  <text class="cap" x={cx(i) + CW / 2} y={HEAD_Y} text-anchor="middle" fill="var(--muted)">{s}</text>
+))}
+
+{lanes.map((l) => (
+  <>
+    <text class="lane" x={LX} y={l.y + 27} fill="var(--ink)">{l.no} {l.where}</text>
+
+    {l.cells.map((chips, stage) => (
+      <>
+        <rect x={cx(stage)} y={l.y} width={CW} height={LANE_H} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+        {chips.map((c, k) => (
+          <>
+            <rect x={chipX(stage, k)} y={chipY(l.y)} width={CHIP_W} height={CHIP_H} rx="3"
+                  fill={c.missing ? 'none' : 'var(--bg)'} stroke={c.missing ? 'var(--rule)' : 'var(--ink)'}
+                  stroke-width={c.missing ? 1 : 1.2} stroke-dasharray={c.missing ? '3 3' : undefined}/>
+            <text class="m" x={chipX(stage, k) + CHIP_W / 2} y={chipY(l.y) + 15} text-anchor="middle"
+                  fill={c.missing ? 'var(--muted)' : 'var(--ink)'}>{c.label}</text>
+            {c.missing && (
+              <>
+                <circle cx={chipX(stage, k) + CHIP_W} cy={chipY(l.y)} r="7" fill="var(--accent-strong)"/>
+                <text class="ic" x={chipX(stage, k) + CHIP_W} y={chipY(l.y) + 3.5} text-anchor="middle" fill="var(--bg)">✕</text>
+              </>
+            )}
+          </>
+        ))}
+        <path d={`M ${cx(stage) + CW + 2} ${l.y + LANE_H / 2} H ${cx(stage + 1) - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#walEnd)"/>
+      </>
+    ))}
+
+    <rect x={cx(2)} y={l.y} width={CW} height={LANE_H} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+    <text class="ans" x={cx(2) + CW / 2} y={l.y + 27} text-anchor="middle" fill="var(--accent-strong)">20만 원</text>
+    {l.lostAt === 2 && (
+      <>
+        <circle cx={cx(2) + CW} cy={l.y} r="7" fill="var(--accent-strong)"/>
+        <text class="ic" x={cx(2) + CW} y={l.y + 3.5} text-anchor="middle" fill="var(--bg)">✕</text>
+      </>
+    )}
+  </>
+))}
+
+<text class="cap" x={cx(2) + CW / 2} y={LAST_BOTTOM + 24} text-anchor="middle" fill="var(--muted)">화면에서는 셋이 같은 오답이다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .lane { font-size: 12.5px; font-weight: 550; }
+.dg .m { font-family: var(--font-mono); font-size: 11px; font-weight: 600; }
+.dg .ans { font-size: 12.5px; font-weight: 550; }
+.dg .ic { font-size: 9px; font-weight: 700; }
+.dg .cap { font-size: 11px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

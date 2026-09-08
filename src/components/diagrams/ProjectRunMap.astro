@@ -1,0 +1,66 @@
+---
+/**
+ * 프로젝트를 확인하는 세 경로. 모델 없는 계약 테스트, 실제 모델을 올리는 스모크, 사람이 화면을 읽는 수동 티켓 흐름.
+ */
+const LX = 24;
+const SX = 150;
+const LANES = [
+  { y: 48, label: '계약 테스트', sub: '모델 없음', boxes: ['unittest discover', 'test_*.py'], w: 150, gap: 12, mono: true },
+  { y: 118, label: '스모크', sub: '실제 모델 · 임시 디렉터리', boxes: ['init', '초안 → 등록', '재실행 · 조회', 'HTTP 서버', '인증 실패 · 질문', 'v1 재시작'], w: 76, gap: 8 },
+  { y: 188, label: '수동 티켓 흐름', sub: '사람이 preview를 읽는다', boxes: ['prepare', 'preview 읽기', 'confirm DRAFT_ID', '재실행 = 같은 티켓'], w: 116, gap: 10 },
+];
+const BH = 34;
+const H = 272;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="프로젝트 확인 경로 셋. 계약 테스트는 모델 없이 unittest discover로 test_ 파일을 돈다. 스모크는 실제 모델을 임시 디렉터리에 올려 init, 초안과 등록, 재실행과 조회, HTTP 서버, 인증 실패와 질문, v1 재시작을 순서대로 수행한다. 수동 티켓 흐름은 prepare, 사람이 preview를 읽기, confirm DRAFT_ID, 재실행하면 같은 티켓 순서다. --yes는 테스트 픽스처이며 사람이 승인했다는 증거로 쓰지 않는다">
+
+<defs>
+  <marker id="prEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">books/ai-engineering/examples · 세 가지 확인 경로</text>
+
+{LANES.map((l) => (
+  <>
+    <text class="label" x={LX} y={l.y + 15} fill="var(--ink)">{l.label}</text>
+    <text class="sub" x={LX} y={l.y + 30} fill="var(--muted)">{l.sub}</text>
+    {l.boxes.map((b, i) => {
+      const x = SX + i * (l.w + l.gap);
+      const person = b === 'preview 읽기';
+      return (
+        <>
+          <rect x={x} y={l.y} width={l.w} height={BH} rx="3" fill={person ? 'none' : 'var(--bg-soft)'} stroke={person ? 'var(--ink)' : 'var(--rule)'} stroke-width={person ? 1.6 : 1} stroke-dasharray={person ? '4 3' : undefined}/>
+          <text class={l.mono || b.startsWith('prepare') || b.startsWith('confirm') ? 'm' : 'box'} x={x + l.w / 2} y={l.y + 21} text-anchor="middle" fill="var(--ink)">{b}</text>
+          {i < l.boxes.length - 1 && <path d={`M ${x + l.w + 1} ${l.y + BH / 2} H ${x + l.w + l.gap - 2}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#prEnd)"/>}
+        </>
+      );
+    })}
+  </>
+))}
+
+<text class="cap" x="24" y={H - 30} fill="var(--body)">--yes는 테스트 픽스처다. 사람이 화면을 보고 승인했다는 증거로 쓰지 않는다</text>
+<text class="cap" x="24" y={H - 12} fill="var(--muted)">experiments/service-local.json · v2·v1 모두 생성 응답이 계약 오류였고, 한 요청씩이라 시간은 비교하지 않는다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .label { font-size: 11.5px; font-weight: 550; }
+.dg .sub { font-size: 10px; }
+.dg .box { font-size: 10.5px; font-weight: 550; }
+.dg .m { font-family: var(--font-mono); font-size: 10px; font-weight: 600; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

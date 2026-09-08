@@ -1,0 +1,92 @@
+---
+/**
+ * 스트리밍 CLI가 처리하는 이벤트 흐름. 텍스트 델타는 계속 받고, 스트림이 어떻게 끝났는지에
+ * 따라 네 갈래로 나뉜다. 완료 이벤트를 본 경우에만 최종 응답을 검증한다.
+ */
+const CONN = { x: 24, y: 130, w: 84, h: 40 };
+const RECV = { x: 144, y: 130, w: 126, h: 40 };
+const EV_X = 330;
+const EV_W = 164;
+const ST_X = 524;
+const ST_W = 124;
+const ROW_H = 40;
+const TOP = 44;
+const STEP = 56;
+
+const branches = [
+  { ev: ['response.completed'], mono: true, state: ['ok · refused ·', 'unexpected_output'], good: true },
+  { ev: ['response.incomplete'], mono: true, state: ['incomplete'] },
+  { ev: ['response.failed · error'], mono: true, state: ['upstream_error'] },
+  { ev: ['완료 이벤트 없이 종료', '읽기 오류'], mono: false, state: ['interrupted'] },
+].map((b, i) => ({ ...b, y: TOP + i * STEP }));
+
+const RECV_MID = RECV.y + RECV.h / 2; // 150
+const TRUNK_X = 300;
+const H = branches[3].y + ROW_H + 24; // 276
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="스트림을 연결하고 이벤트를 받는다. 텍스트 델타는 계속 받고, response.completed를 받으면 최종 응답을 검증해 ok나 refused나 unexpected_output이 된다. response.incomplete는 incomplete, failed와 error는 upstream_error, 완료 이벤트 없이 끝나거나 읽기 오류가 나면 interrupted다">
+
+<defs>
+  <marker id="slEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">스트림이 끝나는 네 가지 방식</text>
+
+<!-- 연결 → 이벤트 수신 -->
+<rect x={CONN.x} y={CONN.y} width={CONN.w} height={CONN.h} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+<text class="box" x={CONN.x + CONN.w / 2} y={CONN.y + 25} text-anchor="middle" fill="var(--ink)">연결</text>
+<path d={`M ${CONN.x + CONN.w + 2} ${RECV_MID} H ${RECV.x - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#slEnd)"/>
+
+<rect x={RECV.x} y={RECV.y} width={RECV.w} height={RECV.h} rx="3" fill="var(--bg-soft)" stroke="var(--ink)" stroke-width="1.6"/>
+<text class="box" x={RECV.x + RECV.w / 2} y={RECV.y + 25} text-anchor="middle" fill="var(--ink)">이벤트 수신</text>
+
+<!-- 텍스트 델타는 계속 받는다 -->
+<path d={`M ${RECV.x + 30} ${RECV.y + RECV.h + 2} V ${RECV.y + RECV.h + 22} H ${RECV.x + RECV.w - 30} V ${RECV.y + RECV.h + 3}`}
+      fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#slEnd)"/>
+<text class="cap" x={RECV.x + RECV.w / 2} y={RECV.y + RECV.h + 40} text-anchor="middle" fill="var(--muted)">텍스트 델타: 계속 받는다</text>
+
+<!-- 갈래 -->
+<path d={`M ${RECV.x + RECV.w + 2} ${RECV_MID} H ${TRUNK_X}`} fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+<path d={`M ${TRUNK_X} ${branches[0].y + ROW_H / 2} V ${branches[3].y + ROW_H / 2}`} fill="none" stroke="var(--muted)" stroke-width="1.2"/>
+{branches.map((b) => (
+  <>
+    <path d={`M ${TRUNK_X} ${b.y + ROW_H / 2} H ${EV_X - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#slEnd)"/>
+    <rect x={EV_X} y={b.y} width={EV_W} height={ROW_H} rx="3" fill="none" stroke="var(--rule)" stroke-width="1"/>
+    {b.ev.map((l, k) => (
+      <text class={b.mono ? 'm' : 'line'} x={EV_X + EV_W / 2} y={b.ev.length === 1 ? b.y + 25 : b.y + 17 + k * 15} text-anchor="middle" fill="var(--body)">{l}</text>
+    ))}
+    <path d={`M ${EV_X + EV_W + 2} ${b.y + ROW_H / 2} H ${ST_X - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#slEnd)"/>
+    <rect x={ST_X} y={b.y} width={ST_W} height={ROW_H} rx="3" fill="var(--bg-soft)"
+          stroke={b.good ? 'var(--ink)' : 'var(--rule)'} stroke-width={b.good ? 1.6 : 1}/>
+    {b.state.map((l, k) => (
+      <text class="ms" x={ST_X + ST_W / 2} y={b.state.length === 1 ? b.y + 25 : b.y + 17 + k * 14} text-anchor="middle" fill="var(--ink)">{l}</text>
+    ))}
+  </>
+))}
+
+<text class="cap" x={EV_X} y={branches[0].y - 10} fill="var(--muted)">어떻게 끝났나</text>
+<text class="cap" x={ST_X} y={branches[0].y - 10} fill="var(--muted)">결과 상태</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12.5px; font-weight: 550; }
+.dg .line { font-size: 11px; }
+.dg .m { font-family: var(--font-mono); font-size: 10.5px; }
+.dg .ms { font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; }
+.dg .cap { font-size: 11px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

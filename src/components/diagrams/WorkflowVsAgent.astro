@@ -1,0 +1,78 @@
+---
+/**
+ * 워크플로와 에이전트 루프의 차이는 다음 단계의 결정권이 어디에 있느냐다.
+ * 티켓 등록은 코드가 정한 고정 흐름, 조회는 제한된 행동 목록 안에서 계획기가 고르는 루프다.
+ */
+const L = { x: 24, w: 290 };
+const R = { x: 358, w: 290 };
+const TOP = 50;
+const wf = ['초안 작성 · 모델이 써도 된다', '확인 대기 · 무조건 멈춘다', '호스트가 등록한다'].map((l, i) => ({ l, y: TOP + 30 + i * 52 }));
+const loop = [
+  { l: '관찰', x: R.x + 20, y: TOP + 30, w: 90 },
+  { l: '계획기 제안', x: R.x + 180, y: TOP + 30, w: 90 },
+  { l: '검증 · 실행', x: R.x + 180, y: TOP + 112, w: 90 },
+  { l: 'finish', x: R.x + 20, y: TOP + 112, w: 90, mono: true },
+];
+const H = 300;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="워크플로는 다음 단계가 코드로 정해진 흐름이다. 티켓 등록은 초안 작성 뒤 무조건 확인 대기로 멈추고 호스트가 등록한다. 에이전트 루프는 관찰을 보고 계획기가 다음 행동을 제안하고 검증과 실행을 거쳐 다시 관찰하거나 finish로 끝난다. 허용 행동은 get_ticket, prepare_ticket, finish 셋이고 create_ticket, approve, 권한 변경은 목록에 없다">
+
+<defs>
+  <marker id="wvaEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">결정권이 어디에 있나</text>
+
+<!-- 워크플로 -->
+<rect x={L.x} y={TOP} width={L.w} height="200" rx="3" fill="none" stroke="var(--rule)" stroke-width="1"/>
+<text class="box" x={L.x + 12} y={TOP + 18} fill="var(--ink)">워크플로 · 티켓 등록 · 코드가 정한다</text>
+{wf.map((s, i) => (
+  <>
+    <rect x={L.x + 20} y={s.y} width={L.w - 40} height="34" rx="3" fill="var(--bg-soft)" stroke={i === 1 ? 'var(--ink)' : 'var(--rule)'} stroke-width={i === 1 ? 1.6 : 1}/>
+    <text class="line" x={L.x + L.w / 2} y={s.y + 22} text-anchor="middle" fill="var(--ink)">{s.l}</text>
+    {i < 2 && <path d={`M ${L.x + L.w / 2} ${s.y + 36} V ${s.y + 49}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#wvaEnd)"/>}
+  </>
+))}
+
+<!-- 에이전트 루프 -->
+<rect x={R.x} y={TOP} width={R.w} height="200" rx="3" fill="none" stroke="var(--rule)" stroke-width="1"/>
+<text class="box" x={R.x + 12} y={TOP + 18} fill="var(--ink)">에이전트 루프 · 조회 · 계획기가 고른다</text>
+{loop.map((b, i) => (
+  <>
+    <rect x={b.x} y={b.y} width={b.w} height="34" rx="3" fill="var(--bg-soft)" stroke={i === 2 ? 'var(--ink)' : 'var(--rule)'} stroke-width={i === 2 ? 1.6 : 1}/>
+    <text class={b.mono ? 'm' : 'line'} x={b.x + b.w / 2} y={b.y + 22} text-anchor="middle" fill="var(--ink)">{b.l}</text>
+  </>
+))}
+<path d={`M ${loop[0].x + loop[0].w + 2} ${loop[0].y + 17} H ${loop[1].x - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#wvaEnd)"/>
+<path d={`M ${loop[1].x + 45} ${loop[1].y + 36} V ${loop[2].y - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#wvaEnd)"/>
+<path d={`M ${loop[2].x - 2} ${loop[2].y + 17} H ${loop[3].x + loop[3].w + 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#wvaEnd)"/>
+<path d={`M ${loop[2].x} ${loop[2].y + 8} H ${loop[0].x + 45 + 30} V ${loop[0].y + 37}`} fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#wvaEnd)"/>
+<text class="cap" x={R.x + 145} y={TOP + 100} text-anchor="middle" fill="var(--muted)">다시 관찰</text>
+
+<text class="cap" x={R.x + 12} y={TOP + 172} fill="var(--ink)">허용: get_ticket · prepare_ticket · finish</text>
+<text class="cap" x={R.x + 12} y={TOP + 190} fill="var(--accent-strong)">목록에 없음: create_ticket · approve · 권한 변경</text>
+
+<text class="cap" x="336" y={H - 12} text-anchor="middle" fill="var(--muted)">초안 생성 뒤에는 어느 쪽이든 확인 대기로 멈춘다. 등록은 계획기의 행동이 아니다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12px; font-weight: 550; }
+.dg .line { font-size: 11.5px; font-weight: 550; }
+.dg .m { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

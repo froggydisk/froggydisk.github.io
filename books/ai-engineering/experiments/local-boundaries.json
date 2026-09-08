@@ -1,0 +1,12 @@
+{
+  "output_limit_1": {
+    "status": "incomplete",
+    "text": "",
+    "response_id": null,
+    "request_id": null,
+    "input_tokens": 148,
+    "output_tokens": 1,
+    "error_code": "output_limit"
+  },
+  "oversize_input_error": "이 실습의 입력·출력 예산을 초과한다"
+}

@@ -1,0 +1,71 @@
+---
+/**
+ * 입력을 줄이는 세 가지 방법이 각각 무엇을 잃을 수 있는지 보인다.
+ * 왼쪽은 세 번의 대화, 오른쪽은 방법별로 사라지는 조건이다.
+ */
+const CONV = { x: 24, w: 250 };
+const turns = [
+  { who: '사용자', text: '교육비 신청해 줘' },
+  { who: '사용자', text: '아니, 신청은 취소. 한도만 알려 줘' },
+  { who: '사용자', text: '그럼 얼마까지야?' },
+].map((t, i) => ({ ...t, y: 52 + i * 46 }));
+
+const MX = 330;
+const MW = 318;
+const methods = [
+  { name: '끝부분 자르기', lose: '“단, 승인받은 경우에 한한다”처럼 문서 끝의 조건' },
+  { name: '마지막 메시지만', lose: '“그럼”이 가리키는 대상' },
+  { name: '요약', lose: '“신청은 취소”라는 최신 의도' },
+].map((m, i) => ({ ...m, y: 52 + i * 46 }));
+
+const H = 52 + 3 * 46 + 30; // 220
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="입력을 줄이는 방법마다 잃는 것이 다르다. 끝부분을 자르면 문서 끝의 조건이, 마지막 메시지만 남기면 그럼이 가리키는 대상이, 요약하면 신청은 취소라는 최신 의도가 사라질 수 있다">
+
+<defs>
+  <marker id="clEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">줄이는 방법마다 잃는 것이 다르다</text>
+<text class="cap" x={CONV.x} y="42" fill="var(--muted)">대화</text>
+<text class="cap" x={MX} y="42" fill="var(--muted)">줄이는 방법 → 사라질 수 있는 것</text>
+
+{turns.map((t, i) => (
+  <>
+    <rect x={CONV.x} y={t.y} width={CONV.w} height="34" rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+    <text class="line" x={CONV.x + 12} y={t.y + 22} fill="var(--ink)">{`${i + 1}. ${t.text}`}</text>
+  </>
+))}
+
+<path d={`M ${CONV.x + CONV.w + 2} ${turns[1].y + 17} H ${MX - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#clEnd)"/>
+
+{methods.map((m) => (
+  <>
+    <rect x={MX} y={m.y} width={MW} height="34" rx="3" fill="none" stroke="var(--rule)" stroke-width="1"/>
+    <text class="name" x={MX + 12} y={m.y + 14} fill="var(--ink)">{m.name}</text>
+    <text class="lose" x={MX + 12} y={m.y + 28} fill="var(--accent-strong)">{m.lose}</text>
+  </>
+))}
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .line { font-size: 12px; font-weight: 500; }
+.dg .name { font-size: 11.5px; font-weight: 550; }
+.dg .lose { font-size: 10.5px; }
+.dg .cap { font-size: 11px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

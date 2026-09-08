@@ -1,0 +1,82 @@
+---
+/**
+ * 모델 후보를 고르는 순서. 필수 조건으로 먼저 걸러내고, 남은 후보만 같은 조건에서
+ * 비교하고, 결정 기록에는 다시 비교할 조건까지 남긴다.
+ */
+const Y = 50;
+const H_BOX = 104;
+const stages = [
+  { x: 24, w: 110, title: '후보', lines: ['A', 'B', 'C', 'D'], mono: true },
+  { x: 170, w: 180, title: '필수 조건', lines: ['한국어 출력', '텍스트 입력', '문서 근거 준수', '데이터 처리 조건'], strong: true },
+  { x: 386, w: 130, title: '비교', lines: ['정확성 (Q01~Q05)', '근거 없는 질문', '지연', '비용'] },
+  { x: 552, w: 96, title: '결정 기록', lines: ['만족한 기준', '부담 비용', '다시 볼 조건'] },
+];
+const MID = Y + H_BOX / 2;
+
+const NOTE_Y = Y + H_BOX + 32; // 186
+const NOTE_GAP = 24;
+const notes = [
+  { ok: false, text: '필수 조건에 걸리면 문장이 자연스러워도 뺀다' },
+  { ok: true, text: '남은 후보는 같은 문서·같은 질문·같은 프롬프트로, 질문마다 세 번씩 비교한다' },
+  { ok: true, text: '검색은 아직 붙이지 않는다. 검색 품질과 모델의 근거 활용이 섞이기 때문이다' },
+].map((n, i) => ({ ...n, y: NOTE_Y + i * NOTE_GAP }));
+
+const H = notes[2].y + 22; // 256
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="모델 선택은 후보를 필수 조건으로 먼저 걸러내고, 남은 후보를 정확성·근거 없는 질문 처리·지연·비용으로 비교한 뒤, 만족한 기준과 부담 비용과 다시 볼 조건을 기록하는 순서다">
+
+<defs>
+  <marker id="sfEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">모델을 고르는 순서</text>
+
+{stages.map((s) => (
+  <>
+    <rect x={s.x} y={Y} width={s.w} height={H_BOX} rx="3" fill="var(--bg-soft)"
+          stroke={s.strong ? 'var(--ink)' : 'var(--rule)'} stroke-width={s.strong ? 1.6 : 1}/>
+    <text class="box" x={s.x + s.w / 2} y={Y + 20} text-anchor="middle" fill="var(--ink)">{s.title}</text>
+    {s.lines.map((l, k) => (
+      <text class={s.mono ? 'm' : 'line'} x={s.x + s.w / 2} y={Y + 40 + k * 17} text-anchor="middle" fill="var(--body)">{l}</text>
+    ))}
+  </>
+))}
+{stages.slice(0, -1).map((s, i) => (
+  <path d={`M ${s.x + s.w + 2} ${MID} H ${stages[i + 1].x - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#sfEnd)"/>
+))}
+
+<!-- 탈락 -->
+<circle cx={stages[1].x + stages[1].w} cy={Y + H_BOX} r="7" fill="var(--accent-strong)"/>
+<text class="ic" x={stages[1].x + stages[1].w} y={Y + H_BOX + 3.5} text-anchor="middle" fill="var(--bg)">✕</text>
+
+{notes.map((n) => (
+  <>
+    <circle cx="31" cy={n.y - 4} r="7" fill={n.ok ? 'var(--ink)' : 'var(--accent-strong)'}/>
+    <text class="ic" x="31" y={n.y - 0.5} text-anchor="middle" fill="var(--bg)">{n.ok ? '✓' : '✕'}</text>
+    <text class="note" x="46" y={n.y} fill="var(--body)">{n.text}</text>
+  </>
+))}
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12.5px; font-weight: 550; }
+.dg .line { font-size: 11px; }
+.dg .m { font-family: var(--font-mono); font-size: 11px; font-weight: 600; }
+.dg .note { font-size: 11px; }
+.dg .ic { font-size: 9px; font-weight: 700; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

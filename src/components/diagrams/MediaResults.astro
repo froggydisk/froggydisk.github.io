@@ -1,0 +1,63 @@
+---
+/**
+ * OCR·음성 합성·음성 인식 한 차례 실행의 입출력, 시간, 품질. 깨끗한 문서 이미지는 CER 0,
+ * 깨끗한 합성 질문의 인식은 CER 0.455로 핵심 단어가 바뀌었다.
+ */
+const W = 190;
+const GAP = 27;
+const Y = 50;
+const H_BOX = 118;
+const cards = [
+  { title: 'OCR · Tesseract', io: ['1,400×280 문서 이미지', '→ 두 문장 그대로'], time: '0.111초', quality: 'CER 0', ok: true },
+  { title: '음성 합성 · macOS Yuna', io: ['“교육비 한도는 얼마인가요?”', '→ 1.749초 음성'], time: '0.787초', quality: '숫자·약어 읽기는 검토 대상', ok: null },
+  { title: '음성 인식 · whisper-tiny', io: ['합성 음성', '→ “주유기 한 돈인 얼마인가요?”'], time: '0.217초', quality: 'CER 0.455', ok: false },
+].map((c, i) => ({ ...c, x: 24 + i * (W + GAP) }));
+const H = 236;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="한 차례 실행에서 OCR은 두 정책 문장을 그대로 추출해 0.111초에 CER 0, 음성 합성은 질문을 1.749초 음성으로 0.787초에 만들었고, 음성 인식은 합성 음성을 주유기 한 돈인 얼마인가요로 전사해 0.217초에 CER 0.455였다. 모델 준비 17.335초는 따로 뺐다">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">한 차례 실행 · 단계별 벽시계 시간</text>
+
+{cards.map((c) => (
+  <>
+    <rect x={c.x} y={Y} width={W} height={H_BOX} rx="3" fill="var(--bg-soft)" stroke={c.ok === false ? 'var(--accent-strong)' : 'var(--rule)'} stroke-width={c.ok === false ? 1.4 : 1}/>
+    <text class="box" x={c.x + 12} y={Y + 22} fill="var(--ink)">{c.title}</text>
+    <path d={`M ${c.x + 12} ${Y + 32} H ${c.x + W - 12}`} fill="none" stroke="var(--rule)" stroke-width="1"/>
+    {c.io.map((l, k) => (
+      <text class="sub" x={c.x + 12} y={Y + 52 + k * 16} fill="var(--body)">{l}</text>
+    ))}
+    <text class="m" x={c.x + 12} y={Y + 92} fill="var(--ink)">{c.time}</text>
+    {c.ok !== null && (
+      <>
+        <circle cx={c.x + W - 20} cy={Y + 88} r="7" fill={c.ok ? 'var(--ink)' : 'var(--accent-strong)'}/>
+        <text class="ic" x={c.x + W - 20} y={Y + 91.5} text-anchor="middle" fill="var(--bg)">{c.ok ? '✓' : '✕'}</text>
+      </>
+    )}
+    <text class="sub" x={c.x + 12} y={Y + 108} fill={c.ok === false ? 'var(--accent-strong)' : 'var(--muted)'}>{c.quality}</text>
+  </>
+))}
+
+<text class="cap" x="24" y={H - 30} fill="var(--body)">깨끗한 합성 질문에서도 핵심 단어가 바뀌었다. 이 전사를 그대로 검색에 넣으면 실패의 출발점은 임베딩이 아니라 인식이다</text>
+<text class="cap" x="24" y={H - 12} fill="var(--muted)">음성 모델 준비(다운로드 · 로드) 17.335초는 인식 시간과 분리했다 · experiments/media-local.json</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12px; font-weight: 550; }
+.dg .sub { font-size: 10.5px; }
+.dg .m { font-family: var(--font-mono); font-size: 13px; font-weight: 600; }
+.dg .ic { font-size: 9px; font-weight: 700; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

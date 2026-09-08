@@ -1,0 +1,74 @@
+---
+/**
+ * MCP의 호스트·클라이언트·서버. 호스트가 사용자·모델·연결 정책을 쥐고, 클라이언트 하나가
+ * 서버 하나와 통신한다. 데이터 계층과 전송 계층을 화살표 라벨로 나눈다.
+ */
+const HOST = { x: 24, y: 50, w: 220, h: 150 };
+const CLIENTS = [
+  { label: 'MCP 클라이언트 A', x: 44, y: 104, w: 180, h: 34 },
+  { label: 'MCP 클라이언트 B', x: 44, y: 152, w: 180, h: 34 },
+];
+const SERVERS = [
+  { label: '문서 서버', x: 350, y: 99, w: 130, h: 44 },
+  { label: '티켓 서버', x: 350, y: 147, w: 130, h: 44 },
+];
+const DB = { x: 536, y: 147, w: 112, h: 44 };
+const H = 250;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="호스트는 사용자와 모델과 연결 정책을 관리하고 MCP 클라이언트를 여럿 가진다. 클라이언트 A는 문서 서버와, 클라이언트 B는 티켓 서버와 통신하고 티켓 서버 뒤에 업무 DB가 있다. 데이터 계층은 initialize와 tools/list와 tools/call 같은 메시지의 뜻을, 전송 계층은 stdio나 HTTP로 그 메시지를 전달하는 방법을 정한다">
+
+<defs>
+  <marker id="mtpEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+  <marker id="mtpStart" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 10 0 L 0 5 L 10 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">호스트 · 클라이언트 · 서버</text>
+
+<rect x={HOST.x} y={HOST.y} width={HOST.w} height={HOST.h} rx="3" fill="none" stroke="var(--ink)" stroke-width="1.4"/>
+<text class="box" x={HOST.x + 14} y={HOST.y + 24} fill="var(--ink)">호스트</text>
+<text class="cap" x={HOST.x + 14} y={HOST.y + 42} fill="var(--muted)">사용자 · 모델 · 연결 정책</text>
+{CLIENTS.map((c) => (
+  <>
+    <rect x={c.x} y={c.y} width={c.w} height={c.h} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+    <text class="line" x={c.x + c.w / 2} y={c.y + 22} text-anchor="middle" fill="var(--ink)">{c.label}</text>
+  </>
+))}
+{SERVERS.map((s, i) => (
+  <>
+    <path d={`M ${CLIENTS[i].x + CLIENTS[i].w + 3} ${CLIENTS[i].y + 17} H ${s.x - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-start="url(#mtpStart)" marker-end="url(#mtpEnd)"/>
+    <rect x={s.x} y={s.y} width={s.w} height={s.h} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+    <text class="line" x={s.x + s.w / 2} y={s.y + 27} text-anchor="middle" fill="var(--ink)">{s.label}</text>
+  </>
+))}
+<path d={`M ${SERVERS[1].x + SERVERS[1].w + 2} ${SERVERS[1].y + 22} H ${DB.x - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#mtpEnd)"/>
+<rect x={DB.x} y={DB.y} width={DB.w} height={DB.h} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+<text class="line" x={DB.x + DB.w / 2} y={DB.y + 27} text-anchor="middle" fill="var(--ink)">업무 DB</text>
+
+<text class="cap" x="430" y="86" text-anchor="middle" fill="var(--muted)">데이터 계층: initialize · tools/list · tools/call</text>
+<text class="cap" x="430" y="212" text-anchor="middle" fill="var(--muted)">전송 계층: stdio · Streamable HTTP</text>
+
+<text class="cap" x="24" y={H - 12} fill="var(--body)">서버를 별도 프로세스로 띄우는 것은 전송 구조지 샌드박스가 아니다. 파일·네트워크 권한은 실행 환경에서 따로 제한한다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12.5px; font-weight: 550; }
+.dg .line { font-size: 11.5px; font-weight: 550; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

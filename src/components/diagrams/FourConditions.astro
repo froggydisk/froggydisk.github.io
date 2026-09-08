@@ -1,0 +1,65 @@
+---
+/**
+ * 같은 질문에 모델에게 주는 자료를 넷으로 바꾸고, 조건마다 기대하는 답을 옆에 둔다.
+ * 문서 없이 금액을 맞히는 것과 주어진 문서에서 유효한 값을 고르는 것이 다른 능력임을 보인다.
+ */
+const IN = { x: 24, w: 330, h: 50 };
+const OUT = { x: 400, w: 248 };
+const TOP = 48;
+const STEP = 64;
+
+const rows = [
+  { give: '질문만', detail: '한울연구소의 현재 교육비 한도는?', expect: '확인 불가', why: '금액을 말하면 우연이다', warn: true },
+  { give: '질문 + 현재 문서', detail: 'v2 · 한도 30만 원', expect: '30만 원', why: '문서의 값 그대로' },
+  { give: '질문 + 두 판 + 시행일', detail: 'v1 20만 원 · v2 30만 원 · 시행일', expect: '질문 시점에 유효한 값', why: 'v1인지 v2인지 고른다' },
+  { give: '질문 + 무관한 문서', detail: '휴가 신청 안내', expect: '확인 불가', why: '금액을 만들면 실패', warn: true },
+].map((r, i) => ({ ...r, y: TOP + i * STEP }));
+
+const H = rows[3].y + IN.h + 24; // 314
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="같은 질문을 네 조건으로 준다. 질문만 주면 확인 불가가 답이고, 현재 문서를 주면 30만 원, 두 판과 시행일을 주면 질문 시점에 유효한 값, 무관한 문서를 주면 다시 확인 불가가 답이다">
+
+<defs>
+  <marker id="fcEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+    <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+  </marker>
+</defs>
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">네 가지 조건과 기대하는 답</text>
+<text class="cap" x={IN.x} y={TOP - 10} fill="var(--muted)">모델에 주는 것</text>
+<text class="cap" x={OUT.x} y={TOP - 10} fill="var(--muted)">기대하는 답</text>
+
+{rows.map((r, i) => (
+  <>
+    <rect x={IN.x} y={r.y} width={IN.w} height={IN.h} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+    <text class="box" x={IN.x + 12} y={r.y + 20} fill="var(--ink)">{`${i + 1}. ${r.give}`}</text>
+    <text class="sub" x={IN.x + 12} y={r.y + 38} fill="var(--muted)">{r.detail}</text>
+
+    <path d={`M ${IN.x + IN.w + 2} ${r.y + IN.h / 2} H ${OUT.x - 3}`} fill="none" stroke="var(--muted)" stroke-width="1.2" marker-end="url(#fcEnd)"/>
+
+    <rect x={OUT.x} y={r.y} width={OUT.w} height={IN.h} rx="3" fill="var(--bg-soft)"
+          stroke={r.warn ? 'var(--rule)' : 'var(--ink)'} stroke-width={r.warn ? 1 : 1.6}/>
+    <text class="box" x={OUT.x + 12} y={r.y + 20} fill="var(--ink)">{r.expect}</text>
+    <text class="sub" x={OUT.x + 12} y={r.y + 38} fill={r.warn ? 'var(--accent-strong)' : 'var(--muted)'}>{r.why}</text>
+  </>
+))}
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .box { font-size: 12.5px; font-weight: 550; }
+.dg .sub { font-size: 11px; }
+.dg .cap { font-size: 11px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

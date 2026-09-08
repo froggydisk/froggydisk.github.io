@@ -1,0 +1,71 @@
+---
+/**
+ * 첫 통합 실험 네 사례의 내용·형식 판정을 프롬프트 v1·v2로 나눠 보인다.
+ * v2는 코드 블록만 없앴고, 내용이 틀린 사례는 그대로 틀렸다.
+ */
+const COLS = { case: 24, v1c: 268, v1f: 328, v2c: 418, v2f: 478, res: 540 };
+const TOP = 74;
+const ROW = 38;
+type M = 'ok' | 'bad' | 'part' | 'none';
+const rows: { id: string; name: string; v1: M[]; v2: M[]; res: string }[] = [
+  { id: 'R01', name: '교육비 한도와 신청 순서', v1: ['ok', 'bad'], v2: ['part', 'bad'], res: 'contract_failed' },
+  { id: 'R02', name: '해외 출장 숙박비 (근거 없음)', v1: ['bad', 'bad'], v2: ['bad', 'bad'], res: 'contract_failed' },
+  { id: 'R03', name: '상충하는 두 문서', v1: ['bad', 'bad'], v2: ['bad', 'bad'], res: 'contract_failed' },
+  { id: 'R04', name: '권한 회수 뒤 질문', v1: ['none', 'none'], v2: ['none', 'none'], res: 'insufficient_evidence' },
+].map((r, i) => ({ ...r, y: TOP + i * ROW }));
+const mark = (m: M) => ({ ok: { f: 'var(--ink)', c: '✓' }, bad: { f: 'var(--accent-strong)', c: '✕' }, part: { f: 'var(--accent-strong)', c: '△' }, none: { f: 'var(--rule)', c: '–' } }[m]);
+const H = TOP + 4 * ROW + 58; // 284
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="첫 통합 실험에서 R01은 v1에서 내용은 맞고 형식이 틀렸고 v2에서는 승인 절차가 빠지고 형식도 틀렸다. R02와 R03은 두 버전 모두 내용과 형식이 틀렸다. R04는 권한이 없어 생성을 부르지 않았다. 세 사례의 서비스 결과는 contract_failed, R04는 insufficient_evidence다">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">첫 통합 실험 · Qwen3-0.6B · 사례당 1회</text>
+
+<text class="cap" x={COLS.v1c + 30} y="44" text-anchor="middle" fill="var(--muted)">프롬프트 v1</text>
+<text class="cap" x={COLS.v2c + 30} y="44" text-anchor="middle" fill="var(--muted)">v2 (예시 추가)</text>
+<text class="cap" x={COLS.case} y="60" fill="var(--muted)">사례</text>
+<text class="cap" x={COLS.v1c} y="60" text-anchor="middle" fill="var(--muted)">내용</text>
+<text class="cap" x={COLS.v1f} y="60" text-anchor="middle" fill="var(--muted)">형식</text>
+<text class="cap" x={COLS.v2c} y="60" text-anchor="middle" fill="var(--muted)">내용</text>
+<text class="cap" x={COLS.v2f} y="60" text-anchor="middle" fill="var(--muted)">형식</text>
+<text class="cap" x={COLS.res} y="60" fill="var(--muted)">서비스 결과</text>
+<path d="M 24 66 H 648" fill="none" stroke="var(--rule)" stroke-width="1"/>
+
+{rows.map((r) => (
+  <>
+    <text class="id" x={COLS.case} y={r.y + 19} fill="var(--ink)">{r.id}</text>
+    <text class="line" x={COLS.case + 40} y={r.y + 19} fill="var(--body)">{r.name}</text>
+    {[[COLS.v1c, r.v1[0]], [COLS.v1f, r.v1[1]], [COLS.v2c, r.v2[0]], [COLS.v2f, r.v2[1]]].map(([x, m]) => (
+      <>
+        <circle cx={x as number} cy={r.y + 15} r="7" fill={mark(m as M).f}/>
+        <text class="ic" x={x as number} y={r.y + 18.5} text-anchor="middle" fill="var(--bg)">{mark(m as M).c}</text>
+      </>
+    ))}
+    <text class="m" x={COLS.res} y={r.y + 19} fill={r.res === 'contract_failed' ? 'var(--accent-strong)' : 'var(--ink)'}>{r.res}</text>
+    <path d={`M 24 ${r.y + ROW - 6} H 648`} fill="none" stroke="var(--rule)" stroke-width="1"/>
+  </>
+))}
+
+<text class="cap" x="24" y={H - 30} fill="var(--body)">△ = 내용 일부 누락 (승인 절차) · – = 생성을 부르지 않음. 입력 토큰은 v1 574·577·598 → v2 784·787·808 (+210)</text>
+<text class="cap" x="24" y={H - 12} fill="var(--muted)">v2는 코드 블록만 없앴다. 형식을 고쳐도 R02·R03의 내용은 그대로 틀렸다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .id { font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; }
+.dg .line { font-size: 11.5px; }
+.dg .m { font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; }
+.dg .ic { font-size: 9px; font-weight: 700; }
+.dg .cap { font-size: 10.5px; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>
