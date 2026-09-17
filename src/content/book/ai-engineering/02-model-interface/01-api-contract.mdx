@@ -10,7 +10,9 @@ import TimeoutPhases from "../../../../components/diagrams/TimeoutPhases.astro";
 import StreamLifecycle from "../../../../components/diagrams/StreamLifecycle.astro";
 import MockTransport from "../../../../components/diagrams/MockTransport.astro";
 
-“교육비 한도와 신청 순서를 알려 줘.” 문서 한 장을 붙여 모델에 보내는 코드는 열 줄이면 된다. 돌아온 문자열을 그대로 화면에 보내면 어떻게 될까. 응답이 중간에 끊겼을 수도, 모델이 답을 거절했을 수도, 문장 대신 도구 호출 요청이 들어 있을 수도 있다. 정작 HTTP 200은 이 셋을 구분해 주지 않는다.
+데모의 코드는 모델이 돌려준 문자열을 그대로 화면에 뿌렸다. 그러던 어느 날 답변이 문장 한가운데서 끊긴 채로 나왔다. 로그를 열어 보니 응답 코드는 200이었다.
+
+요청은 성공한 것이다. 그런데 답변은 완성되지 않았다. 응답이 중간에 끊겼을 수도, 모델이 답을 거절했을 수도, 문장 대신 도구 호출 요청이 들어 있을 수도 있는데 정작 HTTP 200은 이 셋을 구분해 주지 않는다. 화면에 뿌리기 전에 무엇이 돌아왔는지 먼저 읽어야 한다.
 
 CLI는 교육비 안내 문서 한 장을 코드에 고정해 두고 질문만 바꿔 넘긴다. 검색도 티켓 도구도 아직 없다.
 
