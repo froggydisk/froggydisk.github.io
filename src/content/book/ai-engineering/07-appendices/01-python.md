@@ -18,19 +18,19 @@ books/ai-engineering/examples/.venv/bin/python -m pip install -r books/ai-engine
 
 가상 환경의 Python 경로를 명시하면 터미널 활성화 상태에 따른 혼동을 줄일 수 있다. Windows에서는 실행 파일의 경로가 `.venv/Scripts/python.exe`이며 셸 명령도 환경에 맞게 바꾼다. Windows 설치는 이 책의 확인 범위 밖이다.
 
-기본 요구 파일은 API 어댑터와 계약 예제용이다. 로컬 모델에는 `requirements-local.txt`, MCP에는 `requirements-tools.txt`, 매체 실습에는 `requirements-media.txt`를 추가로 설치한다. 모델 가중치와 운영체제 도구는 pip 의존성과 별개다. 최초 다운로드에는 네트워크와 저장 공간이 필요하다.
+기본 요구 파일은 API 어댑터와 계약 예제용이다. 로컬 모델에는 `requirements-local.txt`, MCP에는 `requirements-tools.txt`, 매체 예제에는 `requirements-media.txt`를 추가로 설치한다. 모델 가중치와 운영체제 도구는 pip 의존성과 별개다. 최초 다운로드에는 네트워크와 저장 공간이 필요하다.
 
 `requirements-final-lock.txt`는 최종 집필 환경에서 설치된 패키지 목록이다. 직접 의존성을 읽기 위한 파일과 환경 전체 기록을 구분한다. 같은 버전을 지정해도 다른 운영체제에서 해당 Python용 배포 파일이 없을 수 있으므로 설치 가능성을 확인한다.
 
 ## 동기·비동기와 실제 동시 실행
 
-일반 함수는 호출한 흐름에서 실행된다. `async def` 함수를 부르면 코루틴 객체가 생기고, `await`하거나 태스크로 돌려야 실행된다. 네트워크 응답을 기다리는 동안 다른 작업이 진행될 수 있지만, CPU 계산을 코루틴 안에 넣었다고 자동으로 병렬 계산이 되지는 않는다.
+일반 함수는 호출한 흐름에서 실행된다. `async def` 함수를 부르면 코루틴 객체가 생기고 `await`하거나 태스크로 돌려야 실행된다. 네트워크 응답을 기다리는 동안 다른 작업이 진행될 수 있지만 CPU 계산을 코루틴 안에 넣었다고 자동으로 병렬 계산이 되지는 않는다.
 
 ```python
 import asyncio
 
 async def fetch_status():
-    await asyncio.sleep(0.01)  # 실제 네트워크 대기의 대역
+    await asyncio.sleep(0.01)  # 실제 네트워크 대기 대신
     return "ready"
 
 async def main():

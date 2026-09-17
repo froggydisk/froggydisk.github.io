@@ -54,7 +54,7 @@ books/ai-engineering/examples/.venv/bin/python books/ai-engineering/examples/loc
 books/ai-engineering/examples/.venv/bin/python books/ai-engineering/examples/embedding_demo.py
 ```
 
-캐시를 준비한 뒤 다음 시연을 실행한다. 기존 기록과 비교하려면 새 파일로 저장하고 원본 실험을 덮어쓰지 않는다.
+캐시를 준비한 뒤 다음 데모를 실행한다. 기존 기록과 비교하려면 새 파일로 저장하고 원본 실험을 덮어쓰지 않는다.
 
 ```bash
 books/ai-engineering/examples/.venv/bin/python books/ai-engineering/examples/store_demo.py
@@ -70,7 +70,7 @@ books/ai-engineering/examples/.venv/bin/python -m pip install -r books/ai-engine
 books/ai-engineering/examples/.venv/bin/python books/ai-engineering/examples/mcp_ticket_demo.py
 ```
 
-매체 실습은 Python 환경 외에 Tesseract·FFmpeg와 macOS의 Yuna 음성·폰트 경로가 필요하다. `requirements-media.txt` 설치 뒤 `media_demo.py`를 실행한다. 다른 운영체제의 호환성은 확인 범위 밖이다.
+매체 예제는 Python 환경 외에 Tesseract·FFmpeg와 macOS의 Yuna 음성·폰트 경로가 필요하다. `requirements-media.txt` 설치 뒤 `media_demo.py`를 실행한다. 다른 운영체제의 호환성은 확인 범위 밖이다.
 
 ## 기록을 해석하는 방법
 
@@ -82,7 +82,7 @@ books/ai-engineering/examples/.venv/bin/python books/ai-engineering/examples/mcp
 | `rag-local.json`, `rag-local-v2.json` | 실제 RAG 생성 실패와 프롬프트 비교 |
 | `hybrid-baseline.json` | E5·FTS5·RRF의 작은 자료 비교 |
 | `mcp-tickets.json` | 실제 서버·클라이언트 프로세스 연결 |
-| `agent-control.json` | 대역 계획기의 제어 흐름 |
+| `agent-control.json` | 가짜 계획기의 제어 흐름 |
 | `media-local.json` | 실제 OCR·합성 음성 인식 |
 | `evaluation-v2.json` | 보존된 RAG 기록의 재채점 |
 | `operations-local.json` | 합성 대기의 과부하·마감·복귀 |

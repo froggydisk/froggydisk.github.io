@@ -14,13 +14,19 @@ parts:
     icon: lucide:compass
   - dir: 02-model-interface
     title: 모델 호출을 애플리케이션으로 만들기
+    icon: lucide:plug
   - dir: 03-retrieval
     title: 문서를 지식으로 연결하기
+    icon: lucide:file-search
   - dir: 04-actions
     title: 답변에서 업무 실행으로
+    icon: lucide:workflow
   - dir: 05-trust
     title: 입력 매체와 신뢰의 확장
+    icon: lucide:shield-check
   - dir: 06-operations
     title: 측정하고 배포하고 유지하기
+    icon: lucide:gauge
   - dir: 07-appendices
     title: 부록
+    icon: lucide:bookmark
