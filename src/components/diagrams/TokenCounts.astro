@@ -1,7 +1,7 @@
 ---
 /**
  * 토큰 수라고 부르는 세 값이 요청의 다른 시점에, 다른 출처에서 나온다는 것을 보인다.
- * 사전 추정치 · 계수 결과 · 실제 사용량은 같은 필드에 덮어쓰지 않는다.
+ * 사전 추정치 · 센 값 · 실제 사용량은 같은 필드에 덮어쓰지 않는다.
  */
 const W = 190;
 const GAP = 27;
@@ -9,7 +9,7 @@ const Y = 50;
 const H_BOX = 96;
 const stops = [
   { when: '요청 전', name: '사전 추정치', src: '로컬 토크나이저 · 문자 수', use: '크기를 가늠한다' },
-  { when: '생성 직전', name: '계수 결과', src: 'responses.input_tokens.count', use: '예산 판정에 쓴다', mono: true, strong: true },
+  { when: '생성 직전', name: '센 값', src: 'responses.input_tokens.count', use: '예산 판정에 쓴다', mono: true, strong: true },
   { when: '생성 후', name: '실제 사용량', src: '응답의 usage', use: '비용을 기록한다' },
 ].map((s, i) => ({ ...s, x: 24 + i * (W + GAP) }));
 const MID = Y + H_BOX / 2;
@@ -18,7 +18,7 @@ const H = Y + H_BOX + 46; // 192
 
 <div class="dg">
 <svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
-     aria-label="토큰 수에는 세 값이 있다. 요청 전에 로컬 토크나이저나 문자 수로 가늠한 사전 추정치, 생성 직전에 계수 API가 돌려준 계수 결과, 생성 후 응답의 usage에 실린 실제 사용량이다. 시점과 출처가 달라 같은 필드에 덮어쓰지 않는다">
+     aria-label="토큰 수에는 세 값이 있다. 요청 전에 로컬 토크나이저나 문자 수로 가늠한 사전 추정치, 생성 직전에 세기 API가 돌려준 값, 생성 후 응답의 usage에 실린 실제 사용량이다. 시점과 출처가 달라 같은 필드에 덮어쓰지 않는다">
 
 <defs>
   <marker id="tcEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">

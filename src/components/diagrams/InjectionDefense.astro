@@ -5,7 +5,7 @@
  */
 const ATTACK = { x: 24, y: 70, w: 200, h: 96 };
 const layers = [
-  { n: '①', title: '권한 · 검색 전', what: '비밀 문서가 모델 문맥에 들어오지 않는다', test: 'SECRET-CANARY가 계수 단계 입력에도 없다' },
+  { n: '①', title: '권한 · 검색 전', what: '비밀 문서가 모델 문맥에 들어오지 않는다', test: 'SECRET-CANARY가 세기 단계 입력에도 없다' },
   { n: '②', title: '인용 검사 · 생성 뒤', what: '없는 출처를 인용하면 unknown_source', test: '비공개 출처 인용 응답 거부' },
   { n: '③', title: '도구 제한 · 실행 전', what: 'approve 행동은 실행되지 않는다', test: '임의 파일 읽기 · 네트워크 호출 도구 없음' },
 ].map((l, i) => ({ ...l, x: 290, y: 46 + i * 66, w: 358, h: 54 }));

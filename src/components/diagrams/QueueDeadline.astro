@@ -23,7 +23,7 @@ const H = 284;
   </marker>
 </defs>
 
-<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">큐 · 역압 · 접수 기준 마감</text>
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">큐 · 백프레셔 · 접수 시점 마감</text>
 
 <rect x={SRC.x} y={SRC.y} width={SRC.w} height={SRC.h} rx="3" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
 <text class="box" x={SRC.x + SRC.w / 2} y={SRC.y + 26} text-anchor="middle" fill="var(--ink)">요청 20개</text>
@@ -46,7 +46,7 @@ const H = 284;
 
 <path d={`M ${Q.x + Q.w / 2} ${Q.y + Q.h + 2} V ${REJ.y - 3}`} fill="none" stroke="var(--accent-strong)" stroke-width="1.2" stroke-dasharray="3 3" marker-end="url(#qdEnd)"/>
 <rect x={REJ.x} y={REJ.y} width={REJ.w} height={REJ.h} rx="3" fill="none" stroke="var(--accent-strong)" stroke-width="1.2" stroke-dasharray="4 3"/>
-<text class="box" x={REJ.x + REJ.w / 2} y={REJ.y + 20} text-anchor="middle" fill="var(--accent-strong)">즉시 거부 16 · 역압</text>
+<text class="box" x={REJ.x + REJ.w / 2} y={REJ.y + 20} text-anchor="middle" fill="var(--accent-strong)">즉시 거부 16 · 백프레셔</text>
 <text class="sub" x={REJ.x + REJ.w + 12} y={REJ.y + 20} fill="var(--muted)">처리할 수 없는 요청을 성공할 것처럼 받아 두지 않는다</text>
 
 <!-- 한 요청의 시간축 -->

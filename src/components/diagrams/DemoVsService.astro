@@ -1,6 +1,6 @@
 ---
 /**
- * 시연은 질문·문서 전부·모델·화면 네 단계고, 서비스는 같은 열에 요청 검사·문서 검색·
+ * 데모는 질문·문서 전부·모델·화면 네 단계고, 서비스는 같은 열에 요청 검사·문서 검색·
  * 도구 실행·응답 검증이 더 있다. 두 줄을 같은 열에 맞춰 무엇이 더해지는지 보인다.
  */
 const W = 76;
@@ -35,7 +35,7 @@ const H = SVC_Y + SVC_H + 24; // 236
 
 <div class="dg">
 <svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
-     aria-label="시연은 질문, 문서 전부 붙이기, 모델, 화면 네 단계다. 서비스는 같은 모델을 쓰지만 그 앞에 요청 검사와 문서 검색이, 뒤에 도구 실행과 응답 검증이 더 있다">
+     aria-label="데모는 질문, 문서 전부 붙이기, 모델, 화면 네 단계다. 서비스는 같은 모델을 쓰지만 그 앞에 요청 검사와 문서 검색이, 뒤에 도구 실행과 응답 검증이 더 있다">
 
 <defs>
   <marker id="dvsEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
@@ -43,12 +43,12 @@ const H = SVC_Y + SVC_H + 24; // 236
   </marker>
 </defs>
 
-<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">시연의 네 단계와 서비스의 일곱 단계</text>
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">데모의 네 단계와 서비스의 일곱 단계</text>
 
-<!-- 시연 -->
-<text class="cap" x="24" y={DEMO_Y - 10} fill="var(--muted)">시연</text>
+<!-- 데모 -->
+<text class="cap" x="24" y={DEMO_Y - 10} fill="var(--muted)">데모</text>
 <rect x="522" y={DEMO_Y - 19} width="14" height="10" rx="2" fill="var(--bg-soft)" stroke="var(--ink)" stroke-width="1.6"/>
-<text class="cap" x="542" y={DEMO_Y - 10} fill="var(--muted)">시연에 없던 결정</text>
+<text class="cap" x="542" y={DEMO_Y - 10} fill="var(--muted)">데모에 없던 결정</text>
 
 {demo.map((d) => (
   <>

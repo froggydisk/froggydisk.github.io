@@ -11,7 +11,7 @@ const STEP = 60;
 const EX_X = 380;
 const EX_W = 268;
 const steps = [
-  { label: '문맥 구성 · 계수', exit: '계수 실패 → 예외를 호출자에게', code: false },
+  { label: '문맥 구성 · 세기', exit: '세기 실패 → 예외를 호출자에게', code: false },
   { label: '구조화 생성', exit: 'generation_failed', sub: '실패 · 거절 · 미완료', code: true },
   { label: 'JSON · 스키마 검사', exit: 'contract_failed', sub: '깨진 JSON · 중복 키 · 필드·타입', code: true },
   { label: '상태 · 인용 검사', exit: 'contract_failed', sub: 'unknown_source · quote_not_found · …', code: true },
@@ -28,7 +28,7 @@ const H = FIN_Y + 30 + 24; // 404
 
 <div class="dg">
 <svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
-     aria-label="문맥 구성과 계수 뒤 구조화 생성을 하고, 실패·거절·미완료면 generation_failed다. JSON과 스키마 검사, 상태와 인용 검사에서 걸리면 contract_failed다. 다 통과하면 contract_valid고, 그 안의 status가 answered, needs_clarification, insufficient_evidence 중 하나다">
+     aria-label="문맥 구성과 토큰 세기 뒤 구조화 생성을 하고, 실패·거절·미완료면 generation_failed다. JSON과 스키마 검사, 상태와 인용 검사에서 걸리면 contract_failed다. 다 통과하면 contract_valid고, 그 안의 status가 answered, needs_clarification, insufficient_evidence 중 하나다">
 
 <defs>
   <marker id="aprEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
