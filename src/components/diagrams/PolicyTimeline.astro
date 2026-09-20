@@ -8,7 +8,7 @@ const X_REG = 320; // 8/20 · v2 등록
 const X_EFF = 430; // 9/1 · v2 시행
 const X_END = 640;
 const X_Q1 = 400; // 8/25 질문
-const X_Q2 = 465; // 9/5 질문
+const X_Q2 = 465; // 9/2 질문
 
 const V1_Y = 44;
 const V2_Y = 76;
@@ -22,15 +22,15 @@ const ticks = [
 ];
 const questions = [
   { x: X_Q1, label: '8/25 질문' },
-  { x: X_Q2, label: '9/5 질문' },
+  { x: X_Q2, label: '9/2 질문' },
 ];
 
 const RES_Y = 182;
 const RES_GAP = 22;
 const results = [
   { when: '8/25', q: '지금 한도는?', ans: 'v1 · 20만 원', note: '최신 문서는 v2, 유효한 문서는 v1' },
-  { when: '9/5', q: '지금 한도는?', ans: 'v2 · 30만 원', note: '' },
-  { when: '9/5', q: '개정 전 한도는?', ans: 'v1 · 20만 원', note: '질문에 시점 조건이 있다' },
+  { when: '9/2', q: '지금 한도는?', ans: 'v2 · 30만 원', note: '' },
+  { when: '9/2', q: '개정 전 한도는?', ans: 'v1 · 20만 원', note: '질문에 시점 조건이 있다' },
 ].map((r, i) => ({ ...r, y: RES_Y + i * RES_GAP }));
 
 const H = results[2].y + 24; // 250
@@ -38,7 +38,7 @@ const H = results[2].y + 24; // 250
 
 <div class="dg">
 <svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
-     aria-label="교육비 안내 v2는 8월 20일에 등록됐지만 9월 1일부터 시행된다. 8월 25일 질문에는 최신 문서가 v2라도 유효한 문서는 v1이고, 9월 5일 질문에는 v2가 유효하다. 개정 전 한도를 묻는 질문은 시점 조건을 따로 받아 v1로 답한다">
+     aria-label="교육비 안내 v2는 8월 20일에 등록됐지만 9월 1일부터 시행된다. 8월 25일 질문에는 최신 문서가 v2라도 유효한 문서는 v1이고, 9월 2일 질문에는 v2가 유효하다. 개정 전 한도를 묻는 질문은 시점 조건을 따로 받아 v1로 답한다">
 
 <defs>
   <marker id="ptEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
