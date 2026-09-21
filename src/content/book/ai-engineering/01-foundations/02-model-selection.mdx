@@ -10,7 +10,7 @@ import FourConditions from "../../../../components/diagrams/FourConditions.astro
 import SelectionFunnel from "../../../../components/diagrams/SelectionFunnel.astro";
 import SamplingBars from "../../../../components/diagrams/SamplingBars.astro";
 
-봇을 시범 사용으로 되돌린 그 주에 개발팀이 네 가지 문제를 놓고 다시 모였다. 화이트보드에 그 문제를 적어 놓고 한참을 들여다보던 참에 누군가 지금 쓰는 모델이 작아서 그런 것 아니냐고 했다. 모델만 바꾸면 네 문제가 한꺼번에 해결된다는 이야기라 회의실 공기가 잠깐 가벼워졌다.
+봇을 시범 운영으로 되돌린 그 주에 개발팀이 네 가지 문제를 놓고 다시 모였다. 화이트보드에 그 문제를 적어 놓고 한참을 들여다보던 참에 누군가 지금 쓰는 모델이 작아서 그런 것 아니냐고 했다. 모델만 바꾸면 네 문제가 한꺼번에 해결된다는 이야기라 회의실 공기가 잠깐 가벼워졌다.
 
 그럴듯한 말이었고, 첫 번째 문제만 놓고 보면 더 그랬다. 봇은 교육비 한도를 20만 원이라고 답했는데 문서에는 분명 30만 원이라고 적혀 있었다. 모델이 문서를 읽고도 틀린 것이라면 더 나은 모델로 고칠 수 있다.
 
@@ -81,13 +81,13 @@ import SamplingBars from "../../../../components/diagrams/SamplingBars.astro";
 
 가상의 후보 A는 문장이 자연스럽지만 근거 없는 질문에도 금액을 답하고, B는 간결하지만 근거 부족을 표시한다. 사용자가 원하는 것이 정책 조회라면 A는 고를 수 없다. 다만 결정 기록에는 무엇을 골랐는지만이 아니라 언제 다시 비교할지도 함께 적는다. 이미지 입력이 필요해지거나 요청량이 크게 바뀌면 지금 고른 답이 더 이상 맞지 않기 때문이다. 개발팀은 이 표부터 만들어 놓고 후보를 붙이기로 했다. 그날까지 칸은 비어 있었다.
 
-## 환각의 갈래
+## 환각의 종류
 
 모델 카드에 적힌 지식 시점은 학습 데이터를 그 날짜까지 모았다는 뜻이지 그 전의 사실을 다 안다는 뜻은 아니다. 그 데이터에 한울연구소의 비공개 문서가 들어 있을 리는 없으니 필요한 정보의 출처와 시점은 개발팀이 관리한다.
 
-이 책에서 환각은 사실이나 제공한 근거로 뒷받침되지 않는 출력을 가리킨다. 오류를 발견하면 한 단어로 묶지 않고 네 갈래로 나눠 기록한다. 고칠 자리가 다르기 때문이다.
+이 책에서 환각은 사실이나 제공한 근거로 뒷받침되지 않는 출력을 가리킨다. 오류를 발견하면 한 단어로 묶지 않고 네 가지로 나눠 기록한다. 고칠 자리가 다르기 때문이다.
 
-| 갈래 | 예 | 볼 곳 |
+| 종류 | 예 | 볼 곳 |
 |---|---|---|
 | 문서에 없는 사실을 추가 | 없는 예외 조항을 설명한다 | 프롬프트·근거 검증 |
 | 문서의 수치를 바꿈 | 30만 원을 20만 원으로 답한다 | 문맥 구성·모델 |
@@ -108,27 +108,7 @@ $T$를 낮추면 큰 로짓의 비중이 커지고 높이면 분포가 평평해
 
 <SamplingBars />
 
-확률은 다음 코드로 구했다. 표준 라이브러리만 쓴다.
-
-```python
-import math
-
-
-def probabilities(logits: list[float], temperature: float) -> list[float]:
-    if not logits or not all(math.isfinite(x) for x in logits):
-        raise ValueError("유한한 로짓을 하나 이상 입력해야 한다")
-    if not math.isfinite(temperature) or temperature <= 0:
-        raise ValueError("온도는 유한한 양수여야 한다")
-    peak = max(logits)
-    weights = [math.exp((x - peak) / temperature) for x in logits]
-    total = sum(weights)
-    return [weight / total for weight in weights]
-
-
-for temperature in (0.5, 1.0, 2.0):
-    result = probabilities([2.0, 1.0, 0.0], temperature)
-    print(temperature, [round(p, 3) for p in result])
-```
+온도를 0.5·1.0·2.0으로 바꿔 가며 같은 로짓에 이 식을 적용하면 확률이 이렇게 달라진다.
 
 ```text
 0.5 [0.867, 0.117, 0.016]

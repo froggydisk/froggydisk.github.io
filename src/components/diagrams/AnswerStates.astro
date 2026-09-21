@@ -1,6 +1,6 @@
 ---
 /**
- * 응답의 다섯 상태를 결정 순서로 보인다. 네 가지 질문을 위에서 아래로 내려가며
+ * 다섯 가지 답변 상태를 결정 순서로 보인다. 네 가지 질문을 위에서 아래로 내려가며
  * '아니오'면 오른쪽 상태로 빠지고, 넷을 다 통과한 경우만 answered다.
  */
 const QX = 24;
@@ -25,7 +25,7 @@ const H = FINAL_Y + QH + 24; // 392
 
 <div class="dg">
 <svg width="100%" viewBox={`0 0 672 ${H}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
-     aria-label="응답은 다섯 상태 중 하나다. 허용되지 않은 요청이면 forbidden, 질문에 대상이나 조건이 빠졌으면 needs_clarification, 도구가 실패했으면 unavailable, 허용된 근거로 답을 확인할 수 없으면 insufficient_evidence, 넷을 다 통과하면 answered다">
+     aria-label="답변은 다섯 상태 중 하나다. 허용되지 않은 요청이면 forbidden, 질문에 대상이나 조건이 빠졌으면 needs_clarification, 도구가 실패했으면 unavailable, 허용된 근거로 답을 확인할 수 없으면 insufficient_evidence, 넷을 다 통과하면 answered다">
 
 <defs>
   <marker id="asEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
