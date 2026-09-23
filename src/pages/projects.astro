@@ -16,7 +16,50 @@ import MoodySplitView from '../components/diagrams/MoodySplitView.astro';
   <div class="page-content">
     <div class="project-card">
       <div class="project-header">
-        <img src="/img/gc-icon.webp" alt="GC Symbol Logo" class="project-icon" decoding="async" />
+        <img src="/img/gaze-footer-icon.webp" alt="I SEE YOU 푸터의 니들펠트 캐릭터" class="project-icon" decoding="async" />
+        <div>
+          <h2 class="project-title">I SEE YOU</h2>
+          <p class="project-tagline">커서를 따라 눈을 돌리는 캐릭터 푸터</p>
+        </div>
+      </div>
+      <p>니들펠트 캐릭터의 눈동자가 시계 방향으로 한 바퀴 도는 4.75초 영상을 재생하지 않고, 커서가 있는 방향에 맞는 프레임을 골라 보여줍니다. 눈 중심에서 커서까지의 각도를 구해 각도별 프레임 표에서 가장 가까운 시간으로 이동하고, 표시 각도가 커서 각도를 따라가게 해서 빠르게 움직여도 중간 프레임을 거쳐 눈이 돌아갑니다. 모바일에서는 같은 영상을 소리 없이 반복 재생합니다.</p>
+      <p class="project-note">캐릭터 영상은 AI로 생성했고, 원본에서 한 바퀴 구간만 잘라 선명화한 뒤 인코딩했습니다.</p>
+
+      <a href="https://gallery-lime-chi.vercel.app/footer-gaze.html" target="_blank" rel="noopener noreferrer" class="project-wireframe-link" aria-label="I SEE YOU 푸터 데모 열기">
+        <div class="project-wireframe">
+          <img src="/img/gaze-footer-cover.webp" alt="I SEE YOU 푸터 — 양옆의 굵은 헤드라인 사이에서 커서를 바라보는 니들펠트 캐릭터" class="project-wireframe-img" width="1132" height="636" decoding="async" />
+        </div>
+      </a>
+
+      <div class="project-details project-details-single">
+        <div class="project-detail-group">
+          <h3>담당</h3>
+          <ul>
+            <li>각도 → 영상 시간 표를 이용한 커서 시선 스크러빙</li>
+            <li>이징과 seek 게이트로 프레임을 건너뛰지 않는 시선 이동</li>
+            <li>한 바퀴 구간만 잘라 바퀴가 바뀔 때 몸·머리카락이 튀는 현상 제거</li>
+            <li>2560 원본 선명화 + 키프레임 4프레임 간격 인코딩</li>
+            <li>헤드라인·콜로폰·실시간 시선 각도를 넣은 포스터 레이아웃</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="project-tags-section">
+        <div class="project-tags">
+          <span class="project-tag">HTML Video</span>
+          <span class="project-tag">JavaScript</span>
+          <span class="project-tag">CSS</span>
+          <span class="project-tag">ffmpeg</span>
+          <span class="project-tag">NumPy</span>
+          <span class="project-tag">Vercel</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="project-card">
+      <div class="project-header">
+        <img src="/img/gc-icon.webp" alt="GC Symbol Logo" class="project-icon" loading="lazy" decoding="async" />
         <div>
           <h2 class="project-title">GC Symbol Study</h2>
           <p class="project-tagline">2D 로고를 3차원 WebGL 심볼로</p>
