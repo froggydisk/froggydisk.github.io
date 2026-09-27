@@ -237,7 +237,7 @@ npm run preview  # Preview built site locally
   **`sitemap.xml.ts`는 손으로 만드는 파일이라 새 컬렉션을 자동으로 못 줍는다.** `@astrojs/sitemap`은
   라우트를 다 훑지만 이쪽은 STATIC_PATHS + 블로그 + 책을 직접 나열한다. 2026-08에 책 72개 URL이
   빠져 56 vs 128로 어긋난 적이 있다 (`c200f77`). 라우트를 추가하면 여기도 함께 고칠 것.
-  현재 URL 128개
+  현재 URL 150개 (2026-09-27)
 - **Robots.txt**: Allow all. **`sitemap.xml`만 알린다.** 인덱스를 다시 넣지 말 것 — 구글이 못 읽는 경로를
   광고하면 서치콘솔에 실패 항목이 계속 남는다
 
@@ -381,6 +381,41 @@ dist를 임시 폴더에 복사해 측정 스크립트를 `</body>` 앞에 끼�
    캡처해두면 스왑 후 죽은 노드를 붙들게 된다. `Navbar`·`BookSidebar`의 리스너는 `document`에
    위임으로 붙이고, `TOC`는 `astro:page-load`에서 멱등하게 다시 그린다.
    `data-theme`은 스왑이 body 속성까지 바꿔 날아가므로 `astro:after-swap`에서 다시 씌운다
+
+### 7-1. Projects 페이지 (`/projects/`)
+
+스튜디오 포트폴리오 형식 (레퍼런스: lusion.co/projects). 초대형 `PROJECTS` 워드마크 + 비대칭 그리드
+(`i % 3 === 0`이면 폭 전체, 나머지는 반반) + 카드 위 `View` 원형 커서. 누르면 전체 화면 시트(`<dialog>`)가
+아래에서 올라오고, 맨 아래 '다음 프로젝트'로 이어진다.
+**문구는 최소로** — 저자가 리드 문장과 긴 설명을 빼달라고 했다. 본문은 한 줄, 목록은 3개 안팎. 목록 제목은 혼자 만든 것은 "1인 제작", 팀 작업(Moody, `team: true`)만 "담당"이다.
+
+- **데이터**: `projects.astro` 머리의 `projects` 배열 하나에서 카드와 dialog를 함께 그린다.
+  dialog도 서버 렌더링이라 pagefind가 색인한다 (`data-pagefind-ignore` 걸지 말 것)
+- **영상**: `public/img/projects/<slug>.mp4` + 같은 이름 `.webp` 포스터, 960×600(16:10).
+  **포스터는 반드시 첫 프레임** (다르면 재생 시작 때 화면이 튄다). 다시 만들 때는
+  `scripts/project-media/build.sh [gaze|gc|econix]` — puppeteer-core로 시스템 크롬을 띄워 데모를 screencast한다.
+  puppeteer-core는 의존성이 아니니 `npm i --no-save puppeteer-core`
+- **Moody는 영상이 없다.** 카드에 원래의 `MoodySplitView` 애니메이션을 그대로 넣는다.
+  Blender로 액자를 렌더링한 영상을 넣어봤지만 저자가 이상하다고 해서 뺐다.
+  카드에서는 `<MoodySplitView fill />`로 제품 뷰만 카드에 꽉 채우고 도면 패널은 숨기며,
+  모달에는 원래의 두 패널을 넣는다. 한 페이지에 두 번 들어가므로 컴포넌트가 인스턴스마다
+  ID 접두사(`data-uid`)를 붙인다 — 겹치면 url(#…)이 display:none 안의 첫 정의를 가리켜 채우기가 사라진다.
+  카드 안 그림에는 `pointer-events: none`이 필요하다. 매 프레임 SVG를 새로 그려서 누르는 사이
+  커서 밑 도형이 바뀌면 click이 성립하지 않아, 액자 위를 누르면 모달이 안 떴다.
+  `fill`은 viewBox를 `-80 0 1160 780`으로 넓혀 `slice`로 자른다 (폭 1000이면 회전하는 액자 위아래가 잘린다)
+- **재생**: `preload="none"` + IntersectionObserver로 화면 안 카드만 `play()`.
+  `prefers-reduced-motion`이면 포스터만. dialog가 열린 동안 뒤 카드 영상은 멈춘다
+- **폭**: `wide` prop을 쓰고 페이지 스타일에서 `.wrapper.wrapper-wide`를 1120px로 연다
+  (book.css의 같은 규칙은 책 페이지에서만 로드된다)
+
+함정:
+1. **스크롤하며 screencast를 찍으면 프레임이 찢어진다** (지구본이 두 개로 겹쳐 찍혔다).
+   econix는 뷰포트를 페이지 높이(1280×2130)로 키워 한 번에 찍고 ffmpeg `crop`의 y를 움직여 스크롤을 흉내 냈다.
+   GC처럼 스크롤이 애니메이션을 구동하는 페이지는 이 방법을 못 쓰니 `mouse.wheel`로 찍는다
+2. **dialog의 `close` 이벤트는 버블링하지 않는다.** `document`에 위임하려면 capture(`true`)로 건다.
+   Esc로 닫혀도 이 이벤트가 오므로 스크롤 잠금 해제·영상 정지를 여기서 한 번에 한다
+3. `MoodySplitView`는 ClientRouter 페이지에 있다. 다른 페이지를 거쳐 다시 들어오면 모듈 스크립트가 안 돌아
+   그림이 비었었다 → `initMoodySplit()`을 `astro:page-load`에 걸고 `dataset`으로 멱등하게 했다
 
 ### 8. Icon System
 - **Library**: astro-icon (integrates Iconify)

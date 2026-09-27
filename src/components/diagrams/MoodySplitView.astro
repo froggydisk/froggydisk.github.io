@@ -1,4 +1,17 @@
 ---
+interface Props {
+  /** true면 제품 뷰가 상자를 잘라 채운다 (projects 카드용). 기본은 비율 유지.
+      좌우를 넓힌 viewBox를 쓰는 이유: 16:10 상자에 폭을 맞추면 보이는 높이가 725가 되어
+      회전하는 액자의 위아래가 잘리지 않는다 (폭 1000 그대로면 625라 잘린다) */
+  fill?: boolean;
+}
+const { fill = false } = Astro.props;
+
+// 한 페이지에 두 번 들어갈 수 있다 (/projects/의 카드 + 모달). gradient·filter·pattern ID가
+// 겹치면 url(#…)이 문서의 첫 번째 정의를 가리키는데, 그 정의가 display:none 안에 있으면
+// 크롬은 채우기를 아예 그리지 않는다. 그래서 인스턴스마다 접두사를 붙인다.
+const uid = 'ms' + Math.random().toString(36).slice(2, 8);
+
 // ═══════════════════════════════════════════
 // LEFT SVG: Animated via client-side JS
 // Static defs only (gradients, patterns, filters)
@@ -23,45 +36,45 @@ const wfVLines = Array.from({length: 21}, (_, i) => i * 50);
 const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
 ---
 
-<div class="moody-split">
+<div class="moody-split" data-uid={uid}>
   <!-- LEFT: Animated 3D Product View -->
   <div class="moody-split__panel moody-split__panel--product">
-    <svg id="pv-svg" width="100%" viewBox="0 0 1000 780" xmlns="http://www.w3.org/2000/svg">
+    <svg width="100%" viewBox={fill ? '-80 0 1160 780' : '0 0 1000 780'} preserveAspectRatio={fill ? 'xMidYMid slice' : undefined} xmlns="http://www.w3.org/2000/svg">
       <defs>
         <!-- Walnut wood gradients -->
-        <linearGradient id="pv-wf" x1="0%" y1="0%" x2="100%" y2="100%">
+        <linearGradient id={`${uid}-pv-wf`} x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stop-color="#7a5940"/><stop offset="25%" stop-color="#6b4c35"/>
           <stop offset="50%" stop-color="#74533a"/><stop offset="75%" stop-color="#5a3d28"/>
           <stop offset="100%" stop-color="#6b4c35"/>
         </linearGradient>
-        <linearGradient id="pv-ws" x1="0%" y1="0%" x2="100%" y2="0%">
+        <linearGradient id={`${uid}-pv-ws`} x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stop-color="#5a3d28"/><stop offset="50%" stop-color="#4d3322"/>
           <stop offset="100%" stop-color="#3e2a1a"/>
         </linearGradient>
-        <linearGradient id="pv-wt" x1="0%" y1="100%" x2="0%" y2="0%">
+        <linearGradient id={`${uid}-pv-wt`} x1="0%" y1="100%" x2="0%" y2="0%">
           <stop offset="0%" stop-color="#74533a"/><stop offset="100%" stop-color="#5a3d28"/>
         </linearGradient>
-        <linearGradient id="pv-wb" x1="0%" y1="0%" x2="0%" y2="100%">
+        <linearGradient id={`${uid}-pv-wb`} x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stop-color="#4d3322"/><stop offset="100%" stop-color="#3e2a1a"/>
         </linearGradient>
-        <linearGradient id="pv-sg" x1="0%" y1="0%" x2="0%" y2="100%">
+        <linearGradient id={`${uid}-pv-sg`} x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stop-color="#1a7fd4"/><stop offset="40%" stop-color="#1565b0"/>
           <stop offset="65%" stop-color="#0d3a6e"/><stop offset="100%" stop-color="#0a1628"/>
         </linearGradient>
-        <filter id="pv-sb"><feGaussianBlur stdDeviation="8"/></filter>
-        <radialGradient id="pv-ag" cx="60%" cy="55%">
+        <filter id={`${uid}-pv-sb`}><feGaussianBlur stdDeviation="8"/></filter>
+        <radialGradient id={`${uid}-pv-ag`} cx="60%" cy="55%">
           <stop offset="0%" stop-color="rgba(26,18,10,0.3)"/>
           <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
         </radialGradient>
-        <radialGradient id="pv-ambient" cx="50%" cy="50%" r="60%">
+        <radialGradient id={`${uid}-pv-ambient`} cx="50%" cy="50%" r="60%">
           <stop offset="0%" stop-color="rgba(20,15,30,1)"/>
           <stop offset="100%" stop-color="rgba(8,6,14,1)"/>
         </radialGradient>
-        <radialGradient id="pv-lightglow" cx="30%" cy="25%" r="50%">
+        <radialGradient id={`${uid}-pv-lightglow`} cx="30%" cy="25%" r="50%">
           <stop offset="0%" stop-color="rgba(60,40,20,0.15)"/>
           <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
         </radialGradient>
-        <pattern id="pv-wg" width="200" height="200" patternUnits="userSpaceOnUse">
+        <pattern id={`${uid}-pv-wg`} width="200" height="200" patternUnits="userSpaceOnUse">
           {woodGrainLines.map(l => (
             <line x1={l.x1} y1={l.y1} x2={l.x2} y2={l.y2} stroke="rgba(0,0,0,0.08)" stroke-width="0.7"/>
           ))}
@@ -69,19 +82,20 @@ const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
       </defs>
 
       <!-- Static background (themed via CSS) -->
-      <rect class="pv-bg" width="1000" height="780"/>
-      <rect width="1000" height="780" fill="url(#pv-lightglow)"/>
+      <!-- fill 모드는 viewBox가 좌우로 80씩 넓으므로 배경도 같이 넓힌다 (안 그러면 조명이 x=0에서 끊겨 세로선이 보인다) -->
+      <rect class="pv-bg" x={fill ? -80 : 0} width={fill ? 1160 : 1000} height="780"/>
+      <rect x={fill ? -80 : 0} width={fill ? 1160 : 1000} height="780" fill={`url(#${uid}-pv-lightglow)`}/>
 
       <!-- Dynamic scene group (rebuilt each frame by JS) -->
-      <g id="pv-scene"></g>
+      <g data-ms-pv></g>
     </svg>
   </div>
 
   <!-- RIGHT: Wireframe View -->
   <div class="moody-split__panel moody-split__panel--wireframe">
-    <svg id="wf-svg" width="100%" viewBox="0 0 1000 760" xmlns="http://www.w3.org/2000/svg">
+    <svg width="100%" viewBox="0 0 1000 760" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="ms-screenGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <linearGradient id={`${uid}-ms-screenGrad`} x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stop-color="var(--ms-screen-grad-top)"/>
           <stop offset="100%" stop-color="var(--ms-screen-grad-bot)"/>
         </linearGradient>
@@ -104,16 +118,27 @@ const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
       </g>
 
       <!-- Dynamic wireframe scene group (rebuilt each frame by JS) -->
-      <g id="wf-scene"></g>
+      <g data-ms-wf></g>
     </svg>
   </div>
 </div>
 
 <script>
-  const pvScene = document.getElementById('pv-scene');
-  const wfScene = document.getElementById('wf-scene');
+  // /projects/는 ClientRouter 페이지라 모듈 스크립트가 스왑 뒤 다시 돌지 않는다.
+  // 요소를 최상단에서 잡으면 다른 페이지를 거쳐 돌아왔을 때 새 SVG가 빈 채로 남는다.
+  // 그래서 초기화를 함수로 감싸 astro:page-load마다 부르고, dataset으로 한 번만 붙게 한다.
+  function initMoodySplit() {
+    document.querySelectorAll<HTMLElement>('.moody-split').forEach(setupMoodySplit);
+  }
 
-  if (pvScene && wfScene) {
+  function setupMoodySplit(msRoot: HTMLElement) {
+  const pvScene = msRoot.querySelector('[data-ms-pv]');
+  const wfScene = msRoot.querySelector('[data-ms-wf]');
+  // 템플릿이 붙인 인스턴스 접두사. JS가 찍는 url(#…)도 이것으로 자기 인스턴스의 정의를 가리킨다
+  const P = msRoot.dataset.uid + '-';
+
+  if (pvScene && wfScene && !msRoot.dataset.msInit) {
+    msRoot.dataset.msInit = '1';
     // Shared state (both views use the same rotation)
     let rotY = -25;
     let rotX = 5;
@@ -258,17 +283,17 @@ const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
       const shadowCX = (bV[0].x + bV[1].x + bV[2].x + bV[3].x) / 4;
       const shadowCY = Math.max(bV[0].y, bV[1].y, bV[2].y, bV[3].y) + 30;
 
-      const cid = `pv-sc-${++clipId}`;
+      const cid = `${P}pv-sc-${++clipId}`;
       let html = '';
 
       // Floor shadow
-      html += `<ellipse cx="${shadowCX.toFixed(1)}" cy="${shadowCY.toFixed(1)}" rx="200" ry="20" fill="rgba(0,0,0,0.35)" filter="url(#pv-sb)"/>`;
+      html += `<ellipse cx="${shadowCX.toFixed(1)}" cy="${shadowCY.toFixed(1)}" rx="200" ry="20" fill="rgba(0,0,0,0.35)" filter="url(#${P}pv-sb)"/>`;
 
       // Back face (if visible, render first so it's behind)
       if (backVis) {
         html += `<g>`;
-        html += `<polygon points="${pp(fB)}" fill="url(#pv-wf)" stroke="#5a3d28" stroke-width="1"/>`;
-        html += `<polygon points="${pp(fB)}" fill="url(#pv-wg)" opacity="0.4"/>`;
+        html += `<polygon points="${pp(fB)}" fill="url(#${P}pv-wf)" stroke="#5a3d28" stroke-width="1"/>`;
+        html += `<polygon points="${pp(fB)}" fill="url(#${P}pv-wg)" opacity="0.4"/>`;
         html += `<polygon points="${pp(fB)}" fill="rgba(0,0,0,${((1 - brBack) * 0.35).toFixed(3)})"/>`;
         html += `</g>`;
       }
@@ -276,29 +301,29 @@ const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
       // Side faces
       if (rightVis) {
         html += `<g>`;
-        html += `<polygon points="${pp(rV)}" fill="url(#pv-ws)" stroke="none"/>`;
-        html += `<polygon points="${pp(rV)}" fill="url(#pv-wg)" opacity="0.3"/>`;
+        html += `<polygon points="${pp(rV)}" fill="url(#${P}pv-ws)" stroke="none"/>`;
+        html += `<polygon points="${pp(rV)}" fill="url(#${P}pv-wg)" opacity="0.3"/>`;
         html += `<polygon points="${pp(rV)}" fill="rgba(0,0,0,${((1 - brRight) * 0.6).toFixed(3)})"/>`;
         html += `</g>`;
       }
       if (leftVis) {
         html += `<g>`;
-        html += `<polygon points="${pp(lV)}" fill="url(#pv-ws)" stroke="none"/>`;
-        html += `<polygon points="${pp(lV)}" fill="url(#pv-wg)" opacity="0.3"/>`;
+        html += `<polygon points="${pp(lV)}" fill="url(#${P}pv-ws)" stroke="none"/>`;
+        html += `<polygon points="${pp(lV)}" fill="url(#${P}pv-wg)" opacity="0.3"/>`;
         html += `<polygon points="${pp(lV)}" fill="rgba(0,0,0,${((1 - brLeft) * 0.6).toFixed(3)})"/>`;
         html += `</g>`;
       }
       if (topVis) {
         html += `<g>`;
-        html += `<polygon points="${pp(tV)}" fill="url(#pv-wt)" stroke="none"/>`;
-        html += `<polygon points="${pp(tV)}" fill="url(#pv-wg)" opacity="0.3"/>`;
+        html += `<polygon points="${pp(tV)}" fill="url(#${P}pv-wt)" stroke="none"/>`;
+        html += `<polygon points="${pp(tV)}" fill="url(#${P}pv-wg)" opacity="0.3"/>`;
         html += `<polygon points="${pp(tV)}" fill="rgba(0,0,0,${((1 - brTop) * 0.6).toFixed(3)})"/>`;
         html += `</g>`;
       }
       if (bottomVis) {
         html += `<g>`;
-        html += `<polygon points="${pp(bV)}" fill="url(#pv-wb)" stroke="none"/>`;
-        html += `<polygon points="${pp(bV)}" fill="url(#pv-wg)" opacity="0.3"/>`;
+        html += `<polygon points="${pp(bV)}" fill="url(#${P}pv-wb)" stroke="none"/>`;
+        html += `<polygon points="${pp(bV)}" fill="url(#${P}pv-wg)" opacity="0.3"/>`;
         html += `<polygon points="${pp(bV)}" fill="rgba(0,0,0,${((1 - brBottom) * 0.6).toFixed(3)})"/>`;
         html += `</g>`;
       }
@@ -306,8 +331,8 @@ const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
       // Front face (if visible)
       if (frontVis) {
         html += `<g>`;
-        html += `<polygon points="${pp(fF)}" fill="url(#pv-wf)" stroke="none"/>`;
-        html += `<polygon points="${pp(fF)}" fill="url(#pv-wg)" opacity="0.4"/>`;
+        html += `<polygon points="${pp(fF)}" fill="url(#${P}pv-wf)" stroke="none"/>`;
+        html += `<polygon points="${pp(fF)}" fill="url(#${P}pv-wg)" opacity="0.4"/>`;
         html += `<polygon points="${pp(fF)}" fill="rgba(0,0,0,${((1 - brFront) * 0.5).toFixed(3)})"/>`;
         html += `<clipPath id="${cid}"><polygon points="${pp(sF)}"/></clipPath>`;
         html += `<g clip-path="url(#${cid})">`;
@@ -362,7 +387,7 @@ const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
       html += `</g>`;
 
       // Screen with corner squares
-      html += `<polygon points="${pp(wfSF)}" fill="url(#ms-screenGrad)" stroke="var(--ms-accent)" stroke-width="1.2" opacity="0.8" stroke-linejoin="round"/>`;
+      html += `<polygon points="${pp(wfSF)}" fill="url(#${P}ms-screenGrad)" stroke="var(--ms-accent)" stroke-width="1.2" opacity="0.8" stroke-linejoin="round"/>`;
       for (let i = 0; i < wfSF.length; i++) {
         const cx = wfSF[i].x - cornerSize / 2;
         const cy = wfSF[i].y - cornerSize / 2;
@@ -484,7 +509,7 @@ const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
     draw(); // 정지 상태에서도 다이어그램은 보여야 한다
 
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const root = document.querySelector('.moody-split');
+      const root = msRoot;
       const io = new IntersectionObserver((entries) => {
         onScreen = entries[0].isIntersecting;
         if (onScreen) start();
@@ -493,6 +518,10 @@ const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
       io.observe(root);
     }
   }
+  }
+
+  initMoodySplit();
+  document.addEventListener('astro:page-load', initMoodySplit);
 </script>
 
 <style>
