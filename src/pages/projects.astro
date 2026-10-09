@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import MoodySplitView from '../components/diagrams/MoodySplitView.astro';
+import { pageJsonLd } from '../utils/seo';
 
 // 카드는 영상만 보여주고, 설명은 누르면 뜨는 dialog 안에 있다.
 // dialog 내용도 서버에서 렌더링하므로 HTML에 그대로 들어가 pagefind가 색인한다.
@@ -25,6 +26,23 @@ interface Project {
 }
 
 const projects: Project[] = [
+  {
+    slug: 'flight-quest',
+    title: 'Isle of Embers',
+    category: 'Scroll Experience',
+    year: '2026',
+    icon: '/img/flight-quest-icon.webp',
+    video: '/img/projects/flight-quest.mp4',
+    poster: '/img/projects/flight-quest.webp',
+    body: '스크롤로 해안 마을에서 화산 분화구까지 한 번에 날아가는 판타지 비행 랜딩 페이지.',
+    link: { href: 'https://gallery-lime-chi.vercel.app/flight-quest.html', label: '데모' },
+    duties: [
+      '스크롤 한 번에 다음 지점으로 미끄러지는 정거장 스크롤',
+      '비행 영상을 그대로 재생하고 스크롤이 따라가게 해 끊김 제거',
+      '퀘스트 · 나침반 · 미니맵 · 고도와 속도를 담은 게임 HUD',
+    ],
+    tags: ['HTML Video', 'JavaScript', 'CSS'],
+  },
   {
     slug: 'i-see-you',
     title: 'I SEE YOU',
@@ -95,11 +113,17 @@ const projects: Project[] = [
     tags: ['Next.js', 'TypeScript', 'Supabase', 'Python', 'LLM'],
   },
 ];
+
+const description =
+  'froggydisk가 직접 만든 사이드 프로젝트 모음 — WebGL 심볼 실험, 데이터 시각화, 사내 도구까지 구현 과정과 담당 범위를 정리했습니다.';
+// 프로젝트마다 고유 URL이 없어(dialog로 열린다) ItemList는 달지 않는다
+const jsonLd = pageJsonLd({ type: 'CollectionPage', path: '/projects/', name: 'Projects', description });
 ---
 
 <BaseLayout
   title="Projects"
-  description="froggydisk가 직접 만든 사이드 프로젝트 모음 — WebGL 심볼 실험, 데이터 시각화, 사내 도구까지 구현 과정과 담당 범위를 정리했습니다."
+  description={description}
+  jsonLd={jsonLd}
   showStars={false}
   transitions
   wide
@@ -117,7 +141,6 @@ const projects: Project[] = [
             type="button"
             data-pj-open={p.slug}
             aria-haspopup="dialog"
-            aria-label={`${p.title} 자세히 보기`}
           >
             <span class:list={['pj-media', { 'pj-media--figure': p.figure }]}>
               {p.figure === 'moody' ? (
@@ -688,6 +711,15 @@ const projects: Project[] = [
   .pj-grid {
     grid-template-columns: 1fr;
     gap: 36px;
+  }
+  /* 한 열로 쌓이면 제목이 아래에 있을 때 위 카드의 영상과 붙어 보인다. 제목을 카드 위로 올린다 */
+  .pj-card {
+    display: flex;
+    flex-direction: column;
+  }
+  .pj-caption {
+    order: -1;
+    margin: 0 0 12px;
   }
   .pj-dialog {
     width: 100vw;
