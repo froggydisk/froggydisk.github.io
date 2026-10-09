@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
-import { postSlug, parseTags } from '../../utils/seo';
+import { pageJsonLd, postSlug, parseTags } from '../../utils/seo';
 
 const posts = await getCollection('blog');
 
@@ -21,9 +21,10 @@ function toSlug(tag: string) {
 
 const topTags = sortedTags.slice(0, 12).map(([tag]) => tag).join(', ');
 const description = `froggydisk 기술 블로그의 주제별 글 목록. ${sortedTags.length}개 태그, ${posts.length}개 글 — ${topTags} 등.`;
+const jsonLd = pageJsonLd({ type: 'CollectionPage', path: '/tags/', name: 'Tags', description });
 ---
 
-<BaseLayout title="Tags" description={description}>
+<BaseLayout title="Tags" description={description} jsonLd={jsonLd}>
   <header class="header" style="margin-bottom: 2em;">
     <h1 class="header-title">Tags</h1>
   </header>

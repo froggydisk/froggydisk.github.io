@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import PostItem from '../components/PostItem.astro';
+import { pageJsonLd, postSlug } from '../utils/seo';
 
 const posts = (await getCollection('blog'))
   .sort((a, b) => {
@@ -9,11 +10,21 @@ const posts = (await getCollection('blog'))
     const dateB = b.id.slice(0, 10);
     return dateB.localeCompare(dateA);
   });
+
+const description = `froggydisk 기술 블로그의 전체 글 ${posts.length}편 목록. 프론트엔드, 쿠버네티스·DevOps, ML/DL 문제 해결 기록을 검색하고 연도순으로 훑어볼 수 있습니다.`;
+const jsonLd = pageJsonLd({
+  type: 'CollectionPage',
+  path: '/archive/',
+  name: 'Archive',
+  description,
+  items: posts.map((p) => ({ path: `/${postSlug(p.id)}/`, name: p.data.title })),
+});
 ---
 
 <BaseLayout
   title="Archive"
-  description={`froggydisk 기술 블로그의 전체 글 ${posts.length}편 목록. 프론트엔드, 쿠버네티스·DevOps, ML/DL 문제 해결 기록을 검색하고 연도순으로 훑어볼 수 있습니다.`}
+  description={description}
+  jsonLd={jsonLd}
   showStars={false}
   transitions
 >

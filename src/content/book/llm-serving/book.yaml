@@ -1,20 +1,34 @@
-# 레이아웃 검증용 더미 책. 실제 원고가 아니다.
-# 실제 책을 쓸 때는 이 디렉터리를 지우거나(rm -rf) sample 을 지우면 된다.
 title: LLM 서빙 실전
-subtitle: 모델을 띄우는 것과 서비스하는 것은 다른 일이다
+subtitle: 추론 엔진 안에서 일어나는 일
 description: >-
-  단일 GPU에서 모델이 도는 것을 확인한 다음부터가 서빙이다. 지연과 처리량이 왜
-  같이 좋아지지 않는지, 배치가 정확히 무엇을 사고 무엇을 파는지, KV 캐시가
-  메모리 예산의 어디를 먹는지를 순서대로 정리한다.
+  공개 가중치 모델을 자체 GPU에 올려 서비스할 때 추론 엔진 안에서 무슨 일이
+  일어나는지 설명한다. 프리필과 디코드가 각각 어느 자원에 묶이는지에서 시작해
+  배치와 스케줄링, KV 캐시 메모리, 양자화, 디코딩 가속, 여러 장비로 나누는 법,
+  측정과 운영까지 인프라·ML 엔지니어가 설계를 고를 때 필요한 원리를 다룬다.
 author: froggydisk
 cover: /img/llm-serving-cover.webp
 status: writing
-sample: true
-published: 2026-08-26
+published: 2026-10-09
+last_modified_at: 2026-10-09
 parts:
   - dir: 01-foundations
-    title: 기초
+    title: 측정의 기준
+    icon: lucide:gauge
   - dir: 02-batching
-    title: 배치
+    title: 배치와 스케줄링
+    icon: lucide:layers
   - dir: 03-memory
-    title: 메모리
+    title: KV 캐시와 메모리
+    icon: lucide:memory-stick
+  - dir: 04-quantization
+    title: 양자화
+    icon: lucide:binary
+  - dir: 05-decoding
+    title: 디코딩 가속
+    icon: lucide:zap
+  - dir: 06-distributed
+    title: 분산 서빙
+    icon: lucide:network
+  - dir: 07-operations
+    title: 운영
+    icon: lucide:activity

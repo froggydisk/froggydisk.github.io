@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**froggydisk.github.io** is a personal technical blog and portfolio website built with **Astro 7**, deployed to GitHub Pages. The site features 52+ blog posts covering frontend development, DevOps, ML/DL, and technical problem-solving, with a focus on Korean-language technical content.
+**froggydisk.github.io** is a personal technical blog and portfolio website built with **Astro 7**, deployed to GitHub Pages. The site features 48 blog posts (2026-10 정리 후), 3 online books, covering frontend development, DevOps, ML/DL, and technical problem-solving, with a focus on Korean-language technical content.
 
 - **Primary Language**: Korean (blog content), JavaScript/TypeScript (code)
 - **Live Site**: https://froggydisk.github.io
@@ -83,12 +83,12 @@ froggydisk.github.io/
 │   │   ├── Support.astro       # Ko-fi donation button
 │   │   ├── StarBackground.astro # Animated star background
 │   │   ├── book/               # BookSidebar · BookNav · BookProgress
-│   │   └── diagrams/           # 37 SVG diagram components (포스트마다 전용 그림)
+│   │   └── diagrams/           # 114 SVG diagram components (포스트·책 장마다 전용 그림)
 │   │       ├── AgentNetwork.astro
 │   │       ├── SystemLayers.astro
 │   │       ├── HarnessConcentric.astro
 │   │       ├── BookArchitectureMap.astro  # 생성물. scripts/gen-book-map.py
-│   │       └── (그 밖 33개. 대부분 특정 포스트 전용)
+│   │       └── (그 밖 110개. 대부분 특정 포스트·장 전용)
 │   ├── layouts/                 # 3 layout templates
 │   │   ├── BaseLayout.astro    # Base HTML + meta tags (wide·transitions prop)
 │   │   ├── PostLayout.astro    # Blog post wrapper
@@ -146,7 +146,10 @@ interface BlogPost {
 npm run dev      # Start development server (http://localhost:3000)
 npm run build    # Build static site + pagefind search index
 npm run preview  # Preview built site locally
+npm run check    # dist 검사: sitemap 두 벌 일치·깨진 내부 링크·중복 title/description·canonical·JSON-LD
 ```
+`npm run check`(`scripts/check-site.mjs`)는 CI에서 빌드 다음에 돌고, 오류가 있으면 배포를 막는다.
+경고(긴 제목·description 등)는 출력만 한다
 
 ### Build Process
 1. **Astro Build**: Generates static HTML/CSS/JS in `/dist`
@@ -191,7 +194,8 @@ npm run preview  # Preview built site locally
 - **CSS Variables**: `data-theme="dark"` attribute on `<body>`; 색·폰트 토큰은 `editorial.css`의
   `:root` / `body[data-theme="dark"]`에 정의 (`--bg`, `--ink`, `--body`, `--muted`, `--rule`, `--accent` …)
 - **Palette**: 아이보리 `#faf9f5` / 잉크 `#141413` / 클레이 액센트 `#cc785c`, 다크는 `#191816` / `#f5f3ec` / `#d9836a`
-- **Toggle**: Navbar sun/moon icon
+- **Toggle**: Navbar sun/moon icon. `<button id="mode">`다 — 예전엔 `href` 없는 `<a>`라 키보드로 닿지 않았다.
+  아이콘만 있는 버튼·링크(테마, GitHub)는 `aria-label`과 `:focus-visible` 테두리를 함께 둔다
 - **Diagram Theming**: 10+ CSS variables per diagram component
 
 ### 3. Content Enhancement
@@ -237,13 +241,20 @@ npm run preview  # Preview built site locally
   **`sitemap.xml.ts`는 손으로 만드는 파일이라 새 컬렉션을 자동으로 못 줍는다.** `@astrojs/sitemap`은
   라우트를 다 훑지만 이쪽은 STATIC_PATHS + 블로그 + 책을 직접 나열한다. 2026-08에 책 72개 URL이
   빠져 56 vs 128로 어긋난 적이 있다 (`c200f77`). 라우트를 추가하면 여기도 함께 고칠 것.
-  현재 URL 150개 (2026-09-27)
+  현재 URL 100개 (2026-10-09)
+- **뼈대 장은 색인하지 않는다**: 본문(주석·공백 제외)이 800자 미만인 책 장은 `noindex` + 두 sitemap에서 제외된다
+  (`src/utils/stub.mjs` 하나를 `astro.config.mjs`·`sitemap.xml.ts`·장 라우트가 함께 쓴다). 목차·라우트에는 남는다.
+  2026-10에 컴퓨터 구조 책의 "다룰 내용" 한 줄짜리 장 70개가 sitemap의 41%를 차지하고 있어서 넣었다.
+  본문을 채우면 저절로 색인 대상이 된다. 목차(사이드바·표지)에는 `준비 중` 배지가, 장 본문 위에는
+  `준비 중` 배너가 붙는다 (`TocChapter.stub`)
 - **Robots.txt**: Allow all. **`sitemap.xml`만 알린다.** 인덱스를 다시 넣지 말 것 — 구글이 못 읽는 경로를
   광고하면 서치콘솔에 실패 항목이 계속 남는다
 
 ### 6. Styling Approach
 - **No CSS Framework**: Pure vanilla CSS (global.css + editorial.css)
-- **Fonts**: 본문·제목 모두 Pretendard(산세리프), 코드 JetBrains Mono
+- **Fonts**: 본문·제목 모두 Pretendard(산세리프), 코드 JetBrains Mono.
+  Pretendard의 `@font-face` CSS는 `src/styles/pretendard.css`에 복사해 번들에 넣었다 (jsDelivr CSS를
+  `<link>`로 부르면 다른 출처 연결을 맺는 동안 첫 렌더가 막힌다). woff2만 jsDelivr에서 받는다
   → `--font-sans`, `--font-mono` 토큰으로 사용 (제목 굵기 600, 목록 제목 450~550)
 - **Measure**: 본문 폭 700px (`--measure`), 본문 18px / line-height 1.78
 - **Mobile-First**: Responsive breakpoints for tab/mobile
@@ -300,6 +311,8 @@ dist를 임시 폴더에 복사해 측정 스크립트를 `</body>` 앞에 끼�
   접두사를 URL에 남기면 장을 재배치할 때마다 외부 링크가 전부 깨진다
 - **정렬**: 접두사 숫자를 자연수로 비교하므로 `10-`이 `2-` 뒤에 온다 (0 패딩 불필요)
 - **부 제목**: `book.yaml`의 `parts[].title`. 없으면 디렉터리 이름을 그대로 쓴다
+- **머리말**: 부를 선언한 책에서 책 폴더 바로 아래 둔 파일(`00-preface.md`)은 번호 없는 앞부분이다.
+  `buildToc`가 `index: 0`을 주고, 사이드바 번호·`제 N 장`·폴리오 번호를 숨긴다. 본문 장 번호는 밀리지 않는다
 - **표지**: `book.yaml`의 `cover`에 `public/` 기준 경로(`/img/<책>-cover.webp`)를 적는다.
   서재 썸네일 · 표지 페이지 이미지 · OG/트위터 이미지가 이 한 값을 공유한다.
   둘 다 CSS에서 `aspect-ratio: 1 / 1.414` + `object-fit: cover` 프레임에 넣으므로
@@ -381,6 +394,12 @@ dist를 임시 폴더에 복사해 측정 스크립트를 `</body>` 앞에 끼�
    캡처해두면 스왑 후 죽은 노드를 붙들게 된다. `Navbar`·`BookSidebar`의 리스너는 `document`에
    위임으로 붙이고, `TOC`는 `astro:page-load`에서 멱등하게 다시 그린다.
    `data-theme`은 스왑이 body 속성까지 바꿔 날아가므로 `astro:after-swap`에서 다시 씌운다
+8. **사이드바 링크의 포커스가 스왑 뒤 스크롤을 끌어내린다.** 사이드바가 `transition:persist`라 ClientRouter가
+   눌린 링크에 포커스를 되살리고, 브라우저가 그 링크를 화면에 보이게 스크롤한다. 목차 아래쪽 장이
+   본문 중간에서 열렸다. `BookSidebar`가 마우스 클릭(`detail > 0`)일 때만 링크를 `blur()`한다
+9. **닫힌 모바일 서랍도 탭 순서에 남는다.** `transform`으로 화면 밖에 밀어둔 것뿐이라 장 링크 70개를
+   지나야 본문에 닿았다. 닫힌 상태에 `visibility: hidden`을 주되 transition delay로 닫히는 애니메이션이
+   끝난 뒤 숨긴다. Esc로 닫을 때 포커스가 서랍 안에 있었으면 여는 버튼으로 돌려준다
 
 ### 7-1. Projects 페이지 (`/projects/`)
 
@@ -393,7 +412,7 @@ dist를 임시 폴더에 복사해 측정 스크립트를 `</body>` 앞에 끼�
   dialog도 서버 렌더링이라 pagefind가 색인한다 (`data-pagefind-ignore` 걸지 말 것)
 - **영상**: `public/img/projects/<slug>.mp4` + 같은 이름 `.webp` 포스터, 960×600(16:10).
   **포스터는 반드시 첫 프레임** (다르면 재생 시작 때 화면이 튄다). 다시 만들 때는
-  `scripts/project-media/build.sh [gaze|gc|econix]` — puppeteer-core로 시스템 크롬을 띄워 데모를 screencast한다.
+  `scripts/project-media/build.sh [gaze|gc|econix|flight]` — puppeteer-core로 시스템 크롬을 띄워 데모를 screencast한다.
   puppeteer-core는 의존성이 아니니 `npm i --no-save puppeteer-core`
 - **Moody는 영상이 없다.** 카드에 원래의 `MoodySplitView` 애니메이션을 그대로 넣는다.
   Blender로 액자를 렌더링한 영상을 넣어봤지만 저자가 이상하다고 해서 뺐다.
@@ -412,6 +431,10 @@ dist를 임시 폴더에 복사해 측정 스크립트를 `</body>` 앞에 끼�
 1. **스크롤하며 screencast를 찍으면 프레임이 찢어진다** (지구본이 두 개로 겹쳐 찍혔다).
    econix는 뷰포트를 페이지 높이(1280×2130)로 키워 한 번에 찍고 ffmpeg `crop`의 y를 움직여 스크롤을 흉내 냈다.
    GC처럼 스크롤이 애니메이션을 구동하는 페이지는 이 방법을 못 쓰니 `mouse.wheel`로 찍는다
+4. **영상이 주인 데모는 원본 fps로 뽑고 창을 띄워 찍는다** (flight-quest). 원본 비행 영상이 24fps인데 30fps로
+   맞추니 네 장마다 한 장이 겹쳐 일정하게 덜컥거렸고, 헤드리스는 고해상도 영상 디코딩을 못 따라가 후반에
+   프레임이 두세 장마다 겹쳤다. 장면의 `fps:24` · `headful:true`가 그 처리다. 녹화는 비행 15초를 다 담아야
+   루프가 비행 도중에 잘리지 않는다. 결과는 `tblend=all_mode=difference,signalstats`로 프레임 간 차이를 찍어 확인한다
 2. **dialog의 `close` 이벤트는 버블링하지 않는다.** `document`에 위임하려면 capture(`true`)로 건다.
    Esc로 닫혀도 이 이벤트가 오므로 스크롤 잠금 해제·영상 정지를 여기서 한 번에 한다
 3. `MoodySplitView`는 ClientRouter 페이지에 있다. 다른 페이지를 거쳐 다시 들어오면 모듈 스크립트가 안 돌아
@@ -470,7 +493,7 @@ Content here...
 ## Git & Deployment
 
 ### Key Git History
-- **Latest**: Safari theme transition fix (repaint optimization)
+- **Latest**: Projects 페이지를 스튜디오 포트폴리오형으로 재구성 (`6fac48d`)
 - **Major Event**: Jekyll → Astro migration (commit: `8e8d230`)
 - **Legacy**: Originally based on Klisé Jekyll theme (MIT licensed)
 
@@ -496,11 +519,11 @@ _site/, .jekyll-*, .sass-*    # Jekyll legacy
 ## Content & Metadata
 
 ### Blog Statistics
-- **Total Posts**: 52+
-- **Date Range**: 2020 - 2025
+- **Total Posts**: 48 (짧은 글을 주제별로 합치면서 줄었다. 구 URL은 `LEGACY_SLUGS`)
+- **Date Range**: 2020-06 ~ 2026-08
 - **Languages**: Korean (with occasional English)
 - **Topics**: Frontend, DevOps, ML/DL, Bug Fixes, Tutorials
-- **Average Length**: ~80 lines per post (range: 20-200 lines)
+- **Average Length**: ~140 lines per post (range: 21-457 lines)
 
 ### Recent Post Categories
 - Infrastructure/Server Setup (GPU, RTX 4090 configs)
@@ -565,7 +588,8 @@ const tags = rawTags
 ### Theme Toggle
 ```javascript
 const theme = localStorage.getItem('theme');
-if (theme === 'dark' || !theme) {
+// 라이트가 기본. 'dark'로 저장된 경우에만 다크로 바꾼다
+if (theme === 'dark') {
   document.body.setAttribute('data-theme', 'dark');
 } else {
   document.body.removeAttribute('data-theme');
@@ -636,7 +660,7 @@ if (theme === 'dark' || !theme) {
 
 ## License & Attribution
 
-- **Site Content**: Copyright (c) 2020-2025 froggydisk
+- **Site Content**: Copyright (c) 2020-2026 froggydisk
 - **Theme Base**: Klisé (MIT License, by Mahendrata Harpi)
 - **Framework**: Astro (Apache 2.0)
 - **Icons**: Lucide, Phosphor (via Iconify)
@@ -677,6 +701,6 @@ npm run preview
 
 ---
 
-**Last Updated**: September 8, 2026
+**Last Updated**: October 9, 2026
 **Framework**: Astro 7.3.1
 **Node**: 22

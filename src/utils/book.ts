@@ -9,6 +9,7 @@
  */
 
 import type { CollectionEntry } from 'astro:content';
+import { isStubBody } from './stub.mjs';
 
 export type BookEntry = CollectionEntry<'book'>;
 export type BookMeta = CollectionEntry<'bookMeta'>;
@@ -94,8 +95,10 @@ export interface TocChapter {
   id: string;
   title: string;
   href: string;
-  /** 책 전체에서 몇 번째 장인지 (1-base) */
+  /** 책 전체에서 몇 번째 장인지 (1-base). 머리말처럼 부 밖에 둔 앞부분은 0이다 */
   index: number;
+  /** 본문을 아직 안 쓴 뼈대 장. 목차에 '준비 중'을 붙인다 (src/utils/stub.mjs) */
+  stub: boolean;
 }
 
 export interface TocPart {
@@ -113,6 +116,9 @@ export interface TocPart {
  */
 export function buildToc(chapters: BookEntry[], meta?: BookMeta): TocPart[] {
   const declared = new Map((meta?.data.parts ?? []).map((p) => [p.dir, p]));
+  // 부를 선언한 책에서 책 폴더 바로 아래 둔 파일(00-preface.md 등)은 번호 없는 앞부분이다.
+  // 번호를 주면 머리말이 '제 1 장'이 되고 본문 장 번호가 하나씩 밀린다.
+  const hasParts = declared.size > 0;
   const parts: TocPart[] = [];
   let index = 0;
 
@@ -137,7 +143,8 @@ export function buildToc(chapters: BookEntry[], meta?: BookMeta): TocPart[] {
       id: entry.id,
       title: entry.data.title,
       href: chapterHref(entry.id),
-      index: ++index,
+      index: hasParts && dir === '' ? 0 : ++index,
+      stub: isStubBody(entry.body ?? ''),
     });
   }
 
@@ -152,6 +159,6 @@ export function neighbors(toc: TocPart[], currentId: string) {
     prev: at > 0 ? flat[at - 1] : null,
     next: at >= 0 && at < flat.length - 1 ? flat[at + 1] : null,
     current: at >= 0 ? flat[at] : null,
-    total: flat.length,
+    total: flat.filter((c) => c.index > 0).length,
   };
 }

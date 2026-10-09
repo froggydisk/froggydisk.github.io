@@ -500,8 +500,7 @@ body[data-theme="dark"] .page-content table th,
 body[data-theme="dark"] .page-content table td { border-bottom-color: var(--rule); }
 
 /* 코드 */
-:not(pre) > code,
-code.highlighter-rouge {
+:not(pre) > code {
   font-family: var(--font-mono);
   font-size: 0.85em;
   padding: 0.12em 0.36em;
@@ -510,14 +509,12 @@ code.highlighter-rouge {
   border-radius: 3px;
   color: var(--accent-strong);
 }
-body[data-theme="dark"] :not(pre) > code,
-body[data-theme="dark"] code.highlighter-rouge {
+body[data-theme="dark"] :not(pre) > code {
   background-color: var(--bg-soft);
   border-color: var(--rule);
   color: var(--accent-strong);
 }
 
-pre.highlight,
 pre.astro-code,
 pre {
   margin: 2rem 0;
@@ -527,13 +524,11 @@ pre {
   font-size: 0.86em;
   box-shadow: none;
 }
-body[data-theme="dark"] pre.highlight,
 body[data-theme="dark"] pre.astro-code,
 body[data-theme="dark"] pre {
   border-color: var(--rule);
   box-shadow: none;
 }
-pre.highlight > code,
 pre.astro-code > code,
 pre > code { line-height: 1.7; }
 pre.astro-code[data-language]:not([data-language="plaintext"])::before {
@@ -752,6 +747,8 @@ body[data-theme="dark"] .post-item .post-item-date {
   font-weight: 450;
   line-height: 1.5;
   word-break: keep-all;
+  /* 제목 단계가 h2·h3로 바뀌어도(PostItem level) 원래 h4 자간을 유지한다 */
+  letter-spacing: -0.008em;
 }
 .post-item .post-item-title a,
 body[data-theme="dark"] .post-item .post-item-title a {

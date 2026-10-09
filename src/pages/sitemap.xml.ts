@@ -8,6 +8,7 @@ import {
   chapterModified,
   sortChapters,
 } from '../utils/book';
+import { isStubBody } from '../utils/stub.mjs';
 
 /**
  * 인덱스를 거치지 않는 단일 sitemap.
@@ -17,7 +18,7 @@ import {
  * 같은 URL 목록을 한 파일에 담은 관례적인 주소(/sitemap.xml)를 함께 제공한다.
  *
  * 제외 대상은 astro.config.mjs의 sitemap filter와 같다.
- * 리다이렉트 스텁, 404, sample 표시된 책의 하위 페이지는 넣지 않는다.
+ * 리다이렉트 스텁, 404, sample 표시된 책의 하위 페이지, 본문 없는 장은 넣지 않는다.
  */
 
 const STATIC_PATHS = [
@@ -66,6 +67,7 @@ export async function GET(context: { site: URL }) {
 
     bookEntries.push({ path: bookHref(meta.id), lastmod: bookModified(mine, meta) });
     for (const chapter of mine) {
+      if (isStubBody(chapter.body ?? '')) continue; // 뼈대만 있는 장은 noindex로 나간다
       bookEntries.push({
         path: chapterHref(chapter.id),
         lastmod: chapterModified(chapter, meta),

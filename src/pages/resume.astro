@@ -1,10 +1,27 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { pageJsonLd } from '../utils/seo';
+
+const description =
+  '소프트웨어 엔지니어 froggydisk의 이력서. 쿠버네티스 온프레미스 인프라 구축, React Native 앱 개발, CI/CD 파이프라인 구축 경력과 보유 자격증을 정리했습니다.';
+const jsonLd = pageJsonLd({
+  type: 'WebPage',
+  path: '/resume/',
+  name: 'Resume',
+  description,
+  about: {
+    '@type': 'Person',
+    name: 'froggydisk',
+    url: 'https://froggydisk.github.io/about/',
+    sameAs: ['https://github.com/froggydisk', 'https://velog.io/@frog'],
+  },
+});
 ---
 
 <BaseLayout
   title="Resume"
-  description="소프트웨어 엔지니어 froggydisk의 이력서. 쿠버네티스 온프레미스 인프라 구축, React Native 앱 개발, CI/CD 파이프라인 구축 경력과 보유 자격증을 정리했습니다."
+  description={description}
+  jsonLd={jsonLd}
   showStars={false}
 >
   <header class="header">

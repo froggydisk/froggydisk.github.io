@@ -4,6 +4,7 @@ import BookSidebar from '../components/book/BookSidebar.astro';
 import BookNav from '../components/book/BookNav.astro';
 import BookProgress from '../components/book/BookProgress.astro';
 import TOC from '../components/TOC.astro';
+import DevEditor from '../components/DevEditor.astro';
 import { bookHref } from '../utils/book';
 import type { TocChapter, TocPart } from '../utils/book';
 import '../styles/book.css';
@@ -14,6 +15,8 @@ interface Props {
   bookAuthor: string;
   /** 레이아웃 검증용 더미 책. 배너를 띄우고 색인에서 뺀다. */
   sample?: boolean;
+  /** 본문을 아직 안 쓴 장. 목차에는 남기고 색인에서만 뺀다 */
+  stub?: boolean;
   /** 연재 중인 책. 아직 채워지지 않은 장이 있을 수 있다는 배너를 띄운다. */
   writing?: boolean;
   toc: TocPart[];
@@ -33,6 +36,8 @@ interface Props {
   showToc?: boolean;
   prev?: TocChapter | null;
   next?: TocChapter | null;
+  /** dev 편집 패널이 고칠 원고 경로 (entry.filePath). 빌드에서는 쓰지 않는다 */
+  sourcePath?: string;
 }
 
 const {
@@ -40,6 +45,7 @@ const {
   bookTitle,
   bookAuthor,
   sample = false,
+  stub = false,
   writing = false,
   toc,
   chapter = null,
@@ -51,6 +57,7 @@ const {
   showToc = true,
   prev = null,
   next = null,
+  sourcePath,
 } = Astro.props;
 
 const site = Astro.site!;
@@ -111,7 +118,7 @@ const jsonLd = {
   showStars={false}
   modifiedTime={modified.toISOString()}
   jsonLd={jsonLd}
-  noindex={sample}
+  noindex={sample || stub}
   wide
   transitions
 >
@@ -140,6 +147,11 @@ const jsonLd = {
             <span class="book-flag-tag">샘플</span>
             레이아웃 검증용 더미 원고입니다. 내용은 실제 글이 아니며 검색엔진 색인에서 제외됩니다.
           </p>
+        ) : stub ? (
+          <p class="book-flag" data-pagefind-ignore>
+            <span class="book-flag-tag">준비 중</span>
+            아직 쓰지 않은 장입니다. 다룰 내용만 먼저 적어 두었습니다.
+          </p>
         ) : writing && (
           <p class="book-flag" data-pagefind-ignore>
             <span class="book-flag-tag">연재 중</span>
@@ -160,7 +172,7 @@ const jsonLd = {
             )}
           </nav>
 
-          {chapter && (
+          {chapter && chapter.index > 0 && (
             <p class="book-kicker" data-pagefind-ignore>제 {chapter.index} 장</p>
           )}
 
@@ -182,7 +194,7 @@ const jsonLd = {
       {chapter && (
         <p class="book-folio" data-pagefind-ignore>
           <span class="book-folio-part">{chapter.partTitle}</span>
-          <span class="book-folio-no">{chapter.index} / {chapter.total}</span>
+          {chapter.index > 0 && <span class="book-folio-no">{chapter.index} / {chapter.total}</span>}
         </p>
       )}
 
@@ -191,4 +203,5 @@ const jsonLd = {
 
     {showToc && <TOC selector=".book-body" threshold={2} variant="inline" label="이 장에서" />}
   </div>
+  <DevEditor filePath={sourcePath} />
 </BaseLayout>

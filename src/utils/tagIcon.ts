@@ -45,8 +45,3 @@ export const TAG_ICON_FALLBACK = 'lucide:tag';
 export function tagIcon(tag: string): string {
   return TAG_ICON[tag] ?? TAG_ICON_FALLBACK;
 }
-
-/** 매핑이 빠진 태그를 찾을 때 쓴다 */
-export function knownTags(): string[] {
-  return Object.keys(TAG_ICON);
-}

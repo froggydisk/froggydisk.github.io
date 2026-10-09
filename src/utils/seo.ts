@@ -100,3 +100,43 @@ export function excerpt(body: string, max = 155): string {
   const space = cut.lastIndexOf(' ');
   return (space > max * 0.6 ? cut.slice(0, space) : cut).trim() + '…';
 }
+
+const SITE_URL = 'https://froggydisk.github.io';
+
+/**
+ * 포스트·책이 아닌 고정 페이지(목록·이력서·방침)의 JSON-LD.
+ * items를 넘기면 목록 페이지로 보고 mainEntity에 ItemList를 단다.
+ */
+export function pageJsonLd(opts: {
+  type: 'CollectionPage' | 'WebPage';
+  path: string;
+  name: string;
+  description: string;
+  items?: { path: string; name: string }[];
+  about?: Record<string, unknown>;
+}): Record<string, unknown> {
+  const url = new URL(opts.path, SITE_URL).href;
+  return {
+    '@context': 'https://schema.org',
+    '@type': opts.type,
+    '@id': url,
+    url,
+    name: opts.name,
+    description: opts.description,
+    inLanguage: 'ko-KR',
+    isPartOf: { '@type': 'WebSite', name: 'froggydisk', url: `${SITE_URL}/` },
+    ...(opts.about && { about: opts.about }),
+    ...(opts.items && {
+      mainEntity: {
+        '@type': 'ItemList',
+        numberOfItems: opts.items.length,
+        itemListElement: opts.items.map((item, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          url: new URL(item.path, SITE_URL).href,
+          name: item.name,
+        })),
+      },
+    }),
+  };
+}

@@ -5,6 +5,7 @@ description: >-
   모델 선택과 API 호출에서 시작해 컨텍스트, 검색, 에이전트, 평가, 보안과 운영까지
   구현 원리와 실패 조건, 설계 대안을 연결해 설명한다.
 author: froggydisk
+cover: /img/ai-engineering-cover.webp
 status: done
 published: 2026-09-08
 last_modified_at: 2026-09-08

@@ -10,6 +10,7 @@ import {
   sortChapters,
 } from '../../../utils/book';
 import { excerpt } from '../../../utils/seo';
+import { isStubBody } from '../../../utils/stub.mjs';
 
 export async function getStaticPaths() {
   const metas = await getCollection('bookMeta');
@@ -48,6 +49,7 @@ const description = entry.data.description?.trim() || excerpt(entry.body ?? '');
   bookTitle={meta.data.title}
   bookAuthor={meta.data.author}
   sample={meta.data.sample}
+  stub={isStubBody(entry.body ?? '')}
   writing={meta.data.status === 'writing'}
   toc={toc}
   chapter={{
@@ -65,6 +67,7 @@ const description = entry.data.description?.trim() || excerpt(entry.body ?? '');
   showToc={entry.data.toc}
   prev={prev}
   next={next}
+  sourcePath={entry.filePath}
 >
   <Content />
 </BookLayout>

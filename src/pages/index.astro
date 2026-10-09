@@ -15,27 +15,44 @@ const recentPosts = posts.slice(0, 8);
 const description =
   'froggydisk의 기술 블로그. React Native·Next.js 프론트엔드, 쿠버네티스·CI/CD 인프라, ' +
   'PyTorch 기반 ML/DL까지 직접 부딪힌 문제와 해결 과정을 기록합니다.';
+
+// 사이트 이름을 구글 검색 결과에 붙이는 WebSite 구조화 데이터
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'froggydisk',
+  url: new URL('/', Astro.site).href,
+  inLanguage: 'ko-KR',
+  description,
+};
 ---
 
-<BaseLayout title="Home" description={description} transitions>
+<BaseLayout title="프론트엔드·인프라·ML 기술 블로그" description={description} jsonLd={jsonLd} transitions>
   <div class="author">
     <video class="author-avatar" src="/img/profile.mp4" autoplay loop muted playsinline></video>
     <h1 class="author-name"><span class="masked-name" data-masked-heading>./workspace</span></h1>
     <div class="content">
       <p class="content__text">$ whoami</p>
-      <ul class="content__list">
+      <div class="content__list">
         <p class="content__list__item">"froggy_disk"</p>
         <p class="content__list__item">"frontend"</p>
         <p class="content__list__item">"ML/DL"</p>
         <p class="content__list__item">"devops"</p>
-      </ul>
+      </div>
     </div>
   </div>
 
-  <h4 class="posts-item-note">Recent Posts</h4>
-  {recentPosts.map((post) => <PostItem post={post} />)}
+  <h2 class="posts-item-note">Recent Posts</h2>
+  {recentPosts.map((post) => <PostItem post={post} level={3} />)}
   <a class="posts-more" href="/archive/">전체 글 {posts.length}편 보기 →</a>
   <style>
+    /* 제목 순서(h1 다음 h2) 때문에 h4에서 h2로 바꿨다. .page-content h2의 크기·여백이
+       걸리지 않게 h4일 때 값을 그대로 둔다 */
+    .posts-item-note {
+      font-size: 1.05rem;
+      line-height: inherit;
+      margin-top: 2.1rem;
+    }
     :global(html) {
       overflow: hidden;
     }
@@ -65,13 +82,6 @@ const description =
     }
     .author-name {
       margin-top: 0;
-    }
-    .author-bio {
-      margin: 0.9rem auto 0;
-      max-width: 34rem;
-      font-size: 14px;
-      line-height: 1.7;
-      color: var(--muted);
     }
     .author {
       margin-top: auto;
@@ -165,7 +175,8 @@ const description =
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     var label = heading.textContent;
-    heading.setAttribute('aria-label', label);
+    // span에는 aria-label을 달 수 없다(역할 없는 요소). 이름은 제목(h1)에 준다
+    (heading.closest('h1') || heading).setAttribute('aria-label', label);
 
     var visual = document.createElement('span');
     visual.setAttribute('aria-hidden', 'true');

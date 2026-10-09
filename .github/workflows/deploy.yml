@@ -25,6 +25,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+      # sitemap 불일치·깨진 링크·중복 메타가 있으면 배포하지 않는다
+      - run: npm run check
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

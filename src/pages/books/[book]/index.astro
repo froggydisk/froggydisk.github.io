@@ -80,9 +80,12 @@ const modified = bookModified(chapters, meta);
         <ul class="book-part-list">
           {part.chapters.map((ch, ci) => (
             <li>
-              <a class="book-ch" href={ch.href}>
+              <a class="book-ch" href={ch.href} data-stub={ch.stub || undefined}>
                 <span class="book-ch-num">{pi + 1}.{String(ci + 1).padStart(2, '0')}</span>
-                <span class="book-ch-title">{ch.title}</span>
+                <span class="book-ch-title">
+                  {ch.title}
+                  {ch.stub && <span class="book-ch-soon">준비 중</span>}
+                </span>
               </a>
             </li>
           ))}

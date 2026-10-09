@@ -325,10 +325,6 @@ sup {
   margin-right: 2px;
 }
 
-.overflow-table {
-  overflow-x: auto;
-}
-
 table {
   width: 100%;
   margin-top: 15px;
@@ -359,14 +355,6 @@ mark,
   color: #141413;
 }
 
-.gist table {
-  border: 0;
-}
-.gist table tr,
-.gist table td {
-  border: 0;
-}
-
 .navbar {
   height: auto;
   max-width: calc(780px - 30px * 2);
@@ -394,7 +382,15 @@ mark,
   -ms-user-select: none;
   -webkit-user-select: none;
 }
-.menu a#mode {
+.menu #mode {
+  /* <button>이 된 뒤에도 <a>일 때와 같은 상자로 보이게 기본 스타일을 걷어낸다 */
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
   float: left;
   left: 8px;
   top: 6px;
@@ -405,34 +401,34 @@ mark,
   opacity: 0.7;
   z-index: 1;
 }
-.menu a#mode:hover {
+.menu #mode:hover {
   cursor: pointer;
   opacity: 0.85;
   color: inherit;
 }
-.menu a#mode:active {
+.menu #mode:active {
   -webkit-transform: scale(0.9, 0.9);
   transform: scale(0.9, 0.9);
 }
-.menu a#mode .mode-moon {
+.menu #mode .mode-moon {
   display: block;
 }
-.menu a#mode .mode-moon line {
+.menu #mode .mode-moon line {
   stroke: #141413;
   fill: none;
 }
-.menu a#mode .mode-moon circle {
+.menu #mode .mode-moon circle {
   fill: #141413;
   stroke: #141413;
 }
-.menu a#mode .mode-sunny {
+.menu #mode .mode-sunny {
   display: none;
 }
-.menu a#mode .mode-sunny line {
+.menu #mode .mode-sunny line {
   stroke: #f5f3ec;
   fill: none;
 }
-.menu a#mode .mode-sunny circle {
+.menu #mode .mode-sunny circle {
   fill: none;
   stroke: #f5f3ec;
 }
@@ -463,7 +459,13 @@ mark,
 .menu .menu-link.rss {
   position: relative;
   bottom: -3px;
-  outline: none;
+}
+/* 아이콘만 있는 두 버튼은 글자 링크처럼 색이 바뀌는 표시가 없어서 테두리로 보여준다 */
+.menu .menu-link.rss:focus-visible,
+.menu #mode:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 @media screen and (max-width: 768px) {
   .menu .menu-link {
@@ -486,7 +488,7 @@ mark,
     background-color: transparent;
     border-bottom: none;
   }
-  .menu a#mode {
+  .menu #mode {
     /* .menu 는 fixed라 .navbar 의 거터를 못 받는다.
        본문 거터(22px)에 맞추려고 패딩 10px 을 뺀 값을 offset 으로 준다. */
     left: 12px;
@@ -574,12 +576,6 @@ mark,
 .author .author-name {
   font-size: 1.7em;
   margin-bottom: 2px;
-}
-.author .author-bio {
-  margin: 0 auto;
-  opacity: 0.9;
-  max-width: 393px;
-  line-height: 1.688;
 }
 .author .content {
   line-height: 30px;
@@ -1048,16 +1044,6 @@ mark,
   padding-top: 15px;
   padding-bottom: 15px;
 }
-.page-content ul.task-list {
-  list-style: none;
-  margin: 0;
-}
-.page-content ul.task-list li::before {
-  content: "";
-}
-.page-content ul.task-list li input[type=checkbox] {
-  margin-right: 10px;
-}
 .page-content dl dt {
   font-weight: 700;
 }
@@ -1266,23 +1252,6 @@ mark,
     filter: blur(4px);
   }
 }
-.embed-responsive {
-  height: 0;
-  max-width: 100%;
-  overflow: hidden;
-  position: relative;
-  padding-bottom: 56.25%;
-  margin-top: 20px;
-}
-.embed-responsive iframe,
-.embed-responsive object,
-.embed-responsive embed {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-}
 
 code {
   font-family: 'JetBrains Mono', 'SF Mono', 'Menlo', Consolas, monospace;
@@ -1295,8 +1264,7 @@ code {
   word-wrap: normal;
   font-size: inherit;
 }
-:not(pre) > code,
-code.highlighter-rouge {
+:not(pre) > code {
   padding: 0.15em 0.4em;
   margin: 0 0.1em;
   font-size: 0.88em;
@@ -1306,7 +1274,7 @@ code.highlighter-rouge {
   color: #b3603f;
 }
 
-pre.highlight, pre.astro-code, pre {
+pre.astro-code, pre {
   margin: 1.4em 0;
   border: 1px solid rgba(128, 128, 128, 0.18);
   border-radius: 8px;
@@ -1318,13 +1286,13 @@ pre.highlight, pre.astro-code, pre {
   position: relative;
 }
 @media screen and (max-width: 768px) {
-  pre.highlight, pre.astro-code, pre {
+  pre.astro-code, pre {
     padding: 14px 16px;
     border-radius: 6px;
     font-size: 0.85em;
   }
 }
-pre.highlight > code, pre.astro-code > code, pre > code {
+pre.astro-code > code, pre > code {
   width: 100%;
   max-width: 50rem;
   margin-left: auto;
@@ -1348,143 +1316,6 @@ pre.astro-code[data-language]:not([data-language="plaintext"])::before {
   color: rgba(255, 255, 255, 0.35);
   text-transform: uppercase;
   pointer-events: none;
-}
-
-.highlight table td {
-  padding: 5px;
-}
-
-.highlight table pre {
-  margin: 0;
-}
-
-.highlight,
-.highlight .w {
-  color: #fbf1c7;
-}
-
-.highlight .err {
-  color: #fb4934;
-  font-weight: bold;
-}
-
-.highlight .c,
-.highlight .cd,
-.highlight .cm,
-.highlight .c1,
-.highlight .cs {
-  color: #928374;
-  font-style: italic;
-}
-
-.highlight .cp {
-  color: #8ec07c;
-}
-
-.highlight .nt {
-  color: #fb4934;
-}
-
-.highlight .o,
-.highlight .ow {
-  color: #fbf1c7;
-}
-
-.highlight .p,
-.highlight .pi {
-  color: #fbf1c7;
-}
-
-.highlight .gi {
-  color: #b8bb26;
-  background-color: #282828;
-}
-
-.highlight .gd {
-  color: #fb4934;
-  background-color: #282828;
-}
-
-.highlight .gh {
-  color: #b8bb26;
-  font-weight: bold;
-}
-
-.highlight .k,
-.highlight .kn,
-.highlight .kp,
-.highlight .kr,
-.highlight .kv {
-  color: #fb4934;
-}
-
-.highlight .kc {
-  color: #d3869b;
-}
-
-.highlight .kt {
-  color: #fabd2f;
-}
-
-.highlight .kd {
-  color: #fe8019;
-}
-
-.highlight .s,
-.highlight .sb,
-.highlight .sc,
-.highlight .sd,
-.highlight .s2,
-.highlight .sh,
-.highlight .sx,
-.highlight .s1 {
-  color: #b8bb26;
-  font-style: italic;
-}
-
-.highlight .si {
-  color: #b8bb26;
-  font-style: italic;
-}
-
-.highlight .sr {
-  color: #b8bb26;
-  font-style: italic;
-}
-
-.highlight .se {
-  color: #fe8019;
-}
-
-.highlight .nn {
-  color: #8ec07c;
-}
-
-.highlight .nc {
-  color: #8ec07c;
-}
-
-.highlight .no {
-  color: #d3869b;
-}
-
-.highlight .na {
-  color: #b8bb26;
-}
-
-.highlight .m,
-.highlight .mf,
-.highlight .mh,
-.highlight .mi,
-.highlight .il,
-.highlight .mo,
-.highlight .mb,
-.highlight .mx {
-  color: #d3869b;
-}
-
-.highlight .ss {
-  color: #83a598;
 }
 
 body[data-theme=dark] {
@@ -1529,13 +1360,11 @@ body[data-theme=dark] .page-content h5 .anchor-head,
 body[data-theme=dark] .page-content h6 .anchor-head {
   color: #d9836a;
 }
-body[data-theme=dark] :not(pre) > code,
-body[data-theme=dark] code.highlighter-rouge {
+body[data-theme=dark] :not(pre) > code {
   background-color: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.08);
   color: #e0a58c;
 }
-body[data-theme=dark] pre.highlight,
 body[data-theme=dark] pre.astro-code,
 body[data-theme=dark] pre {
   border-color: rgba(255, 255, 255, 0.08);
@@ -1582,10 +1411,10 @@ body[data-theme=dark] b {
 body[data-theme=dark] .navbar {
   border-color: #2d2b26;
 }
-body[data-theme=dark] .navbar .menu a#mode .mode-sunny {
+body[data-theme=dark] .navbar .menu #mode .mode-sunny {
   display: block;
 }
-body[data-theme=dark] .navbar .menu a#mode .mode-moon {
+body[data-theme=dark] .navbar .menu #mode .mode-moon {
   display: none;
 }
 body[data-theme=dark] .navbar .menu .menu-link {

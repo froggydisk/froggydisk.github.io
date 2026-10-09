@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import StarBackground from '../components/StarBackground.astro';
 import { ClientRouter } from 'astro:transitions';
+import '../styles/pretendard.css';
 import '../styles/global.css';
 import '../styles/editorial.css';
 
@@ -102,14 +103,8 @@ const jsonLdText = jsonLd ? JSON.stringify(jsonLd).replace(/</g, '\\u003c') : nu
     })();
   </script>
 
-  <!-- Fonts -->
+  <!-- Fonts: @font-face는 src/styles/pretendard.css에 있고, woff2만 jsDelivr에서 받는다 -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
-  <link
-    rel="stylesheet"
-    crossorigin="anonymous"
-    integrity="sha384-GIdEBaqGN9mNkDkMkzMHW8EKUqtpPIe/sLj1X7DIrnc9uPtLROJgmuDlh+3rBw0j"
-    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
-  />
 
   <!-- AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4715878791193779" crossorigin="anonymous"></script>

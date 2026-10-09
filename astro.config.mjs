@@ -11,6 +11,8 @@ import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeRaw from 'rehype-raw';
 import rehypeImageAttrs from './src/plugins/rehype-image-attrs.mjs';
+import devEditor from './src/integrations/dev-editor.mjs';
+import { isStubFile } from './src/utils/stub.mjs';
 
 const SITE = 'https://froggydisk.github.io';
 
@@ -130,6 +132,9 @@ function walkMarkdown(dir, out = []) {
 /** sample: true 인 책의 URL 접두사. 색인 대상이 아니다. */
 const sampleBookPrefixes = new Set();
 
+/** 본문을 아직 안 쓴 장. noindex로 나가므로 sitemap에서도 뺀다 (src/utils/stub.mjs) */
+const stubChapterUrls = new Set();
+
 function addBookLastmod(map) {
   const root = fileURLToPath(new URL('./src/content/book', import.meta.url));
   let allDates = [];
@@ -169,6 +174,7 @@ function addBookLastmod(map) {
       const rel = file.slice(dir.length + 1).replace(/\.(md|mdx)$/, '');
       const path = rel.split('/').map((seg) => seg.replace(/^\d+[-_.]/, '')).join('/');
 
+      if (isStubFile(raw)) stubChapterUrls.add(`${SITE}/books/${book}/${path}/`);
       map.set(`${SITE}/books/${book}/${path}/`, date.toISOString());
       chapterDates.push(date);
     }
@@ -199,9 +205,10 @@ export default defineConfig({
   redirects,
   integrations: [
     sitemap({
-      // 리다이렉트 스텁·404·샘플 책은 색인 대상이 아니다
+      // 리다이렉트 스텁·404·샘플 책·본문 없는 장은 색인 대상이 아니다
       filter: (page) =>
         !redirectUrls.has(page) &&
+        !stubChapterUrls.has(page) &&
         !page.includes('/404') &&
         ![...sampleBookPrefixes].some((prefix) => page.startsWith(prefix)),
       serialize(item) {
@@ -221,6 +228,8 @@ export default defineConfig({
     }),
     mdx(),
     icon(),
+    // dev 서버에서만 원고 편집 엔드포인트를 붙인다. 빌드에는 영향이 없다
+    devEditor(),
   ],
   markdown: {
     shikiConfig: {
@@ -235,7 +244,14 @@ export default defineConfig({
       remarkPlugins: [remarkMath],
       rehypePlugins: [
         rehypeSlug,
-        [rehypeAutolinkHeadings, { behavior: 'prepend', properties: { class: 'anchor-head' } }],
+        // 앵커는 마우스용 장식이다. 이름 없는 링크로 읽히지 않게 보조기술과 탭 순서에서 뺀다
+        [
+          rehypeAutolinkHeadings,
+          {
+            behavior: 'prepend',
+            properties: { class: 'anchor-head', ariaHidden: 'true', tabIndex: -1 },
+          },
+        ],
         // Astro는 rehype-raw를 사용자 플러그인 "뒤"에 돌린다. 그래서 본문에 손으로 쓴
         // <img> 같은 raw HTML이 아래 rehypeImageAttrs에게는 아직 element로 안 보인다.
         // 먼저 파싱해두면 raw HTML 이미지도 같은 처리를 받는다.

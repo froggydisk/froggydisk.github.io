@@ -170,6 +170,22 @@
   color: var(--accent-strong);
   opacity: 1;
 }
+/* 뼈대만 있는 장 (src/utils/stub.mjs). 링크는 살려 두고 흐리게만 한다 */
+.book-ch[data-stub] .book-ch-title { opacity: 0.6; }
+.book-ch-soon {
+  display: inline-block;
+  margin-left: 0.4em;
+  padding: 0 0.4em;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  font-size: 10.5px;
+  font-weight: 450;
+  line-height: 1.5;
+  color: var(--muted);
+  vertical-align: 0.1em;
+  white-space: nowrap;
+}
+
 .book-part-list li {
   border-left: 1.5px solid transparent;
   padding-left: 0.6rem;
@@ -240,9 +256,16 @@
     background: var(--bg);
     border-right: 1px solid var(--rule);
     transform: translateX(-102%);
-    transition: transform 0.24s ease;
+    /* 닫힌 서랍은 화면 밖에 있어도 링크가 탭 순서에 남는다 (장 70개를 지나야 본문에 닿았다).
+       visibility로 빼되, 닫히는 애니메이션이 끝난 뒤에 숨긴다 */
+    visibility: hidden;
+    transition: transform 0.24s ease, visibility 0s linear 0.24s;
   }
-  body.book-aside-open .book-aside { transform: translateX(0); }
+  body.book-aside-open .book-aside {
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform 0.24s ease, visibility 0s;
+  }
 
   .book-aside-close {
     display: flex;

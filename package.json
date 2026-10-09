@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build && npx pagefind --site dist",
+    "check": "node scripts/check-site.mjs",
     "preview": "astro preview"
   },
   "dependencies": {
