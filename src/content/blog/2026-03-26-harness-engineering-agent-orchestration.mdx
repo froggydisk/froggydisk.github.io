@@ -12,7 +12,7 @@ import AgentNetwork from "../../components/diagrams/AgentNetwork.astro";
 import AgentOrchestration from "../../components/diagrams/AgentOrchestration.astro";
 import AgentTddCore from "../../components/diagrams/AgentTddCore.astro";
 
-[지난 글](/harness-engineering)에서 하네스 엔지니어링의 개념을 정리했다. 프롬프트에서 컨텍스트로, 컨텍스트에서 하네스로 이어지는 포함 관계와 세 가지 축(컨텍스트, 제약, GC), 그리고 그것들을 잇는 피드백 루프까지 훑었다.
+[지난 글](/harness-engineering/)에서 하네스 엔지니어링의 개념을 정리했다. 프롬프트에서 컨텍스트로, 컨텍스트에서 하네스로 이어지는 포함 관계와 세 가지 축(컨텍스트, 제약, GC), 그리고 그것들을 잇는 피드백 루프까지 훑었다.
 
 이번 글의 질문은 하나다. **"그래서 하네스 엔지니어링은 어떻게 하는 건데?"**
 
@@ -121,7 +121,7 @@ import AgentTddCore from "../../components/diagrams/AgentTddCore.astro";
 
 ## ▍피드백 루프의 실체
 
-[전편](/harness-engineering)에서 하네스의 핵심이 피드백 루프라고 했는데, TDD 기반 개발을 얹으면 이 루프가 구체적으로 이렇게 돈다.
+[전편](/harness-engineering/)에서 하네스의 핵심이 피드백 루프라고 했는데, TDD 기반 개발을 얹으면 이 루프가 구체적으로 이렇게 돈다.
 
 1. 에이전트가 테스트 가능한 구조로 **코드를 작성**한다
 2. QA 에이전트가 코드를 분석해 **테스트를 자동 생성**한다
@@ -146,4 +146,4 @@ import AgentTddCore from "../../components/diagrams/AgentTddCore.astro";
 ## ▍참고 자료
 
 - Anthropic, [Best Practices for Claude Code](https://code.claude.com/docs/en/best-practices) — "Give Claude a way to verify its work"
-- 전편: [하네스 엔지니어링: 프롬프트 너머의 세계](/harness-engineering)
+- 전편: [하네스 엔지니어링: 프롬프트 너머의 세계](/harness-engineering/)
