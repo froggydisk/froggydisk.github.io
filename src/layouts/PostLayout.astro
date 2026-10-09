@@ -4,6 +4,7 @@ import TOC from '../components/TOC.astro';
 import Comments from '../components/Comments.astro';
 import Support from '../components/Support.astro';
 import PostNav from '../components/PostNav.astro';
+import DevEditor from '../components/DevEditor.astro';
 import { formatDate } from '../utils/seo';
 
 interface Props {
@@ -19,6 +20,8 @@ interface Props {
   use_math?: boolean;
   prev?: { title: string; slug: string } | null;
   next?: { title: string; slug: string } | null;
+  /** dev 편집 패널이 고칠 원고 경로 (post.filePath). 빌드에서는 쓰지 않는다 */
+  sourcePath?: string;
 }
 
 const {
@@ -34,6 +37,7 @@ const {
   use_math = false,
   prev = null,
   next = null,
+  sourcePath,
 } = Astro.props;
 
 const formattedDate = formatDate(date);
@@ -115,4 +119,5 @@ const jsonLd = {
   {comments && <Comments />}
   <PostNav prev={prev} next={next} />
   <Support />
+  <DevEditor filePath={sourcePath} />
 </BaseLayout>

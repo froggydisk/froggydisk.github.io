@@ -45,6 +45,7 @@ const description = post.data.description?.trim() || excerpt(post.body ?? '');
   use_math={post.data.use_math}
   prev={prev}
   next={next}
+  sourcePath={post.filePath}
 >
   <Content />
 </PostLayout>

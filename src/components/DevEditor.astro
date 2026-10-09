@@ -1,0 +1,239 @@
+---
+/**
+ * dev 모드에서만 나오는 원고 편집 패널.
+ *
+ * 페이지 오른쪽 아래 「편집」 버튼을 누르면 이 페이지의 원본 .md/.mdx를 옆 패널에서 고친다.
+ * 저장(⌘S / Ctrl+S)하면 src/integrations/dev-editor.mjs 가 파일에 쓴다. 콘텐츠 컬렉션은 파일이 바뀌어도
+ * 페이지를 스스로 새로고침하지 않아서, 렌더된 본문이 바뀔 때까지 기다렸다가 직접 다시 불러온다.
+ * 패널 왼쪽 가장자리를 끌어 너비를 바꾸고, 그 너비는 localStorage에 남긴다.
+ * 다시 그린 뒤에도 패널이 같은 자리로 열리도록 열린 상태·커서·스크롤을 sessionStorage에 잠깐 남긴다.
+ *
+ * 빌드에서는 아무것도 출력하지 않는다. 스크립트와 스타일을 is:inline 으로 조건 블록 안에 둔 이유다
+ * (일반 <script>는 컴포넌트를 쓰기만 해도 번들에 들어간다).
+ * 책 페이지는 ClientRouter로 스왑되므로 인라인 스크립트가 페이지마다 다시 실행된다.
+ * 리스너는 window 플래그로 한 번만 붙이고, 경로는 누르는 순간 DOM에서 읽는다.
+ */
+interface Props {
+  /** 프로젝트 루트 기준 원고 경로 (content collection entry.filePath) */
+  filePath?: string;
+}
+const { filePath } = Astro.props;
+const show = import.meta.env.DEV && !!filePath;
+---
+
+{show && (
+  <div id="dev-editor" data-path={filePath} data-pagefind-ignore>
+    <button type="button" class="dev-editor-fab" data-dev-editor-open>편집</button>
+    <div class="dev-editor-panel" role="dialog" aria-label="원고 편집" hidden>
+      <div class="dev-editor-resize" data-dev-editor-resize title="끌어서 너비 조절"></div>
+      <header class="dev-editor-head">
+        <code class="dev-editor-path">{filePath}</code>
+        <span class="dev-editor-status" aria-live="polite"></span>
+        <button type="button" data-dev-editor-save>저장 <kbd>⌘S</kbd></button>
+        <button type="button" data-dev-editor-close>닫기 <kbd>Esc</kbd></button>
+      </header>
+      <textarea class="dev-editor-text" spellcheck="false"></textarea>
+    </div>
+  </div>
+)}
+
+{show && (
+  <style is:inline>
+    #dev-editor { --de-bg: #faf9f5; --de-ink: #141413; --de-rule: #d8d4c8; --de-accent: #cc785c; }
+    body[data-theme='dark'] #dev-editor { --de-bg: #1f1d1a; --de-ink: #f5f3ec; --de-rule: #3a3732; --de-accent: #d9836a; }
+    .dev-editor-fab {
+      position: fixed; right: 20px; bottom: 20px; z-index: 9998;
+      padding: 9px 16px; border-radius: 999px; border: 1px solid var(--de-rule);
+      background: var(--de-bg); color: var(--de-ink); font: 600 14px/1 var(--font-sans, sans-serif);
+      box-shadow: 0 6px 20px rgba(0,0,0,.18); cursor: pointer;
+    }
+    .dev-editor-fab:hover { border-color: var(--de-accent); }
+    .dev-editor-panel {
+      position: fixed; top: 0; right: 0; bottom: 0; z-index: 9999;
+      width: var(--de-width, min(760px, 52vw)); display: flex; flex-direction: column;
+      background: var(--de-bg); color: var(--de-ink);
+      border-left: 1px solid var(--de-rule); box-shadow: -12px 0 40px rgba(0,0,0,.18);
+    }
+    .dev-editor-panel[hidden] { display: none; }
+    .dev-editor-resize {
+      position: absolute; left: -5px; top: 0; bottom: 0; width: 10px; cursor: ew-resize; z-index: 1;
+    }
+    .dev-editor-resize:hover, .dev-editor-resize[data-active] { background: linear-gradient(90deg, transparent 4px, var(--de-accent) 4px, var(--de-accent) 6px, transparent 6px); }
+    body.dev-editor-resizing { user-select: none; cursor: ew-resize; }
+    .dev-editor-head {
+      display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+      border-bottom: 1px solid var(--de-rule); font: 13px/1.4 var(--font-sans, sans-serif);
+    }
+    .dev-editor-path { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; opacity: .7; }
+    .dev-editor-status { font-size: 12px; opacity: .8; white-space: nowrap; }
+    .dev-editor-status[data-state='error'] { color: #c0392b; opacity: 1; }
+    .dev-editor-status[data-state='dirty'] { color: var(--de-accent); opacity: 1; }
+    .dev-editor-head button {
+      padding: 6px 10px; border-radius: 6px; border: 1px solid var(--de-rule);
+      background: transparent; color: inherit; font: inherit; cursor: pointer;
+    }
+    .dev-editor-head button:hover { border-color: var(--de-accent); }
+    .dev-editor-head kbd { font: 11px/1 var(--font-mono, monospace); opacity: .6; margin-left: 2px; }
+    .dev-editor-text {
+      flex: 1; width: 100%; box-sizing: border-box; margin: 0; padding: 16px 18px;
+      border: 0; outline: none; resize: none; background: transparent; color: inherit;
+      font: 14px/1.7 var(--font-mono, monospace); tab-size: 2;
+    }
+    @media (max-width: 768px) { .dev-editor-panel { width: 100vw; } .dev-editor-resize { display: none; } }
+  </style>
+)}
+
+{show && (
+  <script is:inline>
+    (() => {
+      const KEY = 'dev-editor-state';
+      const WIDTH_KEY = 'dev-editor-width';
+      let mtime = null;
+      let saving = false;
+      let saved = '';
+
+      const root = () => document.getElementById('dev-editor');
+      const panel = () => root()?.querySelector('.dev-editor-panel');
+      const text = () => root()?.querySelector('.dev-editor-text');
+      const status = (msg, state) => {
+        const el = root()?.querySelector('.dev-editor-status');
+        if (!el) return;
+        el.textContent = msg;
+        if (state) el.dataset.state = state; else delete el.dataset.state;
+      };
+
+      function applyWidth(px) {
+        const r = root(); if (!r || !px) return;
+        const w = Math.max(320, Math.min(window.innerWidth - 80, px));
+        r.style.setProperty('--de-width', w + 'px');
+        return w;
+      }
+
+      // 렌더된 본문만 비교한다. 페이지 전체를 비교하면 본문과 상관없는 값 때문에 너무 일찍 다시 불러올 수 있다
+      async function renderedBody() {
+        const html = await fetch(location.href, { cache: 'no-store' }).then((r) => r.text());
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        // 제목만 고친 경우도 잡도록 제목이 든 article 전체를 본다
+        return (doc.querySelector('article') ?? doc.querySelector('.page-content'))?.innerHTML ?? html;
+      }
+
+      async function reloadWhenRendered(before) {
+        const until = Date.now() + 15000;
+        while (Date.now() < until) {
+          await new Promise((r) => setTimeout(r, 300));
+          try { if ((await renderedBody()) !== before) break; } catch {}
+        }
+        location.reload();
+      }
+
+      async function open(restore) {
+        const r = root(); if (!r) return;
+        const p = panel(); const t = text();
+        try { applyWidth(Number(localStorage.getItem(WIDTH_KEY))); } catch {}
+        p.hidden = false;
+        status('불러오는 중…');
+        const res = await fetch('/__dev-edit?path=' + encodeURIComponent(r.dataset.path));
+        const data = await res.json();
+        if (!res.ok) { status(data.error, 'error'); return; }
+        t.value = data.content; saved = data.content; mtime = data.mtime;
+        status('');
+        if (restore) {
+          t.scrollTop = restore.scrollTop || 0;
+          t.setSelectionRange(restore.caret || 0, restore.caret || 0);
+          if (typeof restore.pageY === 'number') window.scrollTo({ top: restore.pageY, behavior: 'instant' });
+        }
+        t.focus({ preventScroll: true });
+      }
+
+      function close() {
+        const t = text();
+        if (t && t.value !== saved && !confirm('저장하지 않은 수정이 있습니다. 닫을까요?')) return;
+        const p = panel(); if (p) p.hidden = true;
+      }
+
+      async function save() {
+        const r = root(); const t = text(); if (!r || !t) return;
+        status('저장 중…');
+        saving = true;
+        // 저장 뒤 페이지를 다시 불러온다. 같은 자리로 패널을 다시 열 수 있게 남겨 둔다
+        let before = null;
+        try { before = await renderedBody(); } catch {}
+        try {
+          sessionStorage.setItem(KEY, JSON.stringify({
+            path: r.dataset.path, scrollTop: t.scrollTop, caret: t.selectionStart, pageY: window.scrollY,
+          }));
+        } catch {}
+        const res = await fetch('/__dev-edit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ path: r.dataset.path, content: t.value, mtime }),
+        });
+        const data = await res.json();
+        saving = false;
+        if (!res.ok) {
+          try { sessionStorage.removeItem(KEY); } catch {}
+          status(data.error, 'error');
+          return;
+        }
+        saved = t.value; mtime = data.mtime;
+        status('저장됨 · 다시 그리는 중…');
+        saving = true;
+        reloadWhenRendered(before);
+      }
+
+      if (!window.__devEditorBound) {
+        window.__devEditorBound = true;
+        document.addEventListener('click', (e) => {
+          const el = e.target;
+          if (!(el instanceof Element)) return;
+          if (el.closest('[data-dev-editor-open]')) open();
+          else if (el.closest('[data-dev-editor-close]')) close();
+          else if (el.closest('[data-dev-editor-save]')) save();
+        });
+        document.addEventListener('keydown', (e) => {
+          const p = panel();
+          if (!p || p.hidden) return;
+          if ((e.metaKey || e.ctrlKey) && e.key === 's') { e.preventDefault(); save(); }
+          else if (e.key === 'Escape') { e.preventDefault(); close(); }
+        });
+        // 너비 조절: 패널 왼쪽 가장자리를 끈다
+        let drag = null;
+        document.addEventListener('pointerdown', (e) => {
+          const h = e.target instanceof Element && e.target.closest('[data-dev-editor-resize]');
+          if (!h) return;
+          e.preventDefault();
+          drag = h; h.dataset.active = '';
+          h.setPointerCapture(e.pointerId);
+          document.body.classList.add('dev-editor-resizing');
+        });
+        document.addEventListener('pointermove', (e) => {
+          if (drag) applyWidth(window.innerWidth - e.clientX);
+        });
+        document.addEventListener('pointerup', (e) => {
+          if (!drag) return;
+          delete drag.dataset.active;
+          drag = null;
+          document.body.classList.remove('dev-editor-resizing');
+          const w = applyWidth(window.innerWidth - e.clientX);
+          try { localStorage.setItem(WIDTH_KEY, String(w)); } catch {}
+        });
+
+        document.addEventListener('input', (e) => {
+          if (e.target === text()) status(text().value === saved ? '' : '수정됨', text().value === saved ? null : 'dirty');
+        });
+        window.addEventListener('beforeunload', (e) => {
+          const t = text(); const p = panel();
+          // 저장 중이거나 저장 직후 다시 불러올 때는 묻지 않는다
+          if (!saving && p && !p.hidden && t && t.value !== saved) e.preventDefault();
+        });
+      }
+
+      // 저장 직후 다시 그려진 페이지라면 패널을 같은 자리로 연다
+      try {
+        const st = JSON.parse(sessionStorage.getItem(KEY) || 'null');
+        sessionStorage.removeItem(KEY);
+        if (st && root() && st.path === root().dataset.path) open(st);
+      } catch {}
+    })();
+  </script>
+)}
