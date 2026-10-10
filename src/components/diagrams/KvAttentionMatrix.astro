@@ -1,0 +1,99 @@
+---
+// 디코드 한 스텝의 어텐션. "나는 커피를 정말 좋아"까지 왔고 마지막 토큰 "좋아"의 k·v를 방금 캐시에 넣었다
+const tokens = ['나는', '커피를', '정말', '좋아'];
+const scores = ['1.2', '3.1', '0.4', '2.0'];
+const weights = [0.10, 0.65, 0.04, 0.21];
+const D = 5;          // 그림에서 보이는 칸 수 (실제 헤드 차원은 128)
+const CW = 22;        // 칸 너비
+const CH = 24;        // 칸 높이
+const KX = 140;       // K 시작
+const SX = 300;       // 점수 열
+const SW = 56;
+const WX = 376;       // 가중치 열
+const VX = 460;       // V 시작
+const GY = 118;       // 표 첫 행
+const RH = 32;
+const rows = tokens.map((t, i) => ({ t, y: GY + i * RH + 4, isNew: i === tokens.length - 1, s: scores[i], w: weights[i] }));
+const cells = Array.from({ length: D }, (_, j) => j);
+const gridEnd = GY + tokens.length * RH;
+const cacheY = gridEnd + 10;
+const outY = cacheY + 44;
+---
+
+<div class="dg">
+<svg width="100%" viewBox={`0 0 672 ${outY + 34}`} xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="모델은 새 토큰의 q를 캐시에 저장된 키의 각 행과 곱해 점수를 내고, softmax로 바꾼 가중치만큼 값의 행을 섞어 출력을 만든다. 앞선 토큰의 키와 값은 캐시에서 꺼내 쓰고 새 토큰의 키와 값만 계산한다">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">디코드 한 스텝 · “나는 커피를 정말 좋아” 다음 토큰을 정할 때</text>
+
+<!-- q -->
+<text class="row" x="128" y="54" text-anchor="end" fill="var(--accent-strong)">q</text>
+<text class="cap" x="128" y="68" text-anchor="end" fill="var(--muted)">‘좋아’의 쿼리</text>
+{cells.map((j) => (
+  <rect x={KX + j * CW} y={38} width={CW - 2} height={CH} rx={3} fill="var(--accent)" fill-opacity="0.12" stroke="var(--accent)" stroke-width="1.5"/>
+))}
+<text class="cap" x={KX + D * CW + 14} y="54" fill="var(--muted)">K의 각 행과 곱해 점수를 낸다 · 이번 스텝에만 쓰고 버린다</text>
+
+<!-- 열 머리 -->
+<text class="hd" x={KX + (D * CW) / 2} y="96" text-anchor="middle" fill="var(--ink)">K · 키</text>
+<text class="hd" x={SX + SW / 2} y="96" text-anchor="middle" fill="var(--ink)">① 점수</text>
+<text class="m cap" x={SX + SW / 2} y="110" text-anchor="middle" fill="var(--muted)">q·k</text>
+<text class="hd" x={WX + SW / 2} y="96" text-anchor="middle" fill="var(--ink)">② 가중치</text>
+<text class="m cap" x={WX + SW / 2} y="110" text-anchor="middle" fill="var(--muted)">softmax</text>
+<text class="hd" x={VX + (D * CW) / 2} y="96" text-anchor="middle" fill="var(--ink)">V · 값</text>
+
+<!-- 토큰마다 한 행 -->
+{rows.map((r) => (
+  <g>
+    <text class="row" x="128" y={r.y + 17} text-anchor="end" fill={r.isNew ? 'var(--accent-strong)' : 'var(--ink)'}>{r.t}</text>
+    {cells.map((j) => (
+      <rect x={KX + j * CW} y={r.y} width={CW - 2} height={CH} rx={3}
+            fill={r.isNew ? 'var(--accent)' : 'var(--bg-soft)'} fill-opacity={r.isNew ? 0.12 : 1}
+            stroke={r.isNew ? 'var(--accent)' : 'var(--rule)'} stroke-width={r.isNew ? 1.5 : 1}/>
+    ))}
+    <text class="m val" x={SX + SW / 2} y={r.y + 17} text-anchor="middle">{r.s}</text>
+    <rect x={WX} y={r.y} width={SW} height={CH} rx={3} fill="none" stroke="var(--rule)" stroke-width="1"/>
+    <rect x={WX} y={r.y} width={SW * r.w} height={CH} rx={3} fill="var(--ink)" fill-opacity="0.16"/>
+    <text class="m val" x={WX + SW / 2} y={r.y + 17} text-anchor="middle" fill="var(--ink)">{r.w.toFixed(2)}</text>
+    {cells.map((j) => (
+      <rect x={VX + j * CW} y={r.y} width={CW - 2} height={CH} rx={3}
+            fill={r.isNew ? 'var(--accent)' : 'var(--bg-soft)'} fill-opacity={r.isNew ? 0.12 : 1}
+            stroke={r.isNew ? 'var(--accent)' : 'var(--rule)'} stroke-width={r.isNew ? 1.5 : 1}/>
+    ))}
+    {r.isNew && <text class="cap" x={VX + D * CW + 10} y={r.y + 16} fill="var(--accent-strong)">← 방금 추가</text>}
+  </g>
+))}
+
+<!-- 캐시 괄호 -->
+<path d={`M ${KX} ${cacheY - 4} V ${cacheY} H ${KX + D * CW - 2} V ${cacheY - 4}`} fill="none" stroke="var(--muted)" stroke-width="1"/>
+<text class="cap" x={KX + (D * CW) / 2} y={cacheY + 16} text-anchor="middle" fill="var(--muted)">K 캐시</text>
+<path d={`M ${VX} ${cacheY - 4} V ${cacheY} H ${VX + D * CW - 2} V ${cacheY - 4}`} fill="none" stroke="var(--muted)" stroke-width="1"/>
+<text class="cap" x={VX + (D * CW) / 2} y={cacheY + 16} text-anchor="middle" fill="var(--muted)">V 캐시</text>
+
+<!-- 출력 -->
+<text class="hd" x={VX - 12} y={outY + 12} text-anchor="end" fill="var(--ink)">③ 가중치대로 V를 섞은 결과</text>
+<text class="m cap" x={VX - 12} y={outY + 27} text-anchor="end" fill="var(--muted)">0.10·v1 + 0.65·v2 + 0.04·v3 + 0.21·v4</text>
+{cells.map((j) => (
+  <rect x={VX + j * CW} y={outY} width={CW - 2} height={CH} rx={3} fill="var(--bg-soft)" stroke="var(--ink)" stroke-width="1.6"/>
+))}
+<text class="cap" x={VX + D * CW + 10} y={outY + 16} fill="var(--ink)">→ 다음 토큰</text>
+
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .m { font-family: var(--font-mono); }
+.dg .val { font-size: 11.5px; }
+.dg .cap { font-size: 11px; }
+.dg .hd { font-size: 12px; font-weight: 600; }
+.dg .row { font-size: 12px; font-weight: 700; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

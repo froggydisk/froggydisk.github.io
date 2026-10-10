@@ -1,0 +1,78 @@
+---
+// 시스템 프롬프트+첫 질문 1,200토큰, 이후 질문 200토큰, 답 500토큰씩. Llama 3.1 8B BF16 기준 토큰당 128KiB
+const X0 = 120;
+const SCALE = 440 / 3100;
+const turns = [
+  { label: '턴 1', history: 0, input: 1200, answer: 500, peak: '212 MiB' },
+  { label: '턴 2', history: 1700, input: 200, answer: 500, peak: '300 MiB' },
+  { label: '턴 3', history: 2400, input: 200, answer: 500, peak: '388 MiB' },
+].map((t, i) => {
+  const y = 50 + i * 56;
+  const xh = X0;
+  const xi = xh + t.history * SCALE;
+  const xa = xi + t.input * SCALE;
+  const xe = xa + t.answer * SCALE;
+  return { ...t, y, xh, xi, xa, xe };
+});
+const H = 28;
+const GAP = 1.5;   // 구간 사이 틈. 붙여 두면 뒤에 그린 상자가 앞 상자의 오른쪽 테두리를 덮는다
+const legendY = 232;
+---
+
+<div class="dg">
+<svg width="100%" viewBox="0 0 672 262" xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="대화 API에서는 턴 하나가 요청 하나라서, 서버는 응답이 끝나면 KV 캐시를 해제하고 다음 턴에 이전 대화 전체를 다시 프리필한다">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">턴마다 새 요청 · Llama 3.1 8B, 토큰당 128KiB</text>
+
+{turns.map((t) => (
+  <g>
+    <text class="row" x="104" y={t.y + 19} text-anchor="end" fill="var(--ink)">{t.label}</text>
+    {t.history > 0 && (
+      <g>
+        <rect x={t.xh + GAP} y={t.y} width={t.xi - t.xh - GAP * 2} height={H} rx={3}
+              fill="var(--accent)" fill-opacity="0.12" stroke="var(--accent)" stroke-width="1.5"/>
+        <text class="val" x={(t.xh + t.xi) / 2} y={t.y + 18} text-anchor="middle" fill="var(--accent-strong)">
+          이전 대화 {t.history.toLocaleString('en-US')}토큰 · 다시 계산
+        </text>
+      </g>
+    )}
+    <rect x={t.xi + GAP} y={t.y} width={t.xa - t.xi - GAP * 2} height={H} rx={3}
+          fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+    {t.history === 0 && (
+      <text class="val" x={(t.xi + t.xa) / 2} y={t.y + 18} text-anchor="middle">입력 1,200</text>
+    )}
+    <rect x={t.xa + GAP} y={t.y} width={t.xe - t.xa - GAP * 2} height={H} rx={3}
+          fill="var(--ink)" fill-opacity="0.14" stroke="var(--ink)" stroke-width="1"/>
+    <text class="val" x={(t.xa + t.xe) / 2} y={t.y + 18} text-anchor="middle" fill="var(--ink)">답 500</text>
+    <text class="m val" x="572" y={t.y + 12} fill="var(--ink)">{t.peak}</text>
+    <text class="cap" x="572" y={t.y + 27} fill="var(--muted)">응답 후 해제</text>
+  </g>
+))}
+
+<line x1="24" y1="208" x2="648" y2="208" stroke="var(--rule)" stroke-width="1"/>
+
+<rect x="120" y={legendY - 10} width="14" height="12" rx="2" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+<text class="cap" x="140" y={legendY} fill="var(--muted)">새 입력 프리필</text>
+<rect x="250" y={legendY - 10} width="14" height="12" rx="2" fill="var(--accent)" fill-opacity="0.12" stroke="var(--accent)" stroke-width="1.5"/>
+<text class="cap" x="270" y={legendY} fill="var(--muted)">이전 대화를 다시 프리필</text>
+<rect x="420" y={legendY - 10} width="14" height="12" rx="2" fill="var(--ink)" fill-opacity="0.14" stroke="var(--ink)" stroke-width="1"/>
+<text class="cap" x="440" y={legendY} fill="var(--muted)">생성하며 한 토큰씩 추가</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .m { font-family: var(--font-mono); }
+.dg .val { font-size: 11.5px; }
+.dg .cap { font-size: 11px; }
+.dg .row { font-size: 12px; font-weight: 700; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

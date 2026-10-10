@@ -1,0 +1,50 @@
+---
+// 두 번째 턴 요청을 블록으로 나눈 모습. 앞 10블록이 이전 대화, 뒤 2블록이 새 질문 (블록 수는 축척이 아니다)
+const X0 = 150, N = 12, HIST = 10, BW = 40, H = 30;
+const R1 = 62, R2 = 158;
+const xs = Array.from({ length: N }, (_, i) => X0 + i * BW);
+---
+
+<div class="dg">
+<svg width="100%" viewBox="0 0 672 200" xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="앞부분이 이전 대화와 토큰 단위로 같으면 남겨 둔 블록을 그대로 쓰고 새 질문만 프리필한다. 첫 줄에 현재 시각이 들어가 첫 블록이 달라지면 뒤 블록도 모두 다시 계산한다">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">두 번째 턴 요청이 들어왔을 때 · 프리픽스 캐시를 켠 vLLM</text>
+
+<!-- 앞부분이 같을 때 -->
+<text class="row" x="136" y={R1 + 14} text-anchor="end" fill="var(--ink)">앞부분이 같다면</text>
+<text class="cap" x="136" y={R1 + 28} text-anchor="end" fill="var(--muted)">기존 블록 재사용</text>
+<path d={`M ${xs[0] + 1} ${R1 - 8} V ${R1 - 12} H ${xs[HIST - 1] + BW - 1} V ${R1 - 8}`} fill="none" stroke="var(--ink)" stroke-width="1"/>
+<text class="cap" x={(xs[0] + xs[HIST - 1] + BW) / 2} y={R1 - 18} text-anchor="middle" fill="var(--ink)">첫 턴에서 남겨 둔 이전 대화 블록 · 프리필을 건너뛴다</text>
+<text class="cap" x={xs[HIST] + BW} y={R1 - 18} text-anchor="middle" fill="var(--accent-strong)">새 질문</text>
+{xs.map((x, i) => (
+  <rect x={x + 1} y={R1} width={BW - 2} height={H} rx={2}
+        fill={i < HIST ? 'var(--bg-soft)' : 'var(--accent)'} fill-opacity={i < HIST ? 1 : 0.12}
+        stroke={i < HIST ? 'var(--ink)' : 'var(--accent)'} stroke-width={i < HIST ? 1 : 1.5}/>
+))}
+<text class="cap" x={X0} y={R1 + H + 18} fill="var(--muted)">새 질문 200토큰 남짓만 새로 프리필한다</text>
+
+<!-- 첫 줄이 달라졌을 때 -->
+<text class="row" x="136" y={R2 + 14} text-anchor="end" fill="var(--accent-strong)">첫 줄이 다르다면</text>
+<text class="cap" x="136" y={R2 + 28} text-anchor="end" fill="var(--muted)">전부 다시 계산</text>
+<text class="cap" x={xs[0] + BW / 2} y={R2 - 8} text-anchor="middle" fill="var(--accent-strong)">현재 시각</text>
+{xs.map((x, i) => (
+  <rect x={x + 1} y={R2} width={BW - 2} height={H} rx={2}
+        fill="var(--accent)" fill-opacity="0.12" stroke="var(--accent)" stroke-width={i === 0 ? 2 : 1.5}/>
+))}
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .cap { font-size: 11px; }
+.dg .row { font-size: 12px; font-weight: 700; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

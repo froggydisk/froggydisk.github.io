@@ -1,0 +1,66 @@
+---
+// 위: 요청마다 최대 길이(8K)를 연속으로 잡는 방식. 같은 축척(16K 토큰 = 512px)
+// 아래: 16토큰 블록 단위로 필요할 때마다 할당하는 방식. 블록은 축척이 아니다
+const X0 = 128, W = 512;
+const tok = (n) => (n / 16384) * W;
+const RA = 52, RB = 146, H = 30;
+const aUsed = tok(500), bUsed = tok(3000), half = W / 2;
+const pattern = ['A', 'B', 'B', 'C', 'A', 'B', 'B', 'C', 'B', 'B', 'C', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+const lastOf = { A: 4, B: 9, C: 10 };
+const BW = W / pattern.length;
+const blocks = pattern.map((r, i) => ({ r, i, x: X0 + i * BW, partial: lastOf[r] === i }));
+---
+
+<div class="dg">
+<svg width="100%" viewBox="0 0 672 196" xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="요청마다 8K를 연속으로 예약하면 대부분이 빈칸으로 남아 새 요청이 기다리고, 16토큰 블록으로 필요할 때마다 할당하면 빈칸은 요청마다 마지막 블록에만 생겨 새 요청도 들어간다">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">요청에 KV 캐시 메모리를 내주는 방식</text>
+
+<!-- 연속 예약 -->
+<text class="row" x="114" y={RA + 14} text-anchor="end" fill="var(--ink)">연속 예약</text>
+<text class="cap" x="114" y={RA + 28} text-anchor="end" fill="var(--muted)">요청마다 8K</text>
+<rect x={X0} y={RA} width={aUsed} height={H} fill="var(--bg-soft)" stroke="var(--ink)" stroke-width="1"/>
+<rect x={X0 + aUsed} y={RA} width={half - aUsed} height={H} fill="none" stroke="var(--accent)" stroke-width="1" stroke-dasharray="4 3"/>
+<text class="cap" x={X0 + aUsed + (half - aUsed) / 2} y={RA + 19} text-anchor="middle" fill="var(--accent-strong)">A 빈칸 7,692토큰</text>
+<text class="m cap" x={X0 + aUsed / 2} y={RA - 6} text-anchor="middle" fill="var(--ink)">A 500</text>
+<rect x={X0 + half} y={RA} width={bUsed} height={H} fill="var(--bg-soft)" stroke="var(--ink)" stroke-width="1"/>
+<text class="m cap" x={X0 + half + bUsed / 2} y={RA + 19} text-anchor="middle" fill="var(--ink)">B 3,000</text>
+<rect x={X0 + half + bUsed} y={RA} width={half - bUsed} height={H} fill="none" stroke="var(--accent)" stroke-width="1" stroke-dasharray="4 3"/>
+<text class="cap" x={X0 + half + bUsed + (half - bUsed) / 2} y={RA + 19} text-anchor="middle" fill="var(--accent-strong)">B 빈칸 5,192토큰</text>
+<text class="cap" x={X0} y={RA + H + 18} fill="var(--accent-strong)">메모리의 79%가 빈칸인데 새 요청 C는 들어갈 자리가 없어 기다린다</text>
+
+<!-- 블록 할당 -->
+<text class="row" x="114" y={RB + 14} text-anchor="end" fill="var(--ink)">블록 할당</text>
+<text class="cap" x="114" y={RB + 28} text-anchor="end" fill="var(--muted)">PagedAttention</text>
+{blocks.map((b) => (
+  <g>
+    <rect x={b.x + 1} y={RB} width={BW - 2} height={H} rx={2}
+          fill={b.r === 'C' ? 'var(--accent)' : b.r ? 'var(--bg-soft)' : 'none'}
+          fill-opacity={b.r === 'C' ? 0.12 : 1}
+          stroke={b.r === 'C' ? 'var(--accent)' : b.r ? 'var(--ink)' : 'var(--rule)'}
+          stroke-width="1"/>
+    {b.partial && <rect x={b.x + 1 + (BW - 2) * 0.45} y={RB + 1} width={(BW - 2) * 0.55 - 1} height={H - 2} fill="var(--bg)"/>}
+    <text class="m idx" x={b.x + BW / 2} y={RB - 5} text-anchor="middle" fill="var(--muted)">{b.i}</text>
+    {b.r && <text class="m val" x={b.x + BW / 2} y={RB + 19} text-anchor="middle" fill={b.r === 'C' ? 'var(--accent-strong)' : 'var(--ink)'}>{b.r}</text>}
+  </g>
+))}
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .m { font-family: var(--font-mono); }
+.dg .val { font-size: 11px; }
+.dg .idx { font-size: 9px; }
+.dg .cap { font-size: 11px; }
+.dg .row { font-size: 12px; font-weight: 700; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>

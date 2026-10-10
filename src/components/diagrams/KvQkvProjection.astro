@@ -1,0 +1,65 @@
+---
+// 토큰 벡터 x(4,096칸)에 W_Q · W_K · W_V를 곱해 q · k · v를 만든다. Llama 3.1 8B, 레이어 하나
+// 행렬의 높이는 x의 길이(4,096)와 같고, 폭은 결과 길이에 비례한다. 결과는 128칸(6px)마다 헤드 하나
+const MY = 76, MH = 112;        // 행렬 위끝과 높이 (= 4,096)
+const RY = 214, RH = 16;        // 결과 막대
+const HW = 6;                   // 헤드 하나(128칸)의 폭
+const groups = [
+  { w: 'W_Q', shape: '4,096 × 4,096', x: 32, heads: 32, out: 'q', sub: '헤드 32개 × 128칸', isQ: true },
+  { w: 'W_K', shape: '4,096 × 1,024', x: 300, heads: 8, out: 'k', sub: '헤드 8개 × 128칸', isQ: false },
+  { w: 'W_V', shape: '4,096 × 1,024', x: 440, heads: 8, out: 'v', sub: '헤드 8개 × 128칸', isQ: false },
+].map((g) => ({ ...g, mx: g.x + 18, mw: g.heads * HW }));
+const k = groups[1], v = groups[2];
+---
+
+<div class="dg">
+<svg width="100%" viewBox="0 0 672 304" xmlns="http://www.w3.org/2000/svg" fill="var(--body)" role="img"
+     aria-label="토큰 벡터 x에 학습된 가중치 행렬 W_Q, W_K, W_V를 각각 곱해 q, k, v를 만든다. q는 헤드 32개, k와 v는 헤드 8개로 나뉘고, k와 v만 KV 캐시에 저장한다">
+
+<text class="ttl" x="336" y="18" text-anchor="middle" fill="var(--muted)">토큰 하나에서 q·k·v를 만드는 계산 · Llama 3.1 8B, 레이어 하나</text>
+
+{groups.map((g) => (
+  <g>
+    <!-- x -->
+    <text class="m hd" x={g.x + 5} y="71" text-anchor="middle" fill="var(--ink)">x</text>
+    <rect x={g.x} y={MY} width="10" height={MH} rx="2" fill="var(--bg-soft)" stroke="var(--ink)" stroke-width="1.2"/>
+    <text class="m val" x={g.x + 14} y={MY + MH / 2 + 4} text-anchor="middle" fill="var(--muted)">×</text>
+    <!-- W -->
+    <text class="m hd" x={g.mx + g.mw / 2} y="40" text-anchor="middle" fill="var(--ink)">{g.w}</text>
+    <text class="m cap" x={g.mx + g.mw / 2} y="55" text-anchor="middle" fill="var(--muted)">{g.shape}</text>
+    <rect x={g.mx} y={MY} width={g.mw} height={MH} rx="2" fill="var(--bg-soft)" stroke="var(--rule)" stroke-width="1"/>
+    <text class="m cap" x={g.mx + g.mw / 2} y={RY - 8} text-anchor="middle" fill="var(--muted)">↓</text>
+    <!-- 결과 -->
+    {Array.from({ length: g.heads }, (_, h) => (
+      <rect x={g.mx + h * HW + 0.5} y={RY} width={HW - 1} height={RH} rx="1"
+            fill={g.isQ ? 'var(--accent)' : 'var(--bg-soft)'} fill-opacity={g.isQ ? 0.14 : 1}
+            stroke={g.isQ ? 'var(--accent)' : 'var(--ink)'} stroke-width="1"/>
+    ))}
+    <text class="m hd" x={g.mx + g.mw / 2} y={RY + 34} text-anchor="middle" fill={g.isQ ? 'var(--accent-strong)' : 'var(--ink)'}>{g.out}</text>
+    <text class="cap" x={g.mx + g.mw / 2} y={RY + 50} text-anchor="middle" fill="var(--muted)">{g.sub}</text>
+  </g>
+))}
+
+<text class="cap" x="37" y={MY + MH + 16} text-anchor="middle" fill="var(--muted)">4,096칸</text>
+
+<text class="cap" x={groups[0].mx + groups[0].mw / 2} y={RY + 66} text-anchor="middle" fill="var(--accent-strong)">이번 스텝에만 쓰고 버린다</text>
+<path d={`M ${k.mx} ${RY + 58} V ${RY + 62} H ${v.mx + v.mw} V ${RY + 58}`} fill="none" stroke="var(--ink)" stroke-width="1"/>
+<text class="cap" x={(k.mx + v.mx + v.mw) / 2} y={RY + 76} text-anchor="middle" fill="var(--ink)">KV 캐시에 저장한다</text>
+
+</svg>
+</div>
+
+<style>
+.dg { margin: 2.4rem 0; }
+.dg svg { display: block; width: 100%; height: auto; }
+.dg text { font-family: var(--font-sans); }
+.dg .m { font-family: var(--font-mono); }
+.dg .val { font-size: 11px; font-weight: 700; }
+.dg .cap { font-size: 11px; }
+.dg .hd { font-size: 12.5px; font-weight: 700; }
+.dg .ttl { font-size: 11.5px; letter-spacing: 0.09em; }
+@media (max-width: 700px) {
+  .dg { overflow-x: auto; }
+  .dg svg { min-width: 560px; }
+}
+</style>
