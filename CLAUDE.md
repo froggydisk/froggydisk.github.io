@@ -412,16 +412,16 @@ dist를 임시 폴더에 복사해 측정 스크립트를 `</body>` 앞에 끼�
   dialog도 서버 렌더링이라 pagefind가 색인한다 (`data-pagefind-ignore` 걸지 말 것)
 - **영상**: `public/img/projects/<slug>.mp4` + 같은 이름 `.webp` 포스터, 960×600(16:10).
   **포스터는 반드시 첫 프레임** (다르면 재생 시작 때 화면이 튄다). 다시 만들 때는
-  `scripts/project-media/build.sh [gaze|gc|econix|flight]` — puppeteer-core로 시스템 크롬을 띄워 데모를 screencast한다.
+  `scripts/project-media/build.sh [gaze|gc|econix|flight|lens]` — puppeteer-core로 시스템 크롬을 띄워 데모를 screencast한다.
   puppeteer-core는 의존성이 아니니 `npm i --no-save puppeteer-core`
 - **Moody는 영상이 없다.** 카드에 원래의 `MoodySplitView` 애니메이션을 그대로 넣는다.
   Blender로 액자를 렌더링한 영상을 넣어봤지만 저자가 이상하다고 해서 뺐다.
-  카드에서는 `<MoodySplitView fill />`로 제품 뷰만 카드에 꽉 채우고 도면 패널은 숨기며,
-  모달에는 원래의 두 패널을 넣는다. 한 페이지에 두 번 들어가므로 컴포넌트가 인스턴스마다
+  카드와 모달 모두 두 패널(제품 뷰 · 도면)을 나란히 돌린다. 카드에서는 패널 배경을 카드와 같게 하고
+  테두리를 없앴으며, 좁은 화면에서도 세로로 쌓지 않는다. 테두리가 없으면 액자 뒤 조명(`.pv-glow`)이
+  SVG 경계에서 직선으로 끊겨 보이므로 카드에서만 끈다 (예전 `fill` 모드는 2026-10에 뺐다). 한 페이지에 두 번 들어가므로 컴포넌트가 인스턴스마다
   ID 접두사(`data-uid`)를 붙인다 — 겹치면 url(#…)이 display:none 안의 첫 정의를 가리켜 채우기가 사라진다.
   카드 안 그림에는 `pointer-events: none`이 필요하다. 매 프레임 SVG를 새로 그려서 누르는 사이
   커서 밑 도형이 바뀌면 click이 성립하지 않아, 액자 위를 누르면 모달이 안 떴다.
-  `fill`은 viewBox를 `-80 0 1160 780`으로 넓혀 `slice`로 자른다 (폭 1000이면 회전하는 액자 위아래가 잘린다)
 - **재생**: `preload="none"` + IntersectionObserver로 화면 안 카드만 `play()`.
   `prefers-reduced-motion`이면 포스터만. dialog가 열린 동안 뒤 카드 영상은 멈춘다
 - **폭**: `wide` prop을 쓰고 페이지 스타일에서 `.wrapper.wrapper-wide`를 1120px로 연다

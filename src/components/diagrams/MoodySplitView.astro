@@ -1,12 +1,4 @@
 ---
-interface Props {
-  /** true면 제품 뷰가 상자를 잘라 채운다 (projects 카드용). 기본은 비율 유지.
-      좌우를 넓힌 viewBox를 쓰는 이유: 16:10 상자에 폭을 맞추면 보이는 높이가 725가 되어
-      회전하는 액자의 위아래가 잘리지 않는다 (폭 1000 그대로면 625라 잘린다) */
-  fill?: boolean;
-}
-const { fill = false } = Astro.props;
-
 // 한 페이지에 두 번 들어갈 수 있다 (/projects/의 카드 + 모달). gradient·filter·pattern ID가
 // 겹치면 url(#…)이 문서의 첫 번째 정의를 가리키는데, 그 정의가 display:none 안에 있으면
 // 크롬은 채우기를 아예 그리지 않는다. 그래서 인스턴스마다 접두사를 붙인다.
@@ -39,7 +31,7 @@ const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
 <div class="moody-split" data-uid={uid}>
   <!-- LEFT: Animated 3D Product View -->
   <div class="moody-split__panel moody-split__panel--product">
-    <svg width="100%" viewBox={fill ? '-80 0 1160 780' : '0 0 1000 780'} preserveAspectRatio={fill ? 'xMidYMid slice' : undefined} xmlns="http://www.w3.org/2000/svg">
+    <svg width="100%" viewBox="0 0 1000 780" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <!-- Walnut wood gradients -->
         <linearGradient id={`${uid}-pv-wf`} x1="0%" y1="0%" x2="100%" y2="100%">
@@ -82,9 +74,8 @@ const wfHLines = Array.from({length: 16}, (_, i) => i * 50);
       </defs>
 
       <!-- Static background (themed via CSS) -->
-      <!-- fill 모드는 viewBox가 좌우로 80씩 넓으므로 배경도 같이 넓힌다 (안 그러면 조명이 x=0에서 끊겨 세로선이 보인다) -->
-      <rect class="pv-bg" x={fill ? -80 : 0} width={fill ? 1160 : 1000} height="780"/>
-      <rect x={fill ? -80 : 0} width={fill ? 1160 : 1000} height="780" fill={`url(#${uid}-pv-lightglow)`}/>
+      <rect class="pv-bg" width="1000" height="780"/>
+      <rect class="pv-glow" width="1000" height="780" fill={`url(#${uid}-pv-lightglow)`}/>
 
       <!-- Dynamic scene group (rebuilt each frame by JS) -->
       <g data-ms-pv></g>

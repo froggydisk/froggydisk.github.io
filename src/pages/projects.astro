@@ -162,7 +162,7 @@ const jsonLd = pageJsonLd({ type: 'CollectionPage', path: '/projects/', name: 'P
           >
             <span class:list={['pj-media', { 'pj-media--figure': p.figure }]}>
               {p.figure === 'moody' ? (
-                <MoodySplitView fill />
+                <MoodySplitView />
               ) : p.video ? (
                 <video
                   class="pj-video"
@@ -403,29 +403,33 @@ const jsonLd = pageJsonLd({ type: 'CollectionPage', path: '/projects/', name: 'P
   box-shadow: 0 0 0 1px var(--rule);
 }
 .pj-media--figure {
-  background: var(--bg-soft);
+  background: var(--bg);
 }
-/* Moody는 영상 대신 원래의 제품 뷰 애니메이션을 카드에 꽉 채운다.
-   두 패널을 나란히 두면 카드 비율(16:10)에 비해 너무 납작해 위아래가 비므로 도면 패널은 숨긴다 */
+/* Moody는 영상 대신 원래의 두 패널(제품 뷰 · 도면)을 나란히 돌린다.
+   컴포넌트는 좁은 화면에서 패널을 세로로 쌓지만 카드 안에서는 넘치므로 항상 가로로 둔다 */
 .pj-media--figure :global(.moody-split) {
   position: absolute;
   inset: 0;
   margin: 0;
-  gap: 0;
+  padding: 0 14px;
+  flex-direction: row;
+  align-items: center;
   /* 그림은 매 프레임 SVG를 새로 그린다. 누르는 사이 커서 밑 도형이 바뀌면 click이 성립하지 않아
      카드 가운데(액자 위)를 눌러도 모달이 안 떴다. 클릭은 그림을 통과해 카드 버튼이 받게 한다 */
   pointer-events: none;
 }
-.pj-media--figure :global(.moody-split__panel--wireframe) {
-  display: none;
-}
 .pj-media--figure :global(.moody-split__panel) {
   border: 0;
   border-radius: 0;
+  background: transparent;
 }
-.pj-media--figure :global(.moody-split__panel svg) {
-  width: 100%;
-  height: 100%;
+/* 액자 뒤 조명은 위·왼쪽 끝에서도 0이 아니라 SVG 경계에서 직선으로 끊긴다.
+   테두리가 있는 모달에서는 묻히지만 테두리 없는 카드에서는 모서리가 드러나므로 끈다 */
+.pj-media--figure :global(.pv-glow) {
+  display: none;
+}
+.pj-media--figure :global(.moody-split text) {
+  font-size: 30px;
 }
 .pj-video {
   position: absolute;
