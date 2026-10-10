@@ -27,6 +27,24 @@ interface Project {
 
 const projects: Project[] = [
   {
+    slug: 'look-up-lens',
+    title: 'Look Up Lens',
+    category: 'Interaction',
+    year: '2026',
+    icon: '/img/look-up-lens-icon.webp',
+    video: '/img/projects/look-up-lens.mp4',
+    poster: '/img/projects/look-up-lens.webp',
+    body: '커서가 지나가는 자리에만 AR 렌즈의 홀로그램 HUD가 드러나는 제품 히어로.',
+    note: '인물 이미지는 AI 생성',
+    link: { href: 'https://gallery-lime-chi.vercel.app/augmented-hero.html', label: '데모' },
+    duties: [
+      '맨 얼굴 · HUD 두 장을 겹치고 radial-gradient 마스크로 커서 아래만 드러내기',
+      '버튼 하나로 마스크를 뒤집어 커서 아래만 홀로그램이 꺼지게',
+      '동심원 호 위에 스펙 수치를 그리고 눈금이 도는 SVG',
+    ],
+    tags: ['CSS Mask', 'SVG', 'JavaScript', 'HTML Video'],
+  },
+  {
     slug: 'flight-quest',
     title: 'Isle of Embers',
     category: 'Scroll Experience',

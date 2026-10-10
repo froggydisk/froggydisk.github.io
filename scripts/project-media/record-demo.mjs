@@ -18,6 +18,20 @@ const scenes = {
   flight: { url:'https://gallery-lime-chi.vercel.app/flight-quest.html', dur:25000, fps:24, cursor:false, headful:true,
     async setup(p){ await p.mouse.move(640,400); await sleep(3000); },
     async frame(p,t,st){ for (const at of [1800, 5200]) if (t>=at && !st[at]) { st[at]=1; await p.mouse.wheel({deltaY:240}); } } },
+  // 커서가 얼굴 위를 돌며 HUD를 드러내고, 버튼을 눌러 렌즈를 뒤집었다가 다시 눌러 되돌린다.
+  // 끝 상태가 시작과 같아야 루프가 이어진다. 배포 전이면 LENS_URL에 로컬 서버 주소를 준다
+  lens: { url: process.env.LENS_URL || 'https://gallery-lime-chi.vercel.app/augmented-hero.html', dur:10000, cursor:true,
+    async setup(p){ await p.mouse.move(650,310); await sleep(3200); },
+    async frame(p,t,st){
+      if (!st.cta) st.cta = await p.evaluate(()=>{ const r=document.getElementById('swap').getBoundingClientRect(); return [r.x+r.width/2, r.y+r.height/2]; });
+      // 얼굴 가운데(650,310)에서 출발해 8자를 한 번 그리고 돌아오는 경로
+      const home=[650,310], btn=st.cta, eight=u=>[home[0]+Math.sin(u*Math.PI*2)*260, home[1]-Math.sin(u*Math.PI*4)*100];
+      const go=(a,b,u)=>{ const e=(1-Math.cos(Math.PI*Math.min(1,Math.max(0,u))))/2; return [a[0]+(b[0]-a[0])*e, a[1]+(b[1]-a[1])*e]; };
+      const pos = t<2600 ? eight(t/2600) : t<3400 ? go(home,btn,(t-2600)/800) : t<4200 ? go(btn,home,(t-3400)/800)
+        : t<6800 ? eight((t-4200)/2600) : t<7600 ? go(home,btn,(t-6800)/800) : t<8400 ? go(btn,home,(t-7600)/800) : home;
+      await p.mouse.move(pos[0],pos[1]);
+      for (const at of [3400, 7600]) if (t>=at && !st[at]) { st[at]=1; await p.mouse.down(); await p.mouse.up(); }
+    } },
   econix: { url:'https://econix.ai.kr', dur:9000, cursor:false, vh:2130,
     async setup(p){ await sleep(2000); await p.evaluate(()=>{ for (const b of document.querySelectorAll('button')) if (b.getAttribute('aria-label')?.match(/닫기|close/i)) b.click(); }); await sleep(1500); },
     async frame(p,t){ } },
