@@ -5,6 +5,52 @@ const W=1280,H=800;
 const CURSOR = `(()=>{const c=document.createElement('div');c.id='__cur';c.style.cssText='position:fixed;left:0;top:0;width:22px;height:22px;z-index:2147483647;pointer-events:none;transform:translate(-100px,-100px);transition:none';c.innerHTML='<svg width="22" height="22" viewBox="0 0 24 24"><path d="M4 2l16 9.5-7 1.6-3.8 6.9z" fill="#111" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>';document.documentElement.appendChild(c);const r=document.createElement('div');r.id='__ring';r.style.cssText='position:fixed;left:0;top:0;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:2px solid rgba(20,20,20,.5);z-index:2147483646;pointer-events:none;opacity:0';document.documentElement.appendChild(r);addEventListener('mousemove',e=>{c.style.transform='translate('+(e.clientX-3)+'px,'+(e.clientY-2)+'px)'},true);addEventListener('mousedown',e=>{r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';r.animate([{opacity:1,transform:'scale(.4)'},{opacity:0,transform:'scale(1.6)'}],{duration:600,easing:'ease-out'})},true);})()`;
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const scenes = {
+  wepling: {
+    // 위플링 데모 서버에서 원본 일러스트 레이어만 읽고 녹화용 장면은 로컬 HTML로 그린다.
+    url: new URL('/project-preview.html', process.env.WEPLING_URL || 'http://localhost:5180').href,
+    dur: 8000,
+    fps: 60,
+    width: 1920,
+    vh: 1200,
+    captureQuality: 98,
+    async prepare(page) {
+      const html = fs.readFileSync(new URL('./wepling.html', import.meta.url), 'utf8');
+      await page.setRequestInterception(true);
+      page.on('request', request => {
+        if (request.url() === this.url && request.isNavigationRequest()) {
+          return request.respond({ contentType: 'text/html; charset=utf-8', body: html });
+        }
+        return request.continue();
+      });
+    },
+    async setup(page) {
+      await page.evaluate(async () => {
+        document.body.style.zoom = String(window.innerWidth / 1280);
+        await document.fonts.ready;
+        await window.envelopeReady;
+        const assets = ['mask-paper.png', 'line-paper.png'];
+        await Promise.all([...document.images].map(img => img.decode()).concat(assets.map(file => {
+          const image = new Image();
+          image.src = '/art/invite/' + file;
+          return image.decode();
+        })));
+      });
+    },
+    async recordFrames(page, dir) {
+      // CSS 타임라인을 정확히 한 프레임씩 진행시켜 캡처 속도가 영상의 움직임에 영향을 주지 않게 한다.
+      const count = Math.round(this.dur * this.fps / 1000);
+      for (let i = 0; i < count; i++) {
+        await page.evaluate(time => {
+          for (const animation of document.getAnimations()) animation.currentTime = time;
+        }, i * 1000 / this.fps);
+        await page.screenshot({
+          path: `${dir}/f${String(i).padStart(4, '0')}.jpg`,
+          quality: this.captureQuality,
+        });
+      }
+      console.log(name, 'rendered', count, 'frames at', this.fps, 'fps');
+    },
+  },
   gaze: { url:'https://gallery-lime-chi.vercel.app/footer-gaze.html', dur:6400, cursor:true,
     async setup(p){ await p.mouse.move(640,120); await sleep(1500); },
     // 눈(640,415)을 중심으로 한 바퀴 반 — 끝이 시작과 같은 자리라 루프가 이어진다
@@ -39,19 +85,29 @@ const scenes = {
 const s = scenes[name];
 // 헤드리스는 고해상도 영상 디코딩을 못 따라가 프레임이 겹친다. 영상이 주인 장면은 창을 띄워 GPU로 찍는다
 const b = await puppeteer.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless: s.headful ? false : 'new', defaultViewport:null, args:['--use-angle=metal','--enable-gpu','--ignore-gpu-blocklist','--autoplay-policy=no-user-gesture-required','--hide-scrollbars']});
-const p = await b.newPage(); await p.setViewport({width:W,height:s.vh||H,deviceScaleFactor:1});
+const width = s.width || W;
+const p = await b.newPage(); await p.setViewport({width,height:s.vh||H,deviceScaleFactor:1});
+await s.prepare?.(p);
 await p.goto(s.url,{waitUntil:'networkidle2',timeout:60000});
 if (s.cursor) await p.evaluate(CURSOR);
 await s.setup(p);
 const dir=`frames-${name}`; fs.rmSync(dir,{recursive:true,force:true}); fs.mkdirSync(dir);
-const cdp = await p.createCDPSession(); const frames=[];
-cdp.on('Page.screencastFrame', async f=>{ frames.push({ts:f.metadata.timestamp,data:f.data}); cdp.send('Page.screencastFrameAck',{sessionId:f.sessionId}).catch(()=>{}); });
-await cdp.send('Page.startScreencast',{format:'jpeg',quality:92,maxWidth:W,maxHeight:s.vh||H,everyNthFrame:1});
-const t0=Date.now(); const st={};
-while(Date.now()-t0 < s.dur){ await s.frame(p, Date.now()-t0, st); await sleep(12); }
-await cdp.send('Page.stopScreencast'); await sleep(300);
-// 타임스탬프 기준으로 30fps에 다시 맞춘다 (screencast는 화면이 바뀔 때만 프레임을 준다)
-const start=frames[0].ts, fps=s.fps||30, n=Math.floor(s.dur/1000*fps); let j=0;
-for(let i=0;i<n;i++){ const tt=start+i/fps; while(j+1<frames.length && frames[j+1].ts<=tt) j++; fs.writeFileSync(`${dir}/f${String(i).padStart(4,'0')}.jpg`, Buffer.from(frames[j].data,'base64')); }
-console.log(name,'captured',frames.length,'raw →',n);
-await b.close();
+if (s.recordFrames) {
+  try {
+    await s.recordFrames(p, dir);
+  } finally {
+    await b.close();
+  }
+} else {
+  const cdp = await p.createCDPSession(); const frames=[];
+  cdp.on('Page.screencastFrame', async f=>{ frames.push({ts:f.metadata.timestamp,data:f.data}); cdp.send('Page.screencastFrameAck',{sessionId:f.sessionId}).catch(()=>{}); });
+  await cdp.send('Page.startScreencast',{format:'jpeg',quality:s.captureQuality || 92,maxWidth:width,maxHeight:s.vh||H,everyNthFrame:1});
+  const t0=Date.now(); const st={};
+  while(Date.now()-t0 < s.dur){ await s.frame(p, Date.now()-t0, st); await sleep(12); }
+  await cdp.send('Page.stopScreencast'); await sleep(300);
+  // 타임스탬프 기준으로 30fps에 다시 맞춘다 (screencast는 화면이 바뀔 때만 프레임을 준다)
+  const start=frames[0].ts, fps=s.fps||30, n=Math.floor(s.dur/1000*fps); let j=0;
+  for(let i=0;i<n;i++){ const tt=start+i/fps; while(j+1<frames.length && frames[j+1].ts<=tt) j++; fs.writeFileSync(`${dir}/f${String(i).padStart(4,'0')}.jpg`, Buffer.from(frames[j].data,'base64')); }
+  console.log(name,'captured',frames.length,'raw →',n);
+  await b.close();
+}

@@ -1,22 +1,24 @@
 #!/usr/bin/env bash
-# /projects/ 카드 영상 재생성. 사용법: scripts/project-media/build.sh [gaze|gc|econix|flight|lens ...]
-# 결과: public/img/projects/<slug>.mp4 + 첫 프레임 .webp 포스터 (960x600)
+# /projects/ 카드 영상 재생성. 사용법: scripts/project-media/build.sh [gaze|gc|econix|flight|lens|wepling ...]
+# 결과: public/img/projects/<slug>.mp4 + 첫 프레임 .webp 포스터
 # 필요: ffmpeg, cwebp, Google Chrome, puppeteer-core (npm i --no-save puppeteer-core)
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
 OUT="$HERE/../../public/img/projects"
 cd "$HERE"
 
-encode() { # name vf slug [fps] [crf]
+encode() { # name vf slug [fps] [crf] [poster quality]
   ffmpeg -loglevel error -y -framerate "${4:-30}" -start_number 0 -i "$1" -vf "$2" \
     -c:v libx264 -preset slow -crf "${5:-23}" -pix_fmt yuv420p -movflags +faststart -an "$OUT/$3.mp4"
   # 포스터는 반드시 첫 프레임이다. 다른 프레임을 쓰면 재생이 시작될 때 화면이 튄다
   ffmpeg -loglevel error -y -i "$OUT/$3.mp4" -frames:v 1 "$HERE/poster.png"
-  cwebp -quiet -q 80 "$HERE/poster.png" -o "$OUT/$3.webp" && rm "$HERE/poster.png"
+  cwebp -quiet -q "${6:-80}" "$HERE/poster.png" -o "$OUT/$3.webp" && rm "$HERE/poster.png"
 }
 
 for n in ${@:-gaze gc econix flight lens}; do
   case $n in
+    # 로컬 위플링 데모 서버(기본 5180)가 있어야 하므로 명시적으로 선택할 때만 녹화한다.
+    wepling) node record-demo.mjs wepling && encode 'frames-wepling/f%04d.jpg' 'setsar=1' wepling 60 16 93 ;;
     gaze)   node record-demo.mjs gaze   && encode 'frames-gaze/f%04d.jpg' 'scale=960:600' i-see-you ;;
     gc)     node record-demo.mjs gc     && encode 'frames-gc/f%04d.jpg' 'trim=start=0.3,setpts=PTS-STARTPTS,scale=960:600' gc-symbol ;;
     # econix는 실제로 스크롤하면 screencast 프레임이 찢어진다. 1280x2130 뷰포트로 페이지 전체를

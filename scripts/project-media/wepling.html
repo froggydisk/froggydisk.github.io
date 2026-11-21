@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<title>위플링</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    width: 1280px;
+    height: 800px;
+    overflow: hidden;
+    position: relative;
+    color: #302724;
+    background: #fffcf9;
+    font-family: "Apple SD Gothic Neo", system-ui, sans-serif;
+  }
+  h1 {
+    position: absolute;
+    inset: 6% 0 auto;
+    margin: 0;
+    text-align: center;
+    font-size: 52px;
+    line-height: 1.15;
+    font-weight: 500;
+    letter-spacing: -.055em;
+  }
+  mark {
+    color: inherit;
+    background: linear-gradient(178deg, transparent 58%, #f9cbd4 59% 89%, transparent 90%);
+  }
+  .invite {
+    position: absolute;
+    width: 398px;
+    aspect-ratio: 780 / 1176;
+    bottom: 2.5%;
+    left: 50%;
+    translate: -50% 0;
+  }
+  .layer { position: absolute; inset: 0; background-size: 100% 100%; }
+  .back-flap { width: 100%; height: 100%; }
+  .paper-slot { clip-path: inset(0 0 14%); }
+  .paper { background-image: url('/art/invite/demo-poster.webp'); mask: url('/art/invite/mask-paper.png') 0 0 / 100% 100%; }
+  .envelope { width: 100%; height: 100%; }
+  .paper-line { background-image: url('/art/invite/line-paper.png'); }
+  .date, .progress {
+    position: absolute;
+    width: 232px;
+    border-radius: 22px;
+    padding: 23px 26px;
+    box-shadow: 0 6px 0 #694f3d09;
+  }
+  .date { left: 9%; top: 38%; background: #eee6d9; rotate: -6deg; }
+  .progress { right: 8%; top: 56%; background: #f9ced7; rotate: 5deg; }
+  .label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 21px; }
+  strong { font: 650 46px/1.05 system-ui, sans-serif; letter-spacing: -.05em; }
+  .date strong { color: #ad4d62; }
+  .bar { height: 8px; margin-top: 12px; overflow: hidden; border-radius: 12px; background: #fffa; }
+  .fill { width: 28%; height: 100%; background: #483330; border-radius: inherit; transform-origin: left; }
+  .sketch { position: absolute; object-fit: contain; }
+  .rings { width: 112px; left: 19%; top: 72%; rotate: -14deg; }
+  .hearts { width: 56px; right: 23%; top: 30%; rotate: 12deg; }
+  .heart-small { width: 27px; right: 21%; top: 29%; rotate: -15deg; }
+  .animated { animation: var(--motion) 8s ease-in-out infinite both paused; will-change: transform; }
+  .moving-paper { --motion: lift; }
+  .date { --motion: drift; }
+  .progress { --motion: drift; animation-delay: -2s; }
+  .fill { --motion: progress; }
+  .rings { --motion: drift; animation-delay: -4s; }
+  .hearts, .heart-small { --motion: beat; }
+  .heart-small { animation-delay: -.22s; }
+  @keyframes lift {
+    0%, 100% { transform: translateY(27%); }
+    52% { transform: translateY(0); }
+  }
+  @keyframes drift {
+    0%, 100% { transform: translateY(4px) rotate(-1deg); }
+    50% { transform: translateY(-9px) rotate(1deg); }
+  }
+  @keyframes beat {
+    0%, 18%, 78%, 100% { transform: translateY(5px) scale(.77); opacity: .45; }
+    44%, 60% { transform: translateY(-6px) scale(1.05); opacity: 1; }
+  }
+  @keyframes progress {
+    0%, 100% { transform: scaleX(.12); }
+    38%, 75% { transform: scaleX(1); }
+  }
+</style>
+<h1>둘이 함께 준비하는<br><mark>결혼 비용</mark>, 한눈에 정리해요</h1>
+<div class="invite" role="img" aria-label="분홍 봉투에서 올라오는 청첩장">
+  <svg class="layer back-flap" viewBox="0 0 780 1176" aria-hidden="true">
+    <g stroke="#302624" stroke-width="5" stroke-linejoin="round" fill="#efb7b5">
+      <path d="M58 710 Q107 652 193 559 L620 552 Q688 627 744 698 L413 965 Z"/>
+      <path d="M98 731 Q146 688 207 643 M590 598 Q650 675 715 715" fill="none" stroke-width="3"/>
+    </g>
+  </svg>
+  <div class="layer paper-slot">
+    <div class="layer moving-paper animated">
+      <div class="layer paper"></div>
+      <div class="layer paper-line"></div>
+    </div>
+  </div>
+  <canvas class="layer envelope" width="780" height="1176"></canvas>
+</div>
+<div class="date animated"><span class="label">예식까지</span><strong>D-175</strong></div>
+<div class="progress animated">
+  <span class="label">결제 진행률</span><strong>28%</strong>
+  <div class="bar"><div class="fill animated"></div></div>
+</div>
+<img class="sketch rings animated" src="/art/rings.png" alt="">
+<img class="sketch hearts animated" src="/art/heart1.png" alt="">
+<img class="sketch heart-small animated" src="/art/heart2.png" alt="">
+<script>
+  // 원본 봉투 마스크에는 매듭 뒤의 직사각형 종이 조각까지 포함돼 있다.
+  // 매듭과 봉투 윗솔기의 잉크·분홍색만 앞에 남겨 안쪽 구멍으로도 움직이는 종이가 보이게 한다.
+  async function drawEnvelope() {
+    const load = async name => {
+      const image = new Image();
+      image.src = '/art/invite/' + name;
+      await image.decode();
+      return image;
+    };
+    const [art, mask, outline] = await Promise.all([
+      load('demo-poster.webp'), load('mask-envelope.png'), load('line-envelope.png'),
+    ]);
+    const canvas = document.querySelector('.envelope');
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    ctx.drawImage(art, 0, 0);
+    const source = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    ctx.globalCompositeOperation = 'destination-in';
+    ctx.drawImage(mask, 0, 0);
+    const envelope = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+    // 원화 좌표. V자 솔기는 리본 양옆에서 종이보다 앞에 있어야 한다.
+    for (let x = 175; x <= 668; x++) {
+      const left = x < 395;
+      const seamY = left ? 785 + (x - 175) * .73 : 753 + (668 - x) * .77;
+      const atBow = x >= 259 && x <= 538;
+      const top = Math.floor(atBow ? Math.min(827, seamY - 9) : seamY - 9);
+      const bottom = Math.ceil(Math.max(atBow ? 907 : 0, seamY + 5));
+      for (let y = top; y <= bottom; y++) {
+        const i = (y * canvas.width + x) * 4;
+        const [r, g] = source.data.subarray(i, i + 2);
+        const pink = (r - g - 12) / 20;
+        const ink = (222 - g) / 65;
+        const alpha = Math.max(0, Math.min(1, Math.max(pink, ink)));
+        envelope.data.set(source.data.subarray(i, i + 3), i);
+        envelope.data[i + 3] = Math.round(source.data[i + 3] * alpha);
+      }
+    }
+    ctx.putImageData(envelope, 0, 0);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.drawImage(outline, 0, 0);
+
+    // 봉투 앞면과 리본만 종이 앞에 둔다. 양옆의 뒷날개는 종이 테두리를 가리지 않게 뒤에서 그린다.
+    const front = new Path2D('M0 694 L57 705 L101 726 L175 781 L257 840 L259 826 H538 V848 L669 748 L744 693 L780 686 V1176 H0 Z');
+    ctx.globalCompositeOperation = 'destination-in';
+    ctx.fill(front);
+  }
+  window.envelopeReady = drawEnvelope();
+</script>
+</html>

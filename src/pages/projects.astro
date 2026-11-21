@@ -27,6 +27,24 @@ interface Project {
 
 const projects: Project[] = [
   {
+    slug: 'wepling',
+    title: '위플링',
+    category: 'Wedding Planner',
+    year: '2026',
+    icon: '/img/wepling-icon.svg',
+    video: '/img/projects/wepling.mp4',
+    poster: '/img/projects/wepling.webp',
+    body: '예비부부가 결혼 예산과 일정을 함께 관리하고, 업체별 계약서와 결제 내역을 한곳에서 확인하는 웹앱.',
+    link: { href: 'https://www.wepling.kr/', label: '사이트' },
+    duties: [
+      '홈 대시보드 카드와 등장 애니메이션 구현',
+      '예산 그룹 편집과 비용 항목 합치기',
+      '모바일 청첩장 편집기와 미리보기 구현',
+    ],
+    tags: ['React', 'TypeScript', 'Tailwind CSS', 'Supabase'],
+    team: true,
+  },
+  {
     slug: 'look-up-lens',
     title: 'Look Up Lens',
     category: 'Interaction',
